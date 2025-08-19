@@ -30,10 +30,13 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-center items-center border w-auto max-w-screen-sm mx-auto sm:px-6 lg:px-8`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-center items-center border w-auto max-w-screen-sm mx-auto sm:px-6 lg:px-8 overscroll-none`}
       >
         <Navbar />
         {children}
+        <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+          &copy; {new Date().getFullYear()} My Smart Health
+        </footer>
       </body>
     </html>
   );
