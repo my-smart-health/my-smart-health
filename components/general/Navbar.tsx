@@ -13,12 +13,13 @@ export default function Navbar() {
         draggable={false}
         href="/">
         <Image
+          priority
           draggable={false}
           src="/Logo.jpg"
           alt="My Smart Health"
           width={350}
           height={112}
-          className="p-4"
+          className="w-96 h-auto p-4"
         />
       </Link>
       <NotrufDropdown />

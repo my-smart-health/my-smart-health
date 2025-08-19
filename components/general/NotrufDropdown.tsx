@@ -7,12 +7,13 @@ export default function NotrufButton() {
     <details className="dropdown dropdown-end border-0">
       <summary className="btn btn-square m-1 border-0 h-16 w-16 bg-white hover:bg-white shadow-none">
         <Image
+          priority
           draggable={false}
           src="/icon1.png"
           alt="Notruf"
           width={64}
-          height={55}
-          className={`hover:scale-110 transition-transform ease-in-out shadow-lg shadow-[${SHADOW_COLOR}]`} />
+          height={64}
+          className={`w-16 h-16 hover:scale-110 transition-transform ease-in-out shadow-lg shadow-[${SHADOW_COLOR}]`} />
       </summary>
       <ul className={`menu dropdown-content mr-1 w-64 p-0 bg-white text-xl font-black z-1 shadow-lg shadow-[${SHADOW_COLOR}] border-6 border-[${BORDER_COLOR}]`}>
         <li>
