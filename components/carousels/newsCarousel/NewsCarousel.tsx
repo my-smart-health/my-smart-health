@@ -1,5 +1,6 @@
 'use client'
 import { Suspense } from "react";
+import Image from "next/image";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectCube, Mousewheel, Scrollbar } from "swiper/modules";
@@ -29,10 +30,10 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
 
   return (
     <Suspense fallback={<></>}>
-      <div>
+      <div className="mx-auto max-w-2xs md:max-w-sm">
         <Swiper
           modules={[Scrollbar, Mousewheel, Autoplay, EffectCube]}
-          spaceBetween={10}
+          spaceBetween={0}
           slidesPerView={1}
           effect="cube"
           cubeEffect={{
@@ -48,13 +49,20 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
         >
           {props.map((item) => (
             <SwiperSlide key={item.id}>
-              <div className="flex flex-col h-full pb-4 rounded-box">
-                <img
+              <div className="flex flex-col justify-center items-center rounded-box">
+                <Image
+                  loading="lazy"
+                  width={400}
+                  height={400}
                   src={item.imageSrc}
-                  className=" aspect-square"
+                  alt={item.info}
+                  className="aspect-square"
                 />
-                <span className="bg-[#2db9bc] text-center text-white text-3xl">{item.info}</span>
+                <span className="text-center text-white text-3xl w-full bg-[#2db9bc]">
+                  {item.info}
+                </span>
               </div>
+              <br />
             </SwiperSlide>
           ))}
         </Swiper>
