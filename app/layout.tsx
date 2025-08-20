@@ -17,11 +17,11 @@ export const metadata: Metadata = {
   openGraph: {
     title: "My Smart Health",
     description: "Wir machen Düsseldorf gesünder.",
-    url: "https://www.mysmarthealth.de",
+    url: "https://my-smart-health.vercel.app/",
     siteName: "My Smart Health",
     images: [
       {
-        url: "https://www.mysmarthealth.de/logo.png",
+        url: "https://my-smart-health.vercel.app/Logo.jpg",
         width: 800,
         height: 600,
         alt: "My Smart Health Logo",
