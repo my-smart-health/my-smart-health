@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/general/Navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
+  weight: ["500", "600", "700", "800", "900"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "My Smart Health",
@@ -44,7 +42,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col justify-center items-center border min-h-screen w-auto max-w-screen-sm mx-auto sm:px-6 lg:px-8 overscroll-none`}
+        className={`${montserrat.variable} antialiased flex flex-col justify-center items-center border min-h-screen w-auto max-w-screen-sm mx-auto sm:px-6 lg:px-8 overscroll-none`}
       >
         <Navbar />
         {children}
