@@ -2,11 +2,12 @@
 import { Suspense } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Mousewheel, Scrollbar } from "swiper/modules";
+import { Autoplay, EffectCube, Mousewheel, Scrollbar } from "swiper/modules";
 import 'swiper/css';
 import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
+import 'swiper/css/effect-cube';
 
 type NewsCarouselProps = {
   props?: {
@@ -30,9 +31,16 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
     <Suspense fallback={<></>}>
       <div>
         <Swiper
-          modules={[Scrollbar, Mousewheel, Autoplay]}
-          spaceBetween={0}
+          modules={[Scrollbar, Mousewheel, Autoplay, EffectCube]}
+          spaceBetween={10}
           slidesPerView={1}
+          effect="cube"
+          cubeEffect={{
+            shadow: true,
+            slideShadows: true,
+            shadowOffset: 20,
+            shadowScale: 0.94
+          }}
           mousewheel={true}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
           speed={300}
