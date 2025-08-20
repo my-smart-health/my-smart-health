@@ -15,7 +15,21 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "My Smart Health",
-  description: "Your health, smarter.",
+  description: "Wir machen Düsseldorf gesünder.",
+  openGraph: {
+    title: "My Smart Health",
+    description: "Wir machen Düsseldorf gesünder.",
+    url: "https://www.mysmarthealth.de",
+    siteName: "My Smart Health",
+    images: [
+      {
+        url: "https://www.mysmarthealth.de/logo.png",
+        width: 800,
+        height: 600,
+        alt: "My Smart Health Logo",
+      },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -26,7 +40,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/logo.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body
