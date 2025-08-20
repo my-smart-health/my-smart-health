@@ -9,7 +9,7 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
 
-type CarouselItemProps = {
+type TopCarouselItemProps = {
   props?: {
     id: string;
     imageSrc: string;
@@ -17,7 +17,7 @@ type CarouselItemProps = {
   }[]
 };
 
-export default function TopCarousel({ props }: CarouselItemProps) {
+export default function TopCarousel({ props }: TopCarouselItemProps) {
 
   if (!props || props.length === 0) {
     return (
