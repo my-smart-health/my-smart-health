@@ -1,5 +1,5 @@
-import NewsCarousel from "@/components/carousels/NewsCarousel/NewsCarousel";
-import TopCarousel from "@/components/carousels/TopCarousel/TopCarousel";
+import NewsCarousel from "@/components/carousels/newsCarousel/NewsCarousel";
+import TopCarousel from "@/components/carousels/topCarousel/TopCarousel";
 import { defaultCarouselItems, defaultNewsItems } from "@/data/mockup-data";
 
 export default function Home() {
