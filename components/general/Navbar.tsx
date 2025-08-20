@@ -8,7 +8,7 @@ export default function Navbar() {
   return (
     <nav
       draggable={false}
-      className="flex flex-col justify-between mb-4 w-full max-w-md sm:max-w-full px-2 sm:px-6"
+      className="flex flex-col justify-evenly mb-4 w-full max-w-xs sm:max-w-xs md:max-w-sm"
     >
       <div className="flex flex-row gap-1 items-center justify-evenly text-start text-nowrap">
         <Link

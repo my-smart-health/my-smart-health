@@ -22,7 +22,7 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
 
   if (!props || props.length === 0) {
     return (
-      <div className="flex flex-row bg-white rounded-box space-x-4 p-4 max-w-[calc(85vw)] sm:max-w-[80vw] md:max-w-[60vw] lg:max-w-[50vw]">
+      <div className="flex flex-row bg-white rounded-box space-x-4 p-4">
       </div >
 
     );

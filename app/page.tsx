@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="font-sans flex flex-col h-[100dvh] justify-items-center">
       <main className="flex flex-col items-center gap-8">
-        <div className="flex flex-col gap-4 max-w-xs sm:max-w-xs md:max-w-sm">
+        <div className="flex flex-col gap-4 max-w-md">
           <TopCarousel props={defaultCarouselItems} />
           <NewsCarousel props={defaultNewsItems} />
         </div>
