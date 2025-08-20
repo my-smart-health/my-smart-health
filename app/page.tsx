@@ -1,5 +1,6 @@
+import NewsCarousel from "@/components/carousels/NewsCarousel/NewsCarousel";
 import TopCarousel from "@/components/carousels/TopCarousel/TopCarousel";
-import { defaultCarouselItems } from "@/data/mockup-data";
+import { defaultCarouselItems, defaultNewsItems } from "@/data/mockup-data";
 
 export default function Home() {
 
@@ -9,9 +10,10 @@ export default function Home() {
         <div className="max-w-[85vw] sm:max-w-[80vw] md:max-w-[60vw] lg:max-w-[36vw]">
           <TopCarousel props={defaultCarouselItems} />
         </div>
-        <h1>My Smart Health</h1>
+        <div className="max-w-[85vw] sm:max-w-[80vw] md:max-w-[60vw] lg:max-w-[36vw]">
+          <NewsCarousel props={defaultNewsItems} />
+        </div>
       </main>
-
     </div>
   );
 }
