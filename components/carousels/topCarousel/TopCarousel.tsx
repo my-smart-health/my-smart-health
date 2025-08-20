@@ -8,6 +8,7 @@ import 'swiper/css';
 import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
+import Image from "next/image";
 
 type TopCarouselItemProps = {
   props?: {
@@ -30,7 +31,7 @@ export default function TopCarousel({ props }: TopCarouselItemProps) {
 
   return (
     <Suspense fallback={<TopCarouselSkeleton times={7} />}>
-      <div>
+      <div className="mx-auto max-w-2xs md:max-w-sm">
         <Swiper
           modules={[Scrollbar, Mousewheel, Autoplay]}
           spaceBetween={50}
@@ -43,7 +44,11 @@ export default function TopCarousel({ props }: TopCarouselItemProps) {
           {props.map((item) => (
             <SwiperSlide key={item.id}>
               <div className="flex flex-col w-20 gap-1 pb-4">
-                <img
+                <Image
+                  loading="lazy"
+                  width={400}
+                  height={400}
+                  alt={item.name}
                   src={item.imageSrc}
                   className="rounded-box border-6 border-[#2db9bc] aspect-square"
                 />
