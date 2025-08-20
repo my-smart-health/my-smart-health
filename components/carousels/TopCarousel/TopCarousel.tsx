@@ -53,8 +53,6 @@ export default function TopCarousel({ props }: CarouselItemProps) {
           ))}
         </Swiper>
       </div>
-
     </Suspense>
-
   );
 }
