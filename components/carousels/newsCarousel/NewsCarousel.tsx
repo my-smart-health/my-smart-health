@@ -45,7 +45,7 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
                   src={item.imageSrc}
                   className=" aspect-square"
                 />
-                <span className="bg-[#2db9bc] text-center">{item.info}</span>
+                <span className="bg-[#2db9bc] text-center text-white text-3xl">{item.info}</span>
               </div>
             </SwiperSlide>
           ))}
