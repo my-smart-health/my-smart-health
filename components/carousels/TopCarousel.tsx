@@ -1,5 +1,13 @@
+'use client'
 import { Suspense } from "react";
 import TopCarouselSkeleton from "./TopCarouselSkeleton";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, Mousewheel, Scrollbar } from "swiper/modules";
+import 'swiper/css';
+import 'swiper/css/scrollbar';
+import 'swiper/css/autoplay';
+import 'swiper/css/mousewheel';
 
 type CarouselItemProps = {
   props?: {
@@ -13,27 +21,40 @@ export default function TopCarousel({ props }: CarouselItemProps) {
 
   if (!props || props.length === 0) {
     return (
-      <TopCarouselSkeleton times={7} />
+      <div className="flex flex-row bg-white rounded-box space-x-4 p-4 max-w-[calc(85vw)] sm:max-w-[80vw] md:max-w-[60vw] lg:max-w-[36vw]">
+        <TopCarouselSkeleton times={7} />
+      </div >
+
     );
   }
 
   return (
-    <div className="overflow-hidden">
-      <div className="carousel carousel-center bg-white rounded-box max-w-[calc(85vw)] sm:max-w-[calc(80vw)] md:max-w-[60vw] lg:max-w-[42vw] space-x-4 p-4 animate-infinite-scroll">
-        <Suspense fallback={<TopCarouselSkeleton times={7} />}>
-          {
-            props.map((item) => (
-              <div className="carousel-item w-20 flex flex-col items-center" key={item.id}>
+    <Suspense fallback={<TopCarouselSkeleton times={7} />}>
+      <div>
+        <Swiper
+          modules={[Scrollbar, Mousewheel, Autoplay]}
+          spaceBetween={50}
+          slidesPerView={4}
+          mousewheel={true}
+          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          speed={300}
+          scrollbar={{ draggable: true }}
+        >
+          {props.map((item) => (
+            <SwiperSlide key={item.id}>
+              <div className="flex flex-col w-20 gap-1 pb-4">
                 <img
                   src={item.imageSrc}
-                  className="rounded-box w-20 border-6 border-[#2db9bc] aspect-square" />
-                <p>{item.name}</p>
+                  className="rounded-box border-6 border-[#2db9bc] aspect-square"
+                />
+                <p className="text-center">{item.name}</p>
               </div>
-            ))
-          }
-        </Suspense>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
-    </div>
+
+    </Suspense>
 
   );
 }
