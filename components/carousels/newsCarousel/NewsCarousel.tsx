@@ -49,9 +49,10 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
         >
           {props.map((item) => (
             <SwiperSlide key={item.id}>
-              <div className="flex flex-col justify-center items-center rounded-box">
+              <div className="flex flex-col justify-center items-center rounded-box cursor-pointer">
                 <Image
                   loading="lazy"
+                  placeholder="empty"
                   width={400}
                   height={400}
                   src={item.imageSrc}

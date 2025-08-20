@@ -38,16 +38,17 @@ export default function TopCarousel({ props }: TopCarouselItemProps) {
         >
           {props.map((item) => (
             <SwiperSlide key={item.id}>
-              <div className="flex flex-col w-20 gap-1 pb-4">
+              <div className="flex flex-col w-20 gap-1 pb-4 cursor-pointer">
                 <Image
                   loading="lazy"
+                  placeholder="empty"
                   width={400}
                   height={400}
                   alt={item.name}
                   src={item.imageSrc}
                   className="rounded-box border-6 border-[#2db9bc] aspect-square"
                 />
-                <p className="text-center">{item.name}</p>
+                <p className="text-center text-[#2c2e35]">{item.name}</p>
               </div>
             </SwiperSlide>
           ))}

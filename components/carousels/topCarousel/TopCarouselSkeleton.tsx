@@ -25,7 +25,7 @@ export default function TopCarouselSkeleton({ times = 7 }: TopCarouselSkeletonPr
       >
         {Array.from({ length: times }).map((_, index) => (
           <SwiperSlide key={index}>
-            <div className="flex flex-col w-20 gap-1 pb-4">
+            <div className="flex flex-col w-20 gap-1 pb-4 cursor-pointer">
               <div className="skeleton h-20 aspect-square"></div>
               <div className="skeleton h-4 w-full"></div>
             </div>
