@@ -1,4 +1,4 @@
-import TopCarousel from "@/components/carousels/TopCarousel";
+import TopCarousel from "@/components/carousels/TopCarousel/TopCarousel";
 import { defaultCarouselItems } from "@/data/mockup-data";
 
 export default function Home() {
