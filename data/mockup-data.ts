@@ -82,7 +82,7 @@ export const defaultNewsItems = [
   {
     id: '7',
     imageSrc:
-      'https://img.daisyui.com/images/stock/photo-1601004890684-d8cbf643f5f2.webp',
+      'https://img.daisyui.com/images/stock/photo-1550258987-190a2d41a8ba.webp',
     info: 'Info',
   },
 ];
