@@ -26,7 +26,7 @@ export default function TopCarousel({ props }: CarouselItemProps) {
               <div className="carousel-item w-20 flex flex-col items-center" key={item.id}>
                 <img
                   src={item.imageSrc}
-                  className="rounded-box" />
+                  className="rounded-box w-20 border-6 border-[#2db9bc] aspect-square" />
                 <p>{item.name}</p>
               </div>
             ))
