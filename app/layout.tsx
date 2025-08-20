@@ -42,7 +42,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body
-        className={`${montserrat.variable} antialiased flex flex-col justify-center items-center border min-h-screen w-auto max-w-screen-sm mx-auto sm:px-6 lg:px-8 overscroll-none`}
+        className={`${montserrat.variable} antialiased flex flex-col justify-center items-center border min-h-[100dvh] w-auto max-w-screen mx-auto sm:px-6 lg:px-8 overscroll-none`}
       >
         <Navbar />
         {children}
