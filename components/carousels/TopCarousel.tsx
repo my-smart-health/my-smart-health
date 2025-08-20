@@ -19,7 +19,7 @@ export default function TopCarousel({ props }: CarouselItemProps) {
 
   return (
     <div className="overflow-hidden">
-      <div className="carousel carousel-center bg-white rounded-box max-w-sm space-x-4 p-4 animate-infinite-scroll">
+      <div className="carousel carousel-center bg-white rounded-box max-w-[calc(85vw)] sm:max-w-[calc(80vw)] md:max-w-[60vw] lg:max-w-[42vw] space-x-4 p-4 animate-infinite-scroll">
         <Suspense fallback={<TopCarouselSkeleton times={7} />}>
           {
             props.map((item) => (
