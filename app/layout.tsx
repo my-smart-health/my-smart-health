@@ -43,7 +43,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body
-        className={`${montserrat.variable} antialiased flex flex-col justify-center items-center pt-4 min-h-[100dvh] w-auto lg:max-w-md mx-auto sm:px-6 lg:px-8 overscroll-none `}
+        className={`${montserrat.variable} antialiased flex flex-col justify-center items-center pt-4 min-h-[100dvh] w-auto lg:max-w-md mx-auto sm:px-6 lg:px-8 overscroll-none`}
       >
         <div className="flex flex-col w-full h-full justify-between max-w-md lg:max-w-md">
           <Navbar />
