@@ -49,7 +49,7 @@ export default function DatenschutzPage() {
         <br />
         <p>Der Nutzer entbindet die Partner der Future Health GmbH, namentlich Ärzte und Krankenhäuser in diesem Zusammenhang von der ärztlichen Schweigepflicht.</p>
         <br />
-        <p>("Auftragsverarbeiter" ist gemäß Art. 4 Nr.8 DSGVO eine natürliche oder juristische Person, Behörde, Einrichtung oder andere Stelle, die personenbezogene Daten im Auftrag des Verantwortlichen verarbeitet.)</p>
+        <p>(&quot;Auftragsverarbeiter&quot; ist gemäß Art. 4 Nr.8 DSGVO eine natürliche oder juristische Person, Behörde, Einrichtung oder andere Stelle, die personenbezogene Daten im Auftrag des Verantwortlichen verarbeitet.)</p>
         <br />
         <br />
         <p>Links zu anderen Webseiten</p>
