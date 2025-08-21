@@ -9,6 +9,7 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
 import 'swiper/css/effect-cube';
+import NewsCarouselSkeleton from "./NewsCarouselSkeleton";
 
 type NewsCarouselProps = {
   props?: {
@@ -21,15 +22,11 @@ type NewsCarouselProps = {
 export default function NewsCarousel({ props }: NewsCarouselProps) {
 
   if (!props || props.length === 0) {
-    return (
-      <div className="flex flex-row bg-white rounded-box space-x-4 p-4">
-      </div >
-
-    );
+    return <NewsCarouselSkeleton />;
   }
 
   return (
-    <Suspense fallback={<></>}>
+    <Suspense fallback={<NewsCarouselSkeleton />}>
       <div className="mx-auto max-w-2xs md:max-w-sm">
         <Swiper
           modules={[Scrollbar, Mousewheel, Autoplay, EffectCube]}
