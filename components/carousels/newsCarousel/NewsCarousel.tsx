@@ -56,7 +56,7 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
                   alt={item.info}
                   className="aspect-square"
                 />
-                <span className="text-center text-white text-3xl w-full bg-[#2db9bc]">
+                <span className="text-center text-white text-3xl w-full bg-primary">
                   {item.info}
                 </span>
               </div>

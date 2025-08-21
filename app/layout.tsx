@@ -47,7 +47,7 @@ export default function RootLayout({
       >
         <Navbar />
         {children}
-        <footer className="flex flex-row w-full max-w-md items-center justify-center py-2 text-white font-thin bg-[#2db9bc]">
+        <footer className="flex flex-row w-full max-w-md items-center justify-center py-2 text-white font-thin bg-primary">
           <Link href="/impressum">IMPRESSUM</Link>
           <br />
           <span className="mx-1">|</span>

@@ -46,7 +46,7 @@ export default function TopCarousel({ props }: TopCarouselItemProps) {
                   height={400}
                   alt={item.name}
                   src={item.imageSrc}
-                  className="rounded-box border-6 border-[#2db9bc] aspect-square"
+                  className="rounded-box border-6 border-primary aspect-square"
                 />
                 <p className="text-center text-[#2c2e35]">{item.name}</p>
               </div>

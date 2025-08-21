@@ -14,18 +14,18 @@ export default function NotrufButton() {
           height={60}
           className={`w-[60px] h-[60px] hover:scale-110 transition-transform ease-in-out shadow-lg shadow-[#2a2a2ad9]`} />
       </summary>
-      <ul className={`menu dropdown-content mr-1 w-64 p-0 bg-white text-xl font-black z-1 shadow-lg shadow-[#2a2a2ad9] border-6 border-[#2db9bc]`}>
+      <ul className={`menu dropdown-content mr-1 w-64 p-0 bg-white text-xl font-black z-1 shadow-lg shadow-[#2a2a2ad9] border-6 border-primary`}>
         <li>
           <a
             href="tel:112"
-            className={`hover:underline cursor-pointer border-b-2 px-5 py-2 border-[#2db9bc]`}
+            className={`hover:underline cursor-pointer border-b-2 px-5 py-2 border-primary`}
           >
             Notruf<br />112
           </a>
         </li>
         <li><a
           href="tel:116117"
-          className={`hover:underline cursor-pointer border-b-2 px-5 py-2 border-[#2db9bc]`}
+          className={`hover:underline cursor-pointer border-b-2 px-5 py-2 border-primary`}
         >
           Bereitschaftsarzt<br />116117
         </a></li>
