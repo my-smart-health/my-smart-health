@@ -10,9 +10,9 @@ export default function NotrufButton() {
           draggable={false}
           src="/icon1.png"
           alt="Notruf"
-          width={64}
-          height={64}
-          className={`w-16 h-16 hover:scale-110 transition-transform ease-in-out shadow-lg shadow-[#2a2a2ad9]`} />
+          width={60}
+          height={60}
+          className={`w-[60px] h-[60px] hover:scale-110 transition-transform ease-in-out shadow-lg shadow-[#2a2a2ad9]`} />
       </summary>
       <ul className={`menu dropdown-content mr-1 w-64 p-0 bg-white text-xl font-black z-1 shadow-lg shadow-[#2a2a2ad9] border-6 border-[#2db9bc]`}>
         <li>
