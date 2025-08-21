@@ -34,7 +34,7 @@ export default function NewsCarouselSkeleton({ times = 7 }: NewsCarouselSkeleton
       >
         {Array.from({ length: times }).map((_, index) => (
           <SwiperSlide key={index}>
-            <div className="skeleton h-[100%] aspect-square"></div>
+            <div className="skeleton min-h-fit min-w-fit aspect-square">_</div>
             <br />
           </SwiperSlide>
         ))}
