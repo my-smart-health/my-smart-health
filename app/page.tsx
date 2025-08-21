@@ -15,8 +15,8 @@ export default function Home() {
         </div>
         <div className="flex flex-col gap-3 w-full mx-auto max-w-[90%] mb-2">
           <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" />
-          <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/news" />
-          <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/news" />
+          <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/smart-health" />
+          <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
           <TheHealthBarLink />
         </div>
       </main>
