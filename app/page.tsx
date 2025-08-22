@@ -7,7 +7,7 @@ import { defaultCarouselItems, defaultNewsItems } from "@/data/mockup-data";
 export default function Home() {
 
   return (
-    <div className="font-sans flex flex-col min-h-[100dvh] justify-items-center">
+    <div className="flex flex-col min-h-[100dvh] justify-items-center">
       <main className="flex flex-col items-center gap-8 max-w-md">
         <TopCarousel props={defaultCarouselItems} />
         <NewsCarousel props={defaultNewsItems} />
