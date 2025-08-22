@@ -41,7 +41,7 @@ export default function TheHealthBarCarousel({ props }: TheHealthBarCarouselProp
         className="max-w-2xs md:max-w-sm mx-auto"
       >
         {props.map((item) => (
-          <SwiperSlide key={item.id}>
+          <SwiperSlide key={item.id} className="my-4">
             <Link href={item.link}>
               <div className="rounded-box cursor-pointer">
                 <Image
