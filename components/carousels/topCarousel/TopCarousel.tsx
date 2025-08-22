@@ -37,20 +37,20 @@ export default function TopCarousel({ props }: TopCarouselItemProps) {
           scrollbar={{ draggable: true }}
         >
           {props.map((item) => (
-            <div draggable={false} className="flex flex-col mx-auto gap-1 pb-4 cursor-pointer">
-              <SwiperSlide key={item.id}>
-                <Image
-                  loading="lazy"
-                  placeholder="empty"
-                  width={400}
-                  height={400}
-                  alt={item.name}
-                  src={item.imageSrc}
-                  className="rounded-box border-6 border-primary aspect-square"
-                />
-                <p className="text-center text-[#2c2e35] mb-4">{item.name}</p>
-              </SwiperSlide>
-            </div>
+            <SwiperSlide
+              key={item.id}
+              className="cursor-pointer">
+              <Image
+                loading="lazy"
+                placeholder="empty"
+                width={400}
+                height={400}
+                alt={item.name}
+                src={item.imageSrc}
+                className="rounded-box border-6 border-primary aspect-square"
+              />
+              <p className="text-center text-[#2c2e35] mb-4">{item.name}</p>
+            </SwiperSlide>
           ))}
         </Swiper>
       </div>
