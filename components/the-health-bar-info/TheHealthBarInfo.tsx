@@ -1,4 +1,5 @@
 import { AtSign, Globe, MapPin, Phone } from "lucide-react";
+import Link from "next/link";
 
 export default function TheHealthBarInfo() {
   const currentTime = new Date();
@@ -14,15 +15,15 @@ export default function TheHealthBarInfo() {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 justify-center gap-3 text-wrap text-start text-sm ">
+      <div className="grid grid-cols-1 sm:grid-cols-2 justify-center gap-3 text-wrap text-start ">
         <p className="flex">
           <Phone /> <span className="pl-2">+ 49 123 456 7890</span>
         </p>
         <p className="flex">
-          <AtSign /> <span className="pl-2">Info@shop.de</span>
+          <AtSign /> <Link href="mailto:info@shop.de" className="pl-2 visited:text-purple-500 not-visited:text-primary">info@shop.de</Link>
         </p>
         <p className="flex">
-          <Globe /> <span className="pl-2">www.healthbar.de</span>
+          <Globe /> <Link href="https://www.healthbar.de" className="pl-2 visited:text-purple-500 not-visited:text-primary">www.healthbar.de</Link>
         </p>
         <p className="flex">
           <MapPin />
