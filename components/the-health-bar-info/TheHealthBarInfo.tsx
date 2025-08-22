@@ -1,3 +1,4 @@
+'use client'
 import { AtSign, Globe, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 
@@ -36,7 +37,7 @@ export default function TheHealthBarInfo() {
             Öffnungszeiten:
           </p>
           <p className="pl-4">
-            {isOpen ? <span className="text-green-500">geöffnet</span> : <span className="text-red-500">geschlossen</span>}
+            {isOpen ? <span className="text-green-500/95">geöffnet</span> : <span className="text-red-500/95">geschlossen</span>}
           </p>
         </div>
         <div className="flex flex-col gap-2 justify-evenly">
