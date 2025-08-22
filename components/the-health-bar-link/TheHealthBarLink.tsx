@@ -16,8 +16,7 @@ export default function TheHealthBarLink() {
         alt="Health Bar Icon"
         width={410}
         height={130}
-        className="sm:max-w-sm w-auto h-[130px]"
-        style={{ width: "auto", height: "auto" }}
+        style={{ width: "100%", height: "auto" }}
       />
     </Link>
   );
