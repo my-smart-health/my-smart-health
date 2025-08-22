@@ -47,14 +47,12 @@ export default function RootLayout({
       >
         <Navbar />
         {children}
-        <footer className="flex flex-row w-full max-w-md items-center justify-center py-2 text-white font-thin bg-primary">
-          <Link href="/impressum">IMPRESSUM</Link>
-          <br />
+        <footer className="bg-primary w-full text-center text-white py-4 mt-8">
+          <Link href="/impressum" className="hover:underline capitalize">Impressum</Link>
           <span className="mx-1">|</span>
-          <Link href="/datenschutz">DATENSCHUTZ</Link>
-          <br />
+          <Link href="/datenschutz" className="hover:underline capitalize">Datenschutz</Link>
           <span className="mx-1">|</span>
-          <Link href="/kontakt">KONTAKT</Link>
+          <Link href="/kontakt" className="hover:underline capitalize">Kontakt</Link>
         </footer>
       </body>
     </html>
