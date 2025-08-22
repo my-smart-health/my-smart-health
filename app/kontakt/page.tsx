@@ -3,10 +3,10 @@ import Link from "next/link";
 export default function KontaktPage() {
   return (
     <>
-      <div className="flex justify-center align-baseline p-2 mb-4 mx-auto  w-full  bg-primary">
+      <div className="flex justify-center align-baseline p-2 mb-4 mx-auto w-full bg-primary">
         <h1 className="text-white text-2xl font-bold">Impressum</h1>
       </div>
-      <div className="mb-auto flex flex-col align-baseline justify-baseline ml-4 w-full max-w-[90%]">
+      <div className="flex flex-col align-baseline justify-baseline w-full max-w-[90%]">
         <p>Anbieter dieser Webseite ist:</p>
         <br />
         <p>
@@ -29,9 +29,9 @@ export default function KontaktPage() {
         <br />
         <h2 className="font-bold">Online-Streitbeilegungsplattform der EU-Kommission</h2>
         <br />
-        <p>Die Online-Streitbeilegungsplattform („OS-Plattform“) zur außergerichtlichen Beilegung von Streitigkeiten aus online abgeschlossenen Verträgen erreichen Sie unter folgendem Link:
+        <p className="text-wrap">Die Online-Streitbeilegungsplattform („OS-Plattform“) zur außergerichtlichen Beilegung von Streitigkeiten aus online abgeschlossenen Verträgen erreichen Sie unter folgendem Link:
           <br />
-          <Link href="https://ec.europa.eu/consumers/odr/" className="link not-visited:text-blue-600 visited:text-purple-600">https://ec.europa.eu/consumers/odr/</Link>
+          <Link href="https://ec.europa.eu/consumers/odr/" className="link not-visited:text-blue-600 visited:text-purple-600 text-wrap">https://ec.europa.eu/consumers/odr/</Link>
         </p>
         <br />
         <h2 className="font-bold">Informationspflicht nach dem Verbraucherstreitbeilegungsgesetz</h2>

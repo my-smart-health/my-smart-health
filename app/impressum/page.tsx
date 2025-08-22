@@ -3,10 +3,10 @@ import Link from "next/link";
 export default function ImpressumPage() {
   return (
     <>
-      <div className="flex justify-center align-baseline p-2 mb-4 mx-auto  w-full  bg-primary">
+      <div className="flex justify-center align-baseline p-2 mb-4 mx-auto w-full bg-primary">
         <h1 className="text-white text-2xl font-bold">Impressum</h1>
       </div>
-      <div className="mb-auto flex flex-col align-baseline justify-baseline ml-4 w-full max-w-[90%]">
+      <div className="mb-auto flex flex-col align-baseline justify-baseline w-full max-w-[90%]">
         <p>Diese Webseite wird betrieben von:</p>
         <br />
         <p>
