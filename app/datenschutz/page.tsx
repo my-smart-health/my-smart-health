@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function DatenschutzPage() {
   return (
-    <>
+    <main className="flex flex-col justify-center items-center mx-auto mb-auto overflow-clip">
       <div className="flex justify-center align-baseline p-2 mb-4 mx-auto w-full bg-primary">
         <h1 className="text-white text-2xl font-bold">Datenschutz</h1>
       </div>
@@ -57,6 +57,6 @@ export default function DatenschutzPage() {
         <p>Das Angebot enthält auch Links zu Webseiten Dritter, auf deren Inhalt die Future Health GmbH keinen Einfluss hat und deshalb für diese fremden Inhalte auch keine Gewähr übernehmen kann.</p>
         <br />
       </div >
-    </>
+    </main>
   )
 }

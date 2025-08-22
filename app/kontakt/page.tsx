@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function KontaktPage() {
   return (
-    <>
+    <main className="flex flex-col justify-center items-center mx-auto mb-auto overflow-clip">
       <div className="flex justify-center align-baseline p-2 mb-4 mx-auto w-full bg-primary">
         <h1 className="text-white text-2xl font-bold">Impressum</h1>
       </div>
@@ -73,5 +73,6 @@ export default function KontaktPage() {
           <button type="submit" className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark">Senden</button>
         </form>
       </div>
-    </>)
+    </main>
+  );
 }

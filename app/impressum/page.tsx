@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function ImpressumPage() {
   return (
-    <>
+    <main className="flex flex-col justify-center items-center mx-auto mb-auto overflow-clip">
       <div className="flex justify-center align-baseline p-2 mb-4 mx-auto w-full bg-primary">
         <h1 className="text-white text-2xl font-bold">Impressum</h1>
       </div>
@@ -34,6 +34,6 @@ export default function ImpressumPage() {
           Umsatzsteuer-Identifikationsnummer DE295913675
         </p>
       </div>
-    </>
+    </main>
   );
 }
