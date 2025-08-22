@@ -19,6 +19,7 @@ export default function Navbar() {
           <div className="flex flex-row items-center justify-center text-xl font-bold uppercase">
             <Image
               priority
+              loading="eager"
               draggable={false}
               src="/Logo.jpg"
               alt="My Smart Health"
