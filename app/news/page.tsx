@@ -1,9 +1,13 @@
+import GoBack from "@/components/buttons/go-back/GoBack";
 import NewsSmartHealthMedizinButton from "@/components/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
 
 export default function NewsPage() {
   return (
     <div className="flex flex-col gap-3 w-full mb-auto max-w-[90%]">
       <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" active />
+      <div className="flex justify-end">
+        <GoBack />
+      </div>
       <div className="m-auto min-h-full border">
         <p className="p-4">News content goes here</p>
       </div>

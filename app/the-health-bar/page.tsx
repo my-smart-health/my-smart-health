@@ -1,3 +1,4 @@
+import GoBack from "@/components/buttons/go-back/GoBack";
 import TheHealthBarCarousel from "@/components/carousels/theHealthBarCarousel/TheHealthBarCarousel";
 import TopCarousel from "@/components/carousels/topCarousel/TopCarousel";
 import TheHealthBarInfo from "@/components/the-health-bar-info/TheHealthBarInfo";
@@ -11,6 +12,9 @@ export default function TheHealthBarPage() {
       <div className="max-w-[95%]">
         <TopCarousel props={defaultCarouselItems} />
         <TheHealthBarCarousel props={defaultHealthBarItems} />
+        <div className="flex justify-end mt-4">
+          <GoBack />
+        </div>
         <Image loading="lazy" placeholder="empty" src="/healthbar.png" alt="Health Bar" width={410} height={130} className="self-center w-full max-w-full aspect-auto h-auto" />
       </div>
       <div className="flex border w-full border-primary"></div>
