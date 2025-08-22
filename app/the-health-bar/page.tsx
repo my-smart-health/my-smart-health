@@ -5,10 +5,12 @@ import Image from "next/image";
 
 export default function TheHealthBarPage() {
   return (
-    <div className="flex flex-col gap-3 justify-center items-center mx-auto mb-auto max-w-[90%] overflow-clip">
-      <TopCarousel props={defaultCarouselItems} />
-      <TheHealthBarCarousel props={defaultHealthBarItems} />
+    <main className="flex flex-col gap-3 justify-center items-center mx-auto mb-auto max-w-[90%] overflow-clip">
+      <div className="max-w-[95%]">
+        <TopCarousel props={defaultCarouselItems} />
+        <TheHealthBarCarousel props={defaultHealthBarItems} />
+      </div>
       <Image loading="lazy" placeholder="empty" src="/healthbar.png" alt="Health Bar" width={410} height={130} className="self-center w-full max-w-full aspect-auto h-auto" />
-    </div>
+    </main>
   );
 }
