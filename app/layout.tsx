@@ -22,12 +22,14 @@ export const metadata: Metadata = {
     siteName: "My Smart Health",
     images: [
       {
-        url: "https://my-smart-health.vercel.app/Logo.jpg",
-        width: 800,
-        height: 600,
+        url: "https://my-smart-health.vercel.app/og-logo.jpg",
+        width: 1200,
+        height: 630,
         alt: "My Smart Health Logo",
       },
     ],
+    locale: "de_DE",
+    type: "website",
   },
 };
 
