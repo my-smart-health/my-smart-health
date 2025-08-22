@@ -26,10 +26,10 @@ export default function TopCarousel({ props }: TopCarouselItemProps) {
 
   return (
     <Suspense fallback={<TopCarouselSkeleton times={7} />}>
-      <div draggable={false} className="mx-auto max-w-2xs md:max-w-sm">
+      <div draggable={false} className="max-w-2xs md:max-w-sm">
         <Swiper
           modules={[Scrollbar, Mousewheel, Autoplay]}
-          spaceBetween={50}
+          spaceBetween={4}
           slidesPerView={4}
           mousewheel={true}
           autoplay={{ delay: 3000, disableOnInteraction: false }}
@@ -37,8 +37,8 @@ export default function TopCarousel({ props }: TopCarouselItemProps) {
           scrollbar={{ draggable: true }}
         >
           {props.map((item) => (
-            <SwiperSlide key={item.id}>
-              <div draggable={false} className="flex flex-col w-20 gap-1 pb-4 cursor-pointer">
+            <div draggable={false} className="flex flex-col mx-auto gap-1 pb-4 cursor-pointer">
+              <SwiperSlide key={item.id}>
                 <Image
                   loading="lazy"
                   placeholder="empty"
@@ -48,9 +48,9 @@ export default function TopCarousel({ props }: TopCarouselItemProps) {
                   src={item.imageSrc}
                   className="rounded-box border-6 border-primary aspect-square"
                 />
-                <p className="text-center text-[#2c2e35]">{item.name}</p>
-              </div>
-            </SwiperSlide>
+                <p className="text-center text-[#2c2e35] mb-4">{item.name}</p>
+              </SwiperSlide>
+            </div>
           ))}
         </Swiper>
       </div>
