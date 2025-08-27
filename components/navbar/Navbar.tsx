@@ -11,7 +11,7 @@ export default async function Navbar() {
     <>
       <nav
         draggable={false}
-        className="flex flex-col mx-auto mb-1 w-full max-w-[90%] bg-white"
+        className="flex flex-col mx-auto mb-1 w-full max-w-[90%]"
       >
         <div className="flex flex-row gap-1 items-center justify-evenly text-start text-nowrap">
           <Link
@@ -39,7 +39,7 @@ export default async function Navbar() {
         <div className="flex text-wrap m-auto">Welcome, {session.user?.email}</div>
         <div className="border border-white h-full w-0 my-4 text-transparent">.</div>
         <details className="dropdown dropdown-end">
-          <summary className="btn btn-circle m-1 border-2 border-white bg-primary"><Settings className="" /></summary>
+          <summary className="btn btn-circle m-2 border-2 border-white bg-primary"><Settings className="text-white" /></summary>
           <ul className="menu dropdown-content bg-primary border border-black/30 rounded-box z-1 w-52 p-2 mt-2 shadow-sm">
             <li><Link href="/" className="flex gap-1">Home</Link></li>
             <li><Link href="/dashboard" className="flex gap-1">Dashboard</Link></li>
