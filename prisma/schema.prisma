@@ -29,5 +29,5 @@ model Posts {
   content   String   @db.Text
   author    User     @relation("UserPosts", fields: [authorId], references: [id])
   authorId  String
-  photo     String
+  photo     String[]
 }
