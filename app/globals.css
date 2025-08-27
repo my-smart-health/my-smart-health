@@ -1,27 +1,14 @@
 @import 'tailwindcss';
 @plugin "daisyui";
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
   --primary: #2db9bc;
   --secondary: #c5ffe4;
   padding: 0;
   margin: 0;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
 }
 
 html {
   scroll-behavior: smooth;
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Montserrat, Arial, Helvetica, sans-serif;
 }
