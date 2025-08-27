@@ -9,8 +9,8 @@ export default async function RegisterPage() {
     redirect("/login");
   }
 
-  const sessionUser = session.user.email as string;
-  if (sessionUser !== "test@test.bg") {
+  const sessionUser = session.user.role;
+  if (sessionUser !== "ADMIN") {
     redirect("/");
   }
 
