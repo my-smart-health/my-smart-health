@@ -150,7 +150,7 @@ export default function CreateNewsForm({ session }: CreateNewsFormProps) {
           <div className="label text-xs">You can upload up to 10 files</div>
           <label htmlFor="image" className="label">Max file size 4MB</label>
         </fieldset>
-        <button type="submit" className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">
+        <button type="submit" className="p-2 rounded bg-primary text-white font-bold text-base hover:bg-primary/80 transition-colors">
           Create News
         </button>
       </form>
