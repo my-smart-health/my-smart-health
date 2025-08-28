@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import GoToButton from "@/components/buttons/go-to/GoToButton";
 import prisma from "@/lib/db";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -24,6 +25,9 @@ export default async function DashboardPage() {
     <>
       <main className="flex flex-col gap-4 h-full min-h-[72dvh] max-w-[90%]">
         <h1 className="text-4xl font-bold text-primary">Dashboard</h1>
+        <GoToButton src="/create-news" name="Create News" />
+        <GoToButton src="/edit-profile" name="Edit Profile" />
+
         <table className="flex flex-col items-start text-wrap max-w-[90%]">
           <thead>
             <tr>
