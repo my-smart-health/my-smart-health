@@ -11,15 +11,19 @@ generator client {
 
 model User {
   id            String    @id @default(uuid())
-  createdAt     DateTime  @default(now())
   email         String    @unique
-  name          String?
   password      String    @db.VarChar(255)
   role          String    @default("USER")
+  createdAt     DateTime  @default(now())
   emailVerified DateTime? @default(now())
+  name          String?
   image         String?
+  address       String?
+  website       String?
   bio           String?
+  phone         String[]  @db.VarChar(20)
   posts         Posts[]   @relation("UserPosts")
+  socials       Socials[] @relation("UserSocials")
 }
 
 model Posts {
@@ -29,5 +33,14 @@ model Posts {
   content   String   @db.Text
   author    User     @relation("UserPosts", fields: [authorId], references: [id])
   authorId  String
-  photo     String[]
+  photos    String[]
+}
+
+model Socials {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  platform  String   @db.VarChar(255)
+  url       String   @db.VarChar(255)
+  user      User     @relation("UserSocials", fields: [userId], references: [id])
+  userId    String
 }
