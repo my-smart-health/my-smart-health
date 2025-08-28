@@ -1,6 +1,6 @@
 'use client'
 
-import GoBackDashboard from "@/components/buttons/go-back-dashboard/GoBackDashboard";
+import GoToButton from "@/components/buttons/go-to/GoToButton";
 
 export default function EditProfileForm() {
 
@@ -9,7 +9,7 @@ export default function EditProfileForm() {
       <form action="/api/profile" method="POST">
         {/* TODO: Form */}
       </form>
-      <GoBackDashboard />
+      <GoToButton src="/dashboard" name="Back to Dashboard" />
     </div>
   );
 }

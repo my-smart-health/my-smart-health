@@ -1,6 +1,6 @@
 'use client'
 
-import GoBackDashboard from "@/components/buttons/go-back-dashboard/GoBackDashboard";
+import GoToButton from "@/components/buttons/go-to/GoToButton";
 import { FormEvent, useState } from "react";
 
 type RegisterResponse = {
@@ -114,7 +114,7 @@ export default function RegisterForm() {
       </button>
 
       <div className="mt-4">
-        <GoBackDashboard />
+        <GoToButton src="/dashboard" name="Back to Dashboard" />
       </div>
     </form>
   );
