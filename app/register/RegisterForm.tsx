@@ -41,7 +41,6 @@ export default function RegisterForm() {
       }
 
       if (!res.ok) {
-        console.log('Error registering user');
         setUserCreatedOrError({ type: 'someError' });
         return null;
       }
