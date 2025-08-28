@@ -5,7 +5,6 @@ import { PutBlobResult } from "@vercel/blob";
 import { ArrowUpRight } from "lucide-react";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
-import { NextResponse } from "next/server";
 import { FormEvent, useRef, useState } from "react";
 
 type CreateNewsFormProps = {
@@ -19,10 +18,9 @@ export default function CreateNewsForm({ session }: CreateNewsFormProps) {
   }
 
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const [blob, setBlob] = useState<PutBlobResult[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
-
+  const blobResult: string[] = [];
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault();
@@ -31,51 +29,53 @@ export default function CreateNewsForm({ session }: CreateNewsFormProps) {
 
       if (!inputFileRef.current?.files) {
         setError("No file selected");
-      } else {
-        const files = inputFileRef.current.files.length > 0 ? Array.from(inputFileRef.current.files) : [];
+        return;
+      }
 
-        if (files.some(file => file.size > 4 * 1024 * 1024)) { // 4MB limit
-          setError(`File ${files.find(file => file.size > 4 * 1024 * 1024)?.name} exceeds the 4MB size limit.`);
+      const files = inputFileRef.current.files.length > 0 ? Array.from(inputFileRef.current.files) : [];
+
+      if (files.some(file => file.size > 4 * 1024 * 1024)) { // 4MB limit
+        setError(`File ${files.find(file => file.size > 4 * 1024 * 1024)?.name} exceeds the 4MB size limit.`);
+        return;
+      }
+
+      for (const file of files) {
+        if (files.length > 10) {
+          setError("You can upload up to 10 files only.");
           return;
         }
-
-        for (const file of files) {
-          if (files.length > 10) {
-            setError("You can upload up to 10 files only.");
-            return;
+        const response = await fetch(
+          `/api/upload-picture/?userid=${session.user.id}&filename=${file.name}`,
+          {
+            method: 'POST',
+            body: file,
           }
-          const response = await fetch(
-            `/api/upload-picture/${session.user.id}?filename=${file.name}`,
-            {
-              method: 'POST',
-              body: file,
-            }
-          );
-          const result = await response.json() as PutBlobResult;
-
-          setBlob((prev) => [...(prev || []), result]);
-        }
+        );
+        const result = await response.json() as PutBlobResult;
+        blobResult.push(result.url);
       }
+
       const result = await fetch(`/api/create-news`, {
         method: 'POST',
         body: JSON.stringify({
           authorId: session.user.id,
           title: formData.get('title'),
           content: formData.get('content'),
-          photos: blob.map(b => b.pathname),
+          photos: blobResult,
         }),
         headers: {
           'Content-Type': 'application/json',
         },
       });
+
       if (!result.ok) {
         setError('Failed to create news');
-        return NextResponse.error();
+        setIsDisabled(false);
+        return;
       }
 
       setError("News created successfully");
-
-      return NextResponse.json({ message: 'News created successfully' });
+      setIsDisabled(true);
     } catch (error) {
       let message = 'Error uploading files';
       if (error instanceof Error) {
@@ -83,9 +83,10 @@ export default function CreateNewsForm({ session }: CreateNewsFormProps) {
       }
       setError(message);
       setIsDisabled(false);
-      return NextResponse.error();
+      return;
     }
   };
+
   return (
     <>
       {error && <p className={`${error === 'News created successfully' ? 'text-green-500' : 'text-red-500'} bg-secondary/10 border-2 border-primary rounded-2xl p-2 text-center`}>{error}</p>}
