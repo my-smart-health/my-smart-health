@@ -6,6 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { FormEvent, useRef, useState } from "react";
+import logo from '@/public/logo.png'
 
 type CreateNewsFormProps = {
   session: Session | null;
@@ -20,6 +21,7 @@ export default function CreateNewsForm({ session }: CreateNewsFormProps) {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [isDefaultLogo, setIsDefaultLogo] = useState<boolean>(false);
   const blobResult: string[] = [];
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
@@ -27,12 +29,17 @@ export default function CreateNewsForm({ session }: CreateNewsFormProps) {
       setIsDisabled(true);
       const formData = new FormData(event.currentTarget);
 
-      if (!inputFileRef.current?.files) {
-        setError("No file selected");
-        return;
+      let files: File[];
+      if (!inputFileRef.current?.files || inputFileRef.current.files.length === 0) {
+        setIsDefaultLogo(true);
+        const response = await fetch(logo.src);
+        const blob = await response.blob();
+        const defaultFile = new File([blob], "logo.png", { type: blob.type });
+        files = [defaultFile];
+      } else {
+        files = Array.from(inputFileRef.current.files);
+        setIsDefaultLogo(false);
       }
-
-      const files = inputFileRef.current.files.length > 0 ? Array.from(inputFileRef.current.files) : [];
 
       if (files.some(file => file.size > 4 * 1024 * 1024)) { // 4MB limit
         setError(`File ${files.find(file => file.size > 4 * 1024 * 1024)?.name} exceeds the 4MB size limit.`);
@@ -42,10 +49,13 @@ export default function CreateNewsForm({ session }: CreateNewsFormProps) {
       for (const file of files) {
         if (files.length > 10) {
           setError("You can upload up to 10 files only.");
+          setIsDisabled(false);
           return;
         }
+
+        const uniqueFileName = `${Date.now()}-${file.name}`;
         const response = await fetch(
-          `/api/upload-picture/?userid=${session.user.id}&filename=${file.name}`,
+          `/api/upload-picture/?userid=${session.user.id}&filename=${uniqueFileName}`,
           {
             method: 'POST',
             body: file,
@@ -89,11 +99,19 @@ export default function CreateNewsForm({ session }: CreateNewsFormProps) {
 
   return (
     <>
-      {error && <p className={`${error === 'News created successfully' ? 'text-green-500' : 'text-red-500'} bg-secondary/10 border-2 border-primary rounded-2xl p-2 text-center`}>{error}</p>}
+      {error && <p className={`${error === 'News created successfully' ? 'text-green-500' : 'text-red-500'} bg-secondary/10 border-2 border-primary rounded-2xl p-2 text-center break-all`}>{error}</p>}
+      {isDefaultLogo && <div className="flex flex-col items-center">
+        <p className="text-yellow-500 bg-secondary/10 border-2 border-primary rounded-2xl p-2 text-center break-all">
+          No image file was selected, default logo will be used
+        </p>
+        <p className="text-sm text-gray-500 italic">
+          You can change it later in the edit news section
+        </p>
+      </div>}
       <form
         onSubmit={handleSubmit}
         className={`flex flex-col gap-4 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}>
-        <div>
+        <fieldset className="fieldset text-lg">
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">
             Title
           </label>
@@ -104,7 +122,7 @@ export default function CreateNewsForm({ session }: CreateNewsFormProps) {
             required
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
           />
-        </div>
+        </fieldset>
         <fieldset className="fieldset">
           <label htmlFor="content" className="block text-sm font-medium text-gray-700">
             Content
@@ -127,7 +145,6 @@ export default function CreateNewsForm({ session }: CreateNewsFormProps) {
             name="image"
             accept="image/*"
             multiple
-            required
             className="file-input"
           />
           <div className="label text-xs">You can upload up to 10 files</div>
