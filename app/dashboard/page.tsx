@@ -25,9 +25,8 @@ export default async function DashboardPage() {
     <>
       <main className="flex flex-col gap-4 h-full min-h-[72dvh] max-w-[90%]">
         <h1 className="text-4xl font-bold text-primary">Dashboard</h1>
-        <GoToButton src="/create-news" name="Create News" />
-        <GoToButton src="/edit-profile" name="Edit Profile" />
-
+        <GoToButton src="/dashboard/create-news" name="Create News" />
+        <GoToButton src="/dashboard/edit-profile" name="Edit Profile" />
         <table className="flex flex-col items-start text-wrap max-w-[90%]">
           <thead>
             <tr>
