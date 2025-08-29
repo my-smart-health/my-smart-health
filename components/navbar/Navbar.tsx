@@ -43,7 +43,7 @@ export default async function Navbar() {
 
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-circle m-2 border-2 border-white bg-primary"><Settings className="text-white" /></div>
-            <ul tabIndex={0} className="dropdown-content menu bg-primary rounded-box z-1 w-52 p-2 shadow-sm">
+            <ul tabIndex={0} className="dropdown-content menu bg-primary border rounded-box z-1 w-52 p-2 shadow-sm transition-opacity ease-in-out">
               <li><Link href="/" className="flex gap-1">Home</Link></li>
               <li><Link href="/dashboard" className="flex gap-1">Dashboard</Link></li>
               <li><Link href="/dashboard/create-news" className="flex gap-1">Create News</Link></li>
