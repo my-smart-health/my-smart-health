@@ -25,7 +25,6 @@ async function getData(id: string): Promise<NewsCardType | null> {
         }
       }
     }
-
   })
   return prismaResult as NewsCardType | null;
 }
@@ -36,7 +35,7 @@ export default async function NewsPage({ params }: { params: Promise<{ id: strin
 
   return (
     <main className="flex flex-col gap-3 w-full mb-auto max-w-[90%]">
-      <div className="space-y-4 max-w-[90%] mx-auto w-full">
+      <div className="space-y-4 mx-auto w-full">
         <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" active />
         <div className="flex justify-end my-2">
           <GoBack />

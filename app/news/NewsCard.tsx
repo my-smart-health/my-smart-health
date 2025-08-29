@@ -26,9 +26,9 @@ export default function NewsCard({ newsData }: { newsData: NewsCardType[] }) {
         return (
           <div
             key={id}
-            className="m-auto min-h-full border max-w-[90%] rounded-lg shadow-2xl"
+            className="m-auto min-h-full border max-w-[99%] rounded-lg shadow-2xl"
           >
-            <div className="card bg-secondary/20 w-96 shadow-sm max-w-[100%]">
+            <div className="card card-lg bg-secondary/20 w-96 shadow-sm max-w-[100%]">
               <div className="badge badge-accent rounded-bl-none rounded-tr-none p-4">{createdDate}</div>
               <h2 className="card-title card-border flex-col m-4 justify-center">
                 {title}

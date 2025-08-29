@@ -35,9 +35,11 @@ export default async function NewsPage() {
 
   return (
     <div className="flex flex-col gap-3 w-full mb-auto max-w-[90%]">
-      <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" active />
-      <div className="flex justify-end">
-        <GoBack />
+      <div className="space-y-4 mx-auto w-full">
+        <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" active />
+        <div className="flex justify-end my-2">
+          <GoBack />
+        </div>
       </div>
       {newsData && <NewsCard newsData={newsData} />}
       <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/smart-health" />
