@@ -31,3 +31,16 @@ export type Posts = {
   author: User;
   authorId: string;
 };
+export type NewsCardType = {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date | null;
+  photos: string[];
+  author: {
+    id: string;
+    name: string;
+    fieldOfExpertise: string[];
+  };
+};
