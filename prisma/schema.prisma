@@ -10,28 +10,30 @@ generator client {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  email         String    @unique
-  password      String    @db.VarChar(255)
-  role          String    @default("USER")
-  createdAt     DateTime  @default(now())
-  emailVerified DateTime? @default(now())
-  name          String?
-  image         String?
-  address       String?
-  website       String?
-  bio           String?
-  phone         String[]  @db.VarChar(20)
-  posts         Posts[]   @relation("UserPosts")
-  socials       Socials[] @relation("UserSocials")
+  id               String    @id @default(uuid())
+  email            String    @unique
+  password         String    @db.VarChar(255)
+  role             String    @default("USER")
+  createdAt        DateTime  @default(now())
+  emailVerified    DateTime? @default(now())
+  name             String?
+  image            String?
+  address          String?
+  website          String?
+  bio              String?
+  fieldOfExpertise String[]
+  phone            String[]  @db.VarChar(20)
+  posts            Posts[]   @relation("UserPosts")
+  socials          Socials[] @relation("UserSocials")
 }
 
 model Posts {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  title     String   @db.VarChar(255)
-  content   String   @db.Text
-  author    User     @relation("UserPosts", fields: [authorId], references: [id])
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  title     String    @db.VarChar(255)
+  content   String    @db.Text
+  author    User      @relation("UserPosts", fields: [authorId], references: [id])
   authorId  String
   photos    String[]
 }
