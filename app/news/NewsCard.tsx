@@ -9,8 +9,6 @@ import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
 import 'swiper/css/effect-fade';
 
-
-import { useEffect, useState } from "react";
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 
 export default function NewsCard({ newsData }: { newsData: NewsCardType[] }) {
@@ -18,18 +16,12 @@ export default function NewsCard({ newsData }: { newsData: NewsCardType[] }) {
     <>
       {newsData && newsData.map((news) => {
         const { id, title, content, createdAt, photos, author } = news;
-        const [createdDate, setCreatedDate] = useState('');
 
-        useEffect(() => {
-          setCreatedDate(new Date(createdAt).toLocaleString('de-DE', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-          }));
-        }, [createdAt]);
+        const createdDate = new Date(createdAt).toLocaleString('de-DE', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+        });
 
         return (
           <div

@@ -10,22 +10,16 @@ import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
 import 'swiper/css/effect-fade';
 
-import { useEffect, useState } from "react";
 import GoBack from "@/components/buttons/go-back/GoBack";
 
 export default function NewsCardDetails({ newsData }: { newsData: NewsCardType | null }) {
+
   const { id, title, content, createdAt, photos, author } = newsData || {};
-  const [createdDate, setCreatedDate] = useState('');
-  useEffect(() => {
-    createdAt && setCreatedDate(new Date(createdAt).toLocaleString('de-DE', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-    }));
-  }, [createdAt]);
+  const createdDate = new Date(createdAt ? createdAt : '').toLocaleString('de-DE', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
   return (
     <>
       {newsData ? (
