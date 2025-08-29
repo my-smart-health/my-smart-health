@@ -14,7 +14,7 @@ import GoToButton from "@/components/buttons/go-to/GoToButton";
 export default function NewsCard({ newsData }: { newsData: NewsCardType[] }) {
   return (
     <>
-      {newsData && newsData.map((news) => {
+      {newsData ? newsData.map((news) => {
         const { id, title, content, createdAt, photos, author } = news;
 
         const createdDate = new Date(createdAt).toLocaleString('de-DE', {
@@ -84,7 +84,9 @@ export default function NewsCard({ newsData }: { newsData: NewsCardType[] }) {
             </div>
           </div>
         );
-      })}
+      }) : (
+        <div className="text-red-500 border rounded-2xl p-2 text-center">Error: No News found</div>
+      )}
     </>
   );
 }
