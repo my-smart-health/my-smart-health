@@ -30,7 +30,7 @@ async function getData(id: string): Promise<NewsCardType | null> {
   return prismaResult as NewsCardType | null;
 }
 
-export default async function NewsPage({ params }: { params: { id: string } }) {
+export default async function NewsPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const newsData = await getData(id);
 
