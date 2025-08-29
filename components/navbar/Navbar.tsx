@@ -35,20 +35,24 @@ export default async function Navbar() {
           <NotrufDropdown />
         </div>
       </nav>
-      {session && <div className="flex flex-row justify-evenly align-baseline h-full max-h-fit w-full max-w-[90%] gap-2 bg-primary text-white p-2 mb-4">
-        <div className="flex text-wrap m-auto">Welcome, {session.user?.email}</div>
-        <div className="border border-white h-full w-0 my-4 text-transparent">.</div>
-        <details className="dropdown dropdown-end">
-          <summary className="btn btn-circle m-2 border-2 border-white bg-primary"><Settings className="text-white" /></summary>
-          <ul className="menu dropdown-content bg-primary border border-black/30 rounded-box z-1 w-52 p-2 mt-2 shadow-sm">
-            <li><Link href="/" className="flex gap-1">Home</Link></li>
-            <li><Link href="/dashboard" className="flex gap-1">Dashboard</Link></li>
-            <li><Link href="/dashboard/create-news" className="flex gap-1">Create News</Link></li>
-            <li><Link href="/dashboard/edit-profile" className="flex gap-1">Edit profile</Link></li>
-            <li className="mt-4"><LogOut /></li>
-          </ul>
-        </details>
-      </div>}
+      {session &&
+        <div className="flex flex-row justify-evenly align-baseline h-full max-h-fit w-full max-w-[90%] gap-2 bg-primary text-white p-2 mb-4">
+          <div className="flex text-wrap m-auto">Welcome, {session.user?.email}</div>
+
+          <div className="border border-white h-full w-0 my-4 text-transparent">.</div>
+
+          <div className="dropdown dropdown-end">
+            <div tabIndex={0} role="button" className="btn btn-circle m-2 border-2 border-white bg-primary"><Settings className="text-white" /></div>
+            <ul tabIndex={0} className="dropdown-content menu bg-primary rounded-box z-1 w-52 p-2 shadow-sm">
+              <li><Link href="/" className="flex gap-1">Home</Link></li>
+              <li><Link href="/dashboard" className="flex gap-1">Dashboard</Link></li>
+              <li><Link href="/dashboard/create-news" className="flex gap-1">Create News</Link></li>
+              <li><Link href="/dashboard/edit-profile" className="flex gap-1">Edit profile</Link></li>
+              <li className="mt-4"><LogOut /></li>
+            </ul>
+          </div>
+        </div>
+      }
     </>
   )
 }
