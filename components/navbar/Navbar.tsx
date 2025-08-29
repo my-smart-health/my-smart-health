@@ -47,8 +47,10 @@ export default async function Navbar() {
               <li><Link href="/" className="flex gap-1">Home</Link></li>
               <li><Link href="/dashboard" className="flex gap-1">Dashboard</Link></li>
               <li><Link href="/dashboard/create-news" className="flex gap-1">Create News</Link></li>
+              <li className="tab-disabled"></li>
               <li><Link href="/dashboard/edit-profile" className="flex gap-1">Edit profile</Link></li>
-              <li className="mt-4"><LogOut /></li>
+              <li className="tab-disabled"></li>
+              <li className="my-2"><LogOut /></li>
             </ul>
           </div>
         </div>
