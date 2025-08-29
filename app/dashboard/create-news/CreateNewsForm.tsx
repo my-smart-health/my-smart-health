@@ -43,6 +43,7 @@ export default function CreateNewsForm({ session }: CreateNewsFormProps) {
 
       if (files.some(file => file.size > 4 * 1024 * 1024)) { // 4MB limit
         setError(`File ${files.find(file => file.size > 4 * 1024 * 1024)?.name} exceeds the 4MB size limit.`);
+        setIsDisabled(false);
         return;
       }
 
