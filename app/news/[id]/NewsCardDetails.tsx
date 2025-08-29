@@ -70,7 +70,7 @@ export default function NewsCardDetails({ newsData }: { newsData: NewsCardType |
                     </Swiper>
                   </div>
                 </figure>
-                <p className="text-base text-pretty">{content}</p>
+                <p className="text-base text-pretty indent-4 break-before">{content}</p>
                 {author?.fieldOfExpertise &&
                   <div className="card-actions mt-1 pt-1 justify-end">
                     {
