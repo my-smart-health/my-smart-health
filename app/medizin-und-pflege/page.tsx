@@ -1,6 +1,6 @@
 import NewsSmartHealthMedizinButton from "@/components/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
 
-export default function MedizinUndPflegePage() {
+export default async function MedizinUndPflegePage() {
   return (
     <div className="flex flex-col gap-3 w-full mb-auto max-w-[90%]">
       <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" />
