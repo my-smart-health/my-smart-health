@@ -30,6 +30,7 @@ export default function NewsCardDetails({ newsData }: { newsData: NewsCardType |
           >
             <div className="card card-lg bg-secondary/20 w-96 shadow-sm max-w-[100%]">
               <div className="badge badge-accent rounded-bl-none rounded-tr-none p-4">{createdDate}</div>
+              {author?.name && <div className="text-2xl indent-6 mt-3">{author?.name || "Unknown Author"}</div>}
               <h2 className="card-title card-border flex-col m-4 justify-center">
                 {title}
               </h2>
