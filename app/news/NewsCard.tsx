@@ -30,6 +30,7 @@ export default function NewsCard({ newsData }: { newsData: NewsCardType[] }) {
           >
             <div className="card card-lg bg-secondary/20 w-96 shadow-sm max-w-[100%]">
               <div className="badge badge-accent rounded-bl-none rounded-tr-none p-4">{createdDate}</div>
+              {author?.name && <div className="text-2xl indent-6 mt-3 text-primary">{author?.name || "Unknown Author"}</div>}
               <h2 className="card-title card-border flex-col m-4 justify-center">
                 {title}
               </h2>
@@ -70,7 +71,7 @@ export default function NewsCard({ newsData }: { newsData: NewsCardType[] }) {
                     </Swiper>
                   </div>
                 </figure>
-                <p className="text-base line-clamp-3">{content}</p>
+                <p className="text-base line-clamp-3 indent-6">{content}</p>
                 <div className="card-actions justify-end">
                   {
                     author?.fieldOfExpertise.map((expertise, index) => (
