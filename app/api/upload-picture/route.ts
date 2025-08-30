@@ -5,6 +5,13 @@ export async function POST(request: Request) {
     const { searchParams } = new URL(request.url);
     const filename = searchParams.get('filename');
     const userid = searchParams.get('userid');
+
+    if (!userid) {
+      return new Response(JSON.stringify({ error: 'User ID is required' }), {
+        status: 400,
+      });
+    }
+
     if (!filename) {
       return new Response(JSON.stringify({ error: 'Filename is required' }), {
         status: 400,
