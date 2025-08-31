@@ -1,4 +1,5 @@
 import { put } from '@vercel/blob';
+import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
@@ -7,37 +8,30 @@ export async function POST(request: Request) {
     const userid = searchParams.get('userid');
 
     if (!userid) {
-      return new Response(JSON.stringify({ error: 'User ID is required' }), {
-        status: 400,
-      });
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      );
     }
 
     if (!filename) {
-      return new Response(JSON.stringify({ error: 'Filename is required' }), {
-        status: 400,
-      });
+      return NextResponse.json(
+        { error: 'Filename is required' },
+        { status: 400 }
+      );
     }
     if (!request.body) {
-      return new Response(JSON.stringify({ error: 'File is required' }), {
-        status: 400,
-      });
+      return NextResponse.json({ error: 'File is required' }, { status: 400 });
     }
 
     const blob = await put(`${userid}/news/${filename}`, request.body, {
       access: 'public',
     });
 
-    return new Response(JSON.stringify(blob), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    return NextResponse.json(blob, { status: 200 });
   } catch (error) {
     process.env.NODE_ENV === 'development' &&
       console.error('Error uploading picture:', error);
-    return new Response(JSON.stringify({ error: 'Invalid request' }), {
-      status: 400,
-    });
+    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
 }
