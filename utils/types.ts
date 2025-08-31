@@ -44,3 +44,5 @@ export type NewsCardType = {
     fieldOfExpertise: string[];
   };
 };
+
+export type Social = { platform: string; url: string };
