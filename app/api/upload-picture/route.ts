@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       });
     }
 
-    const blob = await put(`${userid}/${filename}`, request.body, {
+    const blob = await put(`${userid}/news/${filename}`, request.body, {
       access: 'public',
     });
 
