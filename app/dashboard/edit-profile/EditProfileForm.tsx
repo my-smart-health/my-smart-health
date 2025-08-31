@@ -1,11 +1,15 @@
 'use client'
 
+import Image from "next/image";
+import { useRef, useState } from "react";
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import { PutBlobResult } from "@vercel/blob";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import Xlogo from '@/public/x-logo-black.png';
+import TikTokLogo from '@/public/tik-tok-logo.png';
 
+type Social = { platform: string; url: string };
 type User = {
   name: string | null;
   address: string | null;
@@ -14,33 +18,58 @@ type User = {
   website: string | null;
   image: string | null;
   fieldOfExpertise: string[];
-  socials: {
-    userId: string;
-    id: string;
-    url: string;
-    createdAt: Date;
-    platform: string;
-  }[];
+  socials: string[]; // Now a string array!
   id: string;
 }
 
-export default function EditProfileForm({ user }: { user: User }) {
+function parseSocials(socials: string[]): Social[] {
+  return socials
+    .map((s) => {
+      const [platform, url] = s.split('|');
+      return { platform, url };
+    })
+    .filter(s => s.platform && s.url);
+}
 
+function serializeSocials(socials: Social[]): string[] {
+  return socials
+    .filter(s => s.platform && s.url)
+    .map(s => `${s.platform}|${s.url}`);
+}
+
+export default function EditProfileForm({ user }: { user: User }) {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [userData, setUserData] = useState<User>(user);
+  const [socials, setSocials] = useState<Social[]>(parseSocials(user.socials || []));
   const redirect = useRouter();
   const blobResult: string[] = [];
 
 
+  const platformIcons: Record<string, React.ReactNode> = {
+    Facebook: <Facebook className="inline-block mr-1" size={20} />,
+    Linkedin: <Linkedin className="inline-block mr-1" size={20} />,
+    X: <Image src={Xlogo} width={20} height={20} alt="X.com" className="w-6  mr-1" />,
+    Youtube: <Youtube className="inline-block mr-1" size={20} />,
+    TikTok: <Image src={TikTokLogo} width={20} height={20} alt="TikTok" className="w-10 mr-1" />,
+    Instagram: <Instagram className="inline-block mr-1" size={20} />,
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
+    const data = {
+      name: formData.get('name') as string,
+      bio: formData.get('bio') as string,
+      address: formData.get('address') as string,
+      website: formData.get('website') as string,
+      image: userData.image,
+      socials: serializeSocials(socials),
+    };
+    if (blobResult.length > 0) data.image = blobResult[0];
 
     if (formData.get('image') && inputFileRef.current?.files?.[0]) {
       try {
         const file = formData.get('image') as File;
-
         const response = await fetch(
           `/api/upload-profile-picture/?userid=${userData.id}&filename=${file.name}`,
           {
@@ -48,40 +77,28 @@ export default function EditProfileForm({ user }: { user: User }) {
             body: file,
           }
         );
-        if (!response.ok) {
-          throw new Error('Failed to upload image');
-        }
-
+        if (!response.ok) throw new Error('Failed to upload image');
         const result = await response.json() as PutBlobResult;
-
         blobResult.push(result.url);
-
       } catch (error) {
         process.env.NODE_ENV === 'development' && console.error('Error uploading image:', error);
         return;
       }
     }
     try {
-      if (userData.image) {
-        data.image = userData.image;
-      }
+      if (userData.image) data.image = userData.image;
+      if (blobResult.length > 0) data.image = blobResult[0];
 
-      if (blobResult.length > 0) {
-        data.image = blobResult[0];
-      }
+      // Make sure socials is sent as an array
+      const payload = { ...data, socials: serializeSocials(socials) };
 
       const res = await fetch('/api/update-profile', {
         method: 'PUT',
-        body: data && JSON.stringify({ id: userData.id, data }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        body: JSON.stringify({ id: userData.id, data: payload }),
+        headers: { 'Content-Type': 'application/json' },
       });
 
-      if (!res.ok) {
-        throw new Error('Failed to update profile');
-      }
-
+      if (!res.ok) throw new Error('Failed to update profile');
       const result = await res.json();
       setUserData(result.data);
 
@@ -181,7 +198,6 @@ export default function EditProfileForm({ user }: { user: User }) {
           </label>
           }
 
-
           <label className="flex flex-col">
             <span className="font-semibold text-gray-700">Website</span>
             <input
@@ -193,33 +209,65 @@ export default function EditProfileForm({ user }: { user: User }) {
           </label>
 
           <div>
-
             <span className="font-semibold text-gray-700">Socials</span>
             <div className="flex flex-col gap-2 mt-1">
-              {Array.isArray(userData.socials) && userData.socials.length > 0 ? (
-                userData.socials.map((social, idx) => (
-                  <div key={social.id} className="flex gap-2">
-                    <input
-                      type="text"
-                      name={`socials[${idx}].platform`}
-                      defaultValue={social.platform}
-                      placeholder="Platform"
-                      className="rounded border-1 border-primary shadow-sm flex-1"
-                    />
-                    <input
-                      type="text"
-                      name={`socials[${idx}].url`}
-                      defaultValue={social.url}
-                      placeholder="URL"
-                      className="rounded border-1 border-primary shadow-sm flex-1"
-                    />
+              {socials.map((social, idx) => (
+                <div key={idx} className="flex flex-row flex-wrap gap-2 items-center mb-4">
+                  <input
+                    type="text"
+                    placeholder="URL"
+                    value={social.url}
+                    onChange={e => {
+                      const updated = [...socials];
+                      updated[idx].url = e.target.value;
+                      setSocials(updated);
+                    }}
+                    className="flex-1 rounded border-2 border-primary shadow-sm p-2"
+                  />
+                  <div className="flex flex-col w-full gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className=" flex items-center justify-center">
+                        {platformIcons[social.platform] || null}
+                      </span>
+                      <select
+                        className="select select-ghost"
+                        value={social.platform}
+                        onChange={e => {
+                          const updated = [...socials];
+                          updated[idx].platform = e.target.value;
+                          setSocials(updated);
+                        }}
+                      >
+                        <option disabled value="">Pick a platform</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="Linkedin">Linkedin</option>
+                        <option value="X">X.com</option>
+                        <option value="Youtube">Youtube</option>
+                        <option value="TikTok">TikTok</option>
+                        <option value="Instagram">Instagram</option>
+                      </select>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setSocials(socials.filter((_, i) => i !== idx))}
+                      className="text-red-500 self-end"
+                    >
+                      Remove
+                    </button>
                   </div>
-                ))
-              ) : (
-                <span className="text-gray-400">No social media links available</span>
-              )}
+                </div>
+              ))}
             </div>
           </div>
+
+          <button
+            type="button"
+            onClick={() => setSocials([...socials, { platform: '', url: '' }])}
+            className="mt-2 px-3 py-1 bg-primary text-white rounded"
+          >
+            Add Social Link
+          </button>
 
           <button
             type="submit"
@@ -232,5 +280,4 @@ export default function EditProfileForm({ user }: { user: User }) {
       <GoToButton src="/dashboard" name="Back to Dashboard" />
     </>
   );
-
 }
