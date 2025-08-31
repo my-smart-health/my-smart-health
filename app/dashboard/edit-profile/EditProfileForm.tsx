@@ -8,8 +8,9 @@ import { useRouter } from "next/navigation";
 import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
+import { Social } from "@/utils/types";
+import { parseSocials, serializeSocials } from "@/utils/common";
 
-type Social = { platform: string; url: string };
 type User = {
   name: string | null;
   address: string | null;
@@ -22,20 +23,7 @@ type User = {
   id: string;
 }
 
-function parseSocials(socials: string[]): Social[] {
-  return socials
-    .map((s) => {
-      const [platform, url] = s.split('|');
-      return { platform, url };
-    })
-    .filter(s => s.platform && s.url);
-}
 
-function serializeSocials(socials: Social[]): string[] {
-  return socials
-    .filter(s => s.platform && s.url)
-    .map(s => `${s.platform}|${s.url}`);
-}
 
 export default function EditProfileForm({ user }: { user: User }) {
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -43,7 +31,6 @@ export default function EditProfileForm({ user }: { user: User }) {
   const [socials, setSocials] = useState<Social[]>(parseSocials(user.socials || []));
   const redirect = useRouter();
   const blobResult: string[] = [];
-
 
   const platformIcons: Record<string, React.ReactNode> = {
     Facebook: <Facebook className="inline-block mr-1" size={20} />,
