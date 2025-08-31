@@ -2,7 +2,26 @@ import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import EditProfileForm from "./EditProfileForm";
 import { auth } from "@/auth";
+import prisma from "@/lib/db";
 
+async function getData(sessionId: string) {
+  const user = await prisma.user.findUnique({
+    where: { id: sessionId },
+    select: {
+      id: true,
+      name: true,
+      image: true,
+      address: true,
+      bio: true,
+      phone: true,
+      website: true,
+      socials: true,
+      fieldOfExpertise: true,
+    },
+  });
+
+  return { user } as { user: NonNullable<typeof user> };
+}
 
 export default async function EditProfile() {
   const session: Session | null = await auth();
@@ -11,10 +30,12 @@ export default async function EditProfile() {
     redirect("/login");
   }
 
+  const { user } = await getData(session.user.id);
+
   return (
-    <div className="flex flex-col gap-4 h-full min-h-[72dvh] max-w-[90%]">
-      <h1 className="mb-8 text-3xl font-bold text-gray-800">Edit Profile</h1>
-      <EditProfileForm />
-    </div>
+    <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[90%] text-wrap break-normal">
+      <h1 className="text-4xl font-extrabold text-primary mb-6">Edit Profile</h1>
+      <EditProfileForm user={user} />
+    </main>
   );
 }
