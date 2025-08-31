@@ -4,6 +4,11 @@ import prisma from "@/lib/db";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import Xlogo from '@/public/x-logo-black.png';
+import TikTokLogo from '@/public/tik-tok-logo.png';
+import { Social } from "@/utils/types";
+import { parseSocials } from "@/utils/common";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -43,10 +48,21 @@ export default async function DashboardPage() {
     return redirect("/login");
   }
 
+
   const { user } = await getData(session.user.id);
   const { name, image, address, bio, phone, socials, website } = user || {};
   const { posts } = await getPosts(session.user.id);
 
+  const parsedSocials = parseSocials(socials || []);
+
+  const platformIcons: Record<string, React.ReactNode> = {
+    Facebook: <Facebook className="inline-block mr-1" size={20} />,
+    Linkedin: <Linkedin className="inline-block mr-1" size={20} />,
+    X: <Image src={Xlogo} width={20} height={20} alt="X.com" className="w-6  mr-1" />,
+    Youtube: <Youtube className="inline-block mr-1" size={20} />,
+    TikTok: <Image src={TikTokLogo} width={20} height={20} alt="TikTok" className="w-10 mr-1" />,
+    Instagram: <Instagram className="inline-block mr-1" size={20} />,
+  };
 
   return (
     <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[90%] text-wrap break-normal">
@@ -96,23 +112,44 @@ export default async function DashboardPage() {
           <div>
             <span className="font-semibold text-gray-700">Socials:</span>
             <div className="flex flex-wrap gap-2 mt-1">
-              {socials && socials.length > 0 ? (
-                socials.map((social) => (
-                  <a
-                    key={social.id}
-                    href={social.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-200 transition"
-                  >
-                    {social.platform}
-                  </a>
+              {socials && parsedSocials.length > 0 ? (
+                parsedSocials.map((social, idx) => (
+                  <div key={idx} className="flex items-center">
+                    <span className="flex items-center justify-center">
+                      {platformIcons[social.platform] || null}
+                    </span>
+                    <a
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-200 transition"
+                    >
+                      {social.url}
+                    </a>
+
+                  </div>
                 ))
               ) : (
                 <span className="text-gray-400">No social media links available</span>
               )}
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="w-full max-w-3xl rounded-2xl shadow-md flex flex-col gap-8">
+        <div className="font-semibold text-primary text-2xl text-center p-4">My Posts</div>
+        <div className="flex flex-col gap-2 mt-1 p-4">
+          {posts && posts.length > 0 ? (
+            posts.map((post) => (
+              <div key={post.id} className="bg-secondary/20 rounded-lg p-3 shadow-xl">
+                <h3 className="font-semibold text-lg text-primary">{post.title}</h3>
+                <p className="text-gray-600 line-clamp-3">{post.content}</p>
+              </div>
+            ))
+          ) : (
+            <span className="text-gray-400">No posts available</span>
+          )}
         </div>
       </section>
 
