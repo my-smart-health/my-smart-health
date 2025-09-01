@@ -36,7 +36,7 @@ export default async function Navbar() {
         </div>
       </nav>
       {session &&
-        <div className="flex flex-row justify-evenly align-baseline h-full max-h-fit w-full max-w-[90%] gap-2 bg-primary text-white p-2 mb-4">
+        <div className="flex flex-row justify-evenly align-baseline h-full max-h-fit w-full max-w-[100%] gap-2 bg-primary text-white p-2 mb-4">
           <div className="flex text-wrap m-auto">Welcome, {session.user?.email}</div>
 
           <div className="border border-white h-full w-0 my-4 text-transparent">.</div>

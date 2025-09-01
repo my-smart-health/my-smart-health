@@ -19,7 +19,7 @@ type User = {
   website: string | null;
   image: string | null;
   fieldOfExpertise: string[];
-  socials: string[]; // Now a string array!
+  socials: string[];
   id: string;
 }
 
@@ -76,7 +76,6 @@ export default function EditProfileForm({ user }: { user: User }) {
       if (userData.image) data.image = userData.image;
       if (blobResult.length > 0) data.image = blobResult[0];
 
-      // Make sure socials is sent as an array
       const payload = { ...data, socials: serializeSocials(socials) };
 
       const res = await fetch('/api/update-profile', {
@@ -195,7 +194,7 @@ export default function EditProfileForm({ user }: { user: User }) {
             />
           </label>
 
-          <div>
+          <div className="flex flex-col w-full">
             <span className="font-semibold text-gray-700">Socials</span>
             <div className="flex flex-col gap-2 mt-1">
               {socials.map((social, idx) => (
@@ -246,15 +245,15 @@ export default function EditProfileForm({ user }: { user: User }) {
                 </div>
               ))}
             </div>
+            <button
+              type="button"
+              onClick={() => setSocials([...socials, { platform: '', url: '' }])}
+              className="mt-2 px-3 py-1 bg-primary text-white rounded"
+            >
+              Add Social Link
+            </button>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setSocials([...socials, { platform: '', url: '' }])}
-            className="mt-2 px-3 py-1 bg-primary text-white rounded"
-          >
-            Add Social Link
-          </button>
 
           <button
             type="submit"

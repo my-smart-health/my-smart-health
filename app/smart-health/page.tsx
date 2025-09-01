@@ -2,7 +2,7 @@ import NewsSmartHealthMedizinButton from "@/components/news-smart-health-medizin
 
 export default async function SmartHealthPage() {
   return (
-    <div className="flex flex-col gap-3 w-full mb-auto max-w-[90%]">
+    <div className="flex flex-col gap-3 w-full mb-auto max-w-[100%]">
       <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" />
       <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/smart-health" active />
       <div className="m-auto min-h-full border">

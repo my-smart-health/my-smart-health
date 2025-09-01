@@ -10,7 +10,7 @@ type NewsSmartHealthMedizinButtonProps = {
 
 export default function NewsSmartHealthMedizinButton({ name, icon, goTo, active }: NewsSmartHealthMedizinButtonProps) {
   return (
-    <Link href={goTo} className="flex flex-row h-15 rounded-2xl border shadow-xl">
+    <Link href={goTo} className="flex flex-row h-15 w-full max-w-[100%] rounded-2xl border shadow-xl">
       <div className="w-14 rounded-tl-2xl rounded-bl-2xl flex items-center justify-center bg-primary text-white">
         <Image priority src={icon} width={26} height={26} alt={`${name} icon`} className="w-7 h-7 bg-primary text-white" />
       </div>

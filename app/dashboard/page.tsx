@@ -48,7 +48,6 @@ export default async function DashboardPage() {
     return redirect("/login");
   }
 
-
   const { user } = await getData(session.user.id);
   const { name, image, address, bio, phone, socials, website } = user || {};
   const { posts } = await getPosts(session.user.id);
@@ -65,9 +64,9 @@ export default async function DashboardPage() {
   };
 
   return (
-    <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[90%] text-wrap break-normal">
+    <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[100%] text-wrap break-normal">
 
-      <h1 className="text-4xl font-extrabold text-primary mb-6">Welcome, {name || "User"}!</h1>
+      <h1 className="mx-3 text-4xl font-extrabold  text-primary mb-6">Welcome, {name || "User"}!</h1>
 
       <div className="flex gap-4 mb-8">
         <GoToButton src="/dashboard/create-news" name="Create News" className="btn btn-primary shadow" />
