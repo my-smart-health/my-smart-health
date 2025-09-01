@@ -13,6 +13,7 @@ async function getData(sessionId: string) {
       image: true,
       address: true,
       bio: true,
+      displayEmail: true,
       phone: true,
       website: true,
       socials: true,

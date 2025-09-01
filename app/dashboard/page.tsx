@@ -4,10 +4,9 @@ import prisma from "@/lib/db";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import { AtSign, Facebook, Globe, Instagram, Linkedin, Youtube } from "lucide-react";
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
-import { Social } from "@/utils/types";
 import { parseSocials } from "@/utils/common";
 
 async function getData(sessionId: string) {
@@ -19,6 +18,7 @@ async function getData(sessionId: string) {
       image: true,
       address: true,
       bio: true,
+      displayEmail: true,
       phone: true,
       website: true,
       socials: true,
@@ -26,6 +26,7 @@ async function getData(sessionId: string) {
   });
   return { user };
 }
+
 async function getPosts(userId: string) {
   const posts = await prisma.posts.findMany({
     where: { authorId: userId },
@@ -55,9 +56,11 @@ export default async function DashboardPage() {
   const parsedSocials = parseSocials(socials || []);
 
   const platformIcons: Record<string, React.ReactNode> = {
+    Email: <AtSign className="inline-block mr-1" size={20} />,
+    Website: <Globe className="inline-block mr-1" size={20} />,
     Facebook: <Facebook className="inline-block mr-1" size={20} />,
     Linkedin: <Linkedin className="inline-block mr-1" size={20} />,
-    X: <Image src={Xlogo} width={20} height={20} alt="X.com" className="w-6  mr-1" />,
+    X: <Image src={Xlogo} width={20} height={20} alt="X.com" className="w-6 mr-1" />,
     Youtube: <Youtube className="inline-block mr-1" size={20} />,
     TikTok: <Image src={TikTokLogo} width={20} height={20} alt="TikTok" className="w-10 mr-1" />,
     Instagram: <Instagram className="inline-block mr-1" size={20} />,

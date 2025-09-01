@@ -1,15 +1,20 @@
 'use client'
 
 import Image from "next/image";
-import { useRef, useState } from "react";
-import GoToButton from "@/components/buttons/go-to/GoToButton";
-import { PutBlobResult } from "@vercel/blob";
 import { useRouter } from "next/navigation";
-import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
-import Xlogo from '@/public/x-logo-black.png';
-import TikTokLogo from '@/public/tik-tok-logo.png';
+
+import { useRef, useState } from "react";
+import { PutBlobResult } from "@vercel/blob";
+
+import GoToButton from "@/components/buttons/go-to/GoToButton";
+
 import { Social } from "@/utils/types";
 import { parseSocials, serializeSocials } from "@/utils/common";
+
+import Xlogo from '@/public/x-logo-black.png';
+import TikTokLogo from '@/public/tik-tok-logo.png';
+import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube } from "lucide-react";
+
 
 type User = {
   name: string | null;
@@ -17,25 +22,33 @@ type User = {
   bio: string | null;
   phone: string[];
   website: string | null;
+  displayEmail: string | null;
   image: string | null;
   fieldOfExpertise: string[];
   socials: string[];
   id: string;
 }
 
-
-
 export default function EditProfileForm({ user }: { user: User }) {
+
   const inputFileRef = useRef<HTMLInputElement>(null);
+
   const [userData, setUserData] = useState<User>(user);
+
+  const [fieldOfExpertise, setFieldOfExpertise] = useState<string[]>(user.fieldOfExpertise || []);
+  const [phoneNumbers, setPhoneNumbers] = useState<string[]>(user.phone || []);
   const [socials, setSocials] = useState<Social[]>(parseSocials(user.socials || []));
+
   const redirect = useRouter();
   const blobResult: string[] = [];
 
   const platformIcons: Record<string, React.ReactNode> = {
+    Email: <AtSign className="inline-block mr-1" size={20} />,
+    Website: <Globe className="inline-block mr-1" size={20} />,
+    Phone: <Phone className="inline-block mr-1" size={20} />,
     Facebook: <Facebook className="inline-block mr-1" size={20} />,
     Linkedin: <Linkedin className="inline-block mr-1" size={20} />,
-    X: <Image src={Xlogo} width={20} height={20} alt="X.com" className="w-6  mr-1" />,
+    X: <Image src={Xlogo} width={20} height={20} alt="X.com" className="w-6 mr-1" />,
     Youtube: <Youtube className="inline-block mr-1" size={20} />,
     TikTok: <Image src={TikTokLogo} width={20} height={20} alt="TikTok" className="w-10 mr-1" />,
     Instagram: <Instagram className="inline-block mr-1" size={20} />,
@@ -47,7 +60,10 @@ export default function EditProfileForm({ user }: { user: User }) {
     const data = {
       name: formData.get('name') as string,
       bio: formData.get('bio') as string,
+      fieldOfExpertise: fieldOfExpertise,
       address: formData.get('address') as string,
+      displayEmail: formData.get('displayEmail') as string,
+      phone: phoneNumbers,
       website: formData.get('website') as string,
       image: userData.image,
       socials: serializeSocials(socials),
@@ -125,7 +141,7 @@ export default function EditProfileForm({ user }: { user: User }) {
               accept="image/*"
               className="file-input"
             />
-            <label htmlFor="image" className="label">Max file size 4MB</label>
+            <label htmlFor="image" className="label">One image can be selected at a time</label>
           </fieldset>
 
           <label className="flex flex-col">
@@ -134,7 +150,7 @@ export default function EditProfileForm({ user }: { user: User }) {
               type="text"
               name="name"
               defaultValue={userData.name ? userData.name : ""}
-              className="mt-1 rounded border-1 border-primary shadow-sm"
+              className="mt-1 p-2 rounded border-1 border-primary shadow-sm"
             />
           </label>
 
@@ -143,56 +159,131 @@ export default function EditProfileForm({ user }: { user: User }) {
             <textarea
               name="bio"
               defaultValue={userData.bio ? userData.bio : ""}
-              className="mt-1 rounded border-1 border-primary shadow-sm"
+              className="mt-1 p-2 rounded border-1 border-primary shadow-sm"
               rows={2}
             />
           </label>
 
+          <div className="w-full mx-auto border border-primary h-0"></div>
+
+          {!userData.address && <span className="font-semibold text-gray-700">Address</span>}
           <label className="flex flex-col">
             <span className="font-semibold text-gray-700">Address</span>
-            <input
-              type="text"
+            <textarea
               name="address"
               defaultValue={userData.address ? userData.address : ""}
-              className="mt-1 rounded border-1 border-primary shadow-sm"
+              className="mt-1 p-2 rounded border-1 border-primary shadow-sm"
+              rows={2}
             />
           </label>
-          {Array.isArray(userData.phone) ? userData.phone.map((p, idx) => (
-            <div key={idx} className="flex gap-2">
-              <input
-                type="text"
-                name={`phone[${idx}]`}
-                defaultValue={p}
-                className="mt-1 rounded border-1 border-primary shadow-sm"
-              />
-              <button
-                type="button"
-                // onClick={() => handleRemovePhone(idx)}
-                className="mt-1 text-red-500"
-              >
-                Remove
-              </button>
-            </div>
-          )) : <label className="flex flex-col">
-            <span className="font-semibold text-gray-700">Phone</span>
-            <input
-              type="text"
-              name="phone[0]"
-              defaultValue={userData.phone ? userData.phone : ""}
-              className="mt-1 rounded border-1 border-primary shadow-sm"
-            />
-          </label>
-          }
+
+          <div className="w-full mx-auto border border-primary h-0"></div>
 
           <label className="flex flex-col">
-            <span className="font-semibold text-gray-700">Website</span>
+            <span className="font-semibold text-gray-700">Email (Display)</span>
+            <input
+              type="email"
+              name="displayEmail"
+              defaultValue={userData.displayEmail ? userData.displayEmail : ""}
+              className="mt-1 p-2 rounded border-1 border-primary shadow-sm"
+            />
+          </label>
+
+          <label className="flex flex-col">
+            <span className="font-semibold text-gray-700">{platformIcons['Website']}Website</span>
             <input
               type="url"
               name="website"
               defaultValue={userData.website ? userData.website : ""}
-              className="mt-1 rounded border-1 border-primary shadow-sm"
+              className="mt-1 p-2 rounded border-1 border-primary shadow-sm"
             />
           </label>
+
+          <div className="w-full mx-auto border border-primary h-0"></div>
+
+          {!phoneNumbers.length && <span className="font-semibold text-gray-700">{platformIcons['Phone']} Phone Numbers</span>}
+          {phoneNumbers.map((phone, idx) => (
+            <div className="flex flex-row flex-1 gap-2 items-center " key={idx}>
+              <div className="flex flex-col flex-1 ">
+                <span className="font-semibold text-gray-700">{platformIcons['Phone']} Phone Number</span>
+                <label htmlFor={`phone[${idx}]`} className="flex flex-row gap-2">
+                  <input
+                    type="text"
+                    name={`phone[${idx}]`}
+                    value={phone}
+                    onChange={e => {
+                      const updated = [...phoneNumbers];
+                      updated[idx] = e.target.value;
+                      setPhoneNumbers(updated);
+                    }}
+                    className="mt-1 p-2 flex-1 rounded border-1 align-baseline border-primary shadow-sm"
+                  />
+                </label>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    phoneNumbers.splice(idx, 1);
+                    setPhoneNumbers([...phoneNumbers]);
+                  }}
+                  className="flex place-self-end mt-4  w-fit align-bottom text-red-500"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => setPhoneNumbers([...phoneNumbers, ""])}
+            className="mt-2 px-3 py-1 bg-primary text-white rounded"
+          >
+            Add Phone Number
+          </button>
+
+          <div className="w-full mx-auto border border-primary h-0"></div>
+
+          {!fieldOfExpertise.length && <span className="font-semibold text-gray-700">Area of Expertise</span>}
+          {fieldOfExpertise.map((expertise, idx) => (
+            <div className="flex flex-row flex-1 gap-2 items-center " key={idx}>
+              <div className="flex flex-col flex-1 ">
+                <span className="font-semibold text-gray-700">{platformIcons['Expertise']} Area of Expertise</span>
+                <label htmlFor={`expertise[${idx}]`} className="flex flex-row gap-2">
+                  <input
+                    type="text"
+                    name={`expertise[${idx}]`}
+                    value={expertise}
+                    onChange={e => {
+                      const updated = [...fieldOfExpertise];
+                      updated[idx] = e.target.value;
+                      setFieldOfExpertise(updated);
+                    }}
+                    className="mt-1 p-2 flex-1 rounded border-1 align-baseline border-primary shadow-sm"
+                  />
+                </label>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    fieldOfExpertise.splice(idx, 1);
+                    setFieldOfExpertise([...fieldOfExpertise]);
+                  }}
+                  className="flex place-self-end mt-4  w-fit align-bottom text-red-500"
+                >
+                  Remove
+                </button>
+              </div>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => setFieldOfExpertise([...fieldOfExpertise, ""])}
+            className="mt-2 px-3 py-1 bg-primary text-white rounded"
+          >
+            Add Area of Expertise
+          </button>
+
+          <div className="w-full mx-auto border border-primary h-0"></div>
 
           <div className="flex flex-col w-full">
             <span className="font-semibold text-gray-700">Socials</span>
@@ -208,7 +299,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                       updated[idx].url = e.target.value;
                       setSocials(updated);
                     }}
-                    className="flex-1 rounded border-2 border-primary shadow-sm p-2"
+                    className="flex-1 rounded border-1 border-primary shadow-sm p-2"
                   />
                   <div className="flex flex-col w-full gap-2">
                     <div className="flex items-center gap-2">
@@ -225,6 +316,8 @@ export default function EditProfileForm({ user }: { user: User }) {
                         }}
                       >
                         <option disabled value="">Pick a platform</option>
+                        <option value="Email">Email</option>
+                        <option value="Website">Website</option>
                         <option value="Facebook">Facebook</option>
                         <option value="Linkedin">Linkedin</option>
                         <option value="X">X.com</option>
