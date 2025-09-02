@@ -7,6 +7,7 @@ import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { FormEvent, useRef, useState } from "react";
 import logo from '@/public/logo.png'
+import { MAX_FILES_PER_NEWS } from "@/utils/constants";
 
 type CreateNewsFormProps = {
   session: Session | null;
@@ -48,12 +49,6 @@ export default function CreateNewsForm({ session }: CreateNewsFormProps) {
       }
 
       for (const file of files) {
-        if (files.length > 10) {
-          setError("You can upload up to 10 files only.");
-          setIsDisabled(false);
-          return;
-        }
-
         const uniqueFileName = `${Date.now()}-${file.name}`;
         const response = await fetch(
           `/api/upload-picture/?userid=${session.user.id}&filename=${uniqueFileName}`,
@@ -147,8 +142,16 @@ export default function CreateNewsForm({ session }: CreateNewsFormProps) {
             accept="image/*"
             multiple
             className="file-input"
+            onChange={e => {
+              if (e.target.files && e.target.files.length > MAX_FILES_PER_NEWS) {
+                setError(`You can select up to ${MAX_FILES_PER_NEWS} files only.`);
+                e.target.value = "";
+              } else {
+                setError(null);
+              }
+            }}
           />
-          <div className="label text-xs">You can upload up to 10 files</div>
+          <div className="label text-xs">You can upload up to {MAX_FILES_PER_NEWS} files</div>
           <label htmlFor="image" className="label">Max file size 4MB</label>
         </fieldset>
         <button type="submit" className="p-2 rounded bg-primary text-white font-bold text-base hover:bg-primary/80 transition-colors">
