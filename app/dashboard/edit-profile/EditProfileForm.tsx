@@ -105,7 +105,9 @@ export default function EditProfileForm({ user }: { user: User }) {
               body: file,
             }
           );
+
           if (!response.ok) throw new Error('Failed to upload image');
+
           const result = await response.json() as PutBlobResult;
           blobResult.push(result.url);
         } catch (error) {
@@ -119,7 +121,7 @@ export default function EditProfileForm({ user }: { user: User }) {
       if (blobResult.length > 0) data.profileImages = blobResult;
       const payload = { ...data, socials: serializeSocials(socials) };
       if (schedule.length > 0) payload.schedule = schedule;
-      console.log('Payload to be sent:', payload);
+
       const res = await fetch('/api/update-profile', {
         method: 'PUT',
         body: JSON.stringify({ id: userData.id, data: payload }),
@@ -127,12 +129,12 @@ export default function EditProfileForm({ user }: { user: User }) {
       });
 
       if (!res.ok) throw new Error('Failed to update profile');
+
       const result = await res.json();
-      console.log('Profile updated successfully:', result);
       setUserData(result.data);
 
-      // redirect.push('/dashboard');
-      // redirect.refresh();
+      redirect.push('/dashboard');
+      redirect.refresh();
     } catch (error) {
       process.env.NODE_ENV === 'development' && console.error('Error updating profile:', error);
     }
