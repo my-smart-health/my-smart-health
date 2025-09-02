@@ -1,16 +1,10 @@
 'use client'
 
 import { NewsCardType } from "@/utils/types";
-import Image from "next/image";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectFade, Mousewheel, Scrollbar } from "swiper/modules";
-import 'swiper/css';
-import 'swiper/css/scrollbar';
-import 'swiper/css/autoplay';
-import 'swiper/css/mousewheel';
-import 'swiper/css/effect-fade';
 
 import GoBack from "@/components/buttons/go-back/GoBack";
+import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
+import { Suspense } from "react";
 
 export default function NewsCardDetails({ newsData }: { newsData: NewsCardType | null }) {
 
@@ -35,42 +29,11 @@ export default function NewsCardDetails({ newsData }: { newsData: NewsCardType |
                 {title}
               </h2>
               <div className="card-body">
-                <figure>
-                  <div className="max-w-xs md:max-w-sm">
-                    <Swiper
-                      modules={[Scrollbar, Mousewheel, Autoplay, EffectFade]}
-                      spaceBetween={0}
-                      lazyPreloadPrevNext={3}
-                      slidesPerView={1}
-                      effect="fade"
-                      grabCursor={true}
-                      fadeEffect={{
-                        crossFade: true
-                      }}
-                      mousewheel={true}
-                      autoplay={{ delay: 3000, disableOnInteraction: false }}
-                      speed={1500}
-                      scrollbar={{ draggable: true }}
-                    >
-                      {photos && photos.map((item, idx) => (
-                        <SwiperSlide key={idx}>
-                          <div className="flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full">
-                            <Image
-                              loading="lazy"
-                              placeholder="empty"
-                              width={450}
-                              height={150}
-                              src={item}
-                              alt={item}
-                              className="aspect-video w-full object-center object-cover"
-                            />
-                          </div>
-                          <br />
-                        </SwiperSlide>
-                      ))}
-                    </Swiper>
-                  </div>
-                </figure>
+                {photos &&
+                  <Suspense fallback={<div>Loading...</div>}>
+                    <FadeCarousel photos={photos} />
+                  </Suspense>
+                }
                 <p className="text-base text-pretty indent-4 break-before">{content}</p>
                 {author?.fieldOfExpertise &&
                   <div className="card-actions mt-1 pt-1 justify-end">
