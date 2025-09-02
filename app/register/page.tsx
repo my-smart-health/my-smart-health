@@ -15,8 +15,8 @@ export default async function RegisterPage() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center my-auto w-full max-w-[90%] mx-auto bg-gray-50">
-      <h1 className="mb-8 text-center text-nowrap text-2xl font-bold  text-primary">Create new account</h1>
+    <main className="my-auto w-full max-w-[90%] mx-auto bg-gray-50 border p-2 border-primary rounded">
+      <h1 className="mb-8 text-center text-nowrap text-2xl font-bold text-primary">Create new account</h1>
       <RegisterForm />
     </main>
   );
