@@ -27,7 +27,7 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
 
   return (
     <Suspense fallback={<NewsCarouselSkeleton />}>
-      <div className="mx-auto max-w-2xs md:max-w-sm">
+      <div className="mx-auto max-w-2xs min-h-[300px] md:max-w-sm">
         <Swiper
           modules={[Scrollbar, Mousewheel, Autoplay, EffectCube]}
           spaceBetween={0}
