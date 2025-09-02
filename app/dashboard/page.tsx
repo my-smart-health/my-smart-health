@@ -8,6 +8,7 @@ import { AtSign, Facebook, Globe, Instagram, Linkedin, Youtube } from "lucide-re
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
 import { parseSocials } from "@/utils/common";
+import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -79,21 +80,7 @@ export default async function DashboardPage() {
 
       <section className="w-full max-w-[90%] bg-white rounded-2xl shadow-xl p-8 flex flex-col gap-8">
         <div className="flex flex-col items-center ">
-          {profileImages && profileImages.length > 0 ? (
-            profileImages?.map((image, index) => (
-              <Image
-                key={index}
-                loading="lazy"
-                src={image}
-                alt={name || "Profile image"}
-                width={220}
-                height={220}
-                className="aspect-square w-full border-4 border-primary shadow-lg" />
-            ))) : (
-            <div className="w-full max-w-[90%] aspect-square skeleton bg-gray-200 flex items-center justify-center mx-auto mt-4 text-gray-400 text-lg font-semibold shadow">
-              No Image
-            </div>
-          )}
+          {profileImages && <FadeCarousel photos={profileImages} />}
           <h2 className="mt-4 text-2xl font-bold text-primary">{name || "No name available"}</h2>
           <p className="text-gray-500 text-center break-words">{bio || "No bio available"}</p>
         </div>
