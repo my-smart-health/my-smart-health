@@ -31,6 +31,7 @@ export type Posts = {
   author: User;
   authorId: string;
 };
+
 export type NewsCardType = {
   id: string;
   title: string;
@@ -43,6 +44,21 @@ export type NewsCardType = {
     name: string;
     fieldOfExpertise: string[];
   };
+};
+
+export type Schedule = {
+  id: string;
+  day: {
+    Monday: boolean;
+    Tuesday: boolean;
+    Wednesday: boolean;
+    Thursday: boolean;
+    Friday: boolean;
+    Saturday: boolean;
+    Sunday: boolean;
+  };
+  open: string;
+  close: string;
 };
 
 export type Social = { platform: string; url: string };
