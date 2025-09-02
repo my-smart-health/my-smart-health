@@ -23,6 +23,7 @@ model User {
   displayEmail     String?
   website          String?
   bio              String?
+  profileType      String
   category         String[]
   schedule         Json?
   fieldOfExpertise String[]

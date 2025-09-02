@@ -1,14 +1,24 @@
 -- CreateTable
 CREATE TABLE "public"."User" (
     "id" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "email" TEXT NOT NULL,
-    "name" TEXT,
     "password" VARCHAR(255) NOT NULL,
     "role" TEXT NOT NULL DEFAULT 'USER',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "emailVerified" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
-    "image" TEXT,
+    "name" TEXT,
+    "profileImages" TEXT[],
+    "address" TEXT,
+    "location" TEXT,
+    "displayEmail" TEXT,
+    "website" TEXT,
     "bio" TEXT,
+    "profileType" TEXT NOT NULL,
+    "category" TEXT[],
+    "schedule" JSONB,
+    "fieldOfExpertise" TEXT[],
+    "phone" TEXT[],
+    "socials" TEXT[],
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -17,9 +27,12 @@ CREATE TABLE "public"."User" (
 CREATE TABLE "public"."Posts" (
     "id" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3),
     "title" VARCHAR(255) NOT NULL,
     "content" TEXT NOT NULL,
     "authorId" TEXT NOT NULL,
+    "photos" TEXT[],
+    "tags" TEXT[],
 
     CONSTRAINT "Posts_pkey" PRIMARY KEY ("id")
 );
