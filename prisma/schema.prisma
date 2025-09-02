@@ -17,11 +17,14 @@ model User {
   createdAt        DateTime  @default(now())
   emailVerified    DateTime? @default(now())
   name             String?
-  image            String?
+  profileImages    String[]
   address          String?
+  location         String?
   displayEmail     String?
   website          String?
   bio              String?
+  category         String[]
+  schedule         Json?
   fieldOfExpertise String[]
   phone            String[]
   socials          String[]
@@ -37,4 +40,5 @@ model Posts {
   author    User      @relation("UserPosts", fields: [authorId], references: [id])
   authorId  String
   photos    String[]
+  tags      String[]
 }
