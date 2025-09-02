@@ -474,6 +474,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                         type="time"
                         id="time"
                         name="time-start"
+                        value={item.open}
                         className="border border-primary p-2 rounded"
                         onChange={(e) => setScheduleTime(item.id, 'open', e.target.value)}
                       />
@@ -487,6 +488,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                         type="time"
                         id="time-end"
                         name="time-end"
+                        value={item.close}
                         className="border border-primary p-2 rounded"
                         onChange={(e) => setScheduleTime(item.id, 'close', e.target.value)}
                       />
