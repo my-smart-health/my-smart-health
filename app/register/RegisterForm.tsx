@@ -4,22 +4,27 @@ import GoToButton from "@/components/buttons/go-to/GoToButton";
 import { FormEvent, useState } from "react";
 
 type RegisterResponse = {
-  type: 'success' | 'passwordError' | 'userExists' | 'someError' | 'missingFields';
+  type: 'success' | 'passwordError' | 'missingName' | 'missingPhone' | 'missingEmail' | 'missingPassword' | 'missingCategory' | 'userExists' | 'someError' | 'missingFields';
 };
 
 export default function RegisterForm() {
 
   const [userCreatedOrError, setUserCreatedOrError] = useState<RegisterResponse | null>(null);
+  const [categoryState, setCategoryState] = useState<string[]>(['']);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
+      const name = formData.get('name');
+      const phone = [formData.get('phone')?.toString()];
       const email = formData.get('email');
       const password = formData.get('password');
       const passwordConfirmation = formData.get('passwordConfirmation');
+      const profileType = formData.get('profileType');
+      const category = categoryState;
 
-      if (!email || !password || !passwordConfirmation) {
+      if (!email || !password || !passwordConfirmation || !category || !profileType) {
         setUserCreatedOrError({ type: 'missingFields' });
         return null;
       }
@@ -29,10 +34,19 @@ export default function RegisterForm() {
         return null;
       }
 
+      const data = {
+        name: name,
+        phone: phone,
+        email: email,
+        password: password,
+        category: category,
+        profileType: profileType
+      }
+      console.log(data);
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, password: password }),
+        body: JSON.stringify(data),
       });
 
       if (res.status === 400) {
@@ -57,64 +71,182 @@ export default function RegisterForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-4 p-8 rounded-lg bg-white shadow-md max-w-[90%] "
+      className="mx-auto space-y-3 sm:p-8 w-full max-w-[90%]"
     >
+      <label htmlFor="name">Name</label>
+      <input
+        type="text"
+        name="name"
+        placeholder="Name"
+        required
+        className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
+      />
+
+      <label htmlFor="phone">Telephone Number</label>
+      <input
+        type="tel"
+        name="phone"
+        placeholder="Telephone Number"
+        required
+        className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
+      />
+
+      <label htmlFor="email">Email</label>
       <input
         type="email"
         name="email"
         placeholder="Email"
         required
-        className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
       />
+
+      <label htmlFor="password">Password</label>
       <input
         type="password"
         name="password"
         placeholder="Password"
         required
-        className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
       />
+
+      <label htmlFor="passwordConfirmation">Password Confirmation</label>
       <input
         type="password"
         name="passwordConfirmation"
         placeholder="Password Confirmation"
         required
-        className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
       />
-      {userCreatedOrError && userCreatedOrError.type === 'success' && (
-        <div className="mb-4 p-3 rounded border text-center">
-          <span className="text-green-700 border-green-400">Benutzer erfolgreich erstellt</span>
-        </div>
-      )}
-      {userCreatedOrError && userCreatedOrError.type === 'userExists' && (
-        <div className="mb-4 p-3 rounded border text-center">
-          <span className="text-red-500 border-red-400">E-Mail existiert bereits</span>
-        </div>
-      )}
-      {userCreatedOrError && userCreatedOrError.type === 'someError' && (
-        <div className="mb-4 p-3 rounded border text-center">
-          <span className="text-red-500 border-red-400">Ein Fehler ist aufgetreten</span>
-        </div>
-      )}
-      {userCreatedOrError && userCreatedOrError.type === 'missingFields' && (
-        <div className="mb-4 p-3 rounded border text-center">
-          <span className="text-red-500 border-red-400">Bitte füllen Sie alle Felder aus</span>
-        </div>
-      )}
-      {userCreatedOrError && userCreatedOrError.type === 'passwordError' && (
-        <div className="mb-4 p-3 rounded border text-center">
-          <span className="text-red-500 border-red-400">Passwörter stimmen nicht überein</span>
-        </div>
-      )}
-      <button
-        type="submit"
-        className="p-2 rounded bg-primary text-white font-bold text-base hover:bg-primary/80 transition-colors"
+
+      <label htmlFor="profileType">Profile Type</label>
+      <select
+        name="profileType"
+        required
+        defaultValue="Pick a font"
+        className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
       >
-        Register
-      </button>
+        <option disabled={true} value="">Select Profile Type</option>
+        <option value="PATIENT">Smart Health</option>
+        <option value="DOCTOR">Medizin & Pflege</option>
+      </select>
+
+      <div className="flex flex-col w-full gap-2">
+        {categoryState.map((cat, index) => (
+          <div key={index} className="flex flex-col gap-2 max-w-full">
+            <label htmlFor={`category-${index}`}>Category {index + 1}</label>
+            <input
+              type="text"
+              value={cat}
+              onChange={(e) => {
+                const newCategories = [...categoryState];
+                newCategories[index] = e.target.value;
+                setCategoryState(newCategories);
+              }}
+              placeholder="Category"
+              className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                const newCategories = [...categoryState];
+                newCategories.splice(index, 1);
+                setCategoryState(newCategories);
+              }}
+              className="text-red-500 hover:text-red-700 transition-colors cursor-pointer place-self-end"
+            >
+              Remove
+            </button>
+          </div>
+        ))}
+
+        <button
+          type="button"
+          onClick={() => setCategoryState([...categoryState, ''])}
+          className="p-2 rounded bg-primary text-white font-bold text-base hover:bg-primary/80 transition-colors w-full"
+        >
+          Add Category
+        </button>
+      </div>
+
+      {
+        userCreatedOrError && userCreatedOrError.type === 'success' && (
+          <div className="mb-4 p-3 rounded border text-center">
+            <span className="text-green-700 border-green-400">Benutzer erfolgreich erstellt</span>
+          </div>
+        )
+      }
+      {
+        userCreatedOrError && userCreatedOrError.type === 'userExists' && (
+          <div className="mb-4 p-3 rounded border text-center">
+            <span className="text-red-500 border-red-400">E-Mail existiert bereits</span>
+          </div>
+        )
+      }
+      {
+        userCreatedOrError && userCreatedOrError.type === 'someError' && (
+          <div className="mb-4 p-3 rounded border text-center">
+            <span className="text-red-500 border-red-400">Ein Fehler ist aufgetreten</span>
+          </div>
+        )
+      }
+      {
+        userCreatedOrError && userCreatedOrError.type === 'missingFields' && (
+          <div className="mb-4 p-3 rounded border text-center">
+            <span className="text-red-500 border-red-400">Bitte füllen Sie alle Felder aus</span>
+          </div>
+        )
+      }
+      {
+        userCreatedOrError && userCreatedOrError.type === 'passwordError' && (
+          <div className="mb-4 p-3 rounded border text-center">
+            <span className="text-red-500 border-red-400">Passwörter stimmen nicht überein</span>
+          </div>
+        )
+      }
+
+      {
+        userCreatedOrError && userCreatedOrError.type === 'missingName' && (
+          <div className="mb-4 p-3 rounded border text-center">
+            <span className="text-red-500 border-red-400">Bitte geben Sie Ihren Namen ein</span>
+          </div>
+        )
+      }
+
+      {
+        userCreatedOrError && userCreatedOrError.type === 'missingPhone' && (
+          <div className="mb-4 p-3 rounded border text-center">
+            <span className="text-red-500 border-red-400">Bitte geben Sie Ihre Telefonnummer ein</span>
+          </div>
+        )
+      }
+
+      {
+        userCreatedOrError && userCreatedOrError.type === 'missingEmail' && (
+          <div className="mb-4 p-3 rounded border text-center">
+            <span className="text-red-500 border-red-400">Bitte geben Sie Ihre E-Mail-Adresse ein</span>
+          </div>
+        )
+      }
+
+      {
+        userCreatedOrError && userCreatedOrError.type === 'missingCategory' && (
+          <div className="mb-4 p-3 rounded border text-center">
+            <span className="text-red-500 border-red-400">Bitte wählen Sie eine Kategorie aus</span>
+          </div>
+        )
+      }
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          className="p-2 rounded bg-primary text-white font-bold text-base hover:bg-primary/80 transition-colors"
+        >
+          Register
+        </button>
+      </div>
 
       <div className="mt-4">
         <GoToButton src="/dashboard" name="Back to Dashboard" />
       </div>
-    </form>
+    </form >
   );
 }
