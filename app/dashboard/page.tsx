@@ -15,13 +15,14 @@ async function getData(sessionId: string) {
     select: {
       id: true,
       name: true,
-      image: true,
+      profileImages: true,
       address: true,
       bio: true,
       displayEmail: true,
       phone: true,
       website: true,
       socials: true,
+      schedule: true,
     }
   });
   return { user };
@@ -50,7 +51,7 @@ export default async function DashboardPage() {
   }
 
   const { user } = await getData(session.user.id);
-  const { name, image, address, bio, phone, socials, website } = user || {};
+  const { name, profileImages, address, bio, phone, socials, website } = user || {};
   const { posts } = await getPosts(session.user.id);
 
   const parsedSocials = parseSocials(socials || []);
@@ -76,18 +77,20 @@ export default async function DashboardPage() {
         <GoToButton src="/dashboard/edit-profile" name="Edit Profile" className="btn btn-primary shadow" />
       </div>
 
-      <section className="w-full max-w-3xl bg-white rounded-2xl shadow-xl p-8 flex flex-col gap-8">
+      <section className="w-full max-w-[90%] bg-white rounded-2xl shadow-xl p-8 flex flex-col gap-8">
         <div className="flex flex-col items-center ">
-          {image ? (
-            <Image
-              loading="lazy"
-              src={image}
-              alt={name || "Profile image"}
-              width={220}
-              height={220}
-              className="aspect-square w-full border-4 border-primary shadow-lg" />
-          ) : (
-            <div className="w-full aspect-square skeleton bg-gray-200 flex items-center justify-center mx-auto mt-4 text-gray-400 text-lg font-semibold shadow">
+          {profileImages && profileImages.length > 0 ? (
+            profileImages?.map((image, index) => (
+              <Image
+                key={index}
+                loading="lazy"
+                src={image}
+                alt={name || "Profile image"}
+                width={220}
+                height={220}
+                className="aspect-square w-full border-4 border-primary shadow-lg" />
+            ))) : (
+            <div className="w-full max-w-[90%] aspect-square skeleton bg-gray-200 flex items-center justify-center mx-auto mt-4 text-gray-400 text-lg font-semibold shadow">
               No Image
             </div>
           )}
