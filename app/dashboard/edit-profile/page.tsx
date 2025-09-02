@@ -10,7 +10,7 @@ async function getData(sessionId: string) {
     select: {
       id: true,
       name: true,
-      image: true,
+      profileImages: true,
       address: true,
       bio: true,
       displayEmail: true,
@@ -18,6 +18,7 @@ async function getData(sessionId: string) {
       website: true,
       socials: true,
       fieldOfExpertise: true,
+      schedule: true,
     },
   });
 
@@ -33,10 +34,15 @@ export default async function EditProfile() {
 
   const { user } = await getData(session.user.id);
 
+  const parsedUser = {
+    ...user,
+    schedule: typeof user.schedule === "string" ? JSON.parse(user.schedule) : user.schedule,
+  };
+
   return (
     <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[90%] text-wrap break-normal">
       <h1 className="text-4xl font-extrabold text-primary mb-6">Edit Profile</h1>
-      <EditProfileForm user={user} />
+      <EditProfileForm user={parsedUser} />
     </main>
   );
 }
