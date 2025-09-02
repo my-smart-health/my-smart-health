@@ -1,12 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import NotrufDropdown from "./NotrufDropdown";
-import LogOut from "../buttons/log-out/LogOut";
-import { Settings } from "lucide-react";
-import { auth } from "@/auth";
+import ProKilMenu from "./ProKilMenu";
+import { Suspense } from "react";
 
 export default async function Navbar() {
-  const session = await auth();
+
   return (
     <>
       <nav
@@ -35,26 +34,9 @@ export default async function Navbar() {
           <NotrufDropdown />
         </div>
       </nav>
-      {session &&
-        <div className="flex flex-row justify-evenly align-baseline h-full max-h-fit w-full max-w-[100%] gap-2 bg-primary text-white p-2 mb-4">
-          <div className="flex text-wrap m-auto">Welcome, {session.user?.email}</div>
-
-          <div className="border border-white h-full w-0 my-4 text-transparent">.</div>
-
-          <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-circle m-2 border-2 border-white bg-primary"><Settings className="text-white" /></div>
-            <ul tabIndex={0} className="dropdown-content menu bg-primary border rounded-box z-1 w-52 p-2 shadow-sm transition-opacity ease-in-out">
-              <li><Link href="/" className="flex gap-1">Home</Link></li>
-              <li><Link href="/dashboard" className="flex gap-1">Dashboard</Link></li>
-              <li><Link href="/dashboard/create-news" className="flex gap-1">Create News</Link></li>
-              <li className="tab-disabled"></li>
-              <li><Link href="/dashboard/edit-profile" className="flex gap-1">Edit profile</Link></li>
-              <li className="tab-disabled"></li>
-              <li className="my-2"><LogOut /></li>
-            </ul>
-          </div>
-        </div>
-      }
+      <Suspense fallback={<div className="skeleton flex flex-row justify-evenly align-baseline h-full max-h-fit w-full max-w-[100%] gap-2 bg-primary text-white p-2 mb-4">Loading...</div>}>
+        <ProKilMenu />
+      </Suspense>
     </>
   )
 }
