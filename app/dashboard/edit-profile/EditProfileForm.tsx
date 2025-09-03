@@ -40,7 +40,20 @@ export default function EditProfileForm({ user }: { user: User }) {
   const [fieldOfExpertise, setFieldOfExpertise] = useState<string[]>(user.fieldOfExpertise || []);
   const [phoneNumbers, setPhoneNumbers] = useState<string[]>(user.phone || []);
   const [socials, setSocials] = useState<Social[]>(parseSocials(user.socials || []));
-  const [schedule, setSchedule] = useState<Schedule[]>(user.schedule || []);
+  const [schedule, setSchedule] = useState<Schedule[]>(user.schedule || [{
+    id: crypto.randomUUID(),
+    day: {
+      Monday: false,
+      Tuesday: false,
+      Wednesday: false,
+      Thursday: false,
+      Friday: false,
+      Saturday: false,
+      Sunday: false
+    },
+    open: '',
+    close: ''
+  }]);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -199,7 +212,6 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           <div className="w-full mx-auto border border-primary h-0"></div>
 
-          {!userData.address && <span className="font-semibold text-gray-700">Address</span>}
           <label className="flex flex-col">
             <span className="font-semibold text-gray-700">Address</span>
             <textarea
@@ -511,7 +523,21 @@ export default function EditProfileForm({ user }: { user: User }) {
           }
           <button
             type="button"
-            onClick={() => setSchedule([...schedule, { id: crypto.randomUUID(), day: { Monday: false, Tuesday: false, Wednesday: false, Thursday: false, Friday: false, Saturday: false, Sunday: false }, open: '', close: '' }])}
+            onClick={() => setSchedule([...schedule, {
+              id: crypto.randomUUID(),
+              day:
+              {
+                Monday: false,
+                Tuesday: false,
+                Wednesday: false,
+                Thursday: false,
+                Friday: false,
+                Saturday: false,
+                Sunday: false
+              },
+              open: '',
+              close: ''
+            }])}
             className="mt-2 px-3 py-1 bg-primary text-white rounded"
           >
             Add Schedule
