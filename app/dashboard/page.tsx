@@ -4,11 +4,18 @@ import prisma from "@/lib/db";
 import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { AtSign, Facebook, Globe, Instagram, Linkedin, Youtube } from "lucide-react";
+import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube, MapPin } from "lucide-react";
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
 import { parseSocials } from "@/utils/common";
-import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
+import ProfilePictureCarousel from "@/components/carousels/profile-picture-carousel/ProfilePictureCarousel";
+import { BioSection } from "./BioSection";
+
+import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
+import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
+
+import { Schedule } from '@/utils/types'
+import ScheduleSection from "./ScheduleSection";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -24,6 +31,7 @@ async function getData(sessionId: string) {
       website: true,
       socials: true,
       schedule: true,
+      fieldOfExpertise: true,
     }
   });
   return { user };
@@ -52,7 +60,10 @@ export default async function DashboardPage() {
   }
 
   const { user } = await getData(session.user.id);
-  const { name, profileImages, address, bio, phone, socials, website } = user || {};
+  const { name, profileImages, address, bio, phone, socials, website, fieldOfExpertise, displayEmail } = user || {};
+
+  const schedule = user?.schedule as Schedule[] || [];
+
   const { posts } = await getPosts(session.user.id);
 
   const parsedSocials = parseSocials(socials || []);
@@ -60,6 +71,7 @@ export default async function DashboardPage() {
   const platformIcons: Record<string, React.ReactNode> = {
     Email: <AtSign className="inline-block mr-1" size={20} />,
     Website: <Globe className="inline-block mr-1" size={20} />,
+    Phone: <Phone className="inline-block mr-1" size={20} />,
     Facebook: <Facebook className="inline-block mr-1" size={20} />,
     Linkedin: <Linkedin className="inline-block mr-1" size={20} />,
     X: <Image src={Xlogo} width={20} height={20} alt="X.com" className="w-6 mr-1" />,
@@ -69,7 +81,7 @@ export default async function DashboardPage() {
   };
 
   return (
-    <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[100%] text-wrap break-normal">
+    <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-none">
 
       <h1 className="mx-3 text-4xl font-extrabold  text-primary mb-6">Welcome, {name || "User"}!</h1>
 
@@ -78,72 +90,92 @@ export default async function DashboardPage() {
         <GoToButton src="/dashboard/edit-profile" name="Edit Profile" className="btn btn-primary shadow" />
       </div>
 
-      <section className="w-full max-w-[90%] bg-white rounded-2xl shadow-xl p-8 flex flex-col gap-8">
-        <div className="flex flex-col items-center ">
-          {profileImages && <FadeCarousel photos={profileImages} />}
-          <h2 className="mt-4 text-2xl font-bold text-primary">{name || "No name available"}</h2>
-          <p className="text-gray-500 text-center break-words">{bio || "No bio available"}</p>
-        </div>
-        <div className="flex-1 flex flex-col gap-4">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-gray-700">Address:</span>
-            <span className="break-words">{address || <span className="text-gray-400">No address available</span>}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-gray-700">Phone:</span>
-            <span className="break-words">{phone || <span className="text-gray-400">No phone number available</span>}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-gray-700">Website:</span>
-            {website ? (
-              <a href={website} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline break-all">{website}</a>
-            ) : (
-              <span className="text-gray-400">No website available</span>
-            )}
-          </div>
-          <div>
-            <span className="font-semibold text-gray-700">Socials:</span>
-            <div className="flex flex-wrap gap-2 mt-1">
-              {socials && parsedSocials.length > 0 ? (
-                parsedSocials.map((social, idx) => (
-                  <div key={idx} className="flex items-center">
-                    <span className="flex items-center justify-center">
-                      {platformIcons[social.platform] || null}
-                    </span>
-                    <a
-                      href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm hover:bg-blue-200 transition"
-                    >
-                      {social.url}
-                    </a>
+      <div className="flex flex-col gap-2 p-2 w-full max-w-[99%]">
 
-                  </div>
-                ))
-              ) : (
-                <span className="text-gray-400">No social media links available</span>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
+        <section className="max-w-[95%]">
+          {profileImages && <ProfilePictureCarousel imageSrcArray={profileImages} />}
+        </section>
 
-      <section className="w-full max-w-3xl rounded-2xl shadow-md flex flex-col gap-8">
-        <div className="font-semibold text-primary text-2xl text-center p-4">My Posts</div>
-        <div className="flex flex-col gap-2 mt-1 p-4">
-          {posts && posts.length > 0 ? (
-            posts.map((post) => (
-              <div key={post.id} className="bg-secondary/20 rounded-lg p-3 shadow-xl">
-                <h3 className="font-semibold text-lg text-primary">{post.title}</h3>
-                <p className="text-gray-600 line-clamp-3">{post.content}</p>
-              </div>
-            ))
-          ) : (
-            <span className="text-gray-400">No posts available</span>
+        <section>
+          <h2 className="font-bold text-primary text-xl">{name}</h2>
+        </section>
+
+        <section>
+          <p className="font-semibold">
+            {fieldOfExpertise?.join(", ")}
+          </p>
+        </section>
+
+        <div className="w-full mx-auto border border-primary h-0"></div>
+
+        <section className="font-semibold text-primary text-lg">
+          <article className="text-base text-black">
+            {bio && <BioSection bio={bio} />}
+          </article>
+        </section>
+
+        <div className="w-full mx-auto border border-primary h-0"></div>
+
+        <h2 className="font-bold text-primary text-xl">Kontakt</h2>
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {phone && (
+            <Link
+              href={`tel:${phone}`}
+              target="_blank"
+              className="text-gray-700 hover:text-primary transition-colors duration-200 link">
+              {platformIcons.Phone} {phone}
+            </Link>
           )}
-        </div>
-      </section>
+          {displayEmail && (
+            <Link
+              href={`mailto:${displayEmail}`}
+              className="text-gray-700 hover:text-primary transition-colors duration-200 link">
+              {platformIcons.Email} {displayEmail}
+            </Link>
+          )}
+
+          {website && (
+            <Link
+              href={website}
+              target="_blank"
+              className="text-gray-700 hover:text-primary transition-colors duration-200 link">
+              {platformIcons.Website} {website}
+            </Link>
+          )}
+
+          {parsedSocials && parsedSocials.map((social) => (
+            <div key={social.platform} className="flex items-center">
+              <Link
+                href={social.url}
+                target="_blank"
+                className="flex items-center">
+                {platformIcons[social.platform]} {social.url}
+              </Link>
+            </div>
+          ))}
+
+          {address && (
+            <div className="flex flex-col">
+              <div><MapPin className="inline-block mr-1" size={20} /> {address}</div>
+              <Link
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
+                target="_blank"
+                className="indent-7 text-primary font-bold text-lg hover:text-primary transition-colors duration-200"
+              >
+                Route planen
+              </Link>
+            </div>
+          )}
+        </section>
+
+        <div className="w-full mx-auto border border-primary h-0"></div>
+
+        <section>
+          <ScheduleSection schedule={schedule} />
+        </section>
+
+        <div className="w-full mx-auto border border-primary h-0"></div>
+      </div>
 
       <section className="w-full max-w-3xl rounded-2xl shadow-md flex flex-col gap-8">
         <div className="font-semibold text-primary text-2xl text-center p-4">My Posts</div>
@@ -160,17 +192,19 @@ export default async function DashboardPage() {
               </div>
             ))
           ) : (
-            <span className="text-gray-400">No posts available</span>
+            <span className="text-gray-400">No active posts</span>
           )}
         </div>
       </section>
 
-      {session && session.user.role === 'ADMIN' && (
-        <div className="mt-8">
-          <span className="mr-2">Create new account</span>
-          <Link href="/register" className="btn btn-accent text-white">here</Link>
-        </div>
-      )}
-    </main>
+      {
+        session && session.user.role === 'ADMIN' && (
+          <div className="mt-8">
+            <span className="mr-2">Create new account</span>
+            <Link href="/register" className="btn btn-accent text-white">here</Link>
+          </div>
+        )
+      }
+    </main >
   );
 }
