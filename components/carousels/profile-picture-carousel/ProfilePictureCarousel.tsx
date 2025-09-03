@@ -12,7 +12,7 @@ import 'swiper/css/effect-cards';
 import Link from "next/link";
 
 
-export default function TheHealthBarCarousel({ imageSrcArray }: { imageSrcArray?: string[] }) {
+export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArray?: string[] }) {
 
   if (!imageSrcArray || imageSrcArray.length === 0) {
     return <div className="skeleton animate-pulse h-64 bg-gray-200 rounded-lg"></div>;
