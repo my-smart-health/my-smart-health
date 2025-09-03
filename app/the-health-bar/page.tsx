@@ -1,17 +1,17 @@
 import GoBack from "@/components/buttons/go-back/GoBack";
-import TheHealthBarCarousel from "@/components/carousels/theHealthBarCarousel/TheHealthBarCarousel";
+import ProfilePictureCarousel from "@/components/carousels/profile-picture-carousel/ProfilePictureCarousel";
 import TopCarousel from "@/components/carousels/topCarousel/TopCarousel";
 import TheHealthBarInfo from "@/components/the-health-bar-info/TheHealthBarInfo";
 import { defaultCarouselItems, defaultHealthBarItems } from "@/data/mockup-data";
 import Image from "next/image";
 
 export default function TheHealthBarPage() {
-
+  const healthBarItems = defaultHealthBarItems.map(item => item.imageSrc);
   return (
     <main className="flex flex-col gap-3 justify-center items-center mx-auto mb-auto max-w-[90%] overflow-clip">
       <div className="max-w-[95%]">
         <TopCarousel props={defaultCarouselItems} />
-        <TheHealthBarCarousel props={defaultHealthBarItems} />
+        <ProfilePictureCarousel imageSrcArray={healthBarItems} />
         <div className="flex justify-end mt-4">
           <GoBack />
         </div>
