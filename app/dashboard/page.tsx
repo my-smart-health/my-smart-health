@@ -1,21 +1,14 @@
-import { auth } from "@/auth";
-import GoToButton from "@/components/buttons/go-to/GoToButton";
-import prisma from "@/lib/db";
-import Image from "next/image";
-import Link from "next/link";
 import { redirect } from "next/navigation";
-import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube, MapPin } from "lucide-react";
-import Xlogo from '@/public/x-logo-black.png';
-import TikTokLogo from '@/public/tik-tok-logo.png';
-import { parseSocials } from "@/utils/common";
-import ProfilePictureCarousel from "@/components/carousels/profile-picture-carousel/ProfilePictureCarousel";
-import { BioSection } from "./BioSection";
 
-import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
-import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
+import { auth } from "@/auth";
+import prisma from "@/lib/db";
 
-import { Schedule } from '@/utils/types'
-import ScheduleSection from "./ScheduleSection";
+import GoToButton from "@/components/buttons/go-to/GoToButton";
+import ProfileFull from "@/components/profile-full/ProfileFull";
+import CreateNewAccount from "@/components/buttons/create-new-account/CreateNewAccount";
+import ShortPosts from "@/components/posts/short-posts/ShortPosts";
+
+import { Schedule } from "@/utils/types";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -47,6 +40,9 @@ async function getPosts(userId: string) {
       content: true,
       createdAt: true,
       updatedAt: true,
+      photos: true,
+      author: true,
+      authorId: true,
     },
   });
   return { posts };
@@ -60,151 +56,42 @@ export default async function DashboardPage() {
   }
 
   const { user } = await getData(session.user.id);
-  const { name, profileImages, address, bio, phone, socials, website, fieldOfExpertise, displayEmail } = user || {};
-
-  const schedule = user?.schedule as Schedule[] || [];
-
   const { posts } = await getPosts(session.user.id);
 
-  const parsedSocials = parseSocials(socials || []);
+  const safeUser = user
+    ? { ...user, schedule: Array.isArray(user.schedule) ? user.schedule as Schedule[] : [] }
+    : null;
 
-  const platformIcons: Record<string, React.ReactNode> = {
-    Email: <AtSign className="inline-block mr-1" size={20} />,
-    Website: <Globe className="inline-block mr-1" size={20} />,
-    Phone: <Phone className="inline-block mr-1" size={20} />,
-    Facebook: <Facebook className="inline-block mr-1" size={20} />,
-    Linkedin: <Linkedin className="inline-block mr-1" size={20} />,
-    X: <Image src={Xlogo} width={20} height={20} alt="X.com" className="w-6 mr-1" />,
-    Youtube: <Youtube className="inline-block mr-1" size={20} />,
-    TikTok: <Image src={TikTokLogo} width={20} height={20} alt="TikTok" className="w-10 mr-1" />,
-    Instagram: <Instagram className="inline-block mr-1" size={20} />,
-  };
+  const safePosts = posts
+    ? posts.map((post) => ({
+      ...post,
+      author: {
+        ...post.author,
+        schedule: Array.isArray(post.author.schedule) ? post.author.schedule as Schedule[] : [],
+      },
+    }))
+    : null;
 
   return (
     <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-none">
 
-      <h1 className="mx-3 text-4xl font-extrabold  text-primary mb-6">Welcome, {name || "User"}!</h1>
+      <h1 className="mx-3 text-4xl font-extrabold  text-primary mb-6">Welcome, {user?.name || "User"}!</h1>
 
       <div className="flex gap-4 mb-8">
         <GoToButton src="/dashboard/create-news" name="Create News" className="btn btn-primary shadow" />
         <GoToButton src="/dashboard/edit-profile" name="Edit Profile" className="btn btn-primary shadow" />
       </div>
 
-      <div className="flex flex-col gap-2 p-2 w-full max-w-[99%]">
+      {safeUser && <ProfileFull user={safeUser} />}
 
-        <section className="max-w-[95%]">
-          {profileImages && <ProfilePictureCarousel imageSrcArray={profileImages} />}
-        </section>
+      <div className="w-full mx-auto border border-primary h-0"></div>
 
-        <section>
-          <h2 className="font-bold text-primary text-xl">{name}</h2>
-        </section>
-
-        <section>
-          <p className="font-semibold">
-            {fieldOfExpertise?.join(", ")}
-          </p>
-        </section>
-
-        <div className="w-full mx-auto border border-primary h-0"></div>
-
-        <section className="font-semibold text-primary text-lg">
-          <article className="text-base text-black">
-            {bio && <BioSection bio={bio} />}
-          </article>
-        </section>
-
-        <div className="w-full mx-auto border border-primary h-0"></div>
-
-        <h2 className="font-bold text-primary text-xl">Kontakt</h2>
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {phone && (
-            <Link
-              href={`tel:${phone}`}
-              target="_blank"
-              className="text-gray-700 hover:text-primary transition-colors duration-200 link">
-              {platformIcons.Phone} {phone}
-            </Link>
-          )}
-          {displayEmail && (
-            <Link
-              href={`mailto:${displayEmail}`}
-              className="text-gray-700 hover:text-primary transition-colors duration-200 link">
-              {platformIcons.Email} {displayEmail}
-            </Link>
-          )}
-
-          {website && (
-            <Link
-              href={website}
-              target="_blank"
-              className="text-gray-700 hover:text-primary transition-colors duration-200 link">
-              {platformIcons.Website} {website}
-            </Link>
-          )}
-
-          {parsedSocials && parsedSocials.map((social) => (
-            <div key={social.platform} className="flex items-center">
-              <Link
-                href={social.url}
-                target="_blank"
-                className="flex items-center">
-                {platformIcons[social.platform]} {social.url}
-              </Link>
-            </div>
-          ))}
-
-          {address && (
-            <div className="flex flex-col">
-              <div><MapPin className="inline-block mr-1" size={20} /> {address}</div>
-              <Link
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
-                target="_blank"
-                className="indent-7 text-primary font-bold text-lg hover:text-primary transition-colors duration-200"
-              >
-                Route planen
-              </Link>
-            </div>
-          )}
-        </section>
-
-        <div className="w-full mx-auto border border-primary h-0"></div>
-
-        <section>
-          <ScheduleSection schedule={schedule} />
-        </section>
-
-        <div className="w-full mx-auto border border-primary h-0"></div>
-      </div>
-
-      <section className="w-full max-w-3xl rounded-2xl shadow-md flex flex-col gap-8">
-        <div className="font-semibold text-primary text-2xl text-center p-4">My Posts</div>
-        <div className="flex flex-col gap-2 mt-1 p-4">
-          {posts && posts.length > 0 ? (
-            posts.map((post) => (
-              <div key={post.id} className="bg-secondary/20 rounded-lg p-3 shadow-xl">
-                <h3 className="font-semibold text-lg text-primary">{post.title}</h3>
-                <p className="text-gray-600 line-clamp-3">{post.content}</p>
-                <div className="flex flex-row-reverse gap-2 mt-4 mb-2">
-                  <GoToButton src={`/news/${post.id}`} name="View Post" className="btn btn-primary shadow" />
-                  <GoToButton src={`/dashboard/edit-post/${post.id}`} name="Edit Post" className="btn btn-dash shadow" />
-                </div>
-              </div>
-            ))
-          ) : (
-            <span className="text-gray-400">No active posts</span>
-          )}
-        </div>
+      <section className="flex flex-col w-full rounded-2xl shadow-md">
+        <div className="font-semibold text-primary text-2xl text-center">My Posts</div>
+        {safePosts && <ShortPosts posts={safePosts} session={session} />}
       </section>
 
-      {
-        session && session.user.role === 'ADMIN' && (
-          <div className="mt-8">
-            <span className="mr-2">Create new account</span>
-            <Link href="/register" className="btn btn-accent text-white">here</Link>
-          </div>
-        )
-      }
+      <CreateNewAccount session={session} />
     </main >
   );
 }

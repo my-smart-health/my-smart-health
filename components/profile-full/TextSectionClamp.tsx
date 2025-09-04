@@ -1,11 +1,13 @@
 'use client'
+
 import { useState } from "react";
-export function BioSection({ bio }: { bio: string }) {
+
+export default function TextSectionClamp({ text }: { text: string }) {
   const [expanded, setExpanded] = useState(false);
   return (
     <>
       <section className={`break-before-all ${expanded ? "line-clamp-none" : "line-clamp-3"}`}>
-        {bio}
+        {text}
       </section>
       <button
         onClick={() => setExpanded(e => !e)}
