@@ -12,30 +12,9 @@ type Posts = {
   photos: string[];
   createdAt: Date;
   updatedAt: Date | null;
-  author: {
-    name: string | null;
-    profileImages: string[];
-    address: string | null;
-    bio: string | null;
-    phone: string[];
-    socials: string[];
-    website: string | null;
-    fieldOfExpertise: string[];
-    displayEmail: string | null;
-    id: string;
-    role: string;
-    schedule: Schedule[];
-    email: string;
-    password: string;
-    createdAt: Date;
-    emailVerified: Date | null;
-    location: string | null;
-    profileType: string;
-    category: string[];
-  };
 }
 
-export default function ShortPosts({ posts, session }: { posts: Posts[]; session: Session }) {
+export default function ShortPosts({ posts, session = null }: { posts: Posts[]; session?: Session | null }) {
   return (
     <div className="flex flex-col gap-2">
       {posts && posts.length > 0 ? (
