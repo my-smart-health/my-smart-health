@@ -55,7 +55,7 @@ export default function ProfileFull({ user }: { user: User }) {
     <>
       <div className="flex flex-col gap-2 p-2 w-full max-w-[99%]">
 
-        <section className="max-w-[95%]">
+        <section className="max-w-[90%]">
           {profileImages && <ProfilePictureCarousel imageSrcArray={profileImages} />}
         </section>
 
@@ -80,7 +80,7 @@ export default function ProfileFull({ user }: { user: User }) {
         <div className="w-full mx-auto border border-primary h-0"></div>
 
         <h2 className="font-bold text-primary text-xl">Kontakt</h2>
-        <section className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <section className="grid grid-cols-1 gap-3">
           {phone && (
             <Link
               href={`tel:${phone}`}
@@ -92,8 +92,8 @@ export default function ProfileFull({ user }: { user: User }) {
           {displayEmail && (
             <Link
               href={`mailto:${displayEmail}`}
-              className="text-gray-700 hover:text-primary transition-colors duration-200 link">
-              {platformIcons.Email} {displayEmail}
+              className="text-gray-700 hover:text-primary transition-colors duration-200 break-all break-before-left link">
+              <span className="mr-1">{platformIcons.Email}</span> {displayEmail}
             </Link>
           )}
 
@@ -101,18 +101,20 @@ export default function ProfileFull({ user }: { user: User }) {
             <Link
               href={website}
               target="_blank"
-              className="text-gray-700 hover:text-primary transition-colors duration-200 link">
-              {platformIcons.Website} {website}
+              className="text-gray-700 hover:text-primary transition-colors duration-200 break-all break-before-left link">
+              <span className="mr-1">{platformIcons.Website}</span> {website}
             </Link>
           )}
 
-          {parsedSocials && parsedSocials.map((social) => (
-            <div key={social.platform} className="flex items-center">
+          {parsedSocials && parsedSocials.map((social, idx) => (
+            <div
+              key={social.url + idx}
+              className="flex items-center w-full h-auto my-auto">
               <Link
                 href={social.url}
                 target="_blank"
-                className="flex items-center">
-                {platformIcons[social.platform]} {social.url}
+                className="text-gray-700 hover:text-primary transition-colors duration-200 break-all break-before-left link">
+                <span className="mr-1">{platformIcons[social.platform]}</span> {social.url}
               </Link>
             </div>
           ))}
