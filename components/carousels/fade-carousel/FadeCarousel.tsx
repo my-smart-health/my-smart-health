@@ -8,16 +8,14 @@ import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
 import 'swiper/css/effect-fade';
 import { Suspense } from "react";
+import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
+import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 
-function getYoutubeEmbedUrl(url: string) {
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
-  return match ? `https://www.youtube.com/embed/${match[1]}` : url;
-}
 
-export default function FadeCarousel({ photos }: { photos: string[] }) {
+export default function FadeCarousel({ photos, disableOnInteraction = false }: { photos: string[]; disableOnInteraction?: boolean }) {
   return (
     <Suspense fallback={<div className="text-center skeleton min-h-[352px]">Loading...</div>}>
-      <figure>
+      <figure >
         <div className="max-w-xs md:max-w-sm">
           <Swiper
             modules={[Scrollbar, Mousewheel, Autoplay, EffectFade]}
@@ -30,42 +28,49 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
               crossFade: true
             }}
             mousewheel={true}
-            autoplay={{ delay: 3000, disableOnInteraction: true }}
+            autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction }}
             speed={1500}
             scrollbar={{ draggable: true }}
           >
-            {photos && photos.map((item, idx) => (
-              <SwiperSlide key={idx}>
-                {item.search('youtu') > 0 ? (
-                  <div className="flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full">
-                    <iframe
-                      key={idx}
-                      width="560"
-                      height="315"
-                      src={getYoutubeEmbedUrl(item)}
-                      title="YouTube video player"
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
-                      allowFullScreen
-                      className="aspect-video w-full object-center object-cover"
-                    ></iframe>
-                  </div>
-                ) : (
-                  <div className="flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full">
-                    <Image
-                      loading="lazy"
-                      placeholder="empty"
-                      width={450}
-                      height={150}
-                      src={item}
-                      alt={item}
-                      className="aspect-video w-full object-center object-cover"
-                    />
-                  </div>
-                )}
-                <br />
-              </SwiperSlide>
-            ))}
+            {photos && photos.map((item, idx) => {
+              if (item.search('youtu') > 0 || item.search('youtube') > 0) {
+                return (
+                  <SwiperSlide key={idx}>
+                    <div className="flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full">
+                      <YoutubeEmbed embedHtml={item} height={150} width={450} />
+                    </div>
+                    <br />
+                  </SwiperSlide>
+                )
+              }
+              if (item.search('instagram') > 0) {
+                return (
+                  <SwiperSlide key={idx}>
+                    <div className="flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full">
+                      <InstagramEmbed embedHtml={item} height={150} width={450} />
+                    </div>
+                    <br />
+                  </SwiperSlide>
+                )
+              } else {
+                return (
+                  <SwiperSlide key={idx}>
+                    <div className="flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full">
+                      <Image
+                        loading="lazy"
+                        placeholder="empty"
+                        width={450}
+                        height={150}
+                        src={item}
+                        alt={item}
+                        className="aspect-video w-full object-center object-cover"
+                      />
+                    </div>
+                    <br />
+                  </SwiperSlide>
+                )
+              }
+            })}
           </Swiper>
         </div>
       </figure>
