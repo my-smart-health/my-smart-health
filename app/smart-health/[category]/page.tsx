@@ -29,7 +29,7 @@ async function getUser(category: string) {
   return { user };
 }
 
-export default async function CategoryPage({ params }: { params: { category: string } }) {
+export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {
   const { category } = await params;
 
   const FormattedCategory = category.replace(/-/g, ' ').replace(/%26/g, '&');
