@@ -1,6 +1,7 @@
 'use client'
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
+import { PROFILE_TYPE_MEDIZIN_UND_PFLEGE, PROFILE_TYPE_SMART_HEALTH } from "@/utils/constants";
 import { FormEvent, useState } from "react";
 
 type RegisterResponse = {
@@ -126,8 +127,8 @@ export default function RegisterForm() {
         className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
       >
         <option disabled={true} value="">Select Profile Type</option>
-        <option value="PATIENT">Smart Health</option>
-        <option value="DOCTOR">Medizin & Pflege</option>
+        <option value={PROFILE_TYPE_SMART_HEALTH}>Smart Health</option>
+        <option value={PROFILE_TYPE_MEDIZIN_UND_PFLEGE}>Medizin & Pflege</option>
       </select>
 
       <div className="flex flex-col w-full gap-2">
