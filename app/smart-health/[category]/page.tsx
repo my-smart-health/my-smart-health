@@ -6,14 +6,14 @@ import { Triangle } from "lucide-react";
 import Link from "next/link";
 
 async function getCategory() {
-  const user = await prisma.user.findMany({
+  const categories = await prisma.user.findMany({
     where: { profileType: PROFILE_TYPE_SMART_HEALTH },
     select: {
       id: true,
       category: true
     }
   });
-  return { categories: user };
+  return { categories };
 }
 
 async function getUser(category: string) {
@@ -33,7 +33,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   const { category } = await params;
 
   const FormattedCategory = category.replace(/-/g, ' ').replace(/%26/g, '&');
-
 
   const { user } = await getUser(FormattedCategory);
 
@@ -74,6 +73,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                         key={id}
                         className="bg-secondary/20 rounded-lg p-3 shadow-xl">
                         <ProfileShort
+                          id={id}
                           name={name}
                           bio={bio}
                           image={profileImages[0]}
