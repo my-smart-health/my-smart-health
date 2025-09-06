@@ -33,7 +33,7 @@ export default function ShortPosts({ posts, session = null }: { posts: Posts[]; 
             </h3>
 
             <section className="my-2 mx-auto w-full flex place-content-center items-center">
-              <FadeCarousel photos={post.photos} />
+              <FadeCarousel photos={post.photos} disableOnInteraction={true} />
             </section>
 
             <p
