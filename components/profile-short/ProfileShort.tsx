@@ -1,15 +1,21 @@
 import Image from "next/image";
+import Link from "next/link";
 
-export default function ProfileShort({ name, bio, image }: { name: string; bio: string; image: string }) {
+export default function ProfileShort({ id, name, bio, image }: { id: string; name: string; bio: string; image: string }) {
   return (
-    <div className="flex justify-between p-2 gap-1 border">
-      <div className="flex flex-col flex-1 justify-center gap-2 ">
+    <>
+      <div className="flex flex-col p-3 gap-1 border border-dashed rounded-lg bg-white/80 shadow-md hover:shadow-xl transition-shadow">
         <h3 className="font-bold text-lg">{name}</h3>
+        <div className="flex h-full">
+          <Image src={image} alt={name} width={96} height={96} className=" w-full h-full aspect-square rounded-lg" />
+        </div>
         <p className="text-gray-600 line-clamp-3">{bio}</p>
       </div>
-      <div className="flex p-2">
-        <Image src={image} alt={name} width={96} height={96} className="w-24 h-24 rounded-lg" />
-      </div>
-    </div>
+      <span className="flex justify-end">
+        <Link href={`/profile/${id}`} className="btn btn-sm btn-primary self-end mt-2">
+          View Profile
+        </Link>
+      </span>
+    </>
   );
 }
