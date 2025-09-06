@@ -8,7 +8,7 @@ import Image from "next/image";
 export default function TheHealthBarPage() {
   const healthBarItems = defaultHealthBarItems.map(item => item.imageSrc);
   return (
-    <main className="flex flex-col gap-3 justify-center items-center mx-auto mb-auto max-w-[90%] overflow-clip">
+    <main className="flex flex-col gap-3 justify-center items-center mx-auto mb-auto max-w-[90%] overflow-clip overscroll-none">
       <div className="max-w-[95%]">
         <TopCarousel props={defaultCarouselItems} />
         <ProfilePictureCarousel imageSrcArray={healthBarItems} />
