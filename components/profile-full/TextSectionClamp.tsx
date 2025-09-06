@@ -1,5 +1,6 @@
 'use client'
 
+import { MAX_BIO_LENGTH_CLAMP } from "@/utils/constants";
 import { useState } from "react";
 
 export default function TextSectionClamp({ text }: { text: string }) {
@@ -12,7 +13,7 @@ export default function TextSectionClamp({ text }: { text: string }) {
       <button
         onClick={() => setExpanded(e => !e)}
         className="text-primary ml-2 flex place-self-end">
-        {expanded ? "Show less" : "Show more"}
+        {text.length > MAX_BIO_LENGTH_CLAMP ? expanded ? "Show less" : "Show more" : null}
       </button>
     </>
   );
