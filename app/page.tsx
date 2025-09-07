@@ -2,7 +2,6 @@ import NewsCarousel from "@/components/carousels/newsCarousel/NewsCarousel";
 import TopCarousel from "@/components/carousels/topCarousel/TopCarousel";
 import NewsSmartHealthMedizinButton from "@/components/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
 import TheHealthBarLink from "@/components/the-health-bar-link/TheHealthBarLink";
-import { defaultNewsItems } from "@/data/mockup-data";
 import prisma from "@/lib/db";
 
 async function getUsers() {
