@@ -28,7 +28,7 @@ export default function FadeCarousel({ photos, disableOnInteraction = false }: {
               crossFade: true
             }}
             mousewheel={true}
-            autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction }}
+            autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction, pauseOnMouseEnter: true, waitForTransition: true }}
             speed={1500}
             scrollbar={{ draggable: true }}
           >
@@ -36,8 +36,8 @@ export default function FadeCarousel({ photos, disableOnInteraction = false }: {
               if (item.search('youtu') > 0 || item.search('youtube') > 0) {
                 return (
                   <SwiperSlide key={idx}>
-                    <div className="flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full">
-                      <YoutubeEmbed embedHtml={item} height={150} width={450} />
+                    <div className="flex flex-col justify-center items-center aspect-video rounded-box cursor-pointer max-w-full">
+                      <YoutubeEmbed embedHtml={item} height={200} width={450} />
                     </div>
                     <br />
                   </SwiperSlide>
@@ -55,7 +55,7 @@ export default function FadeCarousel({ photos, disableOnInteraction = false }: {
               } else {
                 return (
                   <SwiperSlide key={idx}>
-                    <div className="flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full">
+                    <div className="flex flex-col justify-center object-cover object-center items-center rounded-box cursor-pointer max-w-full">
                       <Image
                         loading="lazy"
                         placeholder="empty"

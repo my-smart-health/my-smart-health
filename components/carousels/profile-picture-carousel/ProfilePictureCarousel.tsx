@@ -1,18 +1,19 @@
 'use client'
-import { Suspense } from "react";
+
 import Image from "next/image";
+import { Suspense } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Scrollbar, EffectCards } from "swiper/modules";
+
 import 'swiper/css';
 import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
 import 'swiper/css/effect-cards';
-import Link from "next/link";
 
 
-export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArray?: string[] }) {
+export default function ProfilePictureCarousel({ imageSrcArray, disableOnInteraction = false }: { imageSrcArray?: string[]; disableOnInteraction?: boolean }) {
 
   if (!imageSrcArray || imageSrcArray.length === 0) {
     return <div className="skeleton animate-pulse h-64 bg-gray-200 rounded-lg"></div>;
@@ -27,7 +28,7 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
 
         speed={300}
 
-        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction, pauseOnMouseEnter: true, waitForTransition: true }}
         mousewheel={true}
         scrollbar={{ draggable: true }}
         effect="cards"

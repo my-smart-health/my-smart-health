@@ -55,7 +55,7 @@ export default function YoutubeEmbed({
           allow="autoplay; encrypted-media"
           title="YouTube Embed"
           frameBorder="0"
-          className="rounded-lg bg-white"
+          className="rounded-lg aspect-video object-cover object-center bg-white"
           style={{ border: "none" }}
         ></iframe>
       </div>

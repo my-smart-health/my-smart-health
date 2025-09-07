@@ -9,16 +9,18 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
 import Image from "next/image";
+import Link from "next/link";
 
 type TopCarouselItemProps = {
   props?: {
     id: string;
-    imageSrc: string;
     name: string;
-  }[]
+    profileImage: string;
+  }[];
+  disableOnInteraction?: boolean;
 };
 
-export default function TopCarousel({ props }: TopCarouselItemProps) {
+export default function TopCarousel({ props, disableOnInteraction = false }: TopCarouselItemProps) {
 
   if (!props || props.length === 0) {
     return <TopCarouselSkeleton times={7} />;
@@ -32,7 +34,7 @@ export default function TopCarousel({ props }: TopCarouselItemProps) {
           spaceBetween={4}
           slidesPerView={4}
           mousewheel={true}
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction, pauseOnMouseEnter: true, waitForTransition: true }}
           speed={300}
           scrollbar={{ draggable: true }}
         >
@@ -40,16 +42,18 @@ export default function TopCarousel({ props }: TopCarouselItemProps) {
             <SwiperSlide
               key={item.id}
               className="cursor-pointer">
-              <Image
-                loading="lazy"
-                placeholder="empty"
-                width={400}
-                height={400}
-                alt={item.name}
-                src={item.imageSrc}
-                className="rounded-box border-6 border-primary aspect-square"
-              />
-              <p className="text-center text-[#2c2e35] mb-4">{item.name}</p>
+              <Link href={`/profile/${item.id}`}>
+                <Image
+                  loading="lazy"
+                  placeholder="empty"
+                  width={400}
+                  height={400}
+                  alt={item.name}
+                  src={item.profileImage}
+                  className="rounded-box border-6 border-primary aspect-square"
+                />
+                <p className="text-center text-[#2c2e35] mb-4">{item.name}</p>
+              </Link>
             </SwiperSlide>
           ))}
         </Swiper>

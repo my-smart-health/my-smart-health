@@ -10,16 +10,18 @@ import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
 import 'swiper/css/effect-cube';
 import NewsCarouselSkeleton from "./NewsCarouselSkeleton";
+import Link from "next/link";
 
 type NewsCarouselProps = {
   props?: {
     id: string;
-    imageSrc: string;
+    image: string;
     info: string;
-  }[]
+  }[];
+  disableOnInteraction?: boolean;
 };
 
-export default function NewsCarousel({ props }: NewsCarouselProps) {
+export default function NewsCarousel({ props, disableOnInteraction = false }: NewsCarouselProps) {
 
   if (!props || props.length === 0) {
     return <NewsCarouselSkeleton />;
@@ -40,26 +42,28 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
             shadowScale: 0.94
           }}
           mousewheel={true}
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
+          autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction, pauseOnMouseEnter: true, waitForTransition: true }}
           speed={300}
           scrollbar={{ draggable: true }}
         >
           {props.map((item) => (
             <SwiperSlide key={item.id}>
-              <div className="flex flex-col justify-center items-center rounded-box cursor-pointer">
-                <Image
-                  loading="lazy"
-                  placeholder="empty"
-                  width={400}
-                  height={400}
-                  src={item.imageSrc}
-                  alt={item.info}
-                  className="aspect-square"
-                />
-                <span className="text-center text-white text-3xl w-full bg-primary">
-                  {item.info}
-                </span>
-              </div>
+              <Link href={`/news/${item.id}`}>
+                <div className="flex flex-col justify-center items-center rounded-box cursor-pointer">
+                  <Image
+                    loading="lazy"
+                    placeholder="empty"
+                    width={400}
+                    height={400}
+                    src={item.image}
+                    alt={item.info}
+                    className="aspect-square"
+                  />
+                  <span className="text-center text-white text-3xl w-full bg-primary">
+                    {item.info}
+                  </span>
+                </div>
+              </Link>
               <br />
             </SwiperSlide>
           ))}

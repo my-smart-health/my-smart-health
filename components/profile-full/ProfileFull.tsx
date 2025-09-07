@@ -48,28 +48,32 @@ export default function ProfileFull({ user }: { user: User }) {
 
   const schedule = user?.schedule as Schedule[] || [];
 
-
   const parsedSocials = parseSocials(socials || []);
 
   return (
     <>
       <div className="flex flex-col gap-2 p-2 w-full max-w-[99%]">
 
-        <section className="max-w-[90%]">
-          {profileImages && <ProfilePictureCarousel imageSrcArray={profileImages} />}
-        </section>
+        {
+          profileImages.length > 0 && <section className="max-w-[90%] mx-auto">
+            <ProfilePictureCarousel imageSrcArray={profileImages} />
+          </section>
+        }
 
         <section>
           <h2 className="font-bold text-primary text-xl">{name}</h2>
         </section>
 
-        <section>
-          <p className="font-semibold">
-            {fieldOfExpertise?.join(", ")}
-          </p>
-        </section>
-
-        <div className="w-full mx-auto border border-primary h-0"></div>
+        {fieldOfExpertise.length > 0 && (
+          <>
+            <section>
+              <p className="font-semibold">
+                {fieldOfExpertise?.join(", ")}
+              </p>
+            </section>
+            <div className="w-full mx-auto border border-primary h-0"></div>
+          </>
+        )}
 
         <section className="font-semibold text-primary text-lg">
           <article className="text-base text-black">
@@ -106,7 +110,7 @@ export default function ProfileFull({ user }: { user: User }) {
             </Link>
           )}
 
-          {parsedSocials && parsedSocials.map((social, idx) => (
+          {parsedSocials.length > 0 && parsedSocials.map((social, idx) => (
             <div
               key={social.url + idx}
               className="flex items-center w-full h-auto my-auto">
@@ -133,11 +137,15 @@ export default function ProfileFull({ user }: { user: User }) {
           )}
         </section>
 
-        <div className="w-full mx-auto border border-primary h-0"></div>
+        {schedule && schedule.length > 0 && (
+          <>
+            <div className="w-full mx-auto border border-primary h-0"></div>
 
-        <section>
-          <ScheduleSection schedule={schedule} />
-        </section>
+            <section>
+              <ScheduleSection schedule={schedule} />
+            </section>
+          </>
+        )}
       </div>
     </>
   )
