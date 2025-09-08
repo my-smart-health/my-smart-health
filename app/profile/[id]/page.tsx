@@ -4,6 +4,7 @@ import ShortPosts from "@/components/posts/short-posts/ShortPosts";
 import ProfileFull from "@/components/profile-full/ProfileFull";
 import prisma from "@/lib/db";
 import { Schedule } from "@/utils/types";
+import Link from "next/link";
 
 async function getUser(id: string) {
   const user = await prisma.user.findUnique({
@@ -66,11 +67,26 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
       <main
         className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-none">
         <ProfileFull user={safeUser} />
-        <GoBack />
+        <span className="self-end pr-2">
+          <GoBack />
+        </span>
         <section className="flex flex-col w-full rounded-2xl shadow-md">
           <div className="font-semibold text-primary text-2xl text-center">Posts</div>
           {posts ? <ShortPosts posts={posts} session={safeSession} /> : <div>No posts available</div>}
         </section>
+        {session?.user?.role === "ADMIN" && (
+          <div
+            className="text-sm text-gray-500 italic mt-4">
+            <Link
+              href={`/dashboard/edit-profile/${user.id}`}
+              className="btn btn-warning underline">
+              Edit profile
+            </Link>
+            <p className="mt-2">
+              Note: You are logged in as an admin. You can edit any user's profile from the admin dashboard.
+            </p>
+          </div>
+        )}
       </main>
     </>
   );
