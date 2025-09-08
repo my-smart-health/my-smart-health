@@ -6,7 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { FormEvent, useRef, useState } from "react";
-import logo from '@/public/logo.png'
+import logo from '@/public/og-logo.jpg';
 import { MAX_FILES_PER_NEWS } from "@/utils/constants";
 
 type CreateNewsFormProps = {
