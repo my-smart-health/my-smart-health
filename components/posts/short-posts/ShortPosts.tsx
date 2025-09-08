@@ -24,7 +24,7 @@ export default function ShortPosts({ posts, session = null }: { posts: Posts[]; 
             className="bg-secondary/20 rounded-lg p-3 shadow-xl">
 
             <div
-              className="text-gray-500">
+              className="badge badge-accent rounded-bl-none rounded-tr-none mb-2 p-4">
               {new Date(post.createdAt).toLocaleDateString()}
             </div>
 
