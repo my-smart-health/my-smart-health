@@ -75,8 +75,8 @@ export default function ProfileFull({ user }: { user: User }) {
           </>
         )}
 
-        {bio && <section className="font-semibold text-primary text-lg">
-          <article className="text-base text-black">
+        {bio && <section className="">
+          <article className="text-base">
             <TextSectionClamp text={bio} />
           </article>
         </section>
