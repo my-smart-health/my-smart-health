@@ -6,8 +6,9 @@ import GoBack from "@/components/buttons/go-back/GoBack";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
 import { Suspense } from "react";
 import Link from "next/link";
+import { Session } from "next-auth";
 
-export default function NewsCardDetails({ newsData }: { newsData: NewsCardType | null }) {
+export default function NewsCardDetails({ newsData, session }: { newsData: NewsCardType | null, session?: Session | null }) {
 
   const { id, title, content, createdAt, photos, author } = newsData || {};
   const createdDate = new Date(createdAt ? createdAt : '').toLocaleString('de-DE', {
@@ -24,7 +25,13 @@ export default function NewsCardDetails({ newsData }: { newsData: NewsCardType |
             className="m-auto min-h-full border max-w-[99%] rounded-lg shadow-2xl"
           >
             <div className="card card-lg bg-secondary/20 w-96 shadow-sm max-w-[100%]">
+
               <div className="badge badge-accent rounded-bl-none rounded-tr-none p-4">{createdDate}</div>
+
+              {session?.user.role === "ADMIN" || session?.user.id === author?.id
+                && <div className="self-center btn btn-wide btn-warning rounded-xl mt-4"><Link href={`/edit-post/${id}`}>Edit Post</Link></div>
+              }
+
               {author?.name && <div className="text-2xl indent-6 mt-3 text-primary">
                 <Link
                   href={`/profile/${author.id}`}
