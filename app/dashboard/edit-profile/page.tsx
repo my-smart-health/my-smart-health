@@ -54,7 +54,7 @@ export default async function EditProfile() {
               Edit profile
             </Link>
             <p className="mt-2">
-              Note: You are logged in as an admin. You can edit any user's profile from the admin dashboard.
+              Note: You are logged in as an admin. You can edit any user&apos;s profile from the admin dashboard.
             </p>
           </div>
         )}
