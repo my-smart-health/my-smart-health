@@ -12,7 +12,7 @@ import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 
 
-export default function FadeCarousel({ photos, disableOnInteraction = false }: { photos: string[]; disableOnInteraction?: boolean }) {
+export default function FadeCarousel({ photos, disableOnInteraction = true }: { photos: string[]; disableOnInteraction?: boolean }) {
   return (
     <Suspense fallback={<div className="text-center skeleton min-h-[352px]">Loading...</div>}>
       <figure >
