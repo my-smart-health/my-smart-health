@@ -1,7 +1,10 @@
+import { auth } from "@/auth";
+import prisma from "@/lib/db";
+
+import NewsCard from "./NewsCard";
 import GoBack from "@/components/buttons/go-back/GoBack";
 import NewsSmartHealthMedizinButton from "@/components/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
-import prisma from "@/lib/db";
-import NewsCard from "./NewsCard";
+
 import { NewsCardType } from "@/utils/types";
 
 async function getData() {
@@ -31,6 +34,8 @@ async function getData() {
 }
 
 export default async function NewsPage() {
+  const session = await auth();
+
   const newsData = await getData() as NewsCardType[];
 
   return (
@@ -41,7 +46,9 @@ export default async function NewsPage() {
           <GoBack />
         </div>
       </div>
-      {newsData && <NewsCard newsData={newsData} />}
+      {newsData && session
+        ? <NewsCard newsData={newsData} session={session} /> :
+        <NewsCard newsData={newsData} />}
       <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/smart-health" />
       <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
     </div>
