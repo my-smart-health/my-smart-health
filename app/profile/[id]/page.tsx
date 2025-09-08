@@ -79,7 +79,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         </span>
         <section className="flex flex-col w-full rounded-2xl shadow-md">
           <div className="font-semibold text-primary text-2xl text-center">Posts</div>
-          {posts ? <ShortPosts posts={posts} session={safeSession} /> : <div>No posts available</div>}
+          {posts ? <ShortPosts posts={posts} session={safeSession} /> : <div className=" py-2 px-4 self-center">No posts available</div>}
         </section>
 
       </main>
