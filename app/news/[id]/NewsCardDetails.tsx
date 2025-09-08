@@ -29,7 +29,8 @@ export default function NewsCardDetails({ newsData, session }: { newsData: NewsC
               <div className="badge badge-accent rounded-bl-none rounded-tr-none p-4">{createdDate}</div>
 
               {session?.user.role === "ADMIN" || session?.user.id === author?.id
-                && <div className="self-center btn btn-wide btn-warning rounded-xl mt-4"><Link href={`/edit-post/${id}`}>Edit Post</Link></div>
+                ? <div className="self-center btn btn-wide btn-warning rounded-xl mt-4"><Link href={`/dashboard/edit-post/${id}`}>Edit Post</Link></div>
+                : null
               }
 
               {author?.name && <div className="text-2xl indent-6 mt-3 text-primary">

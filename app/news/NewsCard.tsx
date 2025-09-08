@@ -58,7 +58,8 @@ export default function NewsCard({ newsData, session }: { newsData: NewsCardType
                 </div>
 
                 {session?.user.role === "ADMIN" || session?.user.id === author?.id
-                  && <div className="self-center btn btn-wide btn-warning rounded-xl"><Link href={`/edit-post/${id}`}>Edit Post</Link></div>
+                  ? <div className="self-center btn btn-wide btn-warning rounded-xl"><Link href={`/dashboard/edit-post/${id}`}>Edit Post</Link></div>
+                  : null
                 }
               </div>
             </div>

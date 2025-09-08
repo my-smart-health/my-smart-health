@@ -65,7 +65,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
   return (
     <>
       <main
-        className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-none">
+        className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
         {(session?.user?.role === "ADMIN" || session?.user?.id === user.id) && (
           <Link
             href={`/dashboard/edit-profile/${user.id}`}
