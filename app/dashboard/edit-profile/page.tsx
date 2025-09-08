@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import EditProfileForm from "./EditProfileForm";
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
+import Link from "next/link";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -43,6 +44,20 @@ export default async function EditProfile() {
     <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[90%] text-wrap break-normal">
       <h1 className="text-4xl font-extrabold text-primary mb-6">Edit Profile</h1>
       <EditProfileForm user={parsedUser} />
+      {
+        session?.user?.role === "ADMIN" && (
+          <div
+            className="text-sm text-gray-500 italic mt-4">
+            <Link
+              href={`/dashboard/edit-profile/${user.id}`}
+              className="btn btn-warning underline">
+              Edit profile
+            </Link>
+            <p className="mt-2">
+              Note: You are logged in as an admin. You can edit any user's profile from the admin dashboard.
+            </p>
+          </div>
+        )}
     </main>
   );
 }
