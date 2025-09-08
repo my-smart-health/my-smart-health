@@ -37,7 +37,7 @@ const platformIcons: Record<string, React.ReactNode> = {
   Linkedin: <Linkedin className="inline-block mr-1" size={20} />,
   X: <Image src={Xlogo} width={20} height={20} alt="X.com" className="w-6 mr-1" />,
   Youtube: <Youtube className="inline-block mr-1" size={20} />,
-  TikTok: <Image src={TikTokLogo} width={20} height={20} alt="TikTok" className="w-10 mr-1" />,
+  TikTok: <Image src={TikTokLogo} width={20} height={20} alt="TikTok" className="w-8 -ml-1" />,
   Instagram: <Instagram className="inline-block mr-1" size={20} />,
 };
 
@@ -75,11 +75,12 @@ export default function ProfileFull({ user }: { user: User }) {
           </>
         )}
 
-        <section className="font-semibold text-primary text-lg">
+        {bio && <section className="font-semibold text-primary text-lg">
           <article className="text-base text-black">
-            {bio && <TextSectionClamp text={bio} />}
+            <TextSectionClamp text={bio} />
           </article>
         </section>
+        }
 
         <div className="w-full mx-auto border border-primary h-0"></div>
 
@@ -90,14 +91,14 @@ export default function ProfileFull({ user }: { user: User }) {
               href={`tel:${phone}`}
               target="_blank"
               className="text-gray-700 hover:text-primary transition-colors duration-200 link">
-              {platformIcons.Phone} {phone}
+              <span className="mr-1">{platformIcons.Phone}</span>{phone}
             </Link>
           )}
           {displayEmail && (
             <Link
               href={`mailto:${displayEmail}`}
               className="text-gray-700 hover:text-primary transition-colors duration-200 break-all break-before-left link">
-              <span className="mr-1">{platformIcons.Email}</span> {displayEmail}
+              <span className="mr-1">{platformIcons.Email}</span>{displayEmail}
             </Link>
           )}
 
@@ -106,7 +107,7 @@ export default function ProfileFull({ user }: { user: User }) {
               href={website}
               target="_blank"
               className="text-gray-700 hover:text-primary transition-colors duration-200 break-all break-before-left link">
-              <span className="mr-1">{platformIcons.Website}</span> {website}
+              <span className="mr-1">{platformIcons.Website}</span>{website}
             </Link>
           )}
 
@@ -117,8 +118,8 @@ export default function ProfileFull({ user }: { user: User }) {
               <Link
                 href={social.url}
                 target="_blank"
-                className="text-gray-700 hover:text-primary transition-colors duration-200 break-all break-before-left link">
-                <span className="mr-1">{platformIcons[social.platform]}</span> {social.url}
+                className="flex justify-center items-center text-gray-700 hover:text-primary transition-colors duration-200 break-all link max-w-[99%]">
+                <span className="mr-1">{platformIcons[social.platform]}</span>{social.url}
               </Link>
             </div>
           ))}
