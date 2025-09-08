@@ -7,8 +7,9 @@ import { NewsCardType } from "@/utils/types";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
+import { Session } from "next-auth";
 
-export default function NewsCard({ newsData }: { newsData: NewsCardType[] }) {
+export default function NewsCard({ newsData, session }: { newsData: NewsCardType[], session?: Session | null }) {
   return (
     <>
       {newsData ? newsData.map((news) => {
@@ -55,6 +56,10 @@ export default function NewsCard({ newsData }: { newsData: NewsCardType[] }) {
                 <div className="card-actions justify-center">
                   <GoToButton name={"View more"} src={`/news/${id}`} className="btn btn-wide bg-primary rounded-xl text-secondary" />
                 </div>
+
+                {session?.user.role === "ADMIN" || session?.user.id === author?.id
+                  && <div className="self-center btn btn-wide btn-warning rounded-xl"><Link href={`/edit-post/${id}`}>Edit Post</Link></div>
+                }
               </div>
             </div>
           </div>
