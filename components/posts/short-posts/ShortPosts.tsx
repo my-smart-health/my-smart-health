@@ -47,12 +47,12 @@ export default function ShortPosts({ posts, session = null }: { posts: Posts[]; 
                 src={`/news/${post.id}`}
                 name="View Post"
                 className="btn btn-primary shadow" />
-              {session?.user.id === post.authorId && (
+              {session?.user.id === post.authorId || session?.user.role === "ADMIN" ? (
                 <GoToButton
                   src={`/dashboard/edit-post/${post.id}`}
                   name="Edit Post"
                   className="btn btn-dash shadow" />
-              )}
+              ) : null}
             </div>
           </div>
         ))
