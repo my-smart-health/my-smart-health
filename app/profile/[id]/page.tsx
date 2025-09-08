@@ -65,7 +65,14 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
   return (
     <>
       <main
-        className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-none">
+        className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-none">
+        {(session?.user?.role === "ADMIN" || session?.user?.id === user.id) && (
+          <Link
+            href={`/dashboard/edit-profile/${user.id}`}
+            className="btn btn-wide btn-warning self-center rounded-xl underline">
+            Edit profile
+          </Link>
+        )}
         <ProfileFull user={safeUser} />
         <span className="self-end pr-2">
           <GoBack />
@@ -74,19 +81,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
           <div className="font-semibold text-primary text-2xl text-center">Posts</div>
           {posts ? <ShortPosts posts={posts} session={safeSession} /> : <div>No posts available</div>}
         </section>
-        {session?.user?.role === "ADMIN" && (
-          <div
-            className="text-sm text-gray-500 italic mt-4">
-            <Link
-              href={`/dashboard/edit-profile/${user.id}`}
-              className="btn btn-warning underline">
-              Edit profile
-            </Link>
-            <p className="mt-2">
-              Note: You are logged in as an admin. You can edit any user&apos;s profile from the admin dashboard.
-            </p>
-          </div>
-        )}
+
       </main>
     </>
   );
