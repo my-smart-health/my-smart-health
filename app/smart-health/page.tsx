@@ -4,7 +4,7 @@ import { PROFILE_TYPE_SMART_HEALTH } from "@/utils/constants";
 import { Triangle } from "lucide-react";
 import Link from "next/link";
 
-async function getData() {
+async function getCategories() {
   const user = await prisma.user.findMany({
     where: { profileType: PROFILE_TYPE_SMART_HEALTH },
     select: {
@@ -17,9 +17,9 @@ async function getData() {
 
 export default async function SmartHealthPage() {
 
-  const { user } = await getData();
+  const { user } = await getCategories();
 
-  const uniqueCategories = Array.from(new Set(user.flatMap(u => u.category))).sort();
+  const uniqueCategories = Array.from(new Set(user.flatMap(u => u.category))).filter(u => u.length > 0).sort();
 
   return (
     <main className="w-full mb-auto max-w-full">
