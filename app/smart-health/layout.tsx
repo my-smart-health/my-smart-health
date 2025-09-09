@@ -1,18 +1,4 @@
-
 import NewsSmartHealthMedizinButton from "@/components/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
-import prisma from "@/lib/db";
-import { PROFILE_TYPE_SMART_HEALTH } from "@/utils/constants";
-
-async function getData() {
-  const user = await prisma.user.findMany({
-    where: { profileType: PROFILE_TYPE_SMART_HEALTH },
-    select: {
-      id: true,
-      category: true
-    }
-  });
-  return { user };
-}
 
 export default async function SmartHealthLayout({ children }: { children: React.ReactNode }) {
 
