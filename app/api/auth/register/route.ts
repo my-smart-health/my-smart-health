@@ -41,8 +41,9 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error) {
-    process.env.NODE_ENV === 'development' &&
+    if (process.env.NODE_ENV === 'development') {
       console.error('Error registering user:', error);
+    }
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
 }

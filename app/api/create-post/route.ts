@@ -30,8 +30,9 @@ export async function POST(req: Request) {
 
     return NextResponse.json(news, { status: 201 });
   } catch (error) {
-    process.env.NODE_ENV === 'development' &&
+    if (process.env.NODE_ENV === 'development') {
       console.error('Error creating news:', error);
+    }
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
 }

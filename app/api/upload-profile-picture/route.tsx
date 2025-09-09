@@ -25,8 +25,9 @@ export async function POST(request: Request) {
 
     return NextResponse.json(blob, { status: 200 });
   } catch (error) {
-    process.env.NODE_ENV === 'development' &&
+    if (process.env.NODE_ENV === 'development') {
       console.error('Error uploading picture:', error);
+    }
     return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
   }
 }
