@@ -7,7 +7,7 @@ export const NOTRUF_NUMBERS = {
 export const BORDER_COLOR = '#2db9bc';
 export const SHADOW_COLOR = '#2a2a2ad9';
 
-export const MAX_FILES_PER_NEWS = 5;
+export const MAX_FILES_PER_POST = 5;
 export const MAX_FILES_PER_USER = 10;
 
 export const PROFILE_TYPE_SMART_HEALTH = 'SMART_HEALTH';
