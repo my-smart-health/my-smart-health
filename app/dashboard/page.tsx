@@ -78,7 +78,7 @@ export default async function DashboardPage() {
       <h1 className="mx-3 text-4xl font-extrabold  text-primary mb-6">Welcome, {user?.name || "User"}!</h1>
 
       <div className="flex gap-4 mb-8">
-        <GoToButton src="/dashboard/create-news" name="Create News" className="btn btn-primary shadow" />
+        <GoToButton src="/dashboard/create-post" name="New Post" className="btn btn-primary shadow" />
         <GoToButton src="/dashboard/edit-profile" name="Edit Profile" className="btn btn-primary shadow" />
       </div>
 
