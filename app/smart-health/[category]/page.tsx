@@ -69,16 +69,13 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                     }
 
                     return (
-                      <div
+                      <ProfileShort
                         key={id}
-                        className="bg-secondary/20 rounded-lg p-3 shadow-xl">
-                        <ProfileShort
-                          id={id}
-                          name={name}
-                          bio={bio}
-                          image={profileImages[0]}
-                        />
-                      </div>
+                        id={id}
+                        name={name}
+                        bio={bio}
+                        image={profileImages[0]}
+                      />
                     );
 
                   }))
