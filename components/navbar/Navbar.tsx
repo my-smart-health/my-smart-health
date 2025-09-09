@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import NotrufDropdown from "./NotrufDropdown";
-import ProKilMenu from "./ProKilMenu";
 import { Suspense } from "react";
+import ProfileMenu from "./ProfileMenu";
 
 export default async function Navbar() {
 
@@ -35,7 +35,7 @@ export default async function Navbar() {
         </div>
       </nav>
       <Suspense fallback={<div className="skeleton flex flex-row justify-evenly align-baseline h-full max-h-fit w-full max-w-[100%] gap-2 bg-primary text-white p-2 mb-4">Loading...</div>}>
-        <ProKilMenu />
+        <ProfileMenu />
       </Suspense>
     </>
   )
