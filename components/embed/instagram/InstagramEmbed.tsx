@@ -12,7 +12,6 @@ function getInstagramEmbedUrl(url: string) {
   if (postMatch) return `https://www.instagram.com/p/${postMatch[1]}/embed`;
   return "";
 }
-console.log("Embed URL :", getInstagramEmbedUrl("https://www.instagram.com/reels/DMsHkP0oM7B/?hl=bg"));
 
 export default function InstagramEmbed({
   embedHtml,
