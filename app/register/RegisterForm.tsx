@@ -69,7 +69,9 @@ export default function RegisterForm() {
       setIsDisabled(true);
       return await res.json();
     } catch (error) {
-      process.env.NODE_ENV === 'development' && console.error('Error registering user:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error registering user:', error);
+      }
       setUserCreatedOrError({ type: 'someError' });
       return null;
     }
