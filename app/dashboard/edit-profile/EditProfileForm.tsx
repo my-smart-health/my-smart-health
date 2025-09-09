@@ -124,7 +124,9 @@ export default function EditProfileForm({ user }: { user: User }) {
           const result = await response.json() as PutBlobResult;
           blobResult.push(result.url);
         } catch (error) {
-          process.env.NODE_ENV === 'development' && console.error('Error uploading image:', error);
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Error uploading image:', error);
+          }
           return;
         }
       }
@@ -149,7 +151,9 @@ export default function EditProfileForm({ user }: { user: User }) {
       redirect.push('/dashboard');
       redirect.refresh();
     } catch (error) {
-      process.env.NODE_ENV === 'development' && console.error('Error updating profile:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error updating profile:', error);
+      }
     }
   }
 
