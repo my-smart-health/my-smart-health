@@ -1,5 +1,4 @@
 import { Session } from "next-auth";
-import { Schedule } from "@/utils/types";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
@@ -10,6 +9,7 @@ type Posts = {
   content: string;
   authorId: string;
   photos: string[];
+  tags: string[];
   createdAt: Date;
   updatedAt: Date | null;
 }
@@ -40,6 +40,7 @@ export default function ShortPosts({ posts, session = null }: { posts: Posts[]; 
               className="text-gray-600 line-clamp-3">
               {post.content}
             </p>
+
 
             <div
               className="flex flex-row-reverse gap-2 mt-4 mb-2">
