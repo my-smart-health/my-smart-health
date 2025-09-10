@@ -10,12 +10,14 @@ import { Session } from "next-auth";
 
 export default function NewsCardDetails({ newsData, session }: { newsData: NewsCardType | null, session?: Session | null }) {
 
-  const { id, title, content, createdAt, photos, author } = newsData || {};
+  const { id, title, content, createdAt, photos, author, tags } = newsData || {};
+
   const createdDate = new Date(createdAt ? createdAt : '').toLocaleString('de-DE', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
   });
+
   return (
     <>
       {newsData ? (
@@ -53,6 +55,7 @@ export default function NewsCardDetails({ newsData, session }: { newsData: NewsC
                 {title}
               </h2>
 
+
               <div className="card-body">
                 {photos &&
                   <Suspense fallback={<div>Loading...</div>}>
@@ -62,6 +65,16 @@ export default function NewsCardDetails({ newsData, session }: { newsData: NewsC
 
                 <p className="text-base text-pretty indent-4 break-before">{content}</p>
 
+              </div>
+
+              <div className="card-actions justify-end m-4">
+                {tags && tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {tags.map((tag, index) => (
+                      <span key={index} className="badge badge-dash">{tag}</span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>
