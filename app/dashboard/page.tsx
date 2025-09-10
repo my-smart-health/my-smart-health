@@ -42,6 +42,7 @@ async function getPosts(userId: string) {
       updatedAt: true,
       photos: true,
       author: true,
+      tags: true,
       authorId: true,
     },
   });
