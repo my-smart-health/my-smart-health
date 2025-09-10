@@ -1,20 +1,19 @@
 "use client"
 
+import Image from "next/image";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { PutBlobResult } from "@vercel/blob";
 import { FormEvent, MouseEvent, useEffect, useRef, useState } from "react";
 
 import { MAX_FILES_PER_POST } from "@/utils/constants";
-import GoToButton from "@/components/buttons/go-to/GoToButton";
-
-import logo from '@/public/og-logo.jpg';
-import { ArrowUpRight } from "lucide-react";
+import GoBack from "@/components/buttons/go-back/GoBack";
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
-import Image from "next/image";
-import MoveImageVideo from "../../../components/buttons/move-up-down-image-video/MoveImageVideo";
-import GoBack from "@/components/buttons/go-back/GoBack";
+import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
+
+import logo from '@/public/og-logo.jpg';
+import { ArrowUpRight, XIcon } from "lucide-react";
 
 type CreatePostFormProps = {
   session: Session | null;
@@ -29,19 +28,22 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
-
   const [isDefaultLogo, setIsDefaultLogo] = useState<boolean>(false);
+
+  const [tags, setTags] = useState<string[]>([]);
 
   const [blobResult, setBlobResult] = useState<string[]>([]);
 
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
 
   useEffect(() => {
-    blobResult.length > 0
-      && setIsImageFirst((blobResult[0].search("instagram") === -1
-        && blobResult[0].search("youtube") === -1
-        && blobResult[0].search("youtu") === -1)
-        ? true : false);
+    if (blobResult.length > 0) {
+      setIsImageFirst(
+        blobResult[0].search("instagram") === -1 &&
+        blobResult[0].search("youtube") === -1 &&
+        blobResult[0].search("youtu") === -1
+      );
+    }
   }, [blobResult]);
 
   const handleAddURL = (e: MouseEvent<HTMLButtonElement>) => {
@@ -108,6 +110,22 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
     }
   };
 
+  const handleAddTag = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setTags([...tags, '']);
+  };
+
+  const handleTagsChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    const newTags = [...tags];
+    newTags[index] = e.target.value;
+    setTags(newTags);
+  };
+
+  const handleRemoveTag = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
+    e.preventDefault();
+    setTags(tags.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
 
@@ -135,6 +153,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
           title: formData.get('title'),
           content: formData.get('content'),
           photos: blobResult,
+          tags: tags.filter(tag => tag.trim() !== ''),
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -177,33 +196,70 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       <form
         onSubmit={handleSubmit}
         className={`flex flex-col gap-4 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}>
+
         <fieldset className="fieldset text-lg">
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">
             Title
-            <textarea
-              id="title"
-              name="title"
-              required
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            />
-            <div className="label pt-1 text-xs flex flex-row justify-end">You can pull the right corner to resize it <ArrowUpRight /></div>
           </label>
+          <textarea
+            id="title"
+            name="title"
+            required
+            className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+          />
+          <div className="label pt-1 text-xs flex flex-row justify-end">You can pull the right corner to resize it <ArrowUpRight /></div>
         </fieldset>
+
+        <div className="w-full mx-auto border border-primary h-0"></div>
+
         <fieldset className="fieldset">
           <label htmlFor="content" className="block text-sm font-medium text-gray-700">
             Content
-            <textarea
-              id="content"
-              name="content"
-              required
-              className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-            />
-            <div className="label pt-1 text-xs flex flex-row justify-end">You can pull the right corner to resize it <ArrowUpRight /></div>
           </label>
+          <textarea
+            id="content"
+            name="content"
+            required
+            className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+          />
+          <div className="label pt-1 text-xs flex flex-row justify-end">You can pull the right corner to resize it <ArrowUpRight /></div>
         </fieldset>
 
-        <span className={blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''}>
-          <fieldset>
+        <div className="w-full mx-auto border border-primary h-0"></div>
+
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Post Tags</legend>
+          {tags.length > 0 && (
+            <div className="flex flex-col flex-wrap gap-2 mb-2">
+              {tags.map((tag, index) => (
+                <div key={index} className="flex flex-col items-center gap-2">
+                  <input
+                    type="text"
+                    name={`tag-${index}`}
+                    placeholder="Tag"
+                    value={tags[index]}
+                    onChange={(e) => handleTagsChange(e, index)}
+                    className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                  />
+                  {tags[index] && (
+                    <div key={index} className="flex items-center bg-primary text-white px-3 py-1 rounded-full">
+                      <span>{tag}</span>
+                      <button type="button" onClick={(e) => handleRemoveTag(e, index)} className="ml-2">
+                        <XIcon className="h-4 w-4" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          <button type="button" onClick={handleAddTag} className="btn btn-primary mt-2">Add Tag</button>
+        </fieldset>
+
+        <div className="w-full mx-auto border border-primary h-0"></div>
+
+        <div className={blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''}>
+          <fieldset className="fieldset">
             <legend className="fieldset-legend">Select File</legend>
             <div className="flex flex-wrap gap-4 w-full">
               <input
@@ -212,7 +268,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                 id="image"
                 name="image"
                 accept="image/*"
-                className={`${blobResult && blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''} file-input`}
+                className={`${blobResult && blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full max-w-xs`}
                 onChange={async e => {
                   if (e.target.files && e.target.files.length > MAX_FILES_PER_POST) {
                     setError(`You can select up to ${MAX_FILES_PER_POST} files only.`);
@@ -227,14 +283,16 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
             </div>
           </fieldset>
 
-          <fieldset>
+          <div className="w-full my-5 mx-auto border border-primary h-0"></div>
+
+          <fieldset className="fieldset">
             <legend className="fieldset-legend">Add Media URL</legend>
             <div className="flex flex-col gap-4 w-full">
               <input
                 type="text"
                 name={`media`}
                 placeholder="https://"
-                className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
               />
               <label htmlFor={`media`} className="">Media URL must be a valid URL from YouTube or Instagram</label>
               <button
@@ -248,7 +306,9 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
               </button>
             </div>
           </fieldset>
-        </span>
+        </div>
+
+        <div className="w-full mx-auto border border-primary h-0"></div>
 
         <div className="flex flex-col self-center w-full max-w-[90%] gap-4">
           {blobResult && blobResult.map((image, idx) => {
@@ -278,7 +338,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                   <MoveImageVideo
                     index={idx}
                     blobResult={blobResult}
-                    setBlobResult={setBlobResult}
+                    setBlobResultAction={setBlobResult}
                     showTop={idx > 0}
                     showBottom={idx < blobResult.length - 1}
                   />
@@ -287,21 +347,18 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
             );
           })}
         </div>
-        {
-          blobResult && blobResult.length > 0 && (
-            <div className="space-y-2">
-              <div className="text-sm">You can add up to {MAX_FILES_PER_POST} media files (images, Instagram videos, or YouTube videos)</div>
-              <p className="text-wrap text-warning">NB: Please ensure that the first media is an image.</p>
-            </div>
-          )}
+
+        {blobResult && blobResult.length > 0 && (
+          <div className="space-y-2">
+            <div className="text-sm">You can add up to {MAX_FILES_PER_POST} media files (images, Instagram videos, or YouTube videos)</div>
+            <p className="text-wrap text-warning">NB: Please ensure that the first media is an image.</p>
+          </div>
+        )}
 
         <button type="submit" className={`p-2 rounded bg-primary text-white font-bold text-base hover:bg-primary/80 transition-colors ${isImageFirst ? '' : 'opacity-50 pointer-events-none'}`}>
           Create Post
         </button>
       </form >
-      <div className="text-xl">
-        {isDisabled && <GoToButton src="/dashboard" name="Back to Dashboard" />}
-      </div>
     </>
   );
 }
