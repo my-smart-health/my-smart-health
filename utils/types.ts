@@ -39,6 +39,7 @@ export type NewsCardType = {
   createdAt: Date;
   updatedAt: Date | null;
   photos: string[];
+  tags: string[];
   author: {
     id: string;
     name: string;
