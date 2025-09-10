@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function PUT(req: Request) {
   try {
-    const { id, title, content, photos } = await req.json();
+    const { id, title, content, photos, tags } = await req.json();
 
     if (!id || !title || !content) {
       return NextResponse.json(
@@ -18,6 +18,8 @@ export async function PUT(req: Request) {
         title,
         content,
         photos,
+        tags,
+        updatedAt: new Date(),
       },
     });
 
