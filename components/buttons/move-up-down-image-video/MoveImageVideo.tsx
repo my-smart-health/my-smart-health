@@ -6,12 +6,12 @@ import React from "react";
 type MoveImageVideoProps = {
   index: number;
   blobResult: string[];
-  setBlobResult: (blobs: string[]) => void;
+  setBlobResultAction: (blobs: string[]) => void;
   showTop: boolean;
   showBottom: boolean;
 };
 
-export default function MoveImageVideo({ index, blobResult, setBlobResult, showTop = true, showBottom = true }: MoveImageVideoProps) {
+export default function MoveImageVideo({ index, blobResult, setBlobResultAction, showTop = true, showBottom = true }: MoveImageVideoProps) {
 
   const handleOnePositionUp = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
     e.preventDefault();
@@ -20,7 +20,7 @@ export default function MoveImageVideo({ index, blobResult, setBlobResult, showT
     const previous = newBlobResult[index - 1];
     newBlobResult[index - 1] = newBlobResult[index];
     newBlobResult[index] = previous;
-    setBlobResult(newBlobResult);
+    setBlobResultAction(newBlobResult);
   };
 
   const handleOnePositionDown = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
@@ -30,14 +30,14 @@ export default function MoveImageVideo({ index, blobResult, setBlobResult, showT
     const next = newBlobResult[index + 1];
     newBlobResult[index + 1] = newBlobResult[index];
     newBlobResult[index] = next;
-    setBlobResult(newBlobResult);
+    setBlobResultAction(newBlobResult);
   };
 
   const handleRemove = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
     e.preventDefault();
     const newBlobResult = [...blobResult];
     newBlobResult.splice(index, 1);
-    setBlobResult(newBlobResult);
+    setBlobResultAction(newBlobResult);
   };
 
   if (blobResult.length === 0) return null;
