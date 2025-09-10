@@ -18,6 +18,7 @@ async function getData(id: string): Promise<NewsCardType | null> {
       createdAt: true,
       updatedAt: true,
       photos: true,
+      tags: true,
       author: {
         select: {
           id: true,
