@@ -6,10 +6,8 @@ import TikTokLogo from '@/public/tik-tok-logo.png';
 import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube, MapPin } from "lucide-react";
 
 
-import TextSectionClamp from "./TextSectionClamp";
 import ScheduleSection from "./ScheduleSection";
-import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
-import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
+import TextSectionClamp from "./TextSectionClamp";
 import ProfilePictureCarousel from "../carousels/profile-picture-carousel/ProfilePictureCarousel";
 
 import { Schedule } from "@/utils/types";
