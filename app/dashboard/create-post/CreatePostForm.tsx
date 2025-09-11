@@ -36,7 +36,6 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
 
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   useEffect(() => {
     if (blobResult.length > 0) {
@@ -47,17 +46,6 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       );
     }
 
-    return () => {
-      if (isSubmitted === false) {
-        (async () => {
-          await Promise.all(
-            blobResult.map((url) =>
-              fetch(`/api/remove-picture?url=${encodeURIComponent(url)}`, { method: 'DELETE' })
-            )
-          );
-        })();
-      }
-    };
   }, [blobResult]);
 
   const handleAddURL = (e: MouseEvent<HTMLButtonElement>) => {
@@ -180,7 +168,6 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         return;
       }
 
-      setIsSubmitted(true);
       setError("Post created successfully");
       setIsDisabled(true);
     } catch (error) {
