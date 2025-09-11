@@ -216,12 +216,14 @@ export default function EditProfileForm({ user }: { user: User }) {
       {error && <p className="text-red-500 p-2">{error}</p>}
       <form
         onSubmit={handleSubmit}
-        className={`w-full max-w-3xl rounded-2xl shadow-xl p-8 flex flex-col border-1 border-primary gap-8 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
+        className={`w-full max-w-3xl rounded-2xl shadow-xl p-8 border-1 border-primary gap-8 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
       >
         {blobResult && blobResult.length > 0 ? (
-          <Suspense fallback={<div className={`text-center skeleton min-h-[${MAX_FILES_PER_USER}]`}>Loading...</div>}>
-            <FadeCarousel photos={blobResult} />
-          </Suspense>
+          <div className="w-full">
+            <Suspense fallback={<div className={`text-center skeleton min-h-[${MAX_FILES_PER_USER}]`}>Loading...</div>}>
+              <FadeCarousel photos={blobResult} />
+            </Suspense>
+          </div>
         ) : (
           <div className="text-center skeleton min-h-[352px]">No Images</div>
         )}
@@ -237,7 +239,8 @@ export default function EditProfileForm({ user }: { user: User }) {
                   id="image"
                   name="image"
                   accept="image/*"
-                  className={`${blobResult && blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full max-w-xs`}
+                  multiple={true}
+                  className={`${blobResult && blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full`}
                   onChange={async e => {
                     if (e.target.files && e.target.files.length > MAX_FILES_PER_USER) {
                       setError(`You can select up to ${MAX_FILES_PER_USER} files only.`);
@@ -273,6 +276,14 @@ export default function EditProfileForm({ user }: { user: User }) {
                 >
                   Upload Media URL
                 </button>
+                <div className="flex flex-wrap max-w-[50%] gap-4 text-wrap mx-auto">
+                  {blobResult && blobResult.length > 0 && (
+                    <>
+                      <div className="text-sm">You can add up to {MAX_FILES_PER_USER} media files (images, Instagram videos, or YouTube videos)</div>
+                      <p className="text-wrap text-warning">NB: Please ensure that the first media is image.</p>
+                    </>
+                  )}
+                </div>
               </div>
             </fieldset>
 
@@ -290,7 +301,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                       width={MEDIA_WIDTH}
                       height={MEDIA_HEIGHT}
                       placeholder="empty"
-                      className="object-cover rounded-lg w-auto h-auto hover:z-10 hover:scale-200 hover:shadow-lg cursor-pointer transition-all"
+                      className="object-contain rounded-lg hover:z-10 hover:scale-200 hover:shadow-lg cursor-pointer transition-all"
                     />;
 
                 return (
@@ -299,7 +310,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                     className="flex w-full justify-center items-center gap-4 max-w-[90%]"
                     style={{ minHeight: 200 }}
                   >
-                    <div className="flex items-center justify-center w-[200px] h-[200px]">
+                    <div className="flex items-center mb-9 justify-center w-[200px] h-[200px]">
                       {media}
                     </div>
                     <div className="flex flex-col items-center justify-center h-[200px] gap-2">
@@ -316,13 +327,6 @@ export default function EditProfileForm({ user }: { user: User }) {
                 );
               })}
             </div>
-
-            {blobResult && blobResult.length > 0 && (
-              <div className="space-y-2">
-                <div className="text-sm">You can add up to {MAX_FILES_PER_USER} media files (images, Instagram videos, or YouTube videos)</div>
-                <p className="text-wrap text-warning">NB: Please ensure that the first media is image.</p>
-              </div>
-            )}
 
             <div className="w-full my-5 mx-auto border border-primary h-0"></div>
 
