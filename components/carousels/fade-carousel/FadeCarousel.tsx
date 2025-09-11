@@ -15,7 +15,7 @@ import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 export default function FadeCarousel({ photos, disableOnInteraction = true }: { photos: string[]; disableOnInteraction?: boolean }) {
   return (
     <Suspense fallback={<div className="text-center skeleton min-h-[352px]">Loading...</div>}>
-      <figure>
+      <figure className="w-full max-w-[90%] mx-auto">
         <div className="max-w-xs md:max-w-sm">
           <Swiper
             modules={[Scrollbar, Mousewheel, Autoplay, EffectFade]}
