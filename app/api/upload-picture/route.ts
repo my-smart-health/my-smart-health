@@ -23,8 +23,9 @@ export async function POST(request: Request) {
     if (!request.body) {
       return NextResponse.json({ error: 'File is required' }, { status: 400 });
     }
+    const uniqueFileName = `${Date.now()}-${filename}`;
 
-    const blob = await put(`${userid}/news/${filename}`, request.body, {
+    const blob = await put(`${userid}/news/${uniqueFileName}`, request.body, {
       access: 'public',
       allowOverwrite: true,
     });
