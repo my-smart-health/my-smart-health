@@ -343,6 +343,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                     setBlobResultAction={setBlobResult}
                     showTop={idx > 0}
                     showBottom={idx < blobResult.length - 1}
+                    removeAddress={`/api/remove-picture?url=${encodeURIComponent(image)}`}
                   />
                 </div>
               </div>
@@ -353,7 +354,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         {blobResult && blobResult.length > 0 && (
           <div className="space-y-2">
             <div className="text-sm">You can add up to {MAX_FILES_PER_POST} media files (images, Instagram videos, or YouTube videos)</div>
-            <p className="text-wrap text-warning">NB: Please ensure that the first media is an image.</p>
+            <p className="text-wrap text-warning">NB: Please ensure that the first media is image.</p>
           </div>
         )}
 
