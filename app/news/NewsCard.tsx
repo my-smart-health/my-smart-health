@@ -1,12 +1,7 @@
 'use client'
 
-import Link from "next/link";
-import { Suspense } from "react";
-
 import { NewsCardType } from "@/utils/types";
 
-import GoToButton from "@/components/buttons/go-to/GoToButton";
-import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
 import { Session } from "next-auth";
 import NewsCardShort from "./short/NewsCardShort";
 
@@ -23,7 +18,7 @@ export default function NewsCard({ newsData, session }: { newsData: NewsCardType
             <div className="text-red-500 border rounded-2xl p-2 text-center">Error: No News found</div>
           )
         ) : (
-          <NewsCardShort newsData={newsData as NewsCardType} session={session} />
+          <NewsCardShort newsData={newsData} session={session} />
         )
       ) : (
         <div className="text-red-500 border rounded-2xl p-2 text-center">Error: No News found</div>
