@@ -24,14 +24,12 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'File is required' }, { status: 400 });
     }
 
-    const uniqueFileName = `${Date.now()}-${filename}`;
-
     const blob = await put(
-      `${userid}/profile-pictures/${uniqueFileName}`,
+      `${userid}/profile-pictures/${filename}`,
       request.body,
       {
         access: 'public',
-        allowOverwrite: true,
+        addRandomSuffix: true,
       }
     );
 
