@@ -26,8 +26,8 @@ export default function YoutubeEmbed({
   width = 400,
 }: {
   embedHtml: string;
-  height?: number;
-  width?: number;
+  height?: number | string;
+  width?: number | string;
 }) {
   const embedUrl = getYoutubeEmbedUrl(embedHtml);
 
