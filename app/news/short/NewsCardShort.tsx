@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { Session } from "next-auth";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
+
 import { NewsCardType } from "@/utils/types";
-import { Session } from "next-auth";
 
 
 export default function NewsCardShort({ newsData, session }: { newsData: NewsCardType | null, session?: Session | null }) {
