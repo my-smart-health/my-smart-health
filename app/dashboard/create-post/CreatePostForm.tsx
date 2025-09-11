@@ -341,6 +341,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                     setBlobResultAction={setBlobResult}
                     showTop={idx > 0}
                     showBottom={idx < blobResult.length - 1}
+                    removeAddress={`/api/remove-picture?url=${encodeURIComponent(image)}`}
                   />
                 </div>
               </div>
