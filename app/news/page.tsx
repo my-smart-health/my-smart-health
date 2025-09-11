@@ -20,6 +20,7 @@ async function getData() {
       createdAt: true,
       updatedAt: true,
       photos: true,
+      tags: true,
       author: {
         select: {
           id: true,
