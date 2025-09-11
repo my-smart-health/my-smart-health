@@ -9,9 +9,10 @@ type MoveImageVideoProps = {
   setBlobResultAction: (blobs: string[]) => void;
   showTop: boolean;
   showBottom: boolean;
+  removeAddress: string;
 };
 
-export default function MoveImageVideo({ index, blobResult, setBlobResultAction, showTop = true, showBottom = true }: MoveImageVideoProps) {
+export default function MoveImageVideo({ index, blobResult, setBlobResultAction, showTop = true, showBottom = true, removeAddress }: MoveImageVideoProps) {
 
   const handleOnePositionUp = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
     e.preventDefault();
@@ -33,11 +34,21 @@ export default function MoveImageVideo({ index, blobResult, setBlobResultAction,
     setBlobResultAction(newBlobResult);
   };
 
-  const handleRemove = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
+  const handleRemove = async (e: React.MouseEvent<HTMLButtonElement>, index: number, removeAddress?: string) => {
     e.preventDefault();
     const newBlobResult = [...blobResult];
     newBlobResult.splice(index, 1);
     setBlobResultAction(newBlobResult);
+
+    if (removeAddress) {
+      try {
+        await fetch(removeAddress, { method: 'DELETE' });
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error removing media:', error);
+        }
+      }
+    }
   };
 
   if (blobResult.length === 0) return null;
@@ -67,7 +78,7 @@ export default function MoveImageVideo({ index, blobResult, setBlobResultAction,
       <button
         type="button"
         className="btn btn-outline btn-circle text-red-500 hover:text-red-700 transition-colors cursor-pointer"
-        onClick={(e) => handleRemove(e, index)}>x</button>
+        onClick={(e) => handleRemove(e, index, removeAddress)}>x</button>
 
       {showBottom && (
         <>
