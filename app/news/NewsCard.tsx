@@ -8,75 +8,26 @@ import { NewsCardType } from "@/utils/types";
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
 import { Session } from "next-auth";
+import NewsCardShort from "./short/NewsCardShort";
 
-export default function NewsCard({ newsData, session }: { newsData: NewsCardType[], session?: Session | null }) {
+export default function NewsCard({ newsData, session }: { newsData: NewsCardType[] | NewsCardType, session?: Session | null }) {
   return (
     <>
-      {newsData ? newsData.map((news) => {
-        const { id, title, content, createdAt, photos, author, tags } = news;
-
-        const createdDate = new Date(createdAt).toLocaleString('de-DE', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
-        });
-
-        return (
-          <div
-            key={id}
-            className="m-auto min-h-full border max-w-[99%] rounded-lg shadow-2xl"
-          >
-            <div className="card card-lg bg-secondary/20 w-96 shadow-sm max-w-[100%]">
-
-              <div className="badge badge-accent rounded-bl-none rounded-tr-none p-4">{createdDate}</div>
-
-              {author?.name && <div className="text-2xl indent-6 mt-3 text-primary ">
-                <Link
-                  href={`/profile/${author.id}`}
-                  className="hover:underline">
-                  {author?.name || "Unknown Author"}
-                </Link>
-              </div>}
-
-              <div className="card-actions mt-1 pt-1 justify-start gap-2 mx-4">
-                {
-                  author?.fieldOfExpertise.map((expertise, index) => (
-                    <div key={index} className="badge badge-outline">{expertise}</div>
-                  ))}
-              </div>
-              <h2 className="card-title card-border flex-col m-4 justify-center">
-                {title}
-              </h2>
-              <div className="card-body min-h-[352px]">
-                <Suspense fallback={<div className="text-center skeleton min-h-[352px]">Loading...</div>}>
-                  <FadeCarousel photos={photos} />
-                </Suspense>
-                <p className="text-base line-clamp-3 indent-6">{content}</p>
-
-                <div className="card-actions justify-end m-4">
-                  {tags && tags.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {tags.map((tag, index) => (
-                        <span key={index} className="badge badge-dash">{tag}</span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <div className="card-actions justify-center">
-                  <GoToButton name={"View more"} src={`/news/${id}`} className="btn btn-wide bg-primary rounded-xl text-secondary" />
-                </div>
-
-                {session?.user.role === "ADMIN" || session?.user.id === author?.id
-                  ? <div className="self-center btn btn-wide btn-warning rounded-xl"><Link href={`/dashboard/edit-post/${id}`}>Edit Post</Link></div>
-                  : null
-                }
-              </div>
-            </div>
-          </div>
-        );
-      }) : (
+      {newsData ? (
+        Array.isArray(newsData) ? (
+          newsData.length > 0 ? (
+            newsData.map((news: NewsCardType) => (
+              <NewsCardShort key={news.id} newsData={news} session={session} />
+            ))
+          ) : (
+            <div className="text-red-500 border rounded-2xl p-2 text-center">Error: No News found</div>
+          )
+        ) : (
+          <NewsCardShort newsData={newsData as NewsCardType} session={session} />
+        )
+      ) : (
         <div className="text-red-500 border rounded-2xl p-2 text-center">Error: No News found</div>
       )}
     </>
-  );
+  )
 }
