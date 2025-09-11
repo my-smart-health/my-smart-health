@@ -19,7 +19,7 @@ export default async function ProfileMenu() {
             <ul tabIndex={0} className="dropdown-content menu bg-primary border rounded-box z-1 w-52 p-2 shadow-sm transition-opacity ease-in-out">
               <li><Link href="/" className="flex gap-1">Home</Link></li>
               <li><Link href="/dashboard" className="flex gap-1">Dashboard</Link></li>
-              <li><Link href="/dashboard/create-post" className="flex gap-1">New Post</Link></li>
+              <li><Link href="/dashboard/create-post" className="flex gap-1">Create Post</Link></li>
               <li className="tab-disabled"></li>
               <li><Link href="/dashboard/edit-profile" className="flex gap-1">Edit profile</Link></li>
               <li className="tab-disabled"></li>
