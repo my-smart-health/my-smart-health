@@ -13,7 +13,7 @@ export default function NewsCard({ newsData, session }: { newsData: NewsCardType
   return (
     <>
       {newsData ? newsData.map((news) => {
-        const { id, title, content, createdAt, photos, author } = news;
+        const { id, title, content, createdAt, photos, author, tags } = news;
 
         const createdDate = new Date(createdAt).toLocaleString('de-DE', {
           year: 'numeric',
@@ -53,6 +53,15 @@ export default function NewsCard({ newsData, session }: { newsData: NewsCardType
                 </Suspense>
                 <p className="text-base line-clamp-3 indent-6">{content}</p>
 
+                <div className="card-actions justify-end m-4">
+                  {tags && tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {tags.map((tag, index) => (
+                        <span key={index} className="badge badge-dash">{tag}</span>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <div className="card-actions justify-center">
                   <GoToButton name={"View more"} src={`/news/${id}`} className="btn btn-wide bg-primary rounded-xl text-secondary" />
                 </div>
