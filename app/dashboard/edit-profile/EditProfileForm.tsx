@@ -67,7 +67,6 @@ export default function EditProfileForm({ user }: { user: User }) {
 
   const [blobResult, setBlobResult] = useState<string[]>(userData.profileImages || []);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
-  const [isDefaultLogo, setIsDefaultLogo] = useState<boolean>(false);
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
 
   useEffect(() => {
@@ -125,11 +124,6 @@ export default function EditProfileForm({ user }: { user: User }) {
       const formData = new FormData();
       formData.append('file', file);
 
-      if (!userData || !userData.id) {
-        setIsDefaultLogo(true);
-
-        return logo.src;
-      }
       const response = await fetch(
         `/api/upload-profile-picture/?userid=${userData.id}&filename=${file.name}`,
         {
@@ -145,7 +139,6 @@ export default function EditProfileForm({ user }: { user: User }) {
         throw new Error('Failed to upload image');
       }
 
-      setIsDefaultLogo(false);
       setIsDisabled(false);
       setError(null);
       return result.url;
@@ -155,7 +148,6 @@ export default function EditProfileForm({ user }: { user: User }) {
         message = error.message;
       }
       setError(message);
-      setIsDefaultLogo(true);
       setIsDisabled(false);
       return logo.src;
     }
