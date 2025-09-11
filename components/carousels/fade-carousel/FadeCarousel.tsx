@@ -33,11 +33,13 @@ export default function FadeCarousel({ photos, disableOnInteraction = true }: { 
             scrollbar={{ draggable: true }}
           >
             {photos && photos.map((item, idx) => {
+              const WIDTH = 450;
+              const HEIGHT = 150;
               if (item.search('youtu') > 0 || item.search('youtube') > 0) {
                 return (
                   <SwiperSlide key={idx}>
                     <div className="flex flex-col justify-center items-center aspect-video rounded-box cursor-pointer max-w-full">
-                      <YoutubeEmbed embedHtml={item} height={200} width={450} />
+                      <YoutubeEmbed embedHtml={item} width={WIDTH} height={HEIGHT} />
                     </div>
                     <br />
                   </SwiperSlide>
@@ -47,7 +49,7 @@ export default function FadeCarousel({ photos, disableOnInteraction = true }: { 
                 return (
                   <SwiperSlide key={idx}>
                     <div className="flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full">
-                      <InstagramEmbed embedHtml={item} height={150} width={450} />
+                      <InstagramEmbed embedHtml={item} width={WIDTH} height={HEIGHT} />
                     </div>
                     <br />
                   </SwiperSlide>
@@ -59,11 +61,11 @@ export default function FadeCarousel({ photos, disableOnInteraction = true }: { 
                       <Image
                         loading="lazy"
                         placeholder="empty"
-                        width={450}
-                        height={150}
+                        width={WIDTH}
+                        height={HEIGHT}
                         src={item}
                         alt={item}
-                        className="aspect-video w-full object-center object-cover"
+                        className="aspect-video w-auto h-auto object-center object-cover"
                       />
                     </div>
                     <br />
