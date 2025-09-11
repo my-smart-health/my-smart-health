@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { Suspense, useRef, useState } from "react";
+import { MouseEvent, Suspense, useEffect, useRef, useState } from "react";
 import { PutBlobResult } from "@vercel/blob";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
@@ -11,11 +11,15 @@ import GoToButton from "@/components/buttons/go-to/GoToButton";
 import { Schedule, Social } from "@/utils/types";
 import { parseSocials, serializeSocials } from "@/utils/common";
 
+import logo from '@/public/og-logo.jpg';
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
 import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube, ArrowUpRight } from "lucide-react";
 import { MAX_FILES_PER_USER } from "@/utils/constants";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
+import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
+import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
+import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 
 type User = {
   id: string;
@@ -33,6 +37,8 @@ type User = {
 
 export default function EditProfileForm({ user }: { user: User }) {
 
+  const MEDIA_WIDTH = 200;
+  const MEDIA_HEIGHT = 200;
   const inputFileRef = useRef<HTMLInputElement>(null);
 
   const [userData, setUserData] = useState<User>(user);
@@ -58,7 +64,40 @@ export default function EditProfileForm({ user }: { user: User }) {
   const [error, setError] = useState<string | null>(null);
 
   const redirect = useRouter();
-  const blobResult: string[] = [];
+
+  const [blobResult, setBlobResult] = useState<string[]>(userData.profileImages || []);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [isDefaultLogo, setIsDefaultLogo] = useState<boolean>(false);
+  const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
+
+  useEffect(() => {
+    if (blobResult.length > 0) {
+      setIsImageFirst(
+        blobResult[0].search("instagram") === -1 &&
+        blobResult[0].search("youtube") === -1 &&
+        blobResult[0].search("youtu") === -1
+      );
+    }
+  }, [blobResult]);
+
+  const handleAddURL = (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget.closest('form');
+
+    if (!form) return;
+    const formData = new FormData(form);
+    const mediaUrl = formData.get(`media`)?.toString().trim();
+
+    if (!mediaUrl || mediaUrl.length === 0) {
+      setError('Media URL cannot be empty');
+      return;
+    }
+
+    setError(null);
+    setBlobResult([...blobResult, mediaUrl]);
+    const resetMediaInput = form.querySelector('input[name="media"]') as HTMLInputElement;
+    resetMediaInput.value = '';
+  };
 
   const platformIcons: Record<string, React.ReactNode> = {
     Email: <AtSign className="inline-block mr-1" size={20} />,
@@ -80,60 +119,77 @@ export default function EditProfileForm({ user }: { user: User }) {
     setSchedule(schedule.map(schedule => schedule.id === id ? { ...schedule, [openClose]: value.toString() } : schedule));
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    let files: File[];
-
-    if (inputFileRef.current && inputFileRef.current.files) {
-      files = Array.from(inputFileRef.current.files);
-    } else {
-      files = [];
-    }
-
-    const formData = new FormData(e.currentTarget);
-
-    const data = {
-      name: formData.get('name') as string,
-      bio: formData.get('bio') as string,
-      fieldOfExpertise: fieldOfExpertise,
-      address: formData.get('address') as string,
-      displayEmail: formData.get('displayEmail') as string,
-      phone: phoneNumbers,
-      website: formData.get('website') as string,
-      profileImages: userData.profileImages,
-      socials: serializeSocials(socials),
-      schedule: userData.schedule,
-    };
-
-    if (blobResult.length > 0) data.profileImages = blobResult;
-
-    if (inputFileRef.current && inputFileRef.current.files) {
-      for (const file of files) {
-        try {
-          const response = await fetch(
-            `/api/upload-profile-picture/?userid=${userData.id}&filename=${file.name}`,
-            {
-              method: 'POST',
-              body: file,
-            }
-          );
-
-          if (!response.ok) throw new Error('Failed to upload image');
-
-          const result = await response.json() as PutBlobResult;
-          blobResult.push(result.url);
-        } catch (error) {
-          if (process.env.NODE_ENV === 'development') {
-            console.error('Error uploading image:', error);
-          }
-          return;
-        }
-      }
-    }
-
+  const handleImageUpload = async (file: File) => {
     try {
-      if (blobResult.length > 0) data.profileImages = blobResult;
+      setIsDisabled(true);
+      const formData = new FormData();
+      formData.append('file', file);
+
+      if (!userData || !userData.id) {
+        setIsDefaultLogo(true);
+
+        return logo.src;
+      }
+      const response = await fetch(
+        `/api/upload-profile-picture/?userid=${userData.id}&filename=${file.name}`,
+        {
+          method: 'PUT',
+          body: file,
+        }
+      );
+
+      const result = await response.json() as PutBlobResult;
+
+      if (!response.ok) {
+        setError('Failed to upload image');
+        throw new Error('Failed to upload image');
+      }
+
+      setIsDefaultLogo(false);
+      setIsDisabled(false);
+      setError(null);
+      return result.url;
+    } catch (error) {
+      let message = 'Error uploading files';
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      setError(message);
+      setIsDefaultLogo(true);
+      setIsDisabled(false);
+      return logo.src;
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    try {
+      e.preventDefault();
+
+      setIsDisabled(true);
+      setError(null);
+
+      if (!isImageFirst) {
+        setError('The first media must be an image. Please rearrange the media files.');
+        setIsDisabled(false);
+        return;
+      }
+
+      const formData = new FormData(e.currentTarget);
+
+      const data = {
+        name: formData.get('name') as string,
+        bio: formData.get('bio') as string,
+        fieldOfExpertise: fieldOfExpertise,
+        address: formData.get('address') as string,
+        displayEmail: formData.get('displayEmail') as string,
+        phone: phoneNumbers,
+        website: formData.get('website') as string,
+        profileImages: blobResult,
+        socials: serializeSocials(socials),
+        schedule: userData.schedule,
+      };
+
       const payload = { ...data, socials: serializeSocials(socials) };
       if (schedule.length > 0) payload.schedule = schedule;
 
@@ -143,10 +199,16 @@ export default function EditProfileForm({ user }: { user: User }) {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      if (!res.ok) throw new Error('Failed to update profile');
+      if (!res.ok) {
+        setError('Failed to update profile');
+        setIsDisabled(false);
+        return;
+      }
 
       const result = await res.json();
       setUserData(result.data);
+      setError(null);
+      setIsDisabled(false);
 
       redirect.push('/dashboard');
       redirect.refresh();
@@ -162,37 +224,117 @@ export default function EditProfileForm({ user }: { user: User }) {
       {error && <p className="text-red-500 p-2">{error}</p>}
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-3xl rounded-2xl shadow-xl p-8 flex flex-col border-1 border-primary gap-8"
+        className={`w-full max-w-3xl rounded-2xl shadow-xl p-8 flex flex-col border-1 border-primary gap-8 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
       >
-        {userData.profileImages ? (
-          <Suspense fallback={<div className="text-center skeleton min-h-[352px]">Loading...</div>}>
-            <FadeCarousel photos={userData.profileImages} />
+        {blobResult && blobResult.length > 0 ? (
+          <Suspense fallback={<div className={`text-center skeleton min-h-[${MAX_FILES_PER_USER}]`}>Loading...</div>}>
+            <FadeCarousel photos={blobResult} />
           </Suspense>
         ) : (
           <div className="text-center skeleton min-h-[352px]">No Images</div>
         )}
         <div className="flex-1 flex flex-col gap-4">
-          <fieldset className="fieldset">
-            <legend className="fieldset-legend ">Pick a file</legend>
-            <input
-              type="file"
-              ref={inputFileRef}
-              name="profileImages"
-              accept="image/*"
-              multiple
-              onChange={e => {
-                if (e.target.files && e.target.files.length > MAX_FILES_PER_USER) {
-                  setError(`You can select up to ${MAX_FILES_PER_USER} files only.`);
-                  e.target.value = "";
-                } else {
-                  setError(null);
-                }
-              }}
-              className="file-input"
-            />
-            <label htmlFor="profileImages" className="label">You can upload up to {MAX_FILES_PER_USER} files</label>
 
-          </fieldset>
+          <div >
+            <fieldset className={`fieldset mb-5 ${blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''}`}>
+              <legend className="fieldset-legend">Select File</legend>
+              <div className="flex flex-wrap gap-4 w-full">
+                <input
+                  type="file"
+                  ref={inputFileRef}
+                  id="image"
+                  name="image"
+                  accept="image/*"
+                  className={`${blobResult && blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full max-w-xs`}
+                  onChange={async e => {
+                    if (e.target.files && e.target.files.length > MAX_FILES_PER_USER) {
+                      setError(`You can select up to ${MAX_FILES_PER_USER} files only.`);
+                      e.target.value = "";
+                    } else {
+                      inputFileRef.current = e.target;
+                      const uploadedImage = await handleImageUpload(inputFileRef.current.files?.[0] as File);
+                      setBlobResult(prev => [...prev, uploadedImage as string]);
+                      setError(null);
+                    }
+                  }} />
+              </div>
+            </fieldset>
+
+            <div className="w-full my-5 mx-auto border border-primary h-0"></div>
+
+            <fieldset className={blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''}>
+              <legend className="fieldset-legend">Add Media URL</legend>
+              <div className="flex flex-col gap-4 w-full">
+                <label htmlFor={`media`} className="">Media URL must be a valid URL from YouTube or Instagram</label>
+                <input
+                  type="text"
+                  name={`media`}
+                  placeholder="https://"
+                  className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                />
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    handleAddURL(e)
+                  }}
+                  className="btn w-full btn-primary mt-2"
+                >
+                  Upload Media URL
+                </button>
+              </div>
+            </fieldset>
+
+            <div className="w-full my-5 mx-auto border border-primary h-0"></div>
+
+            <div className="flex flex-col self-center w-full max-w-[90%] gap-4">
+              {blobResult && blobResult.map((image, idx) => {
+                const media = image.includes("youtube") || image.includes("youtu")
+                  ? <YoutubeEmbed embedHtml={image} width={MEDIA_WIDTH} height={MEDIA_HEIGHT} />
+                  : image.includes("instagram")
+                    ? <InstagramEmbed embedHtml={image} width={MEDIA_WIDTH} height={MEDIA_HEIGHT} />
+                    : <Image
+                      src={image}
+                      alt={`Photo ${idx + 1}`}
+                      width={MEDIA_WIDTH}
+                      height={MEDIA_HEIGHT}
+                      placeholder="empty"
+                      className="object-cover rounded-lg w-auto h-auto hover:z-10 hover:scale-200 hover:shadow-lg cursor-pointer transition-all"
+                    />;
+
+                return (
+                  <div
+                    key={image + idx}
+                    className="flex w-full justify-center items-center gap-4 max-w-[90%]"
+                    style={{ minHeight: 200 }}
+                  >
+                    <div className="flex items-center justify-center w-[200px] h-[200px]">
+                      {media}
+                    </div>
+                    <div className="flex flex-col items-center justify-center h-[200px] gap-2">
+                      <MoveImageVideo
+                        index={idx}
+                        blobResult={blobResult}
+                        setBlobResultAction={setBlobResult}
+                        showTop={idx > 0}
+                        showBottom={idx < blobResult.length - 1}
+                        removeAddress={`/api/remove-picture?url=${encodeURIComponent(image)}`}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {blobResult && blobResult.length > 0 && (
+              <div className="space-y-2">
+                <div className="text-sm">You can add up to {MAX_FILES_PER_USER} media files (images, Instagram videos, or YouTube videos)</div>
+                <p className="text-wrap text-warning">NB: Please ensure that the first media is image.</p>
+              </div>
+            )}
+
+            <div className="w-full my-5 mx-auto border border-primary h-0"></div>
+
+          </div>
 
           <label className="flex flex-col">
             <span className="font-semibold text-gray-700">Name</span>
