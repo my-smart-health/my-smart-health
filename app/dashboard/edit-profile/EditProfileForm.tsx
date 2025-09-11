@@ -11,7 +11,6 @@ import GoToButton from "@/components/buttons/go-to/GoToButton";
 import { Schedule, Social } from "@/utils/types";
 import { parseSocials, serializeSocials } from "@/utils/common";
 
-import logo from '@/public/og-logo.jpg';
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
 import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube, ArrowUpRight } from "lucide-react";
@@ -118,38 +117,42 @@ export default function EditProfileForm({ user }: { user: User }) {
     setSchedule(schedule.map(schedule => schedule.id === id ? { ...schedule, [openClose]: value.toString() } : schedule));
   };
 
-  const handleImageUpload = async (file: File) => {
+  const handleImageUpload = async (files: FileList) => {
     try {
       setIsDisabled(true);
-      const formData = new FormData();
-      formData.append('file', file);
+      const uploadedUrls: string[] = [];
 
-      const response = await fetch(
-        `/api/upload-profile-picture/?userid=${userData.id}&filename=${file.name}`,
-        {
-          method: 'PUT',
-          body: file,
+      for (const file of files) {
+
+        const response = await fetch(
+          `/api/upload-profile-picture/?userid=${userData.id}&filename=${file.name}`,
+          {
+            method: 'PUT',
+            body: file,
+          }
+        );
+
+        const result = await response.json() as PutBlobResult;
+
+        if (!response.ok) {
+          setError('Failed to upload image');
+          throw new Error('Failed to upload image');
         }
-      );
 
-      const result = await response.json() as PutBlobResult;
-
-      if (!response.ok) {
-        setError('Failed to upload image');
-        throw new Error('Failed to upload image');
+        uploadedUrls.push(result.url);
       }
-
       setIsDisabled(false);
       setError(null);
-      return result.url;
+      return uploadedUrls;
     } catch (error) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       let message = 'Error uploading files';
       if (error instanceof Error) {
         message = error.message;
       }
       setError(message);
       setIsDisabled(false);
-      return logo.src;
+      return [];
     }
   };
 
@@ -216,20 +219,22 @@ export default function EditProfileForm({ user }: { user: User }) {
       {error && <p className="text-red-500 p-2">{error}</p>}
       <form
         onSubmit={handleSubmit}
-        className={`w-full max-w-3xl rounded-2xl shadow-xl p-8 border-1 border-primary gap-8 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
+        className={`w-full max-w-3xl rounded-2xl shadow-xl border-1 border-primary p-4 gap-8 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
       >
-        {blobResult && blobResult.length > 0 ? (
-          <div className="w-full">
-            <Suspense fallback={<div className={`text-center skeleton min-h-[${MAX_FILES_PER_USER}]`}>Loading...</div>}>
-              <FadeCarousel photos={blobResult} />
-            </Suspense>
-          </div>
-        ) : (
-          <div className="text-center skeleton min-h-[352px]">No Images</div>
-        )}
+        <div className="flex flex-col justify-center items-center content-center">
+          {blobResult && blobResult.length > 0 ? (
+            <div className="max-w-[90%]">
+              <Suspense fallback={<div className={`text-center skeleton min-h-[${MAX_FILES_PER_USER}]`}>Loading...</div>}>
+                <FadeCarousel photos={blobResult} />
+              </Suspense>
+            </div>
+          ) : (
+            <div className="text-center skeleton min-h-[352px]">No Images</div>
+          )}
+        </div>
         <div className="flex-1 flex flex-col gap-4">
 
-          <div >
+          <div>
             <fieldset className={`fieldset mb-5 ${blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''}`}>
               <legend className="fieldset-legend">Select File</legend>
               <div className="flex flex-wrap gap-4 w-full">
@@ -242,15 +247,17 @@ export default function EditProfileForm({ user }: { user: User }) {
                   multiple={true}
                   className={`${blobResult && blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full`}
                   onChange={async e => {
-                    if (e.target.files && e.target.files.length > MAX_FILES_PER_USER) {
+                    const files = e.target.files;
+                    if (!files) return;
+                    if (blobResult.length + files.length > MAX_FILES_PER_USER) {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
                       setError(`You can select up to ${MAX_FILES_PER_USER} files only.`);
                       e.target.value = "";
-                    } else {
-                      inputFileRef.current = e.target;
-                      const uploadedImage = await handleImageUpload(inputFileRef.current.files?.[0] as File);
-                      setBlobResult(prev => [...prev, uploadedImage as string]);
-                      setError(null);
+                      return;
                     }
+                    const uploadedImages = await handleImageUpload(files);
+                    setBlobResult(prev => [...prev, ...uploadedImages]);
+                    setError(null);
                   }} />
               </div>
             </fieldset>
@@ -289,31 +296,36 @@ export default function EditProfileForm({ user }: { user: User }) {
 
             <div className="w-full my-5 mx-auto border border-primary h-0"></div>
 
-            <div className="flex flex-col self-center w-full max-w-[90%] gap-4">
+            <div className="aspect-square flex flex-col gap-4 content-between items-center">
               {blobResult && blobResult.map((image, idx) => {
                 const media = image.includes("youtube") || image.includes("youtu")
-                  ? <YoutubeEmbed embedHtml={image} width={MEDIA_WIDTH} height={MEDIA_HEIGHT} />
+                  ? <div className="aspect-video">
+                    <YoutubeEmbed embedHtml={image} width={MEDIA_WIDTH} height={MEDIA_HEIGHT} />
+                  </div>
                   : image.includes("instagram")
-                    ? <InstagramEmbed embedHtml={image} width={MEDIA_WIDTH} height={MEDIA_HEIGHT} />
-                    : <Image
-                      src={image}
-                      alt={`Photo ${idx + 1}`}
-                      width={MEDIA_WIDTH}
-                      height={MEDIA_HEIGHT}
-                      placeholder="empty"
-                      className="object-contain rounded-lg hover:z-10 hover:scale-200 hover:shadow-lg cursor-pointer transition-all"
-                    />;
+                    ? <div className="aspect-square flex items-center justify-center max-w-[50%]">
+                      <InstagramEmbed embedHtml={image} width={MEDIA_WIDTH} height={MEDIA_HEIGHT} />
+                    </div>
+                    : <div className="aspect-square flex items-center justify-center">
+                      <Image
+                        src={image}
+                        alt={`Photo ${idx + 1}`}
+                        width={MEDIA_WIDTH}
+                        height={MEDIA_HEIGHT}
+                        placeholder="empty"
+                        className="object-cover rounded-lg hover:z-10 hover:scale-200 hover:shadow-lg cursor-pointer transition-all"
+                      />
+                    </div>;
 
                 return (
                   <div
                     key={image + idx}
                     className="flex w-full justify-center items-center gap-4 max-w-[90%]"
-                    style={{ minHeight: 200 }}
                   >
                     <div className="flex items-center mb-9 justify-center w-[200px] h-[200px]">
                       {media}
                     </div>
-                    <div className="flex flex-col items-center justify-center h-[200px] gap-2">
+                    <div className="flex flex-col items-center justify-center gap-2">
                       <MoveImageVideo
                         index={idx}
                         blobResult={blobResult}
@@ -348,7 +360,7 @@ export default function EditProfileForm({ user }: { user: User }) {
               name="bio"
               defaultValue={userData.bio ? userData.bio : ""}
               className="mt-1 p-2 rounded border-1 border-primary shadow-sm"
-              rows={2}
+              rows={5}
             />
           </label>
 
@@ -360,7 +372,8 @@ export default function EditProfileForm({ user }: { user: User }) {
               name="address"
               defaultValue={userData.address ? userData.address : ""}
               className="mt-1 p-2 rounded border-1 border-primary shadow-sm"
-              rows={2}
+              placeholder="Deutschland, Düsseldorf, Kölner Straße 123"
+              rows={5}
             />
           </label>
 
