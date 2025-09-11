@@ -83,9 +83,8 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         return logo.src;
       }
 
-      const uniqueFileName = `${Date.now()}-${file.name}`;
       const response = await fetch(
-        `/api/upload-picture/?userid=${session.user.id}&filename=${uniqueFileName}`,
+        `/api/upload-picture/?userid=${session.user.id}&filename=${file.name}`,
         {
           method: 'POST',
           body: file,
