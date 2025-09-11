@@ -8,20 +8,32 @@ export async function PUT(request: Request) {
     const userid = searchParams.get('userid');
 
     if (!userid) {
-      return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      );
     }
 
     if (!filename) {
-      return NextResponse.json({ error: 'Filename is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Filename is required' },
+        { status: 400 }
+      );
     }
     if (!request.body) {
       return NextResponse.json({ error: 'File is required' }, { status: 400 });
     }
 
-    const blob = await put(`${userid}/profile-pictures/${filename}`, request.body, {
-      access: 'public',
-      allowOverwrite: true
-    });
+    const uniqueFileName = `${Date.now()}-${filename}`;
+
+    const blob = await put(
+      `${userid}/profile-pictures/${uniqueFileName}`,
+      request.body,
+      {
+        access: 'public',
+        allowOverwrite: true,
+      }
+    );
 
     return NextResponse.json(blob, { status: 200 });
   } catch (error) {
