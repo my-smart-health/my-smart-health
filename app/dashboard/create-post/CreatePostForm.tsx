@@ -36,6 +36,8 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
 
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+
   useEffect(() => {
     if (blobResult.length > 0) {
       setIsImageFirst(
@@ -44,6 +46,18 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         blobResult[0].search("youtu") === -1
       );
     }
+
+    return () => {
+      if (isSubmitted === false) {
+        (async () => {
+          await Promise.all(
+            blobResult.map((url) =>
+              fetch(`/api/remove-picture?url=${encodeURIComponent(url)}`, { method: 'DELETE' })
+            )
+          );
+        })();
+      }
+    };
   }, [blobResult]);
 
   const handleAddURL = (e: MouseEvent<HTMLButtonElement>) => {
@@ -58,8 +72,8 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       return;
     }
     if (
-      /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+/.test(mediaUrl) ||
-      /^(https?:\/\/)?(www\.)?instagram\.com\/(reel|p)\/[\w-]+/.test(mediaUrl)
+      (mediaUrl.includes("youtube") || mediaUrl.includes("youtu")) ||
+      mediaUrl.includes("instagram")
     ) {
       setError(null);
       setBlobResult([...blobResult, mediaUrl]);
@@ -166,6 +180,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         return;
       }
 
+      setIsSubmitted(true);
       setError("Post created successfully");
       setIsDisabled(true);
     } catch (error) {
@@ -312,17 +327,19 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
         <div className="flex flex-col self-center w-full max-w-[90%] gap-4">
           {blobResult && blobResult.map((image, idx) => {
+            const WIDTH = 200;
+            const HEIGHT = 200;
             const media = image.includes("youtube") || image.includes("youtu")
-              ? <YoutubeEmbed embedHtml={image} width={200} height={200} />
+              ? <YoutubeEmbed embedHtml={image} width={WIDTH} height={HEIGHT} />
               : image.includes("instagram")
-                ? <InstagramEmbed embedHtml={image} width={200} height={200} />
+                ? <InstagramEmbed embedHtml={image} width={WIDTH} height={HEIGHT} />
                 : <Image
                   src={image}
                   alt={`Photo ${idx + 1}`}
-                  width={200}
-                  height={200}
+                  width={WIDTH}
+                  height={HEIGHT}
                   placeholder="empty"
-                  className="object-cover rounded-lg w-[200px] h-[200px] hover:z-10 hover:scale-200 hover:shadow-lg cursor-pointer transition-all"
+                  className={`object-cover rounded-lg w-[${WIDTH}px] h-[${HEIGHT}px] hover:z-10 hover:scale-200 hover:shadow-lg cursor-pointer transition-all`}
                 />;
 
             return (
@@ -331,10 +348,10 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                 className="flex w-full justify-center items-center gap-4 max-w-[90%]"
                 style={{ minHeight: 200 }}
               >
-                <div className="flex items-center justify-center w-[200px] h-[200px]">
+                <div className={`flex items-center justify-center w-[${WIDTH}px] h-[${HEIGHT}px]`}>
                   {media}
                 </div>
-                <div className="flex flex-col items-center justify-center h-[200px] gap-2">
+                <div className={`flex flex-col items-center justify-center h-[${HEIGHT}px] gap-2`}>
                   <MoveImageVideo
                     index={idx}
                     blobResult={blobResult}
