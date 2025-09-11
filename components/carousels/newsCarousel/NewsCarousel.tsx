@@ -57,9 +57,9 @@ export default function NewsCarousel({ props, disableOnInteraction = false }: Ne
                     height={400}
                     src={item.image}
                     alt={item.info}
-                    className="aspect-square"
+                    className="aspect-square rounded-t-lg"
                   />
-                  <span className="text-center text-white text-3xl w-full bg-primary">
+                  <span className="text-center line-clamp-1 p-1 text-white text-3xl w-full bg-primary rounded-b-lg">
                     {item.info}
                   </span>
                 </div>
