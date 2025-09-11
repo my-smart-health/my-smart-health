@@ -15,7 +15,7 @@ import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 export default function FadeCarousel({ photos, disableOnInteraction = true }: { photos: string[]; disableOnInteraction?: boolean }) {
   return (
     <Suspense fallback={<div className="text-center skeleton min-h-[352px]">Loading...</div>}>
-      <figure >
+      <figure>
         <div className="max-w-xs md:max-w-sm">
           <Swiper
             modules={[Scrollbar, Mousewheel, Autoplay, EffectFade]}
@@ -57,7 +57,7 @@ export default function FadeCarousel({ photos, disableOnInteraction = true }: { 
               } else {
                 return (
                   <SwiperSlide key={idx}>
-                    <div className="flex flex-col justify-center object-cover object-center items-center rounded-box cursor-pointer max-w-full">
+                    <div className="flex flex-col justify-center  object-scale-down items-center rounded-box cursor-pointer max-w-full">
                       <Image
                         loading="lazy"
                         placeholder="empty"
@@ -65,7 +65,7 @@ export default function FadeCarousel({ photos, disableOnInteraction = true }: { 
                         height={HEIGHT}
                         src={item}
                         alt={item}
-                        className="aspect-video w-auto h-auto object-center object-cover"
+                        className="aspect-video w-auto h-auto object-scale-down"
                       />
                     </div>
                     <br />
@@ -73,6 +73,7 @@ export default function FadeCarousel({ photos, disableOnInteraction = true }: { 
                 )
               }
             })}
+
           </Swiper>
         </div>
       </figure>
