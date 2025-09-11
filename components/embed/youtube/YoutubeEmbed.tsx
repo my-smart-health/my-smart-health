@@ -54,8 +54,9 @@ export default function YoutubeEmbed({
           height={height}
           allow="autoplay; encrypted-media"
           title="YouTube Embed"
+          allowFullScreen
           frameBorder="0"
-          className="rounded-lg aspect-video object-cover object-center bg-white"
+          className="rounded-lg aspect-video object-cover bg-white"
           style={{ border: "none" }}
         ></iframe>
       </div>
