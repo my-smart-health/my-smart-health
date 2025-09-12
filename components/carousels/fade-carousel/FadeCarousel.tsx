@@ -35,46 +35,40 @@ export default function FadeCarousel({ photos, disableOnInteraction = true }: { 
             autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction, pauseOnMouseEnter: true, waitForTransition: true }}
             speed={1500}
           >
-            {photos && photos.map((item, idx) => {
+            {photos?.map((item, idx) => {
               const WIDTH = 450;
               const HEIGHT = 150;
-              if (item.search('youtu') > 0 || item.search('youtube') > 0) {
-                return (
-                  <SwiperSlide key={idx}>
-                    <div className="flex flex-col mb-3 justify-center items-center aspect-video rounded-box cursor-pointer max-w-full">
-                      <YoutubeEmbed embedHtml={item} width={WIDTH} height={HEIGHT} />
-                    </div>
-                    <br />
-                  </SwiperSlide>
-                )
-              }
-              if (item.search('instagram') > 0) {
-                return (
-                  <SwiperSlide key={idx}>
-                    <div className="flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full">
-                      <InstagramEmbed embedHtml={item} width={WIDTH} height={HEIGHT} />
-                    </div>
-                    <br />
-                  </SwiperSlide>
-                )
+
+              const isYoutube = /youtu(be)?/.test(item);
+              const isInstagram = /instagram/.test(item);
+
+              let content;
+              if (isYoutube) {
+                content = <YoutubeEmbed embedHtml={item} width={WIDTH} height={HEIGHT} />;
+              } else if (isInstagram) {
+                content = <InstagramEmbed embedHtml={item} width={WIDTH} height={HEIGHT} />;
               } else {
-                return (
-                  <SwiperSlide key={idx}>
-                    <div className="flex flex-col justify-center  object-scale-down items-center rounded-box cursor-pointer max-w-full">
-                      <Image
-                        loading="lazy"
-                        placeholder="empty"
-                        width={WIDTH}
-                        height={HEIGHT}
-                        src={item}
-                        alt={item}
-                        className="aspect-video w-auto h-auto object-scale-down"
-                      />
-                    </div>
-                    <br />
-                  </SwiperSlide>
-                )
+                content = (
+                  <Image
+                    loading="lazy"
+                    placeholder="empty"
+                    width={WIDTH}
+                    height={HEIGHT}
+                    src={item}
+                    alt={item}
+                    className="aspect-video w-auto h-auto object-scale-down"
+                  />
+                );
               }
+
+              return (
+                <SwiperSlide key={idx}>
+                  <div className="flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full">
+                    {content}
+                  </div>
+                  <br />
+                </SwiperSlide>
+              );
             })}
 
           </Swiper>
