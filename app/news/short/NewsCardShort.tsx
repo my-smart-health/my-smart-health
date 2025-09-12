@@ -31,13 +31,14 @@ export default function NewsCardShort({ newsData, session }: { newsData: NewsCar
 
         <div className="badge badge-accent rounded-bl-none rounded-tr-none p-4">{createdDate}</div>
 
-        {author?.name && <div className="text-2xl indent-6 mt-3 text-primary ">
+        {author?.name && (
           <Link
             href={`/profile/${author.id}`}
-            className="hover:underline">
+            className="hover:underline text-2xl indent-6 mt-3 text-primary"
+          >
             {author?.name || "Unknown Author"}
           </Link>
-        </div>}
+        )}
 
         <div className="card-actions mt-1 pt-1 justify-start gap-2 mx-4">
           {
@@ -68,7 +69,7 @@ export default function NewsCardShort({ newsData, session }: { newsData: NewsCar
           </div>
 
           {session?.user.role === "ADMIN" || session?.user.id === author?.id
-            ? <div className="self-center btn btn-wide btn-warning rounded-xl"><Link href={`/dashboard/edit-post/${id}`}>Edit Post</Link></div>
+            ? <Link href={`/dashboard/edit-post/${id}`} className="self-center btn btn-wide btn-warning rounded-xl">Edit Post</Link>
             : null
           }
         </div>
