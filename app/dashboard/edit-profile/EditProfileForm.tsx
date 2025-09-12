@@ -321,7 +321,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                           fill
                           sizes="(max-width: 600px) 100vw, 200px"
                           style={{ objectFit: "cover" }}
-                          className="rounded-lg"
+                          className="rounded-lg hover:scale-150 transition-transform duration-300 ease-in-out"
                         />
                       </div>
                     )}
