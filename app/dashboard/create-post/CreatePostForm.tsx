@@ -75,18 +75,13 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
   const handleImageUpload = async (file: File) => {
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      if (file === undefined) {
-        setIsDefaultLogo(true);
-        return logo.src;
+      if (!file) {
+        return;
       }
-
       const response = await fetch(
         `/api/upload-picture/?userid=${session.user.id}&filename=${file.name}`,
         {
-          method: 'POST',
+          method: 'PUT',
           body: file,
         }
       );
@@ -137,7 +132,18 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
       if (blobResult.length === 0) {
         setIsDefaultLogo(true);
-        blobResult.push(logo.src);
+
+        const response = await fetch(logo.src);
+        if (!response.ok) {
+          throw new Error('Failed to fetch default logo');
+        }
+
+        const blob = await response.blob();
+        const file = new File([blob], "og-logo.jpg", { type: blob.type });
+
+        const uploadedUrl = await handleImageUpload(file);
+
+        blobResult.push(uploadedUrl as string);
       }
 
       if (!isImageFirst) {
