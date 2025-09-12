@@ -305,23 +305,25 @@ export default function EditProfileForm({ user }: { user: User }) {
                   <div
                     className={
                       isYoutube
-                        ? "aspect-video w-[200px] h-[112px] flex items-center justify-center rounded-lg overflow-hidden bg-primary/20"
-                        : "aspect-square w-[200px] h-[200px] flex items-center justify-center rounded-lg overflow-hidden bg-primary/20"
+                        ? "aspect-video flex items-center justify-center rounded-lg overflow-hidden bg-primary/20"
+                        : "aspect-square flex items-center justify-center rounded-lg overflow-hidden bg-primary/20 max-w-[200px]"
                     }
                   >
                     {isYoutube ? (
                       <YoutubeEmbed embedHtml={mediaUrl} width={200} height={112} />
                     ) : isInstagram ? (
-                      <InstagramEmbed embedHtml={mediaUrl} width={200} height={200} />
+                      <InstagramEmbed embedHtml={mediaUrl} width={MEDIA_WIDTH} height={MEDIA_HEIGHT} />
                     ) : (
-                      <Image
-                        src={mediaUrl}
-                        alt={`Photo ${idx + 1}`}
-                        width={200}
-                        height={200}
-                        style={{ objectFit: "cover" }}
-                        className="rounded-lg"
-                      />
+                      <div className="relative w-[200px] h-[200px]">
+                        <Image
+                          src={mediaUrl}
+                          alt={`Photo ${idx + 1}`}
+                          fill
+                          sizes="(max-width: 600px) 100vw, 200px"
+                          style={{ objectFit: "cover" }}
+                          className="rounded-lg"
+                        />
+                      </div>
                     )}
                   </div>
                 );
