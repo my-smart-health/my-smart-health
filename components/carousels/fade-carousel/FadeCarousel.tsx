@@ -1,8 +1,10 @@
 'use client'
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectFade, Mousewheel, Scrollbar } from "swiper/modules";
+import { Autoplay, EffectFade, Mousewheel, Navigation, Pagination, Scrollbar } from "swiper/modules";
 import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
@@ -18,19 +20,20 @@ export default function FadeCarousel({ photos, disableOnInteraction = true }: { 
       <figure className="w-full max-w-[90%] mx-auto">
         <div className="max-w-xs md:max-w-sm">
           <Swiper
-            modules={[Scrollbar, Mousewheel, Autoplay, EffectFade]}
+            modules={[Scrollbar, Mousewheel, Navigation, Pagination, Autoplay, EffectFade]}
             spaceBetween={0}
             lazyPreloadPrevNext={3}
             slidesPerView={1}
             effect="fade"
             grabCursor={true}
+            navigation={true}
+            pagination={{ clickable: true, enabled: true }}
             fadeEffect={{
               crossFade: true
             }}
             mousewheel={true}
             autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction, pauseOnMouseEnter: true, waitForTransition: true }}
             speed={1500}
-            scrollbar={{ draggable: true }}
           >
             {photos && photos.map((item, idx) => {
               const WIDTH = 450;
@@ -38,7 +41,7 @@ export default function FadeCarousel({ photos, disableOnInteraction = true }: { 
               if (item.search('youtu') > 0 || item.search('youtube') > 0) {
                 return (
                   <SwiperSlide key={idx}>
-                    <div className="flex flex-col justify-center items-center aspect-video rounded-box cursor-pointer max-w-full">
+                    <div className="flex flex-col mb-3 justify-center items-center aspect-video rounded-box cursor-pointer max-w-full">
                       <YoutubeEmbed embedHtml={item} width={WIDTH} height={HEIGHT} />
                     </div>
                     <br />
