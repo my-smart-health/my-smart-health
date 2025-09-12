@@ -14,7 +14,7 @@ import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 
 
-export default function FadeCarousel({ photos, disableOnInteraction = true }: { photos: string[]; disableOnInteraction?: boolean }) {
+export default function FadeCarousel({ photos }: { photos: string[] }) {
   return (
     <Suspense fallback={<div className="text-center skeleton min-h-[352px]">Loading...</div>}>
       <figure className="w-full max-w-[90%] mx-auto">
@@ -32,7 +32,7 @@ export default function FadeCarousel({ photos, disableOnInteraction = true }: { 
               crossFade: true
             }}
             mousewheel={true}
-            autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction, pauseOnMouseEnter: true, waitForTransition: true }}
+            autoplay={{ delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true }}
             speed={1500}
           >
             {photos?.map((item, idx) => {
