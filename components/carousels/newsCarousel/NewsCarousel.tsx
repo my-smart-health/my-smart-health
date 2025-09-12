@@ -3,8 +3,10 @@ import { Suspense } from "react";
 import Image from "next/image";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectCube, Mousewheel, Scrollbar } from "swiper/modules";
+import { Autoplay, EffectCube, Mousewheel, Navigation, Pagination, Scrollbar } from "swiper/modules";
 import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
@@ -18,10 +20,9 @@ type NewsCarouselProps = {
     image: string;
     info: string;
   }[];
-  disableOnInteraction?: boolean;
 };
 
-export default function NewsCarousel({ props, disableOnInteraction = false }: NewsCarouselProps) {
+export default function NewsCarousel({ props }: NewsCarouselProps) {
 
   if (!props || props.length === 0) {
     return <NewsCarouselSkeleton />;
@@ -31,10 +32,13 @@ export default function NewsCarousel({ props, disableOnInteraction = false }: Ne
     <Suspense fallback={<NewsCarouselSkeleton />}>
       <div className="mx-auto max-w-2xs min-h-[300px] md:max-w-sm">
         <Swiper
-          modules={[Scrollbar, Mousewheel, Autoplay, EffectCube]}
+          modules={[Scrollbar, Navigation, Pagination, Mousewheel, Autoplay, EffectCube]}
           spaceBetween={0}
           slidesPerView={1}
           effect="cube"
+          grabCursor={true}
+          navigation={true}
+          pagination={{ clickable: true, enabled: true }}
           cubeEffect={{
             shadow: true,
             slideShadows: true,
@@ -42,9 +46,8 @@ export default function NewsCarousel({ props, disableOnInteraction = false }: Ne
             shadowScale: 0.94
           }}
           mousewheel={true}
-          autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction, pauseOnMouseEnter: true, waitForTransition: true }}
+          autoplay={{ delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true }}
           speed={300}
-          scrollbar={{ draggable: true }}
         >
           {props.map((item) => (
             <SwiperSlide key={item.id}>
@@ -64,6 +67,7 @@ export default function NewsCarousel({ props, disableOnInteraction = false }: Ne
                   </span>
                 </div>
               </Link>
+              <br />
               <br />
             </SwiperSlide>
           ))}
