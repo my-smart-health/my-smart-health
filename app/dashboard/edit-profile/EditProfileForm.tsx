@@ -320,9 +320,9 @@ export default function EditProfileForm({ user }: { user: User }) {
                 return (
                   <div
                     key={image + idx}
-                    className="flex w-full justify-center items-center gap-4 max-w-[90%]"
+                    className="flex w-full justify-center my-10 items-center gap-4 max-w-[90%]"
                   >
-                    <div className="flex items-center mb-9 justify-center w-[200px] h-[200px]">
+                    <div className="flex items-center justify-center w-[200px] max-h-[200px] h-[200px]">
                       {media}
                     </div>
                     <div className="flex flex-col items-center justify-center gap-2">
