@@ -296,43 +296,50 @@ export default function EditProfileForm({ user }: { user: User }) {
 
             <div className="w-full my-5 mx-auto border border-primary h-0"></div>
 
-            <div className="aspect-square flex flex-col gap-4 content-between items-center">
-              {blobResult && blobResult.map((image, idx) => {
-                const media = image.includes("youtube") || image.includes("youtu")
-                  ? <div className="aspect-video">
-                    <YoutubeEmbed embedHtml={image} width={MEDIA_WIDTH} height={MEDIA_HEIGHT} />
-                  </div>
-                  : image.includes("instagram")
-                    ? <div className="aspect-square flex items-center justify-center max-w-[50%]">
-                      <InstagramEmbed embedHtml={image} width={MEDIA_WIDTH} height={MEDIA_HEIGHT} />
-                    </div>
-                    : <div className="aspect-square flex items-center justify-center">
+            <div className="flex flex-col items-center gap-8 w-full max-w-[90%]">
+              {blobResult.map((mediaUrl, idx) => {
+                const isYoutube = /youtu(be)?/.test(mediaUrl);
+                const isInstagram = /instagram/.test(mediaUrl);
+
+                const media = (
+                  <div
+                    className={
+                      isYoutube
+                        ? "aspect-video w-[200px] h-[112px] flex items-center justify-center rounded-lg overflow-hidden bg-primary/20"
+                        : "aspect-square w-[200px] h-[200px] flex items-center justify-center rounded-lg overflow-hidden bg-primary/20"
+                    }
+                  >
+                    {isYoutube ? (
+                      <YoutubeEmbed embedHtml={mediaUrl} width={200} height={112} />
+                    ) : isInstagram ? (
+                      <InstagramEmbed embedHtml={mediaUrl} width={200} height={200} />
+                    ) : (
                       <Image
-                        src={image}
+                        src={mediaUrl}
                         alt={`Photo ${idx + 1}`}
-                        width={MEDIA_WIDTH}
-                        height={MEDIA_HEIGHT}
-                        placeholder="empty"
-                        className="object-cover rounded-lg hover:z-10 hover:scale-200 hover:shadow-lg cursor-pointer transition-all"
+                        width={200}
+                        height={200}
+                        style={{ objectFit: "cover" }}
+                        className="rounded-lg"
                       />
-                    </div>;
+                    )}
+                  </div>
+                );
 
                 return (
                   <div
-                    key={image + idx}
-                    className="flex w-full justify-center my-10 items-center gap-4 max-w-[90%]"
+                    key={mediaUrl + idx}
+                    className="flex flex-row items-center justify-center gap-6 w-full"
                   >
-                    <div className="flex items-center justify-center w-[200px] max-h-[200px] h-[200px]">
-                      {media}
-                    </div>
-                    <div className="flex flex-col items-center justify-center gap-2">
+                    {media}
+                    <div className="flex flex-col items-center gap-2">
                       <MoveImageVideo
                         index={idx}
                         blobResult={blobResult}
                         setBlobResultAction={setBlobResult}
                         showTop={idx > 0}
                         showBottom={idx < blobResult.length - 1}
-                        removeAddress={`/api/remove-picture?url=${encodeURIComponent(image)}`}
+                        removeAddress={`/api/remove-picture?url=${encodeURIComponent(mediaUrl)}`}
                       />
                     </div>
                   </div>
