@@ -52,7 +52,7 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
                   src={item.profileImage}
                   className="rounded-box border-6 border-primary aspect-square"
                 />
-                <p className="text-center text-[#2c2e35] mb-4">{item.name}</p>
+                <p className="text-center break-words line-clamp-1 text-[#2c2e35] mb-4">{item.name}</p>
               </Link>
             </SwiperSlide>
           ))}
