@@ -27,18 +27,23 @@ export default function NewsCardShort({ newsData, session }: { newsData: NewsCar
       key={id}
       className="m-auto min-h-full border max-w-[99%] rounded-lg shadow-2xl"
     >
-      <div className="card card-lg bg-secondary/20 w-96 shadow-sm max-w-[100%]">
+      <div className="card card-lg bg-secondary/20 w-96 shadow-sm max-w-[100%] ">
 
-        <div className="badge badge-accent rounded-bl-none rounded-tr-none p-4">{createdDate}</div>
+        <div className="flex flex-row gap-2">
 
-        {author?.name && (
-          <Link
-            href={`/profile/${author.id}`}
-            className="hover:underline text-2xl indent-6 mt-3 text-primary"
-          >
-            {author?.name || "Unknown Author"}
-          </Link>
-        )}
+          {author?.name && (
+            <span className="text-2xl text-primary w-full m-2 font-semibold">
+              <Link
+                href={`/profile/${author.id}`}
+                className="hover:underline"
+              >
+                {author?.name || "Unknown Author"}
+              </Link>
+            </span>
+          )}
+
+          <span className="badge badge-accent rounded-br-none rounded-tl-none py-4 px-1">{createdDate}</span>
+        </div>
 
         <div className="card-actions mt-1 pt-1 justify-start gap-2 mx-4">
           {
@@ -49,11 +54,13 @@ export default function NewsCardShort({ newsData, session }: { newsData: NewsCar
         <h2 className="card-title card-border flex-col m-4 justify-center">
           {title}
         </h2>
-        <div className="card-body min-h-[352px]">
-          <Suspense fallback={<div className="text-center skeleton min-h-[352px]">Loading...</div>}>
-            <FadeCarousel photos={photos} />
-          </Suspense>
-          <p className="text-base line-clamp-3 indent-6">{content}</p>
+        <div className="flex flex-col gap-1  mb-4 w-full">
+          <div className="w-full">
+            <Suspense fallback={<div className="text-center skeleton min-h-[352px]">Loading...</div>}>
+              <FadeCarousel photos={photos} />
+            </Suspense>
+          </div>
+          <p className="text-base mx-4 line-clamp-3 indent-6">{content}</p>
 
           <div className="card-actions justify-end m-4">
             {tags && tags.length > 0 && (

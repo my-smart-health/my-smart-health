@@ -216,22 +216,22 @@ export default function EditProfileForm({ user }: { user: User }) {
 
   return (
     <>
+      <div className="flex flex-col justify-center items-center content-center max-w-full">
+        {blobResult && blobResult.length > 0 ? (
+          <div className="max-w-full">
+            <Suspense fallback={<div className={`text-center skeleton min-h-[${MAX_FILES_PER_USER}]`}>Loading...</div>}>
+              <FadeCarousel photos={blobResult} />
+            </Suspense>
+          </div>
+        ) : (
+          <div className="text-center skeleton min-h-[352px]">No Images</div>
+        )}
+      </div>
       {error && <p className="text-red-500 p-2">{error}</p>}
       <form
         onSubmit={handleSubmit}
         className={`w-full max-w-3xl rounded-2xl shadow-xl border-1 border-primary p-4 gap-8 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
       >
-        <div className="flex flex-col justify-center items-center content-center">
-          {blobResult && blobResult.length > 0 ? (
-            <div className="max-w-[90%]">
-              <Suspense fallback={<div className={`text-center skeleton min-h-[${MAX_FILES_PER_USER}]`}>Loading...</div>}>
-                <FadeCarousel photos={blobResult} />
-              </Suspense>
-            </div>
-          ) : (
-            <div className="text-center skeleton min-h-[352px]">No Images</div>
-          )}
-        </div>
         <div className="flex-1 flex flex-col gap-4">
 
           <div>

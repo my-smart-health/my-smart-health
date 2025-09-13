@@ -13,12 +13,11 @@ import { Suspense } from "react";
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 
-
-export default function FadeCarousel({ photos }: { photos: string[] }) {
+export default function FadeCarousel({ photos, width = 450, height = 135 }: { photos: string[], width?: number, height?: number }) {
   return (
     <Suspense fallback={<div className="text-center skeleton min-h-[352px]">Loading...</div>}>
-      <figure className="w-full max-w-[90%] mx-auto">
-        <div className="max-w-xs md:max-w-sm">
+      <div className="w-full flex flex-col items-center">
+        <div className="w-full max-w-[450px] md:max-w-[600px] aspect-video">
           <Swiper
             modules={[Scrollbar, Mousewheel, Navigation, Pagination, Autoplay, EffectFade]}
             spaceBetween={0}
@@ -27,53 +26,55 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
             effect="fade"
             grabCursor={true}
             navigation={true}
-            pagination={{ clickable: true, enabled: true }}
-            fadeEffect={{
-              crossFade: true
+            pagination={{
+              clickable: true,
             }}
+            fadeEffect={{ crossFade: true }}
             mousewheel={true}
-            autoplay={{ delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true }}
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: true,
+              pauseOnMouseEnter: true,
+              waitForTransition: true,
+            }}
             speed={1500}
+            className="w-full h-full"
           >
             {photos?.map((item, idx) => {
-              const WIDTH = 450;
-              const HEIGHT = 150;
-
               const isYoutube = /youtu(be)?/.test(item);
               const isInstagram = /instagram/.test(item);
 
               let content;
               if (isYoutube) {
-                content = <YoutubeEmbed embedHtml={item} width={WIDTH} height={HEIGHT} />;
+                content = <YoutubeEmbed embedHtml={item} width="100%" height="100%" />;
               } else if (isInstagram) {
-                content = <InstagramEmbed embedHtml={item} width={WIDTH} height={HEIGHT} />;
+                content = <InstagramEmbed embedHtml={item} width="100%" height="100%" />;
               } else {
                 content = (
                   <Image
                     loading="lazy"
                     placeholder="empty"
-                    width={WIDTH}
-                    height={HEIGHT}
                     src={item}
                     alt={item}
-                    className="aspect-video w-auto h-auto object-scale-down"
+                    fill
+                    sizes="(max-width: 600px) 100vw, 600px"
+                    style={{ objectFit: "cover" }}
+                    className="rounded-lg"
                   />
                 );
               }
 
               return (
                 <SwiperSlide key={idx}>
-                  <div className="flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full">
+                  <div className="relative w-full h-full flex justify-center items-center aspect-video">
                     {content}
                   </div>
-                  <br />
                 </SwiperSlide>
               );
             })}
-
           </Swiper>
         </div>
-      </figure>
+      </div>
     </Suspense>
   );
 }
