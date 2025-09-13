@@ -27,7 +27,7 @@ export default function NewsCardShort({ newsData, session }: { newsData: NewsCar
       key={id}
       className="m-auto min-h-full border max-w-[99%] rounded-lg shadow-2xl"
     >
-      <div className="card card-lg bg-secondary/20 w-96 shadow-sm max-w-[100%] ">
+      <div className="card card-lg w-96 shadow-sm max-w-[100%] ">
 
         <div className="flex flex-row gap-2">
 
