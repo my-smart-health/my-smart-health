@@ -7,7 +7,7 @@ import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube, MapPin } 
 
 
 import ScheduleSection from "./ScheduleSection";
-import TextSectionClamp from "./TextSectionClamp";
+import SeeMoreLess from "../buttons/see-more-less/SeeMoreLess";
 import ProfilePictureCarousel from "../carousels/profile-picture-carousel/ProfilePictureCarousel";
 
 import { Schedule } from "@/utils/types";
@@ -75,7 +75,7 @@ export default function ProfileFull({ user }: { user: User }) {
 
         {bio && <section className="">
           <article className="text-base">
-            <TextSectionClamp text={bio} />
+            <SeeMoreLess text={bio} />
           </article>
         </section>
         }

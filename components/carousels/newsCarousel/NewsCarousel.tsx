@@ -51,7 +51,7 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
         >
           {props.map((item) => (
             <SwiperSlide key={item.id}>
-              <Link href={`/news/short/${item.id}`}>
+              <Link href={`/news/${item.id}`}>
                 <div className="flex flex-col justify-center items-center rounded-box cursor-pointer">
                   <Image
                     loading="lazy"

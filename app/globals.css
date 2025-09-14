@@ -20,3 +20,12 @@ html {
 body {
   @apply bg-white text-black;
 }
+
+.swiper-pagination-bullet {
+  background: black;
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  color: white;
+}

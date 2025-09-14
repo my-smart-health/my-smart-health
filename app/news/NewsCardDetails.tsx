@@ -7,6 +7,8 @@ import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
 import { Suspense } from "react";
 import Link from "next/link";
 import { Session } from "next-auth";
+import SeeMoreLess from "@/components/buttons/see-more-less/SeeMoreLess";
+import GoToButton from "@/components/buttons/go-to/GoToButton";
 
 export default function NewsCardDetails({ newsData, session }: { newsData: NewsCardType | null, session?: Session | null }) {
 
@@ -28,33 +30,21 @@ export default function NewsCardDetails({ newsData, session }: { newsData: NewsC
           >
             <div className="card card-lg w-96 shadow-sm max-w-[100%]">
 
-              <div className="badge badge-accent rounded-bl-none rounded-tr-none p-4">{createdDate}</div>
+              <div className="flex flex-row gap-2">
 
-              {session?.user.role === "ADMIN" || session?.user.id === author?.id
-                ? <Link href={`/dashboard/edit-post/${id}`} className="self-center btn btn-wide btn-warning rounded-xl mt-4">Edit Post</Link>
-                : null
-              }
+                {author?.name && (
+                  <span className="text-2xl text-primary w-full m-2 font-semibold">
+                    <Link
+                      href={`/profile/${author.id}`}
+                      className="hover:underline"
+                    >
+                      {author?.name || "Unknown Author"}
+                    </Link>
+                  </span>
+                )}
 
-              {author?.name && <div className="text-2xl indent-6 mt-3 text-primary">
-                <Link
-                  href={`/profile/${author.id}`}
-                  className="hover:underline">
-                  {author?.name || "Unknown Author"}
-                </Link></div>}
-
-              {author?.fieldOfExpertise &&
-                <div className="card-actions mt-1 pt-1 justify-start gap-2 mx-4">
-                  {
-                    author?.fieldOfExpertise.map((expertise, index) => (
-                      <div key={index} className="badge badge-outline">{expertise}</div>
-                    ))}
-                </div>
-              }
-
-              <h2 className="card-title card-border flex-col m-4 justify-center">
-                {title}
-              </h2>
-
+                <span className="badge badge-accent rounded-br-none rounded-tl-none py-4 px-1">{createdDate}</span>
+              </div>
 
               <div className="card-body">
                 {photos &&
@@ -63,7 +53,7 @@ export default function NewsCardDetails({ newsData, session }: { newsData: NewsC
                   </Suspense>
                 }
 
-                <p className="text-base text-pretty indent-4 break-before">{content}</p>
+                {content && <div className="text-base indent-4 break-before"><SeeMoreLess text={content} /></div>}
 
               </div>
 
@@ -76,6 +66,18 @@ export default function NewsCardDetails({ newsData, session }: { newsData: NewsC
                   </div>
                 )}
               </div>
+            </div>
+            <div className="flex flex-col items-center space-y-2 mb-4">
+              {author?.name &&
+                <div className="card-actions justify-center">
+                  <GoToButton name={`zum Anbieter ${author.name}`} src={`/profile/${author.id}`} className="btn btn-wide bg-primary rounded-xl text-secondary" />
+                </div>
+              }
+
+              {session?.user.role === "ADMIN" || session?.user.id === author?.id
+                ? <Link href={`/dashboard/edit-post/${id}`} className="self-center btn btn-wide btn-warning rounded-xl">Edit Post</Link>
+                : null
+              }
             </div>
           </div>
           <div className="flex justify-end my-2">

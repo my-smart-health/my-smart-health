@@ -28,6 +28,7 @@ export default function FadeCarousel({ photos, width = 450, height = 135 }: { ph
             navigation={true}
             pagination={{
               clickable: true,
+
             }}
             fadeEffect={{ crossFade: true }}
             mousewheel={true}
@@ -65,7 +66,7 @@ export default function FadeCarousel({ photos, width = 450, height = 135 }: { ph
               }
 
               return (
-                <SwiperSlide key={idx}>
+                <SwiperSlide key={idx} className="pb-10 text-white">
                   <div className="relative w-full h-full flex justify-center items-center aspect-video">
                     {content}
                   </div>

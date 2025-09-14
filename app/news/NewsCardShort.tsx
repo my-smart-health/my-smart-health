@@ -45,12 +45,6 @@ export default function NewsCardShort({ newsData, session }: { newsData: NewsCar
           <span className="badge badge-accent rounded-br-none rounded-tl-none py-4 px-1">{createdDate}</span>
         </div>
 
-        <div className="card-actions mt-1 pt-1 justify-start gap-2 mx-4">
-          {
-            author?.fieldOfExpertise.map((expertise, index) => (
-              <div key={index} className="badge badge-outline">{expertise}</div>
-            ))}
-        </div>
         <h2 className="card-title card-border flex-col m-4 justify-center">
           {title}
         </h2>
@@ -60,6 +54,7 @@ export default function NewsCardShort({ newsData, session }: { newsData: NewsCar
               <FadeCarousel photos={photos} />
             </Suspense>
           </div>
+
           <p className="text-base mx-4 line-clamp-3 indent-6">{content}</p>
 
           <div className="card-actions justify-end m-4">
@@ -71,9 +66,17 @@ export default function NewsCardShort({ newsData, session }: { newsData: NewsCar
               </div>
             )}
           </div>
+
+          {author?.name &&
+            <div className="card-actions justify-center">
+              <GoToButton name={author.name} src={`/profile/${author.id}`} className="btn btn-wide bg-primary rounded-xl text-secondary" />
+            </div>
+          }
+
           <div className="card-actions justify-center">
             <GoToButton name={"View more"} src={`/news/${id}`} className="btn btn-wide bg-primary rounded-xl text-secondary" />
           </div>
+
 
           {session?.user.role === "ADMIN" || session?.user.id === author?.id
             ? <Link href={`/dashboard/edit-post/${id}`} className="self-center btn btn-wide btn-warning rounded-xl">Edit Post</Link>
