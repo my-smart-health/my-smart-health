@@ -3,9 +3,9 @@ import { Suspense } from "react";
 import TopCarouselSkeleton from "./TopCarouselSkeleton";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Mousewheel, Scrollbar } from "swiper/modules";
+import { Autoplay, Mousewheel, Pagination } from "swiper/modules";
 import 'swiper/css';
-import 'swiper/css/scrollbar';
+import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
 import Image from "next/image";
@@ -30,18 +30,19 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
     <Suspense fallback={<TopCarouselSkeleton times={7} />}>
       <div draggable={false} className="max-w-2xs md:max-w-sm">
         <Swiper
-          modules={[Scrollbar, Mousewheel, Autoplay]}
+          modules={[Pagination, Mousewheel, Autoplay]}
           spaceBetween={4}
           slidesPerView={4}
           mousewheel={true}
           autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction, pauseOnMouseEnter: true, waitForTransition: true }}
           speed={300}
-          scrollbar={{ draggable: true }}
+
+          pagination={{ clickable: true, enabled: true }}
         >
           {props.map((item) => (
             <SwiperSlide
               key={item.id}
-              className="cursor-pointer">
+              className="cursor-pointer pb-6">
               <Link href={`/profile/${item.id}`}>
                 <Image
                   loading="lazy"

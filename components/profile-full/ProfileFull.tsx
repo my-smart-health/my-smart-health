@@ -12,6 +12,8 @@ import ProfilePictureCarousel from "../carousels/profile-picture-carousel/Profil
 
 import { Schedule } from "@/utils/types";
 import { parseSocials } from "@/utils/common";
+import prisma from "@/lib/db";
+import TopCarousel from "../carousels/topCarousel/TopCarousel";
 
 type User = {
   name: string | null;
@@ -39,10 +41,31 @@ const platformIcons: Record<string, React.ReactNode> = {
   Instagram: <Instagram className="inline-block mr-1" size={20} />,
 };
 
-export default function ProfileFull({ user }: { user: User }) {
+async function getAllPosts(userId: string) {
+  const posts = await prisma.posts.findMany({
+    where: { authorId: userId },
+    select: {
+      id: true,
+      title: true,
+      photos: true,
+    }
+  })
 
+  const serializedPosts = posts.map(post => {
+
+    return { id: post.id, name: post.title, profileImage: post.photos && post.photos.length > 0 ? post.photos[0] : '' };
+
+  });
+
+  return serializedPosts;
+}
+
+export default async function ProfileFull({ user }: { user: User }) {
 
   const { name, profileImages, address, bio, phone, socials, website, fieldOfExpertise, displayEmail } = user || {};
+
+  const posts = await getAllPosts(user.id);
+
 
   const schedule = user?.schedule as Schedule[] || [];
 
@@ -79,6 +102,17 @@ export default function ProfileFull({ user }: { user: User }) {
           </article>
         </section>
         }
+
+        <div className="w-full mx-auto border border-primary h-0"></div>
+
+        {posts && posts.length > 0 && (
+          <>
+            <h2 className="font-bold text-primary text-xl">News</h2>
+            <section className="w-full">
+              <TopCarousel props={posts} />
+            </section>
+          </>
+        )}
 
         <div className="w-full mx-auto border border-primary h-0"></div>
 

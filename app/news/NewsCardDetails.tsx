@@ -70,7 +70,7 @@ export default function NewsCardDetails({ newsData, session }: { newsData: NewsC
             <div className="flex flex-col items-center space-y-2 mb-4">
               {author?.name &&
                 <div className="card-actions justify-center">
-                  <GoToButton name={`zum Anbieter ${author.name}`} src={`/profile/${author.id}`} className="btn btn-wide bg-primary rounded-xl text-secondary" />
+                  <GoToButton name={`zum Anbieter`} src={`/profile/${author.id}`} className="btn btn-wide bg-primary rounded-xl text-secondary" />
                 </div>
               }
 
