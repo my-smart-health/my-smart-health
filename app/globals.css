@@ -21,8 +21,8 @@ body {
   @apply bg-white text-black;
 }
 
-.swiper-pagination-bullet {
-  background: black;
+span.swiper-pagination-bullet-active {
+  background-color: black;
 }
 
 .swiper-button-next::after,
