@@ -25,6 +25,12 @@ span.swiper-pagination-bullet-active {
   background-color: black;
 }
 
+span.swiper-pagination-bullet,
+span.swiper-pagination-bullet-active {
+  width: 12px;
+  height: 12px;
+}
+
 .swiper-button-next::after,
 .swiper-button-prev::after {
   color: white;
