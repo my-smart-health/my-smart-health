@@ -52,7 +52,7 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
           {props.map((item) => (
             <SwiperSlide key={item.id}>
               <Link href={`/news/${item.id}`}>
-                <div className="flex flex-col justify-center items-center rounded-box cursor-pointer">
+                <div className="flex flex-col border-2 border-primary justify-center items-center rounded-box cursor-pointer">
                   <Image
                     loading="lazy"
                     placeholder="empty"
@@ -60,6 +60,7 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
                     height={400}
                     src={item.image}
                     alt={item.info}
+                    style={{ objectFit: "contain" }}
                     className="aspect-square rounded-t-lg"
                   />
                   <span className="text-center line-clamp-1 p-1 text-white text-3xl w-full bg-primary rounded-b-lg">
