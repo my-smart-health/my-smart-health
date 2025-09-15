@@ -9,6 +9,7 @@ import CreateNewAccount from "@/components/buttons/create-new-account/CreateNewA
 import ShortPosts from "@/components/posts/short-posts/ShortPosts";
 
 import { Schedule } from "@/utils/types";
+import Divider from "@/components/divider/Divider";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -85,7 +86,7 @@ export default async function DashboardPage() {
 
       {safeUser && <ProfileFull user={safeUser} />}
 
-      <div className="w-full mx-auto border border-primary h-0"></div>
+      <Divider />
 
       <section className="flex flex-col w-full rounded-2xl shadow-md">
         <div className="font-semibold text-primary text-2xl text-center">My Posts</div>
