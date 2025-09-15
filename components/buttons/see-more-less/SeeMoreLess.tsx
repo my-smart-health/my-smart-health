@@ -2,10 +2,13 @@
 
 import { useRef, useState, useEffect } from "react";
 
-export default function SeeMoreLess({ text }: { text: string }) {
+export default function SeeMoreLess({ text, lines, addClass }: { text: string, lines?: number, addClass?: string }) {
   const [expanded, setExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
+
+  // Only allow up to 6 lines for clamping
+  const clampLines = Math.max(1, Math.min(lines || 3, 6));
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -22,18 +25,18 @@ export default function SeeMoreLess({ text }: { text: string }) {
     <>
       <div
         ref={sectionRef}
-        className={`break-before-all ${expanded ? "line-clamp-none" : "line-clamp-3"}`}
+        className={`break-before-all ${expanded ? "line-clamp-none" : `line-clamp-${clampLines}`} ${addClass} transform-content transition-all ease-in-out duration-1000`}
         style={{ overflow: "hidden" }}
       >
         {text}
       </div>
       {(isClamped || expanded) && (
-        <button
+        <span
           onClick={() => setExpanded(e => !e)}
-          className="text-primary ml-2 flex place-self-end"
+          className="text-primary ml-2 flex place-self-end cursor-pointer select-none font-semibold"
         >
           {expanded ? "Weniger anzeigen" : "Mehr erfahren"}
-        </button>
+        </span>
       )}
     </>
   );

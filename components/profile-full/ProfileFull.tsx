@@ -14,6 +14,7 @@ import { Schedule } from "@/utils/types";
 import { parseSocials } from "@/utils/common";
 import prisma from "@/lib/db";
 import ProfileNewsCarousel from "../carousels/profile-news/ProfileNewsCarousel";
+import Divider from "../divider/Divider";
 
 type User = {
   name: string | null;
@@ -87,7 +88,7 @@ export default async function ProfileFull({ user }: { user: User }) {
                 {fieldOfExpertise?.join(", ")}
               </p>
             </section>
-            <div className="w-full mx-auto border border-primary h-0"></div>
+            <Divider />
           </>
         )}
 
@@ -98,7 +99,7 @@ export default async function ProfileFull({ user }: { user: User }) {
         </section>
         }
 
-        <div className="w-full mx-auto border border-primary h-0"></div>
+        <Divider />
 
         {posts && posts.length > 0 && (
           <>
@@ -109,7 +110,7 @@ export default async function ProfileFull({ user }: { user: User }) {
           </>
         )}
 
-        <div className="w-full mx-auto border border-primary h-0"></div>
+        <Divider />
 
         <h2 className="font-bold text-primary text-xl">Kontakt</h2>
         <section className="grid grid-cols-1 gap-3">
@@ -167,7 +168,7 @@ export default async function ProfileFull({ user }: { user: User }) {
 
         {schedule && schedule.length > 0 && (
           <>
-            <div className="w-full mx-auto border border-primary h-0"></div>
+            <Divider />
 
             <section>
               <ScheduleSection schedule={schedule} />

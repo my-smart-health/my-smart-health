@@ -1,6 +1,7 @@
 'use client';
 
-import { Triangle } from "lucide-react";
+import Divider from "@/components/divider/Divider";
+import { Divide, Triangle } from "lucide-react";
 import React from "react";
 
 type MoveImageVideoProps = {
@@ -72,7 +73,7 @@ export default function MoveImageVideo({ index, blobResult, setBlobResultAction,
             onClick={(e) => handleOnePositionUp(e, index)}><Triangle fill="currentColor" />
           </button>
 
-          <div className="w-full mx-auto border border-primary h-0"></div>
+          <Divider />
         </>
       )}
       <button
@@ -82,7 +83,7 @@ export default function MoveImageVideo({ index, blobResult, setBlobResultAction,
 
       {showBottom && (
         <>
-          <div className="w-full mx-auto border border-primary h-0"></div>
+          <Divider />
 
           <button
             type="button"

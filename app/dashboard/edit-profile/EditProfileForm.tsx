@@ -19,6 +19,7 @@ import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
+import Divider from "@/components/divider/Divider";
 
 type User = {
   id: string;
@@ -373,7 +374,7 @@ export default function EditProfileForm({ user }: { user: User }) {
             />
           </label>
 
-          <div className="w-full mx-auto border border-primary h-0"></div>
+          <Divider />
 
           <label className="flex flex-col">
             <span className="font-semibold text-gray-700">Address</span>
@@ -386,7 +387,7 @@ export default function EditProfileForm({ user }: { user: User }) {
             />
           </label>
 
-          <div className="w-full mx-auto border border-primary h-0"></div>
+          <Divider />
 
           <label className="flex flex-col">
             <span className="font-semibold text-gray-700">Email (Display)</span>
@@ -408,7 +409,7 @@ export default function EditProfileForm({ user }: { user: User }) {
             />
           </label>
 
-          <div className="w-full mx-auto border border-primary h-0"></div>
+          <Divider />
 
           {!phoneNumbers.length && <span className="font-semibold text-gray-700">{platformIcons['Phone']} Phone Numbers</span>}
           {phoneNumbers.map((phone, idx) => (
@@ -450,7 +451,7 @@ export default function EditProfileForm({ user }: { user: User }) {
             Add Phone Number
           </button>
 
-          <div className="w-full mx-auto border border-primary h-0"></div>
+          <Divider />
 
           {!fieldOfExpertise.length && <span className="font-semibold text-gray-700">Area of Expertise</span>}
           {fieldOfExpertise.map((expertise, idx) => (
@@ -492,7 +493,7 @@ export default function EditProfileForm({ user }: { user: User }) {
             Add Area of Expertise
           </button>
 
-          <div className="w-full mx-auto border border-primary h-0"></div>
+          <Divider />
 
           <div className="flex flex-col w-full max-w-[99.9%]">
             <span className="font-semibold text-gray-700">Socials</span>
@@ -557,7 +558,7 @@ export default function EditProfileForm({ user }: { user: User }) {
             </button>
           </div>
 
-          <div className="w-full mx-auto border border-primary h-0"></div>
+          <Divider />
 
           {
             schedule.map((item, idx) => (
@@ -708,7 +709,7 @@ export default function EditProfileForm({ user }: { user: User }) {
           </button>
 
 
-          <div className="w-full mx-auto border border-primary h-0"></div>
+          <Divider />
 
           <button
             type="submit"
