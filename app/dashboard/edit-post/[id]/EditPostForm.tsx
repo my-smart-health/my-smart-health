@@ -371,9 +371,34 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         <Divider />
 
         <div className={blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''}>
-          <fieldset className="fieldset mb-5">
-            <legend className="fieldset-legend">Select File</legend>
+          <fieldset>
+            <legend className="fieldset-legend text-base">Add Media URL</legend>
+            <div className="flex flex-col gap-4 text-base  w-full">
+              <label htmlFor={`media`} className="">Media URL must be a valid URL from YouTube or Instagram</label>
+              <input
+                type="text"
+                name={`media`}
+                placeholder="https://"
+                className="p-3 rounded border border-primary focus:outline-none focus:ring-2 focus:ring-primary w-full"
+              />
+              <button
+                type="button"
+                onClick={(e) => {
+                  handleAddURL(e)
+                }}
+                className="btn w-full btn-primary mt-2"
+              >
+                Upload Media URL
+              </button>
+            </div>
+          </fieldset>
+
+          <Divider />
+
+          <fieldset className="fieldset mb-5 w-full">
+            <legend className="fieldset-legend text-base">Select Image Files</legend>
             <div className="flex flex-wrap gap-4 w-full">
+              <label htmlFor="image" className="">The image file must be a valid image format</label>
               <input
                 type="file"
                 ref={inputFileRef}
@@ -381,7 +406,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                 name="image"
                 accept="image/*"
                 multiple
-                className={`${blobResult && blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full max-w-xs`}
+                className={`${blobResult && blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full`}
                 onChange={async e => {
                   if (e.target.files && e.target.files.length + blobResult.length > MAX_FILES_PER_POST) {
                     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -402,29 +427,6 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
             </div>
           </fieldset>
 
-          <div className="w-full my-5 mx-auto border border-primary h-0"></div>
-
-          <fieldset>
-            <legend className="fieldset-legend">Add Media URL</legend>
-            <div className="flex flex-col gap-4 w-full">
-              <label htmlFor={`media`} className="">Media URL must be a valid URL from YouTube or Instagram</label>
-              <input
-                type="text"
-                name={`media`}
-                placeholder="https://"
-                className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
-              />
-              <button
-                type="button"
-                onClick={(e) => {
-                  handleAddURL(e)
-                }}
-                className="btn w-full btn-primary mt-2"
-              >
-                Upload Media URL
-              </button>
-            </div>
-          </fieldset>
         </div>
 
         <Divider />
