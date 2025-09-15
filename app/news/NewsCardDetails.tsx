@@ -10,7 +10,6 @@ import GoBack from "@/components/buttons/go-back/GoBack";
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import SeeMoreLess from "@/components/buttons/see-more-less/SeeMoreLess";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
-import { Divide } from "lucide-react";
 import Divider from "@/components/divider/Divider";
 
 export default function NewsCardDetails({ newsData, session }: { newsData: NewsCardType | null, session?: Session | null }) {

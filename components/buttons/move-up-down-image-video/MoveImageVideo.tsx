@@ -1,7 +1,7 @@
 'use client';
 
 import Divider from "@/components/divider/Divider";
-import { Divide, Triangle } from "lucide-react";
+import { Triangle } from "lucide-react";
 import React from "react";
 
 type MoveImageVideoProps = {
