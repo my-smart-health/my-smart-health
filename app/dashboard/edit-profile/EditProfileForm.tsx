@@ -341,7 +341,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                         setBlobResultAction={setBlobResult}
                         showTop={idx > 0}
                         showBottom={idx < blobResult.length - 1}
-                        removeAddress={`/api/remove-picture?url=${encodeURIComponent(mediaUrl)}`}
+                        removeAddress={`/api/delete-picture?url=${encodeURIComponent(mediaUrl)}`}
                       />
                     </div>
                   </div>
