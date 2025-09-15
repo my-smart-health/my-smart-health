@@ -53,6 +53,8 @@ export default async function RootLayout({
           <Link href="/datenschutz" className="hover:underline capitalize">Datenschutz</Link>
           <span className="mx-1">|</span>
           <Link href="/kontakt" className="hover:underline capitalize">Kontakt</Link>
+          <span className="mx-1">|</span>
+          <Link href="/login" className="hover:underline capitalize">Login</Link>
         </footer>
       </body>
     </html>
