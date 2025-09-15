@@ -13,7 +13,6 @@ import ProfilePictureCarousel from "../carousels/profile-picture-carousel/Profil
 import { Schedule } from "@/utils/types";
 import { parseSocials } from "@/utils/common";
 import prisma from "@/lib/db";
-import TopCarousel from "../carousels/topCarousel/TopCarousel";
 import ProfileNewsCarousel from "../carousels/profile-news/ProfileNewsCarousel";
 
 type User = {
