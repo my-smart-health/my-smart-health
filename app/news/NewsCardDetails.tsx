@@ -10,6 +10,8 @@ import GoBack from "@/components/buttons/go-back/GoBack";
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import SeeMoreLess from "@/components/buttons/see-more-less/SeeMoreLess";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
+import { Divide } from "lucide-react";
+import Divider from "@/components/divider/Divider";
 
 export default function NewsCardDetails({ newsData, session }: { newsData: NewsCardType | null, session?: Session | null }) {
 
@@ -32,14 +34,14 @@ export default function NewsCardDetails({ newsData, session }: { newsData: NewsC
             <div className="flex flex-row gap-2 w-full">
 
               {title && (
-                <span className="text-2xl text-primary w-full m-2 font-semibold">
+                <span className="text-xl w-full m-5 font-semibold">
                   {title}
                 </span>
               )}
 
               <span className="badge badge-accent rounded-br-none rounded-tl-none py-4 px-1">{createdDate}</span>
             </div>
-
+            <Divider />
             <section>
               <div className="card-body">
                 {photos &&
@@ -49,7 +51,7 @@ export default function NewsCardDetails({ newsData, session }: { newsData: NewsC
                 }
                 {content && <div className="text-base indent-4 break-before"><SeeMoreLess text={content} /></div>}
               </div>
-
+              <Divider />
               <div className="card-actions justify-end m-4">
                 {tags && tags.length > 0 && (
                   <div className="flex flex-wrap gap-2">
