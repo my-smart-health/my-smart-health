@@ -111,7 +111,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         setIsDisabled(false);
         throw new Error('Failed to upload image');
       }
-
+      setIsDisabled(false);
       return result.url;
     } catch (error) {
       let message = 'Error uploading files';
@@ -193,6 +193,10 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       }
       setError("Post updated successfully");
       setIsDisabled(true);
+
+      setTimeout(() => {
+        redirect(`/news/${post.id}`);
+      }, 1500);
     } catch (error) {
       let message = 'Error uploading files';
       if (error instanceof Error) {
@@ -376,15 +380,22 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                 id="image"
                 name="image"
                 accept="image/*"
+                multiple
                 className={`${blobResult && blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full max-w-xs`}
                 onChange={async e => {
-                  if (e.target.files && e.target.files.length > MAX_FILES_PER_POST) {
+                  if (e.target.files && e.target.files.length + blobResult.length > MAX_FILES_PER_POST) {
+                    window.scrollTo({ top: 0, behavior: "smooth" });
                     setError(`You can select up to ${MAX_FILES_PER_POST} files only.`);
                     e.target.value = "";
                   } else {
                     inputFileRef.current = e.target;
-                    const uploadedImage = await handleImageUpload(e.target.files?.[0] as File);
-                    setBlobResult(prev => [...prev, uploadedImage as string]);
+                    let uploadedImages: (string | undefined)[] = [];
+                    if (e.target.files) {
+                      uploadedImages = await Promise.all(
+                        Array.from(e.target.files).map(file => handleImageUpload(file))
+                      );
+                    }
+                    setBlobResult(prev => [...prev, ...uploadedImages.filter((url): url is string => typeof url === 'string')]);
                     setError(null);
                   }
                 }} />
