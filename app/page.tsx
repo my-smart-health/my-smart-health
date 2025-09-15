@@ -50,7 +50,7 @@ export default async function Home() {
   })) : null;
 
   return (
-    <main className="flex flex-col items-center gap-8 max-w-[100%] min-h-[100dvh] mb-auto justify-items-center">
+    <main className="flex flex-col items-center gap-4 max-w-[100%] min-h-[100dvh] mb-auto justify-items-center">
       <span className="w-full">
         <TopCarousel props={safeUsers} />
       </span>
