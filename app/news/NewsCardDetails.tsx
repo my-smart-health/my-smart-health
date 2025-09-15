@@ -1,14 +1,15 @@
 'use client'
 
+import Link from "next/link";
+import { Suspense } from "react";
+import { Session } from "next-auth";
+
 import { NewsCardType } from "@/utils/types";
 
 import GoBack from "@/components/buttons/go-back/GoBack";
-import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
-import { Suspense } from "react";
-import Link from "next/link";
-import { Session } from "next-auth";
-import SeeMoreLess from "@/components/buttons/see-more-less/SeeMoreLess";
 import GoToButton from "@/components/buttons/go-to/GoToButton";
+import SeeMoreLess from "@/components/buttons/see-more-less/SeeMoreLess";
+import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
 
 export default function NewsCardDetails({ newsData, session }: { newsData: NewsCardType | null, session?: Session | null }) {
 
@@ -26,35 +27,27 @@ export default function NewsCardDetails({ newsData, session }: { newsData: NewsC
         <>
           <div
             key={id}
-            className="m-auto min-h-full border max-w-[99%] rounded-lg shadow-2xl"
+            className="card m-auto min-h-full w-96 border max-w-[99%] rounded-lg shadow-2xl"
           >
-            <div className="card card-lg w-96 shadow-sm max-w-[100%]">
+            <div className="flex flex-row gap-2 w-full">
 
-              <div className="flex flex-row gap-2">
+              {title && (
+                <span className="text-2xl text-primary w-full m-2 font-semibold">
+                  {title}
+                </span>
+              )}
 
-                {author?.name && (
-                  <span className="text-2xl text-primary w-full m-2 font-semibold">
-                    <Link
-                      href={`/profile/${author.id}`}
-                      className="hover:underline"
-                    >
-                      {author?.name || "Unknown Author"}
-                    </Link>
-                  </span>
-                )}
+              <span className="badge badge-accent rounded-br-none rounded-tl-none py-4 px-1">{createdDate}</span>
+            </div>
 
-                <span className="badge badge-accent rounded-br-none rounded-tl-none py-4 px-1">{createdDate}</span>
-              </div>
-
+            <section>
               <div className="card-body">
                 {photos &&
                   <Suspense fallback={<div>Loading...</div>}>
                     <FadeCarousel photos={photos} />
                   </Suspense>
                 }
-
                 {content && <div className="text-base indent-4 break-before"><SeeMoreLess text={content} /></div>}
-
               </div>
 
               <div className="card-actions justify-end m-4">
@@ -66,11 +59,12 @@ export default function NewsCardDetails({ newsData, session }: { newsData: NewsC
                   </div>
                 )}
               </div>
-            </div>
+            </section>
+
             <div className="flex flex-col items-center space-y-2 mb-4">
               {author?.name &&
                 <div className="card-actions justify-center">
-                  <GoToButton name={`zum Anbieter`} src={`/profile/${author.id}`} className="btn btn-wide bg-primary rounded-xl text-secondary" />
+                  <GoToButton name={`zum Anbieter ${author.name}`} src={`/profile/${author.id}`} className="btn btn-wide bg-primary rounded-xl text-secondary" />
                 </div>
               }
 
