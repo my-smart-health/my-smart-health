@@ -13,7 +13,7 @@ import { Suspense } from "react";
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 
-export default function FadeCarousel({ photos, width = 450, height = 135 }: { photos: string[], width?: number, height?: number }) {
+export default function FadeCarousel({ photos }: { photos: string[] }) {
   return (
     <Suspense fallback={<div className="text-center skeleton min-h-[352px]">Loading...</div>}>
       <div className="w-full flex flex-col items-center">
