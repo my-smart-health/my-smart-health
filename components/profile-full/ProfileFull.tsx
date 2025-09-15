@@ -14,6 +14,7 @@ import { Schedule } from "@/utils/types";
 import { parseSocials } from "@/utils/common";
 import prisma from "@/lib/db";
 import TopCarousel from "../carousels/topCarousel/TopCarousel";
+import ProfileNewsCarousel from "../carousels/profile-news/ProfileNewsCarousel";
 
 type User = {
   name: string | null;
@@ -48,16 +49,11 @@ async function getAllPosts(userId: string) {
       id: true,
       title: true,
       photos: true,
+      authorId: true,
     }
   })
 
-  const serializedPosts = posts.map(post => {
-
-    return { id: post.id, name: post.title, profileImage: post.photos && post.photos.length > 0 ? post.photos[0] : '' };
-
-  });
-
-  return serializedPosts;
+  return posts;
 }
 
 export default async function ProfileFull({ user }: { user: User }) {
@@ -109,7 +105,7 @@ export default async function ProfileFull({ user }: { user: User }) {
           <>
             <h2 className="font-bold text-primary text-xl">News</h2>
             <section className="w-full">
-              <TopCarousel props={posts} />
+              <ProfileNewsCarousel props={posts} />
             </section>
           </>
         )}
