@@ -14,6 +14,7 @@ import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveIm
 
 import logo from '@/public/og-logo.jpg';
 import { ArrowUpRight, XIcon } from "lucide-react";
+import Divider from "@/components/divider/Divider";
 
 type CreatePostFormProps = {
   session: Session | null;
@@ -217,7 +218,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
           <div className="label pt-1 text-xs flex flex-row justify-end">You can pull the right corner to resize it <ArrowUpRight /></div>
         </fieldset>
 
-        <div className="w-full mx-auto border border-primary h-0"></div>
+        <Divider />
 
         <fieldset className="fieldset">
           <label htmlFor="content" className="block text-sm font-medium text-gray-700">
@@ -232,7 +233,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
           <div className="label pt-1 text-xs flex flex-row justify-end">You can pull the right corner to resize it <ArrowUpRight /></div>
         </fieldset>
 
-        <div className="w-full mx-auto border border-primary h-0"></div>
+        <Divider />
 
         <fieldset className="fieldset">
           <legend className="fieldset-legend">Post Tags</legend>
@@ -263,7 +264,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
           <button type="button" onClick={handleAddTag} className="btn btn-primary mt-2">Add Tag</button>
         </fieldset>
 
-        <div className="w-full mx-auto border border-primary h-0"></div>
+        <Divider />
 
         <div className={blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''}>
           <fieldset className="fieldset">
@@ -315,7 +316,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
           </fieldset>
         </div>
 
-        <div className="w-full mx-auto border border-primary h-0"></div>
+        <Divider />
 
         <div className="flex flex-col self-center w-full max-w-[90%] gap-4">
           {blobResult && blobResult.map((image, idx) => {
