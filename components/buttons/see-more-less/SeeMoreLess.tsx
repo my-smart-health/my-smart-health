@@ -33,7 +33,7 @@ export default function SeeMoreLess({ text, lines, addClass }: { text: string, l
       {(isClamped || expanded) && (
         <span
           onClick={() => setExpanded(e => !e)}
-          className="text-primary ml-2 flex place-self-end cursor-pointer select-none font-semibold"
+          className="text-primary ml-2 flex place-self-end cursor-pointer select-none italic "
         >
           {expanded ? "Weniger anzeigen" : "Mehr erfahren"}
         </span>
