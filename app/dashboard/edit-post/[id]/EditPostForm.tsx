@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { PutBlobResult } from "@vercel/blob";
-import { FormEvent, MouseEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, MouseEvent, useRef, useEffect, useState } from "react";
 
 import logo from "@/public/og-logo.jpg";
 import { ArrowUpRight, XIcon } from "lucide-react";
@@ -33,10 +33,14 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
   }
 
   const inputFileRef = useRef<HTMLInputElement>(null);
+  const titleRef = useRef<HTMLTextAreaElement>(null);
+  const contentRef = useRef<HTMLTextAreaElement>(null);
   const [error, setError] = useState<string | null>(null);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   const [tags, setTags] = useState<string[]>(post.tags || []);
+  const [title, setTitle] = useState(post.title || "");
+  const [content, setContent] = useState(post.content || "");
 
   const [isDefaultLogo, setIsDefaultLogo] = useState<boolean>(false);
 
@@ -53,6 +57,17 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       );
     }
   }, [blobResult]);
+
+  useEffect(() => {
+    const resize = (el: HTMLTextAreaElement | null, value: string) => {
+      if (el) {
+        el.style.height = "auto";
+        if (value) el.style.height = el.scrollHeight + "px";
+      }
+    };
+    resize(titleRef.current, title);
+    resize(contentRef.current, content);
+  }, [title, content]);
 
   const handleAddURL = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -188,12 +203,82 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
     }
   };
 
+  const handleDeletePost = async (e: React.MouseEvent<HTMLButtonElement>, postId: string) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    e.preventDefault();
+    try {
+      setIsDisabled(true);
+      for (const photoUrl of blobResult) {
+        console.log('Deleting photo:', photoUrl);
+        await fetch(`/api/delete-picture?url=${encodeURIComponent(photoUrl)}`, {
+          method: 'DELETE',
+        });
+      }
+
+      const result = await fetch(`/api/delete-post?id=${postId}`, {
+        method: 'DELETE',
+      });
+
+      if (!result.ok) {
+        throw new Error('Failed to delete post');
+      }
+
+      setError('Post deleted successfully');
+
+      setTimeout(() => {
+        redirect(`/profile/${session.user.id}/news`);
+      }, 1500);
+
+    } catch (error) {
+      let message = 'Error deleting post';
+      if (error instanceof Error) {
+        message = error.message;
+        console.error(message);
+      }
+      setError(message);
+    } finally {
+      setIsDisabled(false);
+    }
+  };
+
   return (
     <>
       <span className="self-end mb-4">
         <GoBack />
       </span>
       {error && <p className={`${error === 'Post updated successfully' ? 'text-green-500' : 'text-red-500'} bg-secondary/10 border-2 border-primary rounded-2xl p-2 text-center break-all`}>{error}</p>}
+
+      <dialog id="delete_modal" className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box">
+          <p className="py-4">Are you sure you want to delete this post? This action cannot be undone.</p>
+          <div className="modal-action">
+            <form method="dialog" className="space-x-4">
+              {/* if there is a button in form, it will close the modal */}
+              <button
+                type="button"
+                className="btn btn-outline btn-error hover:text-white hover:bg-error/80 transition-colors p-2 rounded font-bold text-base"
+                onClick={(e) => { handleDeletePost(e, post.id) }}
+              >
+                Delete
+              </button>
+              <button
+                type="button"
+                className="btn btn-outline btn-primary hover:text-white hover:bg-primary/80 transition-colors p-2 rounded font-bold text-base"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const modal = document.getElementById('delete_modal') as HTMLDialogElement | null;
+                  if (modal) {
+                    modal.close();
+                  }
+                }}
+              >
+                Close
+              </button>
+            </form>
+          </div>
+        </div>
+      </dialog>
+
       {isDefaultLogo && <div className="flex flex-col items-center">
         <p className="text-yellow-500 bg-secondary/10 border-2 border-primary rounded-2xl p-2 text-center break-all">
           No image file was selected, default logo will be used
@@ -213,10 +298,16 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
             id="title"
             name="title"
             required
-            defaultValue={post.title}
+            ref={titleRef}
+            value={title}
+            onChange={e => setTitle(e.target.value)}
+            rows={title ? 1 : 3}
             className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+            style={{ overflow: "hidden" }}
           />
-          <div className="label pt-1 text-xs flex flex-row justify-end">You can pull the right corner to resize it <ArrowUpRight /></div>
+          <div className="label pt-1 text-xs flex flex-row justify-end">
+            You can pull the right corner to resize it <ArrowUpRight />
+          </div>
         </fieldset>
 
         <div className="w-full mx-auto border border-primary h-0"></div>
@@ -229,10 +320,16 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
             id="content"
             name="content"
             required
-            defaultValue={post.content}
+            ref={contentRef}
+            value={content}
+            onChange={e => setContent(e.target.value)}
+            rows={content ? 1 : 3}
             className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+            style={{ overflow: "hidden" }}
           />
-          <div className="label pt-1 text-xs flex flex-row justify-end">You can pull the right corner to resize it <ArrowUpRight /></div>
+          <div className="label pt-1 text-xs flex flex-row justify-end">
+            You can pull the right corner to resize it <ArrowUpRight />
+          </div>
         </fieldset>
 
         <div className="w-full mx-auto border border-primary h-0"></div>
@@ -331,8 +428,9 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                   alt={`Photo ${idx + 1}`}
                   width={200}
                   height={200}
+                  style={{ objectFit: "contain" }}
                   placeholder="empty"
-                  className="object-cover rounded-lg w-[200px] h-[200px] hover:z-10 hover:scale-200 hover:shadow-lg cursor-pointer transition-all"
+                  className="rounded-lg w-[200px] h-[200px] hover:z-10 hover:scale-200 hover:shadow-lg cursor-pointer transition-all"
                 />;
 
             return (
@@ -351,7 +449,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                     setBlobResultAction={setBlobResult}
                     showTop={idx > 0}
                     showBottom={idx < blobResult.length - 1}
-                    removeAddress={`/api/remove-picture?url=${encodeURIComponent(image)}`}
+                    removeAddress={`/api/delete-picture?url=${encodeURIComponent(image)}`}
                   />
                 </div>
               </div>
@@ -366,8 +464,30 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
           </div>
         )}
 
-        <button type="submit" className={`p-2 rounded bg-primary text-white font-bold text-base hover:bg-primary/80 transition-colors ${isImageFirst ? '' : 'opacity-50 pointer-events-none'}`}>
+        <button
+          type="button"
+          className="btn btn-outline btn-error p-2 rounded font-bold text-base hover:text-white hover:bg-error/80 transition-colors"
+          onClick={() => {
+            const modal = document.getElementById('delete_modal') as HTMLDialogElement | null;
+            if (modal) {
+              modal.showModal();
+            }
+          }}
+        >
+          Delete Post
+        </button>
+
+        <button
+          type="submit"
+          className={`btn btn-outline btn-success p-2 rounded font-bold text-base hover:text-white hover:bg-success/80 transition-colors ${isImageFirst ? '' : 'opacity-50 pointer-events-none'}`}>
           Update Post
+        </button>
+
+        <button
+          type="button"
+          onClick={() => redirect(`/news/${post.id}`)}
+          className="btn btn-outline btn-primary p-2 rounded font-bold text-base hover:bg-primary/80 transition-colors">
+          Cancel
         </button>
       </form >
     </>
