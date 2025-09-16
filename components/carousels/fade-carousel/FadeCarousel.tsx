@@ -1,5 +1,8 @@
 'use client'
+
 import Image from "next/image";
+import { Suspense, useState } from "react";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade, Mousewheel, Navigation, Pagination, Scrollbar } from "swiper/modules";
 import 'swiper/css';
@@ -9,11 +12,13 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
 import 'swiper/css/effect-fade';
-import { Suspense } from "react";
+
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 
 export default function FadeCarousel({ photos }: { photos: string[] }) {
+  const [zoomedIdx, setZoomedIdx] = useState<number | null>(null);
+
   return (
     <Suspense fallback={<div className="text-center skeleton min-h-[352px]">Loading...</div>}>
       <div className="w-full flex flex-col items-center">
@@ -26,10 +31,7 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
             effect="fade"
             grabCursor={true}
             navigation={true}
-            pagination={{
-              clickable: true,
-
-            }}
+            pagination={{ clickable: true }}
             fadeEffect={{ crossFade: true }}
             mousewheel={true}
             autoplay={{
@@ -52,22 +54,27 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
                 content = <InstagramEmbed embedHtml={item} width="100%" height="100%" />;
               } else {
                 content = (
-                  <Image
-                    loading="lazy"
-                    placeholder="empty"
-                    src={item}
-                    alt={item}
-                    fill
-                    sizes="(max-width: 600px) 100vw, 600px"
-                    style={{ objectFit: "contain" }}
-                    className="rounded-lg"
-                  />
+                  <div
+                    className="relative w-full h-full rounded-lg cursor-zoom-in"
+                    onClick={() => setZoomedIdx(idx)}
+                  >
+                    <Image
+                      loading="lazy"
+                      placeholder="empty"
+                      src={item}
+                      alt={item}
+                      fill
+                      sizes="(max-width: 600px) 100vw, 600px"
+                      style={{ objectFit: "contain" }}
+                      className="rounded-lg"
+                    />
+                  </div>
                 );
               }
 
               return (
                 <SwiperSlide key={idx} className="pb-10 text-white">
-                  <div className="relative w-full h-full flex justify-center items-center aspect-video">
+                  <div className="w-full h-full flex justify-center items-center aspect-video">
                     {content}
                   </div>
                 </SwiperSlide>
@@ -76,6 +83,36 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
           </Swiper>
         </div>
       </div>
+
+      {zoomedIdx !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 bg-opacity-80 transition-opacity"
+          onClick={() => setZoomedIdx(null)}
+        >
+          <div
+            className="relative max-w-3xl w-full flex justify-center items-center"
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-4 right-4 text-white text-3xl font-bold z-10"
+              onClick={() => setZoomedIdx(null)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <div className="relative w-full h-[60vh] md:h-[80vh]">
+              <Image
+                src={photos[zoomedIdx!]}
+                alt={`Zoomed photo ${zoomedIdx! + 1}`}
+                fill
+                style={{ objectFit: "contain" }}
+                className="rounded-lg shadow-lg"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </Suspense>
   );
 }
