@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar/Navbar";
 import Link from "next/link";
 import { auth } from "@/auth";
 import LogOut from "@/components/buttons/log-out/LogOut";
+import { Analytics } from "@vercel/analytics/next"
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -63,6 +64,7 @@ export default async function RootLayout({
             </span>
           }
         </footer>
+        <Analytics />
       </body>
     </html>
   );
