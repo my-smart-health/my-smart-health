@@ -61,7 +61,7 @@ export default async function DashboardPage() {
       <Divider />
 
       <section className="flex flex-col w-full rounded-2xl shadow-md">
-        <div className="font-semibold text-primary text-2xl text-center">Recipe</div>
+        <div className="font-semibold text-primary text-2xl text-center">Rezept</div>
 
         <Divider addClass="my-4" />
 
