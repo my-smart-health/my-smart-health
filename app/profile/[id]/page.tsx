@@ -66,10 +66,10 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         )}
         <ProfileFull user={safeUser} />
 
-        <Divider addClass="my-4" />
+        <Divider />
 
-        <section className="flex flex-col w-full rounded-2xl shadow-md">
-          <div className="font-semibold text-primary text-2xl text-center">Recipe</div>
+        <section className="flex flex-col w-full">
+          <div className="font-semibold text-primary text-2xl text-center">Rezept</div>
 
           <Divider addClass="my-4" />
 
