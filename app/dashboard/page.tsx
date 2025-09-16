@@ -5,11 +5,10 @@ import prisma from "@/lib/db";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import ProfileFull from "@/components/profile-full/ProfileFull";
-import CreateNewAccount from "@/components/buttons/create-new-account/CreateNewAccount";
-import ShortPosts from "@/components/posts/short-posts/ShortPosts";
 
 import { Schedule } from "@/utils/types";
 import Divider from "@/components/divider/Divider";
+import CreateNewAccount from "@/components/buttons/create-new-account/CreateNewAccount";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -79,21 +78,16 @@ export default async function DashboardPage() {
 
       <h1 className="mx-3 text-4xl font-extrabold  text-primary mb-6">Welcome, {user?.name || "User"}!</h1>
 
-      <div className="flex gap-4 mb-8">
-        <GoToButton src="/dashboard/create-post" name="New Post" className="btn btn-primary shadow" />
-        <GoToButton src="/dashboard/edit-profile" name="Edit Profile" className="btn btn-primary shadow" />
+      <div className="flex gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
+        <CreateNewAccount session={session} />
+        <GoToButton src="/dashboard/edit-profile" name="Edit Profile" className="btn btn-outline btn-warning hover:text-white shadow" />
+        <GoToButton src="/dashboard/create-post" name="New Post" className="btn btn-outline btn-success hover:text-white shadow" />
       </div>
 
       {safeUser && <ProfileFull user={safeUser} />}
 
       <Divider />
 
-      <section className="flex flex-col w-full rounded-2xl shadow-md">
-        <div className="font-semibold text-primary text-2xl text-center">My Posts</div>
-        {safePosts && <ShortPosts posts={safePosts} session={session} />}
-      </section>
-
-      <CreateNewAccount session={session} />
     </main >
   );
 }
