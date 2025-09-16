@@ -7,10 +7,7 @@ export default function CreateNewAccount({ session }: { session: Session | null 
     <>
       {
         session && session.user.role === 'ADMIN' && (
-          <div className="mt-8">
-            <span className="mr-2">Create new account</span>
-            <Link href="/register" className="btn btn-accent text-white">here</Link>
-          </div>
+          <Link href="/register" className="btn btn-outline btn-error hover:text-white">Create new account</Link>
         )
       }
     </>
