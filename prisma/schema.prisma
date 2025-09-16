@@ -17,15 +17,16 @@ model User {
   createdAt        DateTime  @default(now())
   emailVerified    DateTime? @default(now())
   name             String?
-  profileImages    String[]
   address          String?
   location         String?
   displayEmail     String?
   website          String?
   bio              String?
   profileType      String
-  category         String[]
+  certificates     String[]
   schedule         Json?
+  profileImages    String[]
+  category         String[]
   fieldOfExpertise String[]
   phone            String[]
   socials          String[]
