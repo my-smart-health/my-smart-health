@@ -39,21 +39,23 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
 
           pagination={{ clickable: true, enabled: true }}
         >
-          {props.map((userProfile) => (
+          {props.map((news) => (
             <SwiperSlide
-              key={userProfile.id}
+              key={news.id}
               className="cursor-pointer pb-6">
-              <Link href={`/profile/${userProfile.id}/news`}>
+              <Link href={`/news/${news.id}`}>
+                {/* <Link href={`/profile/${userProfile.id}/news`}> */}
                 <Image
                   loading="lazy"
                   placeholder="empty"
                   width={400}
                   height={400}
-                  alt={userProfile.name}
-                  src={userProfile.profileImage}
+                  alt={news.name}
+                  src={news.profileImage}
+                  style={{ objectFit: 'contain' }}
                   className="rounded-box border-6 border-primary aspect-square"
                 />
-                <p className="text-center break-words line-clamp-1 text-[#2c2e35] mb-4">{userProfile.name}</p>
+                <p className="text-center break-words line-clamp-1 text-[#2c2e35] mb-4">{news.name}</p>
               </Link>
             </SwiperSlide>
           ))}
