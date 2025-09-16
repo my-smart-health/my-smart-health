@@ -20,11 +20,11 @@ export default function Navbar() {
               priority
               loading="eager"
               draggable={false}
-              src="/og-logo.jpg"
+              src="/logo-nav.jpg"
               alt="My Smart Health"
               width={350}
               height={112}
-              className="w-96 h-auto mx-auto"
+              className="w-96 h-auto my-3 mx-auto"
             />
             <span className="ml-2 text-xl font-bold uppercase sr-only">My Smart Health</span>
           </Link>
