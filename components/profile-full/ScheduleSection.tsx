@@ -21,9 +21,10 @@ export default function ScheduleSection({ schedule }: { schedule: Schedule[] }) 
 
   function getFirstLastDay(schedule: Schedule) {
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
+    const daysDe = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
     const allDays = days.filter(day => schedule.day[day as keyof typeof schedule.day] === true)
       .filter(day => day[0] || day[1])
+      .map(day => daysDe[days.indexOf(day)]);
 
     return <span>{allDays[0]} - {allDays[allDays.length - 1]}</span>
     // all days
@@ -32,9 +33,11 @@ export default function ScheduleSection({ schedule }: { schedule: Schedule[] }) 
 
   function getAllDays(schedule: Schedule) {
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    const daysDe = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
 
     const allDays = days.filter(day => schedule.day[day as keyof typeof schedule.day] === true)
       .filter(day => day[0] || day[1])
+      .map(day => daysDe[days.indexOf(day)]);
 
     return allDays;
   }
