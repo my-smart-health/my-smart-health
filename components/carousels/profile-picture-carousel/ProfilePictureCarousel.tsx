@@ -1,7 +1,7 @@
 'use client'
 
 import Image from "next/image";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Scrollbar, EffectCards, Navigation, Pagination } from "swiper/modules";
@@ -18,6 +18,7 @@ import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 
 
 export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArray?: string[] }) {
+  const [zoomedIdx, setZoomedIdx] = useState<number | null>(null);
 
   if (!imageSrcArray || imageSrcArray.length === 0) {
     return <div className="skeleton animate-pulse h-64 bg-gray-200 rounded-lg"></div>;
@@ -79,7 +80,7 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
           } else if (isValidImageUrl(image)) {
             return (
               <SwiperSlide key={idx} className="my-4">
-                <div className="rounded-box cursor-pointer">
+                <div className="relative rounded-box cursor-zoom-in">
                   <Image
                     loading="lazy"
                     placeholder="empty"
@@ -88,6 +89,10 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
                     src={image}
                     alt={image}
                     className="aspect-square w-auto h-auto object-scale-down rounded-lg"
+                    onClick={e => {
+                      e.preventDefault();
+                      setZoomedIdx(idx);
+                    }}
                   />
                 </div>
                 <br />
@@ -105,7 +110,37 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
             </SwiperSlide>
           );
         })}
+
       </Swiper>
+      {zoomedIdx !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 transition-opacity cursor-zoom-out"
+          onClick={() => setZoomedIdx(null)}
+        >
+          <div
+            className="relative max-w-3xl w-full flex justify-center items-center cursor-zoom-out"
+            onClick={e => { e.stopPropagation(); setZoomedIdx(null); }}
+          >
+            <button
+              className="absolute top-4 right-4 text-white text-3xl font-bold z-10 cursor-pointer"
+              onClick={() => setZoomedIdx(null)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <div className="relative w-full h-[60vh] md:h-[80vh]">
+              <Image
+                src={imageSrcArray[zoomedIdx!]}
+                alt={`Zoomed photo ${zoomedIdx! + 1}`}
+                fill
+                style={{ objectFit: "contain" }}
+                className="rounded-lg shadow-lg"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </Suspense>
   );
 }

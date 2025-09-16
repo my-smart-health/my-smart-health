@@ -1,9 +1,11 @@
 'use client'
-import { Suspense } from "react";
+import Link from "next/link";
 import Image from "next/image";
+import { Suspense } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectCube, Mousewheel, Navigation, Pagination, Scrollbar } from "swiper/modules";
+
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -11,8 +13,8 @@ import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
 import 'swiper/css/effect-cube';
+
 import NewsCarouselSkeleton from "./NewsCarouselSkeleton";
-import Link from "next/link";
 
 type NewsCarouselProps = {
   props?: {
@@ -30,7 +32,7 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
 
   return (
     <Suspense fallback={<NewsCarouselSkeleton />}>
-      <div className="mx-auto max-w-2xs min-h-[300px] md:max-w-sm">
+      <div className="mx-auto max-w-2xs md:max-w-sm min-h-[300px]">
         <Swiper
           modules={[Scrollbar, Navigation, Pagination, Mousewheel, Autoplay, EffectCube]}
           spaceBetween={0}

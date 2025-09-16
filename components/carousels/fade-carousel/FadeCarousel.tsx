@@ -86,15 +86,15 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
 
       {zoomedIdx !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 bg-opacity-80 transition-opacity"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 bg-opacity-80 transition-opacity cursor-zoom-out"
           onClick={() => setZoomedIdx(null)}
         >
           <div
-            className="relative max-w-3xl w-full flex justify-center items-center"
-            onClick={e => e.stopPropagation()}
+            className="relative max-w-3xl w-full flex justify-center items-center cursor-zoom-out"
+            onClick={e => { e.stopPropagation(); setZoomedIdx(null); }}
           >
             <button
-              className="absolute top-4 right-4 text-white text-3xl font-bold z-10"
+              className="absolute top-4 right-4 text-white text-3xl font-bold z-10 cursor-pointer"
               onClick={() => setZoomedIdx(null)}
               aria-label="Close"
             >

@@ -1,6 +1,5 @@
 'use client'
-import { Suspense } from "react";
-
+import { Suspense, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Pagination } from "swiper/modules";
 import 'swiper/css';
@@ -21,6 +20,7 @@ type ProfileNewsCarouselItemProps = {
 };
 
 export default function ProfileNewsCarousel({ props, disableOnInteraction = false }: ProfileNewsCarouselItemProps) {
+  const [zoomedIdx, setZoomedIdx] = useState<number | null>(null);
 
   if (!props || props.length === 0) {
     return <div>No profiles found</div>;
@@ -36,14 +36,15 @@ export default function ProfileNewsCarousel({ props, disableOnInteraction = fals
           mousewheel={true}
           autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction, pauseOnMouseEnter: true, waitForTransition: true }}
           speed={300}
-
           pagination={{ clickable: true, enabled: true }}
         >
-          {props.map((item) => (
+          {props.map((item, idx) => (
             <SwiperSlide
               key={item.id}
               className="cursor-pointer pb-6">
-              <Link href={`/news/${item.id}`}>
+              <div
+                className="relative"
+              >
                 <Image
                   loading="lazy"
                   placeholder="empty"
@@ -51,14 +52,49 @@ export default function ProfileNewsCarousel({ props, disableOnInteraction = fals
                   height={400}
                   alt={item.title}
                   src={item.photos && item.photos.length > 0 ? item.photos[0] : ''}
-                  className="rounded-box border-6 border-primary aspect-square"
+                  className="rounded-box border-6 border-primary aspect-square cursor-zoom-in"
+                  onClick={e => {
+                    e.preventDefault();
+                    setZoomedIdx(idx);
+                  }}
                 />
-                <p className="text-center break-words line-clamp-1 text-[#2c2e35] mb-4">{item.title}</p>
-              </Link>
+                <Link href={`/news/${item.id}`} className="link">
+                  <p className="text-center break-words line-clamp-1 text-[#2c2e35] mb-4">{item.title}</p>
+                </Link>
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>
       </div>
+      {zoomedIdx !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 transition-opacity cursor-zoom-out"
+          onClick={() => setZoomedIdx(null)}
+        >
+          <div
+            className="relative max-w-3xl w-full flex justify-center items-center cursor-zoom-out"
+            onClick={e => { e.stopPropagation(); setZoomedIdx(null); }}
+          >
+            <button
+              className="absolute top-4 right-4 text-white text-3xl font-bold z-10 cursor-pointer"
+              onClick={() => setZoomedIdx(null)}
+              aria-label="Close"
+            >
+              &times;
+            </button>
+            <div className="relative w-full h-[60vh] md:h-[80vh]">
+              <Image
+                src={props[zoomedIdx!].photos && props[zoomedIdx!].photos.length > 0 ? props[zoomedIdx!].photos[0] : ''}
+                alt={`Zoomed photo ${zoomedIdx! + 1}`}
+                fill
+                style={{ objectFit: "contain" }}
+                className="rounded-lg shadow-lg"
+                priority
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </Suspense>
   );
 }
