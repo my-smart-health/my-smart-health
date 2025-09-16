@@ -63,7 +63,7 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
                     style={{ objectFit: "contain" }}
                     className="aspect-square rounded-t-lg"
                   />
-                  <span className="text-center line-clamp-1 p-1 text-white text-xl w-full bg-primary rounded-b-lg">
+                  <span className="text-center line-clamp-1 p-1 text-white text-xl w-full bg-primary rounded-b">
                     {item.info}
                   </span>
                 </div>
