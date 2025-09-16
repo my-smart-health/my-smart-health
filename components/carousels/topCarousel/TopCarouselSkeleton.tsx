@@ -13,7 +13,7 @@ type TopCarouselSkeletonProps = {
 
 export default function TopCarouselSkeleton({ times = 7 }: TopCarouselSkeletonProps) {
   return (
-    <div className="h-44 max-w-full">
+    <div className="min-h-36 max-h-fit max-w-full">
       <Swiper
         modules={[Scrollbar, Mousewheel, Autoplay]}
         spaceBetween={50}

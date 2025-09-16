@@ -28,7 +28,7 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
 
   return (
     <Suspense fallback={<TopCarouselSkeleton times={7} />}>
-      <div draggable={false} className="h-44 max-w-full">
+      <div draggable={false} className="min-h-36 max-h-fit max-w-full">
         <Swiper
           modules={[Pagination, Mousewheel, Autoplay]}
           spaceBetween={4}
