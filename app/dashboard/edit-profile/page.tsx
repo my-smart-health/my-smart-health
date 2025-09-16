@@ -45,7 +45,7 @@ export default async function EditProfile() {
       <h1 className="text-4xl font-extrabold text-primary mb-6">Edit Profile</h1>
       <EditProfileForm user={parsedUser} />
       {
-        session?.user?.role === "ADMIN" && (
+        session?.user?.role === "ADMIN" && parsedUser.id !== session.user.id && (
           <div
             className="text-sm text-gray-500 italic mt-4">
             <Link
