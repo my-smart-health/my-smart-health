@@ -3,6 +3,8 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar/Navbar";
 import Link from "next/link";
+import { auth } from "@/auth";
+import LogOut from "@/components/buttons/log-out/LogOut";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -36,6 +38,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <head>
@@ -54,7 +57,11 @@ export default async function RootLayout({
           <span className="mx-1">|</span>
           <Link href="/kontakt" className="hover:underline capitalize">Kontakt</Link>
           <span className="mx-1">|</span>
-          <Link href="/login" className="hover:underline capitalize">Login</Link>
+          {session && !session.user.id ? <Link href="/login" className="hover:underline capitalize">Login</Link> :
+            <span className="mx-1">
+              <LogOut />
+            </span>
+          }
         </footer>
       </body>
     </html>
