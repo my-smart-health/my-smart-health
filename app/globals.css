@@ -50,3 +50,14 @@ span.swiper-pagination-bullet-active {
 .swiper-button-prev::after {
   color: white;
 }
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Slow down the spin animation */
+.spin-slow {
+  animation: spin 10s linear infinite;
+}
