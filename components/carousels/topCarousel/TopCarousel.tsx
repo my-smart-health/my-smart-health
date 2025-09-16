@@ -28,7 +28,7 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
 
   return (
     <Suspense fallback={<TopCarouselSkeleton times={7} />}>
-      <div draggable={false} className="max-w-2xs md:max-w-sm">
+      <div draggable={false} className="h-44 max-w-full">
         <Swiper
           modules={[Pagination, Mousewheel, Autoplay]}
           spaceBetween={4}
@@ -44,7 +44,6 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
               key={news.id}
               className="cursor-pointer pb-6">
               <Link href={`/news/${news.id}`}>
-                {/* <Link href={`/profile/${userProfile.id}/news`}> */}
                 <Image
                   loading="lazy"
                   placeholder="empty"
