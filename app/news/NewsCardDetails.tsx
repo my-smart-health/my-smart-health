@@ -7,7 +7,6 @@ import { Session } from "next-auth";
 import { NewsCardType } from "@/utils/types";
 
 import GoBack from "@/components/buttons/go-back/GoBack";
-import GoToButton from "@/components/buttons/go-to/GoToButton";
 import SeeMoreLess from "@/components/buttons/see-more-less/SeeMoreLess";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
 import Divider from "@/components/divider/Divider";
