@@ -64,13 +64,19 @@ export default function NewsCardDetails({ newsData, session }: { newsData: NewsC
 
             <div className="flex flex-col items-center space-y-2 mb-4">
               {author?.name &&
-                <div className="card-actions justify-center">
-                  <GoToButton name={`zum Anbieter ${author.name}`} src={`/profile/${author.id}`} className="btn btn-wide bg-primary rounded-xl text-secondary" />
+                <div className="card-actions justify-center w-full">
+                  <Link
+                    href={`/profile/${author.id}`}
+                    className="flex flex-col py-2 w-full max-w-[90%] btn bg-primary rounded-xl text-white text-lg h-fit"
+                  >
+                    <div className="w-full">zum Anbieter</div>
+                    <div className="w-full">{author.name}</div>
+                  </Link>
                 </div>
               }
 
               {session?.user.role === "ADMIN" || session?.user.id === author?.id
-                ? <Link href={`/dashboard/edit-post/${id}`} className="self-center btn btn-wide btn-warning rounded-xl">Edit Post</Link>
+                ? <Link href={`/dashboard/edit-post/${id}`} className="self-center text-lg btn btn-wide btn-warning rounded-xl">Edit Post</Link>
                 : null
               }
             </div>
