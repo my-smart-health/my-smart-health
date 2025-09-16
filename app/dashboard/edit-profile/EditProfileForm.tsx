@@ -217,499 +217,554 @@ export default function EditProfileForm({ user }: { user: User }) {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center content-center max-w-full">
-        {blobResult && blobResult.length > 0 ? (
-          <div className="max-w-full">
-            <Suspense fallback={<div className={`text-center skeleton min-h-[${MAX_FILES_PER_USER}]`}>Loading...</div>}>
-              <FadeCarousel photos={blobResult} />
-            </Suspense>
-          </div>
-        ) : (
-          <div className="text-center skeleton min-h-[352px]">No Images</div>
-        )}
-      </div>
-      {error && <p className="text-red-500 p-2">{error}</p>}
+      {error && <p className="text-red-500 p-2">{error}</p>
+      }
       <form
         onSubmit={handleSubmit}
-        className={`w-full max-w-3xl rounded-2xl shadow-xl border-1 border-primary p-4 gap-8 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
+        className={`w-full ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
       >
-        <div className="flex-1 flex flex-col gap-4">
+        <div className="tabs tabs-box w-full max-w-full">
 
-          <div>
-            <fieldset className={`fieldset mb-5 ${blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''}`}>
-              <legend className="fieldset-legend">Select File</legend>
-              <div className="flex flex-wrap gap-4 w-full">
-                <input
-                  type="file"
-                  ref={inputFileRef}
-                  id="image"
-                  name="image"
-                  accept="image/*"
-                  multiple={true}
-                  className={`${blobResult && blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full`}
-                  onChange={async e => {
-                    const files = e.target.files;
-                    if (!files) return;
-                    if (blobResult.length + files.length > MAX_FILES_PER_USER) {
-                      window.scrollTo({ top: 0, behavior: "smooth" });
-                      setError(`You can select up to ${MAX_FILES_PER_USER} files only.`);
-                      e.target.value = "";
-                      return;
-                    }
-                    const uploadedImages = await handleImageUpload(files);
-                    setBlobResult(prev => [...prev, ...uploadedImages]);
-                    setError(null);
-                  }} />
-              </div>
-            </fieldset>
+          <Divider addClass="my-4" />
 
-            <div className="w-full my-5 mx-auto border border-primary h-0"></div>
-
-            <fieldset className={blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''}>
-              <legend className="fieldset-legend">Add Media URL</legend>
-              <div className="flex flex-col gap-4 w-full">
-                <label htmlFor={`media`} className="">Media URL must be a valid URL from YouTube or Instagram</label>
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Name/Bio" defaultChecked />
+          <div className="tab-content border-primary p-10">
+            <section>
+              <label className="flex flex-col gap-2">
+                <span className="font-semibold text-gray-700">Name</span>
                 <input
                   type="text"
-                  name={`media`}
-                  placeholder="https://"
+                  name="name"
+                  defaultValue={userData.name ? userData.name : ""}
                   className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
                 />
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    handleAddURL(e)
-                  }}
-                  className="btn w-full btn-primary mt-2"
-                >
-                  Upload Media URL
-                </button>
-                <div className="flex flex-wrap max-w-[50%] gap-4 text-wrap mx-auto">
-                  {blobResult && blobResult.length > 0 && (
-                    <>
-                      <div className="text-sm">You can add up to {MAX_FILES_PER_USER} media files (images, Instagram videos, or YouTube videos)</div>
-                      <p className="text-wrap text-warning">NB: Please ensure that the first media is image.</p>
-                    </>
-                  )}
-                </div>
-              </div>
-            </fieldset>
+              </label>
+            </section>
 
-            <div className="w-full my-5 mx-auto border border-primary h-0"></div>
+            <Divider addClass="my-4" />
 
-            <div className="flex flex-col items-center gap-8 w-full max-w-[90%]">
-              {blobResult.map((mediaUrl, idx) => {
-                const isYoutube = /youtu(be)?/.test(mediaUrl);
-                const isInstagram = /instagram/.test(mediaUrl);
-
-                const media = (
-                  <div
-                    className={
-                      isYoutube
-                        ? "aspect-video flex items-center justify-center rounded-lg overflow-hidden bg-primary/20"
-                        : "aspect-square flex items-center justify-center rounded-lg overflow-hidden bg-primary/20 max-w-[200px]"
-                    }
-                  >
-                    {isYoutube ? (
-                      <YoutubeEmbed embedHtml={mediaUrl} width={200} height={112} />
-                    ) : isInstagram ? (
-                      <InstagramEmbed embedHtml={mediaUrl} width={MEDIA_WIDTH} height={MEDIA_HEIGHT} />
-                    ) : (
-                      <div className="relative w-[200px] h-[200px]">
-                        <Image
-                          src={mediaUrl}
-                          alt={`Photo ${idx + 1}`}
-                          fill
-                          sizes="(max-width: 600px) 100vw, 200px"
-                          style={{ objectFit: "cover" }}
-                          className="rounded-lg hover:scale-150 transition-transform duration-300 ease-in-out"
-                        />
-                      </div>
-                    )}
-                  </div>
-                );
-
-                return (
-                  <div
-                    key={mediaUrl + idx}
-                    className="flex flex-row items-center justify-center gap-6 w-full"
-                  >
-                    {media}
-                    <div className="flex flex-col items-center gap-2">
-                      <MoveImageVideo
-                        index={idx}
-                        blobResult={blobResult}
-                        setBlobResultAction={setBlobResult}
-                        showTop={idx > 0}
-                        showBottom={idx < blobResult.length - 1}
-                        removeAddress={`/api/delete-picture?url=${encodeURIComponent(mediaUrl)}`}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="w-full my-5 mx-auto border border-primary h-0"></div>
-
+            <section>
+              <label className="flex flex-col gap-2">
+                <span className="font-semibold text-gray-700">Bio</span>
+                <textarea
+                  name="bio"
+                  defaultValue={userData.bio ? userData.bio : ""}
+                  className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                  rows={5}
+                />
+              </label>
+            </section>
           </div>
 
-          <label className="flex flex-col">
-            <span className="font-semibold text-gray-700">Name</span>
-            <input
-              type="text"
-              name="name"
-              defaultValue={userData.name ? userData.name : ""}
-              className="mt-1 p-2 rounded border-1 border-primary shadow-sm"
-            />
-          </label>
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Address/Phone" />
+          <div className="tab-content border-primary p-10">
 
-          <label className="flex flex-col">
-            <span className="font-semibold text-gray-700">Bio</span>
-            <textarea
-              name="bio"
-              defaultValue={userData.bio ? userData.bio : ""}
-              className="mt-1 p-2 rounded border-1 border-primary shadow-sm"
-              rows={5}
-            />
-          </label>
+            <section>
+              <label className="flex flex-col gap-2">
+                <span className="font-semibold text-gray-700">Address</span>
+                <textarea
+                  name="address"
+                  defaultValue={userData.address ? userData.address : ""}
+                  className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                  placeholder="Deutschland, Düsseldorf, Kölner Straße 123"
+                  rows={5}
+                />
+              </label>
+            </section>
 
-          <Divider />
+            <Divider addClass="my-4" />
 
-          <label className="flex flex-col">
-            <span className="font-semibold text-gray-700">Address</span>
-            <textarea
-              name="address"
-              defaultValue={userData.address ? userData.address : ""}
-              className="mt-1 p-2 rounded border-1 border-primary shadow-sm"
-              placeholder="Deutschland, Düsseldorf, Kölner Straße 123"
-              rows={5}
-            />
-          </label>
-
-          <Divider />
-
-          <label className="flex flex-col">
-            <span className="font-semibold text-gray-700">Email (Display)</span>
-            <input
-              type="email"
-              name="displayEmail"
-              defaultValue={userData.displayEmail ? userData.displayEmail : ""}
-              className="mt-1 p-2 rounded border-1 border-primary shadow-sm"
-            />
-          </label>
-
-          <label className="flex flex-col">
-            <span className="font-semibold text-gray-700">{platformIcons['Website']}Website</span>
-            <input
-              type="url"
-              name="website"
-              defaultValue={userData.website ? userData.website : ""}
-              className="mt-1 p-2 rounded border-1 border-primary shadow-sm"
-            />
-          </label>
-
-          <Divider />
-
-          {!phoneNumbers.length && <span className="font-semibold text-gray-700">{platformIcons['Phone']} Phone Numbers</span>}
-          {phoneNumbers.map((phone, idx) => (
-            <div className="flex flex-row flex-1 gap-2 items-center " key={idx}>
-              <div className="flex flex-col flex-1 ">
-                <span className="font-semibold text-gray-700">{platformIcons['Phone']} Phone Number</span>
-                <label htmlFor={`phone[${idx}]`} className="flex flex-row gap-2">
-                  <input
-                    type="text"
-                    name={`phone[${idx}]`}
-                    value={phone}
-                    onChange={e => {
-                      const updated = [...phoneNumbers];
-                      updated[idx] = e.target.value;
-                      setPhoneNumbers(updated);
-                    }}
-                    className="mt-1 p-2 flex-1 rounded border-1 align-baseline border-primary shadow-sm"
-                  />
-                </label>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    phoneNumbers.splice(idx, 1);
-                    setPhoneNumbers([...phoneNumbers]);
-                  }}
-                  className="flex place-self-end mt-4  w-fit align-bottom text-red-500"
-                >
-                  Remove
-                </button>
-              </div>
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={() => setPhoneNumbers([...phoneNumbers, ""])}
-            className="mt-2 px-3 py-1 bg-primary text-white rounded"
-          >
-            Add Phone Number
-          </button>
-
-          <Divider />
-
-          {!fieldOfExpertise.length && <span className="font-semibold text-gray-700">Area of Expertise</span>}
-          {fieldOfExpertise.map((expertise, idx) => (
-            <div className="flex flex-row flex-1 gap-2 items-center " key={idx}>
-              <div className="flex flex-col flex-1 ">
-                <span className="font-semibold text-gray-700">{platformIcons['Expertise']} Area of Expertise</span>
-                <label htmlFor={`expertise[${idx}]`} className="flex flex-row gap-2">
-                  <input
-                    type="text"
-                    name={`expertise[${idx}]`}
-                    value={expertise}
-                    onChange={e => {
-                      const updated = [...fieldOfExpertise];
-                      updated[idx] = e.target.value;
-                      setFieldOfExpertise(updated);
-                    }}
-                    className="mt-1 p-2 flex-1 rounded border-1 align-baseline border-primary shadow-sm"
-                  />
-                </label>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    fieldOfExpertise.splice(idx, 1);
-                    setFieldOfExpertise([...fieldOfExpertise]);
-                  }}
-                  className="flex place-self-end mt-4  w-fit align-bottom text-red-500"
-                >
-                  Remove
-                </button>
-              </div>
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={() => setFieldOfExpertise([...fieldOfExpertise, ""])}
-            className="mt-2 px-3 py-1 bg-primary text-white rounded"
-          >
-            Add Area of Expertise
-          </button>
-
-          <Divider />
-
-          <div className="flex flex-col w-full max-w-[99.9%]">
-            <span className="font-semibold text-gray-700">Socials</span>
-            <div className="flex flex-col gap-2 mt-1">
-              {socials.map((social, idx) => (
-                <div key={idx} className="flex flex-row flex-wrap gap-4 items-center mb-4">
-                  <input
-                    type="text"
-                    placeholder="URL"
-                    value={social.url}
-                    onChange={e => {
-                      const updated = [...socials];
-                      updated[idx].url = e.target.value;
-                      setSocials(updated);
-                    }}
-                    className="flex-1 rounded border-1 border-primary shadow-sm p-2"
-                  />
-                  <div className="flex flex-col w-full gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className=" flex items-center justify-center  max-w-[40px]">
-                        {platformIcons[social.platform] || null}
-                      </span>
-                      <select
-                        className="select select-ghost"
-                        name={`socials[${idx}].platform`}
-                        value={social.platform}
+            <section className="space-y-4">
+              {!phoneNumbers.length && <span className="font-semibold text-gray-700">{platformIcons['Phone']} Phone Numbers</span>}
+              {phoneNumbers.map((phone, idx) => (
+                <div className="flex flex-row flex-1 gap-2 items-center " key={idx}>
+                  <div className="flex flex-col flex-1 gap-2">
+                    <span className="font-semibold text-gray-700">{platformIcons['Phone']} Phone Number</span>
+                    <label htmlFor={`phone[${idx}]`} className="flex flex-row gap-2">
+                      <input
+                        type="text"
+                        name={`phone[${idx}]`}
+                        value={phone}
                         onChange={e => {
-                          const updated = [...socials];
-                          updated[idx].platform = e.target.value;
-                          setSocials(updated);
+                          const updated = [...phoneNumbers];
+                          updated[idx] = e.target.value;
+                          setPhoneNumbers(updated);
                         }}
-                      >
-                        <option disabled value="">Pick a platform</option>
-                        <option value="Email">Email</option>
-                        <option value="Website">Website</option>
-                        <option value="Facebook">Facebook</option>
-                        <option value="Linkedin">Linkedin</option>
-                        <option value="X">X.com</option>
-                        <option value="Youtube">Youtube</option>
-                        <option value="TikTok">TikTok</option>
-                        <option value="Instagram">Instagram</option>
-                      </select>
-                    </div>
+                        className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                      />
+                    </label>
 
                     <button
                       type="button"
-                      onClick={() => setSocials(socials.filter((_, i) => i !== idx))}
-                      className="text-red-500 self-end"
+                      onClick={() => {
+                        phoneNumbers.splice(idx, 1);
+                        setPhoneNumbers([...phoneNumbers]);
+                      }}
+                      className="btn btn-outline flex place-self-end mt-4  w-fit align-bottom text-red-500"
                     >
                       Remove
                     </button>
                   </div>
                 </div>
               ))}
-            </div>
-            <button
-              type="button"
-              onClick={() => setSocials([...socials, { platform: '', url: '' }])}
-              className="mt-2 px-3 py-1 bg-primary text-white rounded"
-            >
-              Add Social Link
-            </button>
+
+              <Divider addClass="my-4" />
+
+              <button
+                type="button"
+                onClick={() => setPhoneNumbers([...phoneNumbers, ""])}
+                className="btn btn-outline btn-primary px-3 py-1 w-full"
+              >
+                Add Phone Number
+              </button>
+            </section>
           </div>
 
-          <Divider />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Email/Social Links" />
+          <div className="tab-content border-primary p-10">
 
-          {
-            schedule.map((item, idx) => (
-              <fieldset
-                key={item.id}
-                className="fieldset grid-cols-2 max-w-[99.9%]">
-                <legend className="fieldset-legend ">Work Schedule</legend>
-                <div className="grid grid-cols-1 w-full max-w-[99.9%] gap-2">
-                  <label htmlFor="schedule" className="label">
+            <section about="links" className="space-y-4">
+              <label className="flex flex-col gap-2">
+                <span className="font-semibold text-gray-700">Email (Display)</span>
+                <input
+                  type="email"
+                  name="displayEmail"
+                  defaultValue={userData.displayEmail ? userData.displayEmail : ""}
+                  className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                />
+              </label>
+
+              <label className="flex flex-col gap-2">
+                <span className="font-semibold text-gray-700">{platformIcons['Website']}Website</span>
+                <input
+                  type="url"
+                  name="website"
+                  defaultValue={userData.website ? userData.website : ""}
+                  className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                />
+              </label>
+
+              <Divider addClass="my-4" />
+
+              <div className="flex flex-col gap-2 mt-1">
+                <span className="font-semibold text-gray-700">Socials</span>
+                {socials.map((social, idx) => (
+                  <div key={idx} className="flex flex-row flex-wrap gap-4 items-center mb-4">
                     <input
-                      type="checkbox"
-                      name="schedule-monday"
-                      value="Monday"
-                      className="checkbox"
-                      checked={item.day.Monday}
-                      onChange={() => toggleScheduleDay(item.id, 'Monday')}
+                      type="text"
+                      placeholder="URL"
+                      value={social.url}
+                      onChange={e => {
+                        const updated = [...socials];
+                        updated[idx].url = e.target.value;
+                        setSocials(updated);
+                      }}
+                      className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary flex-1 min-w-[200px]"
                     />
-                    Montag
-                  </label>
-                  <label htmlFor="schedule" className="label">
-                    <input
-                      type="checkbox"
-                      name="schedule-tuesday"
-                      value="Tuesday"
-                      className="checkbox"
-                      checked={item.day.Tuesday}
-                      onChange={() => toggleScheduleDay(item.id, 'Tuesday')}
-                    />
-                    Dienstag
-                  </label>
-                  <label htmlFor="schedule" className="label">
-                    <input
-                      type="checkbox"
-                      name="schedule-wednesday"
-                      value="Wednesday"
-                      className="checkbox"
-                      checked={item.day.Wednesday}
-                      onChange={() => toggleScheduleDay(item.id, 'Wednesday')}
-                    />
-                    Mittwoch
-                  </label>
-                  <label htmlFor="schedule" className="label">
-                    <input
-                      type="checkbox"
-                      name="schedule-thursday"
-                      value="Thursday"
-                      className="checkbox"
-                      checked={item.day.Thursday}
-                      onChange={() => toggleScheduleDay(item.id, 'Thursday')}
-                    />
-                    Donnerstag
-                  </label>
-                  <label htmlFor="schedule" className="label">
-                    <input
-                      type="checkbox"
-                      name="schedule-friday"
-                      value="Friday"
-                      className="checkbox"
-                      checked={item.day.Friday}
-                      onChange={() => toggleScheduleDay(item.id, 'Friday')}
-                    />
-                    Freitag
-                  </label>
-                  <label htmlFor="schedule" className="label">
-                    <input
-                      type="checkbox"
-                      name="schedule-saturday"
-                      value="Saturday"
-                      className="checkbox"
-                      checked={item.day.Saturday}
-                      onChange={() => toggleScheduleDay(item.id, 'Saturday')}
-                    />
-                    Samstag
-                  </label>
-                  <label htmlFor="schedule" className="label">
-                    <input
-                      type="checkbox"
-                      name="schedule-sunday"
-                      value="Sunday"
-                      className="checkbox"
-                      checked={item.day.Sunday}
-                      onChange={() => toggleScheduleDay(item.id, 'Sunday')}
-                    />
-                    Sonntag
-                  </label>
-                </div>
-                <div className="grid grid-rows-2 gap-3 justify-baseline mt-4 w-full max-w-[99.9%]">
-                  <label htmlFor="time" className="label text-center flex-col">
-                    <span className="label-text">Time start</span>
-                    <div className="flex flex-col">
-                      <input
-                        type="time"
-                        id="time"
-                        name="time-start"
-                        value={item.open}
-                        className="border border-primary p-2 rounded"
-                        onChange={(e) => setScheduleTime(item.id, 'open', e.target.value)}
-                      />
-                      <span className="text-xs text-gray-500 w-fit flex flex-nowrap">click here to set <ArrowUpRight /></span>
+                    <div className="flex flex-col w-full gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className=" flex items-center justify-center  max-w-[40px]">
+                          {platformIcons[social.platform] || null}
+                        </span>
+                        <select
+                          className="select select-bordered select-primary w-full max-w-xs border-primary"
+                          name={`socials[${idx}].platform`}
+                          value={social.platform}
+                          onChange={e => {
+                            const updated = [...socials];
+                            updated[idx].platform = e.target.value;
+                            setSocials(updated);
+                          }}
+                        >
+                          <option disabled value="">Pick a platform</option>
+                          <option className="select-option" value="Email">Email</option>
+                          <option className="select-option" value="Website">Website</option>
+                          <option className="select-option" value="Facebook">Facebook</option>
+                          <option className="select-option" value="Linkedin">Linkedin</option>
+                          <option className="select-option" value="X">X.com</option>
+                          <option className="select-option" value="Youtube">Youtube</option>
+                          <option className="select-option" value="TikTok">TikTok</option>
+                          <option className="select-option" value="Instagram">Instagram</option>
+                        </select>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => setSocials(socials.filter((_, i) => i !== idx))}
+                        className="btn btn-outline text-red-500 self-end"
+                      >
+                        Remove
+                      </button>
+
                     </div>
-                  </label>
-                  <label htmlFor="time-end" className="label text-center flex-col">
-                    <span className="label-text">Time end</span>
-                    <div className="flex flex-col">
-                      <input
-                        type="time"
-                        id="time-end"
-                        name="time-end"
-                        value={item.close}
-                        className="border border-primary p-2 rounded"
-                        onChange={(e) => setScheduleTime(item.id, 'close', e.target.value)}
-                      />
-                      <span className="text-xs text-gray-500 w-fit flex flex-nowrap">click here to set <ArrowUpRight /></span>
-                    </div>
-                  </label>
+                  </div>
+                ))}
+              </div>
+
+              <Divider addClass="my-4" />
+
+              <button
+                type="button"
+                onClick={() => setSocials([...socials, { platform: '', url: '' }])}
+                className="btn btn-outline btn-primary px-3 py-1 w-full rounded"
+              >
+                Add Social Link
+              </button>
+
+            </section>
+
+          </div>
+
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Image/Video" />
+          <div className="tab-content border-primary p-10">
+
+            <section>
+              <div className="flex flex-col justify-center items-center content-center max-w-full">
+                {blobResult && blobResult.length > 0 ? (
+                  <div className="max-w-full">
+                    <Suspense fallback={<div className={`text-center skeleton min-h-[${MAX_FILES_PER_USER}]`}>Loading...</div>}>
+                      <FadeCarousel photos={blobResult} />
+                    </Suspense>
+                  </div>
+                ) : (
+                  <div className="text-center skeleton min-h-[352px]">No Images</div>
+                )}
+              </div>
+            </section>
+
+            <section>
+              <fieldset className={`fieldset mb-5 ${blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''}`}>
+                <legend className="fieldset-legend">Select File</legend>
+                <div className="flex flex-wrap gap-4 w-full">
+                  <input
+                    type="file"
+                    ref={inputFileRef}
+                    id="image"
+                    name="image"
+                    accept="image/*"
+                    multiple={true}
+                    className={`${blobResult && blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full`}
+                    onChange={async e => {
+                      const files = e.target.files;
+                      if (!files) return;
+                      if (blobResult.length + files.length > MAX_FILES_PER_USER) {
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                        setError(`You can select up to ${MAX_FILES_PER_USER} files only.`);
+                        e.target.value = "";
+                        return;
+                      }
+                      const uploadedImages = await handleImageUpload(files);
+                      setBlobResult(prev => [...prev, ...uploadedImages]);
+                      setError(null);
+                    }} />
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setSchedule(schedule.filter((_, i) => i !== idx))}
-                  className="text-red-500 self-end"
-                >
-                  Remove
-                </button>
               </fieldset>
+            </section>
 
-            ))
-          }
-          <button
-            type="button"
-            onClick={() => setSchedule([...schedule, {
-              id: crypto.randomUUID(),
-              day:
-              {
-                Monday: false,
-                Tuesday: false,
-                Wednesday: false,
-                Thursday: false,
-                Friday: false,
-                Saturday: false,
-                Sunday: false
-              },
-              open: '',
-              close: ''
-            }])}
-            className="mt-2 px-3 py-1 bg-primary text-white rounded"
-          >
-            Add Schedule
-          </button>
+            <Divider addClass="my-4" />
 
+            <section>
+              <fieldset className={blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''}>
+                <legend className="fieldset-legend">Add Media URL</legend>
+                <div className="flex flex-col gap-4 w-full">
+                  <label htmlFor={`media`} className="">Media URL must be a valid URL from YouTube or Instagram</label>
+                  <input
+                    type="text"
+                    name={`media`}
+                    placeholder="https://"
+                    className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                  />
 
-          <Divider />
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      handleAddURL(e)
+                    }}
+                    className="btn btn-outline btn-primary w-full mt-2"
+                  >
+                    Upload Media URL
+                  </button>
+
+                  <Divider addClass="my-2" />
+
+                  <div className="flex flex-wrap max-w-[50%] gap-4 text-wrap mx-auto">
+                    {blobResult && blobResult.length > 0 && (
+                      <>
+                        <div className="text-sm">You can add up to {MAX_FILES_PER_USER} media files (images, Instagram videos, or YouTube videos)</div>
+                        <p className="text-wrap text-warning">NB: Please ensure that the first media is image.</p>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </fieldset>
+            </section>
+
+            <Divider addClass="my-4" />
+
+            <section>
+              <div className="flex flex-col items-center gap-8 w-full max-w-full">
+                {blobResult.map((mediaUrl, idx) => {
+                  const isYoutube = /youtu(be)?/.test(mediaUrl);
+                  const isInstagram = /instagram/.test(mediaUrl);
+
+                  const media = (
+                    <div
+                      className={
+                        isYoutube
+                          ? "aspect-video flex items-center justify-center rounded-lg overflow-hidden"
+                          : "aspect-square flex items-center justify-center rounded-lg overflow-hidden max-w-[200px]"
+                      }
+                    >
+                      {isYoutube ? (
+                        <YoutubeEmbed embedHtml={mediaUrl} width={200} height={112} />
+                      ) : isInstagram ? (
+                        <InstagramEmbed embedHtml={mediaUrl} width={MEDIA_WIDTH} height={MEDIA_HEIGHT} />
+                      ) : (
+                        <div className="relative w-[200px] h-[200px]">
+                          <Image
+                            src={mediaUrl}
+                            alt={`Photo ${idx + 1}`}
+                            fill
+                            sizes="(max-width: 600px) 100vw, 200px"
+                            style={{ objectFit: "contain" }}
+                            className="rounded-lg border border-primary hover:scale-150 transition-transform duration-300 ease-in-out"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  );
+
+                  return (
+                    <div
+                      key={mediaUrl + idx}
+                      className="flex flex-row items-center justify-center gap-6 w-full"
+                    >
+                      {media}
+                      <div className="flex flex-col items-center gap-2">
+                        <MoveImageVideo
+                          index={idx}
+                          blobResult={blobResult}
+                          setBlobResultAction={setBlobResult}
+                          showTop={idx > 0}
+                          showBottom={idx < blobResult.length - 1}
+                          removeAddress={`/api/delete-picture?url=${encodeURIComponent(mediaUrl)}`}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+
+            <Divider addClass="my-4" />
+          </div>
+
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Field of Expertise/Schedule" />
+          <div className="tab-content border-primary p-10">
+
+            <section>
+              {!fieldOfExpertise.length && <span className="font-semibold text-gray-700">Area of Expertise</span>}
+              {fieldOfExpertise.map((expertise, idx) => (
+                <div className="flex flex-row flex-1 gap-2 items-center " key={idx}>
+                  <div className="flex flex-col flex-1 ">
+                    <span className="font-semibold text-gray-700">{platformIcons['Expertise']} Area of Expertise</span>
+                    <label htmlFor={`expertise[${idx}]`} className="flex flex-row gap-2">
+                      <input
+                        type="text"
+                        name={`expertise[${idx}]`}
+                        value={expertise}
+                        onChange={e => {
+                          const updated = [...fieldOfExpertise];
+                          updated[idx] = e.target.value;
+                          setFieldOfExpertise(updated);
+                        }}
+                        className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                      />
+                    </label>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        fieldOfExpertise.splice(idx, 1);
+                        setFieldOfExpertise([...fieldOfExpertise]);
+                      }}
+                      className="btn btn-outline flex place-self-end mt-4  w-fit align-bottom text-red-500"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+
+              <Divider addClass="my-4" />
+
+              <button
+                type="button"
+                onClick={() => setFieldOfExpertise([...fieldOfExpertise, ""])}
+                className="btn w-full btn-outline mt-2 px-3 py-1"
+              >
+                + Area of Expertise
+              </button>
+            </section>
+
+            <Divider addClass="my-4" />
+
+            <section>
+              {schedule.map((item, idx) => (
+                <fieldset
+                  key={item.id}
+                  className="fieldset grid-cols-2 max-w-[99.9%]">
+                  <legend className="fieldset-legend ">Work Schedule</legend>
+                  <div className="grid grid-cols-1 w-full max-w-[99.9%] gap-2">
+                    <label htmlFor="schedule" className="label">
+                      <input
+                        type="checkbox"
+                        name="schedule-monday"
+                        value="Monday"
+                        className="checkbox checkbox-primary"
+                        checked={item.day.Monday}
+                        onChange={() => toggleScheduleDay(item.id, 'Monday')}
+                      />
+                      Montag
+                    </label>
+                    <label htmlFor="schedule" className="label">
+                      <input
+                        type="checkbox"
+                        name="schedule-tuesday"
+                        value="Tuesday"
+                        className="checkbox checkbox-primary"
+                        checked={item.day.Tuesday}
+                        onChange={() => toggleScheduleDay(item.id, 'Tuesday')}
+                      />
+                      Dienstag
+                    </label>
+                    <label htmlFor="schedule" className="label">
+                      <input
+                        type="checkbox"
+                        name="schedule-wednesday"
+                        value="Wednesday"
+                        className="checkbox checkbox-primary"
+                        checked={item.day.Wednesday}
+                        onChange={() => toggleScheduleDay(item.id, 'Wednesday')}
+                      />
+                      Mittwoch
+                    </label>
+                    <label htmlFor="schedule" className="label">
+                      <input
+                        type="checkbox"
+                        name="schedule-thursday"
+                        value="Thursday"
+                        className="checkbox checkbox-primary"
+                        checked={item.day.Thursday}
+                        onChange={() => toggleScheduleDay(item.id, 'Thursday')}
+                      />
+                      Donnerstag
+                    </label>
+                    <label htmlFor="schedule" className="label">
+                      <input
+                        type="checkbox"
+                        name="schedule-friday"
+                        value="Friday"
+                        className="checkbox checkbox-primary"
+                        checked={item.day.Friday}
+                        onChange={() => toggleScheduleDay(item.id, 'Friday')}
+                      />
+                      Freitag
+                    </label>
+                    <label htmlFor="schedule" className="label">
+                      <input
+                        type="checkbox"
+                        name="schedule-saturday"
+                        value="Saturday"
+                        className="checkbox checkbox-primary"
+                        checked={item.day.Saturday}
+                        onChange={() => toggleScheduleDay(item.id, 'Saturday')}
+                      />
+                      Samstag
+                    </label>
+                    <label htmlFor="schedule" className="label">
+                      <input
+                        type="checkbox"
+                        name="schedule-sunday"
+                        value="Sunday"
+                        className="checkbox checkbox-primary"
+                        checked={item.day.Sunday}
+                        onChange={() => toggleScheduleDay(item.id, 'Sunday')}
+                      />
+                      Sonntag
+                    </label>
+                  </div>
+                  <div className="grid grid-rows-2 gap-3 justify-baseline mt-4 w-full max-w-[99.9%]">
+                    <label htmlFor="time" className="label text-center flex-col">
+                      <span className="label-text">Time start</span>
+                      <div className="flex flex-col">
+                        <input
+                          type="time"
+                          id="time"
+                          name="time-start"
+                          value={item.open}
+                          className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                          onChange={(e) => setScheduleTime(item.id, 'open', e.target.value)}
+                        />
+                        <span className="text-xs text-gray-500 w-fit flex flex-nowrap">click here to set <ArrowUpRight /></span>
+                      </div>
+                    </label>
+                    <label htmlFor="time-end" className="label text-center flex-col">
+                      <span className="label-text">Time end</span>
+                      <div className="flex flex-col">
+                        <input
+                          type="time"
+                          id="time-end"
+                          name="time-end"
+                          value={item.close}
+                          style={{ textTransform: 'none' }}
+                          className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                          onChange={(e) => setScheduleTime(item.id, 'close', e.target.value)}
+                        />
+                        <span className="text-xs text-gray-500 w-fit flex flex-nowrap">click here to set <ArrowUpRight /></span>
+                      </div>
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setSchedule(schedule.filter((_, i) => i !== idx))}
+                      className="btn btn-outline w-full text-red-500 self-end"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                  <Divider addClass="my-4 col-span-2" />
+                </fieldset>
+              ))}
+              <button
+                type="button"
+                onClick={() => setSchedule([...schedule, {
+                  id: crypto.randomUUID(),
+                  day:
+                  {
+                    Monday: false,
+                    Tuesday: false,
+                    Wednesday: false,
+                    Thursday: false,
+                    Friday: false,
+                    Saturday: false,
+                    Sunday: false
+                  },
+                  open: '',
+                  close: ''
+                }])}
+                className="btn btn-outline btn-primary mt-2 px-3 py-1 rounded"
+              >
+                Add Schedule
+              </button>
+            </section>
+
+          </div>
+        </div >
+
+        <div className="flex-1 flex flex-col w-full mt-4 p-4 border border-primary gap-4">
+          <GoToButton src="/dashboard" name="Back to Dashboard" className="btn btn-outline btn-primary" />
+
+          <Divider addClass="my-4" />
 
           <button
             type="submit"
@@ -717,9 +772,10 @@ export default function EditProfileForm({ user }: { user: User }) {
           >
             Save Changes
           </button>
+
         </div>
       </form >
-      <GoToButton src="/dashboard" name="Back to Dashboard" />
+
     </>
   );
 }
