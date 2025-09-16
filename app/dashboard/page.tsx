@@ -9,6 +9,8 @@ import ProfileFull from "@/components/profile-full/ProfileFull";
 import { Schedule } from "@/utils/types";
 import Divider from "@/components/divider/Divider";
 import CreateNewAccount from "@/components/buttons/create-new-account/CreateNewAccount";
+import { CalendarPlus2 } from "lucide-react";
+import Link from "next/link";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -57,6 +59,22 @@ export default async function DashboardPage() {
       {safeUser && <ProfileFull user={safeUser} />}
 
       <Divider />
+
+      <section className="flex flex-col w-full rounded-2xl shadow-md">
+        <div className="font-semibold text-primary text-2xl text-center">Recipe</div>
+
+        <Divider addClass="my-4" />
+
+        <div className="flex align-middle w-full">
+          <Link
+            href="https://moers.cms.shic.us/Arzttemin_reservieren"
+            target="_blank"
+            className="btn btn-primary text-lg mx-auto flex gap-2 rounded"
+          >
+            <CalendarPlus2 /> <span>online Termine - Reservierung</span>
+          </Link>
+        </div>
+      </section>
 
     </main >
   );

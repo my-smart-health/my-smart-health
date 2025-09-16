@@ -1,9 +1,10 @@
 import { auth } from "@/auth";
 import GoBack from "@/components/buttons/go-back/GoBack";
-import ShortPosts from "@/components/posts/short-posts/ShortPosts";
+import Divider from "@/components/divider/Divider";
 import ProfileFull from "@/components/profile-full/ProfileFull";
 import prisma from "@/lib/db";
 import { Schedule } from "@/utils/types";
+import { CalendarPlus2 } from "lucide-react";
 import Link from "next/link";
 
 async function getUser(id: string) {
@@ -27,13 +28,6 @@ async function getUser(id: string) {
   return { user };
 }
 
-async function getPosts(userId: string) {
-  const posts = await prisma.posts.findMany({
-    where: { authorId: userId },
-  });
-  return { posts };
-}
-
 function UserNotFound() {
   return (
     <>
@@ -49,11 +43,8 @@ function UserNotFound() {
 export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
 
-  const safeSession = session ? session : null;
-
   const { id } = await params;
   const { user } = await getUser(id);
-  const { posts } = await getPosts(id);
   if (!user || user === null) {
     return (
       <UserNotFound />
@@ -74,12 +65,23 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
           </Link>
         )}
         <ProfileFull user={safeUser} />
-        <span className="self-end pr-2">
-          <GoBack />
-        </span>
+
+        <Divider addClass="my-4" />
+
         <section className="flex flex-col w-full rounded-2xl shadow-md">
-          <div className="font-semibold text-primary text-2xl text-center">Posts</div>
-          {posts ? <ShortPosts posts={posts} session={safeSession} /> : <div className=" py-2 px-4 self-center">No posts available</div>}
+          <div className="font-semibold text-primary text-2xl text-center">Recipe</div>
+
+          <Divider addClass="my-4" />
+
+          <div className="flex align-middle w-full">
+            <Link
+              href="https://moers.cms.shic.us/Arzttemin_reservieren"
+              target="_blank"
+              className="btn btn-primary text-lg mx-auto flex gap-2 rounded"
+            >
+              <CalendarPlus2 /> <span>online Termine - Reservierung</span>
+            </Link>
+          </div>
         </section>
 
       </main>
