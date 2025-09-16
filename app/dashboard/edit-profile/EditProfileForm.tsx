@@ -69,6 +69,12 @@ export default function EditProfileForm({ user }: { user: User }) {
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
 
+  const bioRef = useRef<HTMLTextAreaElement>(null);
+  const addressRef = useRef<HTMLTextAreaElement>(null);
+
+  const [bio, setBio] = useState(user.bio || "");
+  const [address, setAddress] = useState(user.address || "");
+
   useEffect(() => {
     if (blobResult.length > 0) {
       setIsImageFirst(
@@ -78,6 +84,17 @@ export default function EditProfileForm({ user }: { user: User }) {
       );
     }
   }, [blobResult]);
+
+  useEffect(() => {
+    const resize = (el: HTMLTextAreaElement | null, value: string) => {
+      if (el) {
+        el.style.height = "auto";
+        if (value) el.style.height = el.scrollHeight + "px";
+      }
+    };
+    resize(bioRef.current, bio);
+    resize(addressRef.current, address);
+  }, [bio, address]);
 
   const handleAddURL = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -248,9 +265,11 @@ export default function EditProfileForm({ user }: { user: User }) {
                 <span className="font-semibold text-gray-700">Bio</span>
                 <textarea
                   name="bio"
-                  defaultValue={userData.bio ? userData.bio : ""}
-                  className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
-                  rows={5}
+                  ref={bioRef}
+                  value={bio}
+                  onChange={e => setBio(e.target.value)}
+                  className="p-3 rounded border border-primary focus:outline-none focus:ring-2 focus:ring-primary w-full min-h-[80px]"
+                  rows={1}
                 />
               </label>
             </section>
@@ -264,10 +283,11 @@ export default function EditProfileForm({ user }: { user: User }) {
                 <span className="font-semibold text-gray-700">Address</span>
                 <textarea
                   name="address"
-                  defaultValue={userData.address ? userData.address : ""}
-                  className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
-                  placeholder="Deutschland, Düsseldorf, Kölner Straße 123"
-                  rows={5}
+                  ref={addressRef}
+                  value={address}
+                  onChange={e => setAddress(e.target.value)}
+                  className="p-3 rounded border border-primary focus:outline-none focus:ring-2 focus:ring-primary w-full min-h-[80px]"
+                  rows={1}
                 />
               </label>
             </section>
