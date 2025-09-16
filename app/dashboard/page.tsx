@@ -30,25 +30,6 @@ async function getData(sessionId: string) {
   return { user };
 }
 
-async function getPosts(userId: string) {
-  const posts = await prisma.posts.findMany({
-    where: { authorId: userId },
-    orderBy: { createdAt: 'desc' },
-    select: {
-      id: true,
-      title: true,
-      content: true,
-      createdAt: true,
-      updatedAt: true,
-      photos: true,
-      author: true,
-      tags: true,
-      authorId: true,
-    },
-  });
-  return { posts };
-}
-
 export default async function DashboardPage() {
   const session = await auth();
 
@@ -57,20 +38,9 @@ export default async function DashboardPage() {
   }
 
   const { user } = await getData(session.user.id);
-  const { posts } = await getPosts(session.user.id);
 
   const safeUser = user
     ? { ...user, schedule: Array.isArray(user.schedule) ? user.schedule as Schedule[] : [] }
-    : null;
-
-  const safePosts = posts
-    ? posts.map((post) => ({
-      ...post,
-      author: {
-        ...post.author,
-        schedule: Array.isArray(post.author.schedule) ? post.author.schedule as Schedule[] : [],
-      },
-    }))
     : null;
 
   return (
