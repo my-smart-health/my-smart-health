@@ -73,7 +73,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
           <Divider addClass="my-4" />
 
-          <div className="flex align-middle w-full">
+          <div className="flex align-middle w-full mb-8">
             <Link
               href="https://moers.cms.shic.us/Arzttemin_reservieren"
               target="_blank"
