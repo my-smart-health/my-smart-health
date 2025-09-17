@@ -23,7 +23,7 @@ model User {
   website          String?
   bio              String?
   profileType      String
-  certificates     String[]
+  certificates     Json?
   schedule         Json?
   profileImages    String[]
   category         String[]
