@@ -24,11 +24,12 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
       <div className="w-full flex flex-col items-center">
         <div className="w-full max-w-[450px] md:max-w-[600px] aspect-video">
           <Swiper
+            key={photos.join(',')}
             modules={[Scrollbar, Mousewheel, Navigation, Pagination, Autoplay, EffectFade]}
-            spaceBetween={0}
+            spaceBetween={10}
             lazyPreloadPrevNext={3}
             slidesPerView={1}
-            effect="fade"
+            effect="slide"
             grabCursor={true}
             navigation={true}
             pagination={{ clickable: true }}
@@ -63,9 +64,10 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
                       placeholder="empty"
                       src={item}
                       alt={item}
-                      fill
+                      width={600}
+                      height={338}
                       sizes="(max-width: 600px) 100vw, 600px"
-                      style={{ objectFit: "contain" }}
+                      style={{ objectFit: "contain", width: "100%", height: "100%" }}
                       className="rounded-lg"
                     />
                   </div>
@@ -73,7 +75,7 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
               }
 
               return (
-                <SwiperSlide key={idx} className="pb-10 text-white">
+                <SwiperSlide key={item + idx} className="pb-10 md:pb-13 text-white">
                   <div className="w-full h-full flex justify-center items-center aspect-video">
                     {content}
                   </div>
@@ -104,10 +106,12 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
               <Image
                 src={photos[zoomedIdx!]}
                 alt={`Zoomed photo ${zoomedIdx! + 1}`}
+                loading="lazy"
+                placeholder="empty"
                 fill
+                sizes="(max-width: 1024px) 100vw, 1024px"
                 style={{ objectFit: "contain" }}
                 className="rounded-lg shadow-lg"
-                priority
               />
             </div>
           </div>
