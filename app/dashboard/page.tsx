@@ -3,14 +3,11 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
 
+import { Certificates, Schedule } from "@/utils/types";
+
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import ProfileFull from "@/components/profile-full/ProfileFull";
-
-import { Schedule } from "@/utils/types";
-import Divider from "@/components/divider/Divider";
 import CreateNewAccount from "@/components/buttons/create-new-account/CreateNewAccount";
-import { CalendarPlus2 } from "lucide-react";
-import Link from "next/link";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -27,6 +24,7 @@ async function getData(sessionId: string) {
       socials: true,
       schedule: true,
       fieldOfExpertise: true,
+      certificates: true,
     }
   });
   return { user };
@@ -42,7 +40,15 @@ export default async function DashboardPage() {
   const { user } = await getData(session.user.id);
 
   const safeUser = user
-    ? { ...user, schedule: Array.isArray(user.schedule) ? user.schedule as Schedule[] : [] }
+    ? {
+      ...user,
+      schedule: Array.isArray(user.schedule)
+        ? user.schedule as Schedule[]
+        : [],
+      certificates: Array.isArray(user.certificates)
+        ? user.certificates as unknown as Certificates[]
+        : []
+    }
     : null;
 
   return (
@@ -57,24 +63,6 @@ export default async function DashboardPage() {
       </div>
 
       {safeUser && <ProfileFull user={safeUser} />}
-
-      <Divider />
-
-      <section className="flex flex-col w-full">
-        <div className="font-semibold text-primary text-2xl text-center">Rezept</div>
-
-        <Divider addClass="my-4" />
-
-        <div className="flex align-middle w-full mb-8">
-          <Link
-            href="https://moers.cms.shic.us/Arzttemin_reservieren"
-            target="_blank"
-            className="btn btn-primary text-lg mx-auto flex gap-2 rounded"
-          >
-            <CalendarPlus2 /> <span>online Termine - Reservierung</span>
-          </Link>
-        </div>
-      </section>
 
     </main >
   );
