@@ -63,3 +63,12 @@ export type Schedule = {
 };
 
 export type Social = { platform: string; url: string };
+
+export type Certificates = {
+  id: string;
+  name: string;
+  imageUrl: string[];
+  issuedBy: string;
+  dateIssued: Date;
+  validUntil: Date;
+};
