@@ -97,7 +97,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
 
       setIsDisabled(true);
       const response = await fetch(
-        `/api/upload-picture/?userid=${session.user.id}&filename=${file.name}`,
+        `/api/upload/upload-picture/?userid=${session.user.id}&filename=${file.name}`,
         {
           method: 'PUT',
           body: file,
@@ -172,7 +172,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       }
       setError(null);
 
-      const result = await fetch(`/api/update-post`, {
+      const result = await fetch(`/api/update/update-post`, {
         method: 'PUT',
         body: JSON.stringify({
           id: post.id,
@@ -215,12 +215,12 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       setIsDisabled(true);
       for (const photoUrl of blobResult) {
         console.log('Deleting photo:', photoUrl);
-        await fetch(`/api/delete-picture?url=${encodeURIComponent(photoUrl)}`, {
+        await fetch(`/api/delete/delete-picture?url=${encodeURIComponent(photoUrl)}`, {
           method: 'DELETE',
         });
       }
 
-      const result = await fetch(`/api/delete-post?id=${postId}`, {
+      const result = await fetch(`/api/delete/delete-post?id=${postId}`, {
         method: 'DELETE',
       });
 
@@ -463,7 +463,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                     setBlobResultAction={setBlobResult}
                     showTop={idx > 0}
                     showBottom={idx < blobResult.length - 1}
-                    removeAddress={`/api/delete-picture?url=${encodeURIComponent(image)}`}
+                    removeAddress={`/api/delete/delete-picture?url=${encodeURIComponent(image)}`}
                   />
                 </div>
               </div>
