@@ -2,10 +2,10 @@
 
 import { signOut } from "next-auth/react";
 
-export default function LogOut() {
+export default function LogOut({ addClasses }: { addClasses?: string }) {
   return (
     <button
-      className="btn btn-outline btn-error hover:text-white"
+      className={` ${addClasses}`}
       onClick={() => signOut({ redirect: true, redirectTo: '/' })}>
       Logout
     </button>
