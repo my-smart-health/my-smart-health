@@ -3,18 +3,19 @@ import Image from "next/image";
 
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
-import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube, MapPin } from "lucide-react";
+import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube, MapPin, CalendarPlus2 } from "lucide-react";
 
 
 import ScheduleSection from "./ScheduleSection";
 import SeeMoreLess from "../buttons/see-more-less/SeeMoreLess";
 import ProfilePictureCarousel from "../carousels/profile-picture-carousel/ProfilePictureCarousel";
 
-import { Schedule } from "@/utils/types";
+import { Certificates, Schedule } from "@/utils/types";
 import { parseSocials } from "@/utils/common";
 import prisma from "@/lib/db";
 import ProfileNewsCarousel from "../carousels/profile-news/ProfileNewsCarousel";
 import Divider from "../divider/Divider";
+import CertificateList from "./CertificateList";
 
 type User = {
   name: string | null;
@@ -28,6 +29,7 @@ type User = {
   displayEmail: string | null;
   id: string;
   schedule: Schedule[]
+  certificates: Certificates[];
 };
 
 const platformIcons: Record<string, React.ReactNode> = {
@@ -58,7 +60,7 @@ async function getAllPosts(userId: string) {
 
 export default async function ProfileFull({ user }: { user: User }) {
 
-  const { name, profileImages, address, bio, phone, socials, website, fieldOfExpertise, displayEmail } = user || {};
+  const { name, profileImages, address, bio, phone, socials, website, fieldOfExpertise, displayEmail, certificates } = user || {};
 
   const posts = await getAllPosts(user.id);
 
@@ -118,14 +120,14 @@ export default async function ProfileFull({ user }: { user: User }) {
             <Link
               href={`tel:${phone}`}
               target="_blank"
-              className="text-gray-700 hover:text-primary transition-colors duration-200 link">
+              className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 link">
               <span className="mr-1">{platformIcons.Phone}</span>{phone}
             </Link>
           )}
           {displayEmail && (
             <Link
               href={`mailto:${displayEmail}`}
-              className="text-gray-700 hover:text-primary transition-colors duration-200 break-all break-before-left link">
+              className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 break-all break-before-left link">
               <span className="mr-1">{platformIcons.Email}</span>{displayEmail}
             </Link>
           )}
@@ -134,7 +136,7 @@ export default async function ProfileFull({ user }: { user: User }) {
             <Link
               href={website}
               target="_blank"
-              className="text-gray-700 hover:text-primary transition-colors duration-200 break-all break-before-left link">
+              className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 break-all break-before-left link">
               <span className="mr-1">{platformIcons.Website}</span>{website}
             </Link>
           )}
@@ -165,13 +167,40 @@ export default async function ProfileFull({ user }: { user: User }) {
             </div>
           )}
         </section>
+        <section>
+          {schedule && schedule.length > 0 && (
+            <>
+              <Divider />
 
-        {schedule && schedule.length > 0 && (
+              <section>
+                <ScheduleSection schedule={schedule} />
+              </section>
+            </>
+          )}
+        </section>
+
+        <section className="flex flex-col w-full">
+          <div className="font-semibold text-primary text-2xl text-center">Rezept</div>
+
+          <Divider addClass="my-4" />
+
+          <div className="flex align-middle w-full mb-8">
+            <Link
+              href="https://moers.cms.shic.us/Arzttemin_reservieren"
+              target="_blank"
+              className="btn btn-primary text-lg mx-auto flex gap-2 rounded"
+            >
+              <CalendarPlus2 /> <span>online Termine - Reservierung</span>
+            </Link>
+          </div>
+        </section>
+
+        {certificates && certificates.length > 0 && (
           <>
             <Divider />
-
             <section>
-              <ScheduleSection schedule={schedule} />
+              <h2 className="font-bold text-primary text-xl">Zertifikate</h2>
+              <CertificateList certificates={certificates} />
             </section>
           </>
         )}
