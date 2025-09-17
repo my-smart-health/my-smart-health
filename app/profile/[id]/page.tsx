@@ -1,11 +1,11 @@
-import { auth } from "@/auth";
-import GoBack from "@/components/buttons/go-back/GoBack";
-import Divider from "@/components/divider/Divider";
-import ProfileFull from "@/components/profile-full/ProfileFull";
-import prisma from "@/lib/db";
-import { Schedule } from "@/utils/types";
-import { CalendarPlus2 } from "lucide-react";
 import Link from "next/link";
+
+import { auth } from "@/auth";
+import prisma from "@/lib/db";
+
+import GoBack from "@/components/buttons/go-back/GoBack";
+import ProfileFull from "@/components/profile-full/ProfileFull";
+import { Certificates, Schedule } from "@/utils/types";
 
 async function getUser(id: string) {
   const user = await prisma.user.findUnique({
@@ -23,6 +23,7 @@ async function getUser(id: string) {
       fieldOfExpertise: true,
       displayEmail: true,
       schedule: true,
+      certificates: true,
     },
   });
   return { user };
@@ -51,13 +52,15 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     );
   }
   const safeSchedule = user.schedule ? user.schedule as Schedule[] : [];
-  const safeUser = { ...user, schedule: safeSchedule };
+  const safeCertificates = user.certificates ? user.certificates as unknown as Certificates[] : [];
+
+  const safeUser = { ...user, schedule: safeSchedule, certificates: safeCertificates };
 
   return (
     <>
       <main
         className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
-        {(session?.user?.role === "ADMIN" || session?.user?.id === user.id) && (
+        {(session?.user?.role === "ADMIN") && (
           <Link
             href={`/dashboard/edit-profile/${user.id}`}
             className="btn btn-wide btn-warning self-center rounded-xl underline">
@@ -65,25 +68,6 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
           </Link>
         )}
         <ProfileFull user={safeUser} />
-
-        <Divider />
-
-        <section className="flex flex-col w-full">
-          <div className="font-semibold text-primary text-2xl text-center">Rezept</div>
-
-          <Divider addClass="my-4" />
-
-          <div className="flex align-middle w-full mb-8">
-            <Link
-              href="https://moers.cms.shic.us/Arzttemin_reservieren"
-              target="_blank"
-              className="btn btn-primary text-lg mx-auto flex gap-2 rounded"
-            >
-              <CalendarPlus2 /> <span>online Termine - Reservierung</span>
-            </Link>
-          </div>
-        </section>
-
       </main>
     </>
   );
