@@ -5,7 +5,6 @@ import Navbar from "@/components/navbar/Navbar";
 import Link from "next/link";
 import { auth } from "@/auth";
 import LogOut from "@/components/buttons/log-out/LogOut";
-import { Analytics } from "@vercel/analytics/next"
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -58,13 +57,10 @@ export default async function RootLayout({
           <span className="mx-1">|</span>
           <Link href="/kontakt" className="hover:underline capitalize">Kontakt</Link>
           <span className="mx-1">|</span>
-          {session && !session.user.id ? <Link href="/login" className="hover:underline capitalize">Login</Link> :
-            <span className="mx-1">
-              <LogOut />
-            </span>
+          {!session?.user ? <Link href="/login" className="hover:underline capitalize">Login</Link> :
+            <LogOut addClasses="link link-error hover:text-white" />
           }
         </footer>
-        <Analytics />
       </body>
     </html>
   );
