@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
 
-import { Certificates, Schedule } from "@/utils/types";
+import { Certificate, Schedule } from "@/utils/types";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import ProfileFull from "@/components/profile-full/ProfileFull";
@@ -46,7 +46,7 @@ export default async function DashboardPage() {
         ? user.schedule as Schedule[]
         : [],
       certificates: Array.isArray(user.certificates)
-        ? user.certificates as unknown as Certificates[]
+        ? user.certificates as unknown as Certificate[]
         : []
     }
     : null;
