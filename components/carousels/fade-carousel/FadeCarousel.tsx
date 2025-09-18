@@ -4,14 +4,13 @@ import Image from "next/image";
 import { Suspense, useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectFade, Mousewheel, Navigation, Pagination, Scrollbar } from "swiper/modules";
+import { Autoplay, Mousewheel, Navigation, Pagination, Scrollbar } from "swiper/modules";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
-import 'swiper/css/effect-fade';
 
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
@@ -25,7 +24,7 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
         <div className="w-full max-w-[450px] md:max-w-[600px] aspect-video">
           <Swiper
             key={photos.join(',')}
-            modules={[Scrollbar, Mousewheel, Navigation, Pagination, Autoplay, EffectFade]}
+            modules={[Scrollbar, Mousewheel, Navigation, Pagination, Autoplay]}
             spaceBetween={10}
             lazyPreloadPrevNext={3}
             slidesPerView={1}
@@ -33,7 +32,6 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
             grabCursor={true}
             navigation={true}
             pagination={{ clickable: true }}
-            fadeEffect={{ crossFade: true }}
             mousewheel={true}
             autoplay={{
               delay: 3000,
@@ -64,8 +62,7 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
                       placeholder="empty"
                       src={item}
                       alt={item}
-                      width={600}
-                      height={338}
+                      fill
                       sizes="(max-width: 600px) 100vw, 600px"
                       style={{ objectFit: "contain", width: "100%", height: "100%" }}
                       className="rounded-lg"
@@ -92,11 +89,11 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
           onClick={() => setZoomedIdx(null)}
         >
           <div
-            className="relative max-w-3xl w-full flex justify-center items-center cursor-zoom-out"
+            className="relative max-w-3xl w-full cursor-zoom-out"
             onClick={e => { e.stopPropagation(); setZoomedIdx(null); }}
           >
             <button
-              className="absolute top-4 right-4 text-white text-3xl font-bold z-10 cursor-pointer"
+              className="absolute top-4 right-4 btn btn-circle place-content-around text-3xl font-bold z-10 cursor-pointer"
               onClick={() => setZoomedIdx(null)}
               aria-label="Close"
             >
@@ -111,7 +108,7 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
                 fill
                 sizes="(max-width: 1024px) 100vw, 1024px"
                 style={{ objectFit: "contain" }}
-                className="rounded-lg shadow-lg"
+                className="rounded-lg shadow-lg bg-black/50"
               />
             </div>
           </div>
