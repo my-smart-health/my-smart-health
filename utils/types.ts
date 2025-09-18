@@ -64,11 +64,26 @@ export type Schedule = {
 
 export type Social = { platform: string; url: string };
 
-export type Certificates = {
+export type Certificate = {
   id: string;
   name: string;
-  imageUrl: string[];
-  issuedBy: string;
-  dateIssued: Date;
-  validUntil: Date;
+  issuer: string;
+  issueDate: Date;
+  images: string[];
+  expiryDate: Date | null;
+  credentialId: string | null;
+  credentialUrl: string | null;
+  userId: string;
+};
+
+export type CertificateForm = {
+  id?: string;
+  name: string;
+  issuer: string;
+  images: string[];
+  issueDate: Date | string;
+  expiryDate: Date | string | null;
+  credentialId?: string | null;
+  credentialUrl?: string | null;
+  userId?: string;
 };
