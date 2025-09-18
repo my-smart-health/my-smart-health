@@ -87,3 +87,10 @@ export type CertificateForm = {
   credentialUrl?: string | null;
   userId?: string;
 };
+
+export type ProfileNewsCarouselItem = {
+  id: string;
+  authorId: string;
+  title: string;
+  photos: string[];
+};
