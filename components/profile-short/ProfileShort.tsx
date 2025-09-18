@@ -4,6 +4,7 @@ import Link from "next/link";
 export default function ProfileShort({ id, name, bio, image }: { id: string; name: string; bio: string; image: string }) {
   return (
     <>
+      THAT COMPONENT MUST BE REWRITTEN
       <div className="flex flex-col p-4 gap-1 border border-dashed rounded-lg bg-white/80 shadow-md hover:shadow-xl transition-shadow">
         <h3 className="font-bold text-lg">{name}</h3>
         <div className="flex h-full">
