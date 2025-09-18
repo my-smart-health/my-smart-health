@@ -55,7 +55,7 @@ export default function ProfileNewsCarousel({ carouselItems, disableOnInteractio
                     setZoomedIdx(idx);
                   }}
                 />
-                <Link href={`/news/${item.id}`} className="link">
+                <Link href={`/news/${item.id}`} className="link hover:text-primary">
                   <span className="text-center space-x-0.5 line-clamp-1 text-lg mb-4">{item.title}</span>
                 </Link>
               </div>
