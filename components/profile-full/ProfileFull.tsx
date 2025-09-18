@@ -10,7 +10,7 @@ import ScheduleSection from "./ScheduleSection";
 import SeeMoreLess from "../buttons/see-more-less/SeeMoreLess";
 import ProfilePictureCarousel from "../carousels/profile-picture-carousel/ProfilePictureCarousel";
 
-import { Certificates, Schedule } from "@/utils/types";
+import { Certificate, Schedule } from "@/utils/types";
 import { parseSocials } from "@/utils/common";
 import prisma from "@/lib/db";
 import ProfileNewsCarousel from "../carousels/profile-news/ProfileNewsCarousel";
@@ -29,7 +29,7 @@ type User = {
   displayEmail: string | null;
   id: string;
   schedule: Schedule[]
-  certificates: Certificates[];
+  certificates: Certificate[];
 };
 
 const platformIcons: Record<string, React.ReactNode> = {
@@ -187,7 +187,7 @@ export default async function ProfileFull({ user }: { user: User }) {
           <div className="flex align-middle w-full mb-8">
             <Link
               href="https://moers.cms.shic.us/Arzttemin_reservieren"
-              target="_blank"
+              target="_self"
               className="btn btn-primary text-lg mx-auto flex gap-2 rounded"
             >
               <CalendarPlus2 /> <span>online Termine - Reservierung</span>
