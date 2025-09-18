@@ -21,11 +21,11 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
   const [zoomedIdx, setZoomedIdx] = useState<number | null>(null);
 
   if (!imageSrcArray || imageSrcArray.length === 0) {
-    return <div className="skeleton animate-pulse h-64 bg-gray-200 rounded-lg"></div>;
+    return <div className="skeleton animate-pulse h-[350px] w-[350px] bg-gray-200 rounded-lg"></div>;
   }
 
   return (
-    <Suspense fallback={<div className="skeleton animate-pulse h-64 bg-gray-200 rounded-lg"></div>}>
+    <Suspense fallback={<div className="skeleton animate-pulse h-[350px] w-[350px] bg-gray-200 rounded-lg"></div>}>
       <Swiper
         modules={[Scrollbar, Navigation, Pagination, Mousewheel, Autoplay, EffectCards]}
         spaceBetween={1}
@@ -41,7 +41,7 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
         pagination={{ clickable: true, enabled: true }}
         autoplay={{ delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true }}
         speed={300}
-        className="max-w-2xs xs:max-w-3xs md:max-w-sm mx-auto"
+        className="max-w-full mx-auto"
       >
         {imageSrcArray && imageSrcArray.map((image, idx) => {
 
@@ -84,11 +84,12 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
                   <Image
                     loading="lazy"
                     placeholder="empty"
-                    width={WIDTH}
-                    height={HEIGHT}
+                    width={350}
+                    height={350}
                     src={image}
                     alt={image}
-                    className="aspect-square w-auto h-auto object-scale-down rounded-lg"
+                    style={{ objectFit: "contain", width: "350px", height: "350px" }}
+                    className="aspect-square rounded-lg"
                     onClick={e => {
                       e.preventDefault();
                       setZoomedIdx(idx);
