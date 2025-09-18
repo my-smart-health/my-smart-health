@@ -59,7 +59,7 @@ export default function MoveImageVideo({ index, blobResult, setBlobResultAction,
       <button
         type="button"
         className="btn btn-outline btn-circle text-red-500 hover:text-red-700 transition-colors cursor-pointer"
-        onClick={(e) => handleRemove(e, index)}>x</button>
+        onClick={(e) => handleRemove(e, index, removeAddress)}>x</button>
     )
   }
 
