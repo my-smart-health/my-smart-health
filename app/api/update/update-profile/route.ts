@@ -37,12 +37,25 @@ export async function PUT(req: Request) {
       data: {
         ...body.data,
         certificates: {
-          deleteMany: certsToDelete.length
-            ? certsToDelete.map((id) => ({ id }))
-            : undefined,
-          update: existingCertificates.map((cert) => ({
-            where: { id: cert.id },
-            data: {
+          ...(certsToDelete.length > 0 && {
+            deleteMany: certsToDelete.map((id) => ({ id })),
+          }),
+          ...(existingCertificates.length > 0 && {
+            update: existingCertificates.map((cert) => ({
+              where: { id: cert.id },
+              data: {
+                name: cert.name,
+                issuer: cert.issuer,
+                issueDate: cert.issueDate,
+                expiryDate: cert.expiryDate,
+                credentialId: cert.credentialId,
+                credentialUrl: cert.credentialUrl,
+                images: cert.images,
+              },
+            })),
+          }),
+          ...(newCertificates.length > 0 && {
+            create: newCertificates.map((cert) => ({
               name: cert.name,
               issuer: cert.issuer,
               issueDate: cert.issueDate,
@@ -50,17 +63,8 @@ export async function PUT(req: Request) {
               credentialId: cert.credentialId,
               credentialUrl: cert.credentialUrl,
               images: cert.images,
-            },
-          })),
-          create: newCertificates.map((cert) => ({
-            name: cert.name,
-            issuer: cert.issuer,
-            issueDate: cert.issueDate,
-            expiryDate: cert.expiryDate,
-            credentialId: cert.credentialId,
-            credentialUrl: cert.credentialUrl,
-            images: cert.images,
-          })),
+            })),
+          }),
         },
       },
       include: { certificates: true },
