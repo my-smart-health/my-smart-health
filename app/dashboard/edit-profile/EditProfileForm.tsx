@@ -11,29 +11,25 @@ import { parseSocials, serializeSocials } from "@/utils/common";
 
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
-import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube, ArrowUpRight } from "lucide-react";
+import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube } from "lucide-react";
 
 import Divider from "@/components/divider/Divider";
-import { MAX_FILES_PER_USER } from "@/utils/constants";
-import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
-import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
-import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
-import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
-
-import { NameSection } from "./_components/NameSection";
-import { BioSection } from "./_components/BioSection";
-import { AddressSection } from "./_components/AddressSection";
-import { PhoneNumbersSection } from "./_components/PhoneNumbersSection";
-import { EmailSection } from "./_components/EmailSection";
-import { WebsiteSection } from "./_components/WebsiteSection";
-import { SocialsSection } from "./_components/SocialsSection";
-import { ProfileMediaCarousel } from "./_components/ProfileMediaCarousel";
-import { ProfileMediaUpload } from "./_components/ProfileMediaUpload";
-import { ProfileMediaList } from "./_components/ProfileMediaList";
-import { MediaUrlSection } from "./_components/MediaUrlSection";
-import { AreaOfExpertiseSection } from "./_components/AreaOfExpertiseSection";
-import { CertificatesSection } from "./_components/CertificatesSection";
-import { WorkScheduleSection } from "./_components/WorkScheduleSection";
+import {
+  NameSection,
+  BioSection,
+  AddressSection,
+  PhoneNumbersSection,
+  EmailSection,
+  WebsiteSection,
+  SocialsSection,
+  ProfileMediaCarousel,
+  ProfileMediaUpload,
+  ProfileMediaList,
+  MediaUrlSection,
+  AreaOfExpertiseSection,
+  CertificatesSection,
+  WorkScheduleSection,
+} from "./_components";
 
 type User = {
   id: string;
@@ -60,7 +56,6 @@ export default function EditProfileForm({ user }: { user: User }) {
   const bioRef = useRef<HTMLTextAreaElement>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const addressRef = useRef<HTMLTextAreaElement>(null);
-  const certificatesRef = useRef<HTMLTextAreaElement>(null);
 
   const [userData, setUserData] = useState<User>(user);
 
