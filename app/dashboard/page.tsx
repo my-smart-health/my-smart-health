@@ -1,34 +1,52 @@
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
 import prisma from "@/lib/db";
+import { auth } from "@/auth";
 
 import { Certificate, Schedule } from "@/utils/types";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import ProfileFull from "@/components/profile-full/ProfileFull";
 import CreateNewAccount from "@/components/buttons/create-new-account/CreateNewAccount";
+import GoBack from "@/components/buttons/go-back/GoBack";
 
-async function getData(sessionId: string) {
+
+export async function getUser(id: string) {
   const user = await prisma.user.findUnique({
-    where: { id: sessionId },
+    where: { id },
     select: {
       id: true,
       name: true,
+      email: true,
       profileImages: true,
       address: true,
       bio: true,
-      displayEmail: true,
       phone: true,
-      website: true,
       socials: true,
-      schedule: true,
+      website: true,
       fieldOfExpertise: true,
+      displayEmail: true,
+      schedule: true,
       certificates: true,
-    }
+    },
   });
   return { user };
 }
+
+export async function getAllPosts(userId: string) {
+  const posts = await prisma.posts.findMany({
+    where: { authorId: userId },
+    select: {
+      id: true,
+      title: true,
+      photos: true,
+      authorId: true,
+    },
+  });
+
+  return posts;
+}
+
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -37,7 +55,18 @@ export default async function DashboardPage() {
     return redirect("/login");
   }
 
-  const { user } = await getData(session.user.id);
+  const { user } = await getUser(session.user.id);
+
+  if (!user) {
+    return (
+      <main className="flex flex-col items-center justify-center gap-3 w-full mb-auto max-w-[100%]">
+        <div>User not found</div>
+        <GoBack />
+      </main>
+    );
+  }
+
+  const posts = await getAllPosts(user.id);
 
   const safeUser = user
     ? {
@@ -62,7 +91,7 @@ export default async function DashboardPage() {
         <GoToButton src="/dashboard/create-post" name="New Post" className="btn btn-outline btn-success hover:text-white shadow" />
       </div>
 
-      {safeUser && <ProfileFull user={safeUser} />}
+      {safeUser && <ProfileFull user={safeUser} posts={posts} />}
 
     </main >
   );

@@ -1,18 +1,26 @@
+'use client';
+
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
-import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube, MapPin, CalendarPlus2 } from "lucide-react";
+import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube, MapPin, CalendarPlus2, ClipboardPlus } from "lucide-react";
 
 
 import ScheduleSection from "./ScheduleSection";
 import SeeMoreLess from "../buttons/see-more-less/SeeMoreLess";
-import ProfilePictureCarousel from "../carousels/profile-picture-carousel/ProfilePictureCarousel";
 
-import { Certificate, Schedule } from "@/utils/types";
+const ProfilePictureCarousel = dynamic(
+  () => import("../carousels/profile-picture-carousel/ProfilePictureCarousel"),
+  { ssr: false }
+);
+
+import { Certificate, ProfileNewsCarouselItem, Schedule } from "@/utils/types";
 import { parseSocials } from "@/utils/common";
-import prisma from "@/lib/db";
+
 import ProfileNewsCarousel from "../carousels/profile-news/ProfileNewsCarousel";
 import Divider from "../divider/Divider";
 import CertificateList from "./CertificateList";
@@ -44,26 +52,12 @@ const platformIcons: Record<string, React.ReactNode> = {
   Instagram: <Instagram className="inline-block mr-1" size={20} />,
 };
 
-async function getAllPosts(userId: string) {
-  const posts = await prisma.posts.findMany({
-    where: { authorId: userId },
-    select: {
-      id: true,
-      title: true,
-      photos: true,
-      authorId: true,
-    }
-  })
-
-  return posts;
-}
-
-export default async function ProfileFull({ user }: { user: User }) {
+export default function ProfileFull({ user, posts }: { user: User, posts: ProfileNewsCarouselItem[] }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
 
   const { name, profileImages, address, bio, phone, socials, website, fieldOfExpertise, displayEmail, certificates } = user || {};
-
-  const posts = await getAllPosts(user.id);
-
 
   const schedule = user?.schedule as Schedule[] || [];
 
@@ -74,8 +68,11 @@ export default async function ProfileFull({ user }: { user: User }) {
       <div className="flex flex-col gap-2 p-2 w-full max-w-[99%]">
 
         {
-          profileImages.length > 0 && <section className="max-w-[90%] mx-auto">
-            <ProfilePictureCarousel imageSrcArray={profileImages} />
+          profileImages.length > 0 && <section
+            className="w-full max-w-[500px] mx-auto aspect-video min-h-[430px] md:min-h-[430px] flex items-center justify-center"
+            style={{ position: "relative" }}
+          >
+            <ProfilePictureCarousel imageSrcArray={profileImages || []} />
           </section>
         }
 
@@ -107,7 +104,7 @@ export default async function ProfileFull({ user }: { user: User }) {
           <>
             <h2 className="font-bold text-primary text-xl">News</h2>
             <section className="w-full">
-              <ProfileNewsCarousel props={posts} />
+              <ProfileNewsCarousel carouselItems={posts} />
             </section>
           </>
         )}
@@ -180,19 +177,45 @@ export default async function ProfileFull({ user }: { user: User }) {
         </section>
 
         <section className="flex flex-col w-full">
-          <div className="font-semibold text-primary text-2xl text-center">Rezept</div>
+
 
           <Divider addClass="my-4" />
 
-          <div className="flex align-middle w-full mb-8">
-            <Link
-              href="https://moers.cms.shic.us/Arzttemin_reservieren"
-              target="_self"
-              className="btn btn-primary text-lg mx-auto flex gap-2 rounded"
-            >
-              <CalendarPlus2 /> <span>online Termine - Reservierung</span>
-            </Link>
-          </div>
+          <section className="flex flex-col items-center space-y-4">
+
+            <div className="flex flex-row justify-center align-middle font-semibold text-primary text-2xl text-center">
+              <CalendarPlus2 className="self-center mr-2" /><span className="mr-1">Reservierung</span>
+            </div>
+
+            <div className="flex align-middle w-full mb-8">
+              <Link
+                href="https://moers.cms.shic.us/Arzttemin_reservieren"
+                target="_self"
+                className="btn btn-primary text-lg mx-auto flex gap-2 rounded"
+              >
+                <CalendarPlus2 /> <span>online Termine - Reservierung</span>
+              </Link>
+            </div>
+          </section>
+
+          <Divider addClass="my-4" />
+
+          <section className="flex flex-col items-center space-y-4">
+
+            <div className="flex flex-row justify-center align-middle font-semibold text-primary text-2xl text-center">
+              <ClipboardPlus className="self-center mr-2" /><span className="mr-1">Rezept</span>
+            </div>
+
+            <div className="flex align-middle w-full mb-8">
+              <Link
+                href="https://moers.cms.shic.us/Arzttemin_reservieren"
+                target="_self"
+                className="btn btn-primary text-lg mx-auto flex gap-2 rounded"
+              >
+                <ClipboardPlus /> <span>online Rezept</span>
+              </Link>
+            </div>
+          </section>
         </section>
 
         {certificates && certificates.length > 0 && (

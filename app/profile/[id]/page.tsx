@@ -1,13 +1,27 @@
 import Link from "next/link";
 
 import { auth } from "@/auth";
-import prisma from "@/lib/db";
 
-import GoBack from "@/components/buttons/go-back/GoBack";
-import ProfileFull from "@/components/profile-full/ProfileFull";
 import { Certificate, Schedule } from "@/utils/types";
 
-async function getUser(id: string) {
+import ProfileFull from "@/components/profile-full/ProfileFull";
+import GoBack from "@/components/buttons/go-back/GoBack";
+import prisma from "@/lib/db";
+
+function UserNotFound() {
+  return (
+    <>
+      <main
+        className="flex flex-col items-center justify-center gap-3 w-full mb-auto max-w-[100%]">
+        <div>User not found</div>
+        <GoBack />
+      </main>
+    </>
+  );
+}
+
+
+export async function getUser(id: string) {
   const user = await prisma.user.findUnique({
     where: { id },
     select: {
@@ -29,23 +43,33 @@ async function getUser(id: string) {
   return { user };
 }
 
-function UserNotFound() {
-  return (
-    <>
-      <main
-        className="flex flex-col items-center justify-center gap-3 w-full mb-auto max-w-[100%]">
-        <div>User not found</div>
-        <GoBack />
-      </main>
-    </>
-  );
+export async function getAllPosts(userId: string) {
+  const posts = await prisma.posts.findMany({
+    where: { authorId: userId },
+    select: {
+      id: true,
+      title: true,
+      photos: true,
+      authorId: true,
+    },
+  });
+
+  return posts;
 }
+
 
 export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
 
   const { id } = await params;
   const { user } = await getUser(id);
+
+  if (!user) {
+    return <UserNotFound />;
+  }
+
+  const posts = await getAllPosts(user.id);
+
   if (!user || user === null) {
     return (
       <UserNotFound />
@@ -67,7 +91,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
             Edit profile
           </Link>
         )}
-        <ProfileFull user={safeUser} />
+        <ProfileFull user={safeUser} posts={posts} />
       </main>
     </>
   );
