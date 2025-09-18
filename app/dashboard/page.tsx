@@ -30,7 +30,7 @@ export async function getUser(id: string) {
       certificates: true,
     },
   });
-  return { user };
+  return user;
 }
 
 export async function getAllPosts(userId: string) {
@@ -55,7 +55,7 @@ export default async function DashboardPage() {
     return redirect("/login");
   }
 
-  const { user } = await getUser(session.user.id);
+  const user = await getUser(session.user.id);
 
   if (!user) {
     return (
