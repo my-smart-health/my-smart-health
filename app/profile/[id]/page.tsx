@@ -5,7 +5,7 @@ import prisma from "@/lib/db";
 
 import GoBack from "@/components/buttons/go-back/GoBack";
 import ProfileFull from "@/components/profile-full/ProfileFull";
-import { Certificates, Schedule } from "@/utils/types";
+import { Certificate, Schedule } from "@/utils/types";
 
 async function getUser(id: string) {
   const user = await prisma.user.findUnique({
@@ -52,7 +52,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     );
   }
   const safeSchedule = user.schedule ? user.schedule as Schedule[] : [];
-  const safeCertificates = user.certificates ? user.certificates as unknown as Certificates[] : [];
+  const safeCertificates = user.certificates ? user.certificates as unknown as Certificate[] : [];
 
   const safeUser = { ...user, schedule: safeSchedule, certificates: safeCertificates };
 
