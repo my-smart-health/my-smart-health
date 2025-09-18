@@ -7,7 +7,7 @@ import { auth } from "@/auth";
 
 
 async function getData(id: string): Promise<NewsCardType | null> {
-  const prismaResult = await prisma.posts.findUnique({
+  const post = await prisma.posts.findUnique({
     where: {
       id: id
     },
@@ -28,14 +28,14 @@ async function getData(id: string): Promise<NewsCardType | null> {
       }
     }
   })
-  return prismaResult as NewsCardType | null;
+  return post as NewsCardType | null;
 }
 
 export default async function NewsPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
 
   const { id } = await params;
-  const newsData = await getData(id);
+  const post = await getData(id);
 
   return (
     <main className="flex flex-col gap-3 w-full mb-auto max-w-[100%]">
@@ -45,10 +45,14 @@ export default async function NewsPage({ params }: { params: Promise<{ id: strin
           <GoBack />
         </div>
       </div>
-      {session
-        ? <NewsCardDetails newsData={newsData} session={session} />
-        : <NewsCardDetails newsData={newsData} />
-      }
+      {post ?
+        session ? (
+          <NewsCardDetails newsData={post} session={session} />
+        ) : (
+          <NewsCardDetails newsData={post} />
+        ) : (
+          <div className="text-center text-lg text-red-500 font-semibold">Post not found try to refresh the page.</div>
+        )}
       <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/smart-health" />
       <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
     </main>
