@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { PutBlobResult } from "@vercel/blob";
 import { FormEvent, MouseEvent, useEffect, useRef, useState } from "react";
 
+import Divider from "@/components/divider/Divider";
 import { MAX_FILES_PER_POST } from "@/utils/constants";
 import GoBack from "@/components/buttons/go-back/GoBack";
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
@@ -14,7 +15,6 @@ import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveIm
 
 import logo from '@/public/og-logo.jpg';
 import { ArrowUpRight, XIcon } from "lucide-react";
-import Divider from "@/components/divider/Divider";
 
 type CreatePostFormProps = {
   session: Session | null;
@@ -77,10 +77,11 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
   const handleImageUpload = async (file: File) => {
     try {
       if (!file) {
+        setIsDisabled(false);
         return;
       }
       const response = await fetch(
-        `/api/upload-picture/?userid=${session.user.id}&filename=${file.name}`,
+        `/api/upload/upload-picture/?userid=${session.user.id}&filename=${file.name}`,
         {
           method: 'PUT',
           body: file,
@@ -154,7 +155,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       }
       setError(null);
 
-      const result = await fetch(`/api/create-post`, {
+      const result = await fetch(`/api/create/create-post`, {
         method: 'POST',
         body: JSON.stringify({
           authorId: session.user.id,
@@ -351,7 +352,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                     setBlobResultAction={setBlobResult}
                     showTop={idx > 0}
                     showBottom={idx < blobResult.length - 1}
-                    removeAddress={`/api/delete-picture?url=${encodeURIComponent(image)}`}
+                    removeAddress={`/api/delete/delete-picture?url=${encodeURIComponent(image)}`}
                   />
                 </div>
               </div>
