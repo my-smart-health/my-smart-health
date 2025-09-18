@@ -6,20 +6,19 @@ import { useRouter } from "next/navigation";
 import { MouseEvent, Suspense, useEffect, useRef, useState, ChangeEvent } from "react";
 import { PutBlobResult } from "@vercel/blob";
 
-import GoToButton from "@/components/buttons/go-to/GoToButton";
-
 import { Certificate, CertificateForm, Schedule, Social } from "@/utils/types";
 import { parseSocials, serializeSocials } from "@/utils/common";
 
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
 import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube, ArrowUpRight } from "lucide-react";
+
+import Divider from "@/components/divider/Divider";
 import { MAX_FILES_PER_USER } from "@/utils/constants";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
-import Divider from "@/components/divider/Divider";
 
 type User = {
   id: string;
