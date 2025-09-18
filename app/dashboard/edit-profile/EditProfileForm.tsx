@@ -3,12 +3,12 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { MouseEvent, Suspense, useEffect, useRef, useState } from "react";
+import { MouseEvent, Suspense, useEffect, useRef, useState, ChangeEvent } from "react";
 import { PutBlobResult } from "@vercel/blob";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 
-import { Schedule, Social } from "@/utils/types";
+import { Certificate, CertificateForm, Schedule, Social } from "@/utils/types";
 import { parseSocials, serializeSocials } from "@/utils/common";
 
 import Xlogo from '@/public/x-logo-black.png';
@@ -33,13 +33,20 @@ type User = {
   fieldOfExpertise: string[];
   displayEmail: string | null;
   schedule: Schedule[] | null;
+  certificates: Certificate[] | null;
 }
 
 export default function EditProfileForm({ user }: { user: User }) {
 
   const MEDIA_WIDTH = 200;
   const MEDIA_HEIGHT = 200;
+
+  const redirect = useRouter();
+
+  const bioRef = useRef<HTMLTextAreaElement>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
+  const addressRef = useRef<HTMLTextAreaElement>(null);
+  const certificatesRef = useRef<HTMLTextAreaElement>(null);
 
   const [userData, setUserData] = useState<User>(user);
 
@@ -63,17 +70,26 @@ export default function EditProfileForm({ user }: { user: User }) {
 
   const [error, setError] = useState<string | null>(null);
 
-  const redirect = useRouter();
-
+  const [bio, setBio] = useState(user.bio || "");
+  const [address, setAddress] = useState(user.address || "");
   const [blobResult, setBlobResult] = useState<string[]>(userData.profileImages || []);
+
+  const [certificates, setCertificates] = useState<CertificateForm[]>(user.certificates?.map(cert => ({ ...cert })) || []);
+
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
 
-  const bioRef = useRef<HTMLTextAreaElement>(null);
-  const addressRef = useRef<HTMLTextAreaElement>(null);
-
-  const [bio, setBio] = useState(user.bio || "");
-  const [address, setAddress] = useState(user.address || "");
+  const platformIcons: Record<string, React.ReactNode> = {
+    Email: <AtSign className="inline-block mr-1" size={20} />,
+    Website: <Globe className="inline-block mr-1" size={20} />,
+    Phone: <Phone className="inline-block mr-1" size={20} />,
+    Facebook: <Facebook className="inline-block mr-1" size={20} />,
+    Linkedin: <Linkedin className="inline-block mr-1" size={20} />,
+    X: <Image src={Xlogo} width={20} height={20} alt="X.com" className="w-6 mr-1" />,
+    Youtube: <Youtube className="inline-block mr-1" size={20} />,
+    TikTok: <Image src={TikTokLogo} width={20} height={20} alt="TikTok" className="w-10 mr-1" />,
+    Instagram: <Instagram className="inline-block mr-1" size={20} />,
+  };
 
   useEffect(() => {
     if (blobResult.length > 0) {
@@ -96,6 +112,14 @@ export default function EditProfileForm({ user }: { user: User }) {
     resize(addressRef.current, address);
   }, [bio, address]);
 
+  const toggleScheduleDay = (id: string, day: keyof Schedule['day']) => {
+    setSchedule(schedule.map(schedule => schedule.id === id ? { ...schedule, day: { ...schedule.day, [day]: !schedule.day[day] } } : schedule));
+  };
+
+  const setScheduleTime = (id: string, openClose: keyof Schedule, value: string) => {
+    setSchedule(schedule.map(schedule => schedule.id === id ? { ...schedule, [openClose]: value.toString() } : schedule));
+  };
+
   const handleAddURL = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const form = e.currentTarget.closest('form');
@@ -115,52 +139,38 @@ export default function EditProfileForm({ user }: { user: User }) {
     resetMediaInput.value = '';
   };
 
-  const platformIcons: Record<string, React.ReactNode> = {
-    Email: <AtSign className="inline-block mr-1" size={20} />,
-    Website: <Globe className="inline-block mr-1" size={20} />,
-    Phone: <Phone className="inline-block mr-1" size={20} />,
-    Facebook: <Facebook className="inline-block mr-1" size={20} />,
-    Linkedin: <Linkedin className="inline-block mr-1" size={20} />,
-    X: <Image src={Xlogo} width={20} height={20} alt="X.com" className="w-6 mr-1" />,
-    Youtube: <Youtube className="inline-block mr-1" size={20} />,
-    TikTok: <Image src={TikTokLogo} width={20} height={20} alt="TikTok" className="w-10 mr-1" />,
-    Instagram: <Instagram className="inline-block mr-1" size={20} />,
-  };
-
-  const toggleScheduleDay = (id: string, day: keyof Schedule['day']) => {
-    setSchedule(schedule.map(schedule => schedule.id === id ? { ...schedule, day: { ...schedule.day, [day]: !schedule.day[day] } } : schedule));
-  };
-
-  const setScheduleTime = (id: string, openClose: keyof Schedule, value: string) => {
-    setSchedule(schedule.map(schedule => schedule.id === id ? { ...schedule, [openClose]: value.toString() } : schedule));
-  };
-
-  const handleImageUpload = async (files: FileList) => {
+  const handleUploadProfileImages = async (files: FileList) => {
     try {
       setIsDisabled(true);
       const uploadedUrls: string[] = [];
 
-      for (const file of files) {
+      if (!files || files.length === 0) {
+        setError('No files selected');
+        setIsDisabled(false);
+        return [];
+      }
 
+      for (const file of files) {
         const response = await fetch(
-          `/api/upload-profile-picture/?userid=${userData.id}&filename=${file.name}`,
+          `/api/upload/upload-profile-picture/?userid=${userData.id}&filename=${file.name}`,
           {
             method: 'PUT',
             body: file,
           }
         );
 
-        const result = await response.json() as PutBlobResult;
-
         if (!response.ok) {
           setError('Failed to upload image');
           throw new Error('Failed to upload image');
         }
 
+        const result = await response.json() as PutBlobResult;
+
         uploadedUrls.push(result.url);
       }
-      setIsDisabled(false);
+
       setError(null);
+      setIsDisabled(false);
       return uploadedUrls;
     } catch (error) {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -171,6 +181,90 @@ export default function EditProfileForm({ user }: { user: User }) {
       setError(message);
       setIsDisabled(false);
       return [];
+    }
+  };
+
+  const handleUploadCertificate = async (e: ChangeEvent<HTMLInputElement>, certificateFiles: File[]) => {
+    try {
+      e.preventDefault();
+      setIsDisabled(true);
+      setError(null);
+
+      const uploadedUrls: string[] = [];
+
+      if (!certificateFiles || certificateFiles.length === 0) {
+        setError('No certificate file selected');
+        setIsDisabled(false);
+        return [];
+      }
+
+      for (const cert of certificateFiles) {
+        const response = await fetch(
+          `/api/upload/upload-certificate-images/?userid=${userData.id}&filename=${cert.name}`,
+          {
+            method: 'PUT',
+            body: cert,
+          }
+        );
+
+        if (!response.ok) {
+          setError('Failed to upload certificate');
+          throw new Error('Failed to upload certificate');
+        }
+
+        const result = await response.json() as PutBlobResult;
+        uploadedUrls.push(result.url);
+      }
+
+      setError(null);
+      setIsDisabled(false);
+      return uploadedUrls;
+    } catch (error) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      let message = 'Error uploading files';
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      setError(message);
+      setIsDisabled(false);
+      return [];
+    }
+  };
+
+  const handleRemoveImage = async (imageUrl: string, setCertificates?: React.Dispatch<React.SetStateAction<CertificateForm[]>> | null, setBlobResult?: React.Dispatch<React.SetStateAction<string[]>> | null) => {
+    try {
+      setIsDisabled(true);
+      const response = await fetch(`/api/delete/delete-picture?url=${imageUrl}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        setError('Failed to remove image');
+        throw new Error('Failed to remove image');
+      }
+
+      if (setCertificates) {
+        setCertificates(certificates.map(cert => ({
+          ...cert,
+          images: cert.images.filter(img => img !== imageUrl)
+        })));
+      } else if (setBlobResult) {
+        setBlobResult(blobResult.filter((url) => url !== imageUrl));
+      } else {
+        setError('No state update function for the removed image');
+        setIsDisabled(false);
+        return;
+      }
+
+      setIsDisabled(false);
+      setError(null);
+    } catch (error) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      let message = 'Error removing image';
+      if (error instanceof Error) {
+        message = error.message;
+      }
+      setError(message);
     }
   };
 
@@ -190,6 +284,17 @@ export default function EditProfileForm({ user }: { user: User }) {
 
       const formData = new FormData(e.currentTarget);
 
+      const certificatesPayload = certificates.map(cert => ({
+        id: cert.id,
+        name: cert.name,
+        issuer: cert.issuer,
+        images: cert.images,
+        issueDate: cert.issueDate ? new Date(cert.issueDate).toISOString() : null,
+        expiryDate: cert.expiryDate ? new Date(cert.expiryDate).toISOString() : null,
+        credentialId: cert.credentialId !== undefined && cert.credentialId !== null && cert.credentialId !== '' ? cert.credentialId : null,
+        credentialUrl: cert.credentialUrl || null,
+      }));
+
       const data = {
         name: formData.get('name') as string,
         bio: formData.get('bio') as string,
@@ -201,12 +306,13 @@ export default function EditProfileForm({ user }: { user: User }) {
         profileImages: blobResult,
         socials: serializeSocials(socials),
         schedule: userData.schedule,
+        certificates: certificatesPayload,
       };
 
       const payload = { ...data, socials: serializeSocials(socials) };
       if (schedule.length > 0) payload.schedule = schedule;
 
-      const res = await fetch('/api/update-profile', {
+      const res = await fetch('/api/update/update-profile', {
         method: 'PUT',
         body: JSON.stringify({ id: userData.id, data: payload }),
         headers: { 'Content-Type': 'application/json' },
@@ -234,15 +340,15 @@ export default function EditProfileForm({ user }: { user: User }) {
 
   return (
     <>
-      {error && <p className="text-red-500 p-2">{error}</p>
-      }
+      {error && <p className="text-red-500 p-2">{error}</p>}
+
       <form
         onSubmit={handleSubmit}
         className={`w-full ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
       >
         <div className="tabs tabs-box w-full max-w-full">
 
-          <Divider addClass="my-4" />
+          <Divider addClass="mb-4" />
 
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Name/Bio" defaultChecked />
           <div className="tab-content border-primary p-10">
@@ -473,7 +579,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                         e.target.value = "";
                         return;
                       }
-                      const uploadedImages = await handleImageUpload(files);
+                      const uploadedImages = await handleUploadProfileImages(files);
                       setBlobResult(prev => [...prev, ...uploadedImages]);
                       setError(null);
                     }} />
@@ -567,7 +673,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                           setBlobResultAction={setBlobResult}
                           showTop={idx > 0}
                           showBottom={idx < blobResult.length - 1}
-                          removeAddress={`/api/delete-picture?url=${encodeURIComponent(mediaUrl)}`}
+                          removeAddress={`/api/delete/delete-picture?url=${encodeURIComponent(mediaUrl)}`}
                         />
                       </div>
                     </div>
@@ -579,7 +685,7 @@ export default function EditProfileForm({ user }: { user: User }) {
             <Divider addClass="my-4" />
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Field of Expertise/Schedule" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Field of Expertise/Certificates" />
           <div className="tab-content border-primary p-10">
 
             <section>
@@ -621,13 +727,245 @@ export default function EditProfileForm({ user }: { user: User }) {
               <button
                 type="button"
                 onClick={() => setFieldOfExpertise([...fieldOfExpertise, ""])}
-                className="btn w-full btn-outline mt-2 px-3 py-1"
+                className="btn btn-outline btn-primary w-full mt-2 px-3 py-1 rounded"
               >
                 + Area of Expertise
               </button>
             </section>
 
             <Divider addClass="my-4" />
+
+            <section>
+              <fieldset className="fieldset">
+                <legend className="fieldset-legend">Certificates</legend>
+                <div className="flex flex-col gap-4 w-full">
+                  {certificates.map((cert, idx) => (
+                    <div key={cert.id || idx} className="flex flex-col gap-4 border border-primary rounded p-4 relative">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          cert.images.forEach(imageURL => handleRemoveImage(imageURL, setCertificates));
+                          setCertificates(certificates.filter((_, i) => i !== idx));
+                        }}
+                        className="relative top-2 right-2 self-end btn btn-circle btn-error hover:bg-red-600/70 text-white font-bold text-lg"
+                        aria-label="Remove certificate"
+                        title="Remove certificate"
+                      >
+                        &times;
+                      </button>
+                      <div className="flex flex-col gap-2">
+                        <label className="flex flex-col gap-2">
+                          <span className="font-semibold text-gray-700">Certificate Name</span>
+                          <input
+                            type="text"
+                            name={`certificates[${idx}].name`}
+                            value={cert.name}
+                            required
+                            placeholder="e.g. Certificate for ..."
+                            onChange={e => {
+                              const updated = [...certificates];
+                              updated[idx].name = e.target.value;
+                              setCertificates(updated);
+                            }}
+                            className="required: p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                          />
+                        </label>
+                        <label className="flex flex-col gap-2">
+                          <span className="font-semibold text-gray-700">Issuer</span>
+                          <input
+                            type="text"
+                            name={`certificates[${idx}].issuer`}
+                            value={cert.issuer}
+                            required
+                            placeholder="e.g. Issued by ..."
+                            onChange={e => {
+                              const updated = [...certificates];
+                              updated[idx].issuer = e.target.value;
+                              setCertificates(updated);
+                            }}
+                            className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                          />
+                        </label>
+                        <div className="flex flex-col gap-4">
+                          <label className="flex flex-col gap-2 flex-1">
+                            <span className="font-semibold text-gray-700">Issue Date</span>
+                            <input
+                              type="date"
+                              name={`certificates[${idx}].issueDate`}
+                              value={cert.issueDate ? new Date(cert.issueDate).toISOString().split('T')[0] : ""}
+                              required
+                              onChange={e => {
+                                const updated = [...certificates];
+                                updated[idx].issueDate = e.target.value ? new Date(e.target.value) : new Date();
+                                setCertificates(updated);
+                              }}
+                              className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-fit"
+                            />
+                          </label>
+                          <label className="flex flex-col gap-2">
+                            <div className="flex flex-row items-center gap-2 font-semibold text-gray-700">
+                              <span>Expiry Date</span>
+                              <input
+                                type="checkbox"
+                                checked={!!cert.expiryDate}
+                                onChange={e => {
+                                  const updated = [...certificates];
+                                  if (e.target.checked) {
+                                    updated[idx].expiryDate = new Date();
+                                  } else {
+                                    updated[idx].expiryDate = null;
+                                  }
+                                  setCertificates(updated);
+                                }}
+                                className="checkbox checkbox-primary m-0 p-1"
+                              />
+                              <span className="text-xs font-normal text-gray-500">Enable</span>
+                            </div>
+                            {cert.expiryDate && (
+                              <input
+                                type="date"
+                                name={`certificates[${idx}].expiryDate`}
+                                value={cert.expiryDate ? new Date(cert.expiryDate).toISOString().split('T')[0] : ""}
+                                onChange={e => {
+                                  const updated = [...certificates];
+                                  updated[idx].expiryDate = e.target.value ? new Date(e.target.value) : null;
+                                  setCertificates(updated);
+                                }}
+                                className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-fit"
+                              />
+                            )}
+                          </label>
+                        </div>
+                        <label className="flex flex-col gap-2">
+                          <div className="flex flex-row items-center gap-2 font-semibold text-gray-700">
+                            <span>Credential ID</span>
+                            <input
+                              type="checkbox"
+                              checked={cert.credentialId !== null && cert.credentialId !== undefined}
+                              onChange={e => {
+                                const updated = [...certificates];
+                                if (e.target.checked) {
+                                  updated[idx].credentialId = '';
+                                } else {
+                                  updated[idx].credentialId = null;
+                                }
+                                setCertificates(updated);
+                              }}
+                              className="checkbox checkbox-primary m-0 p-1"
+                            />
+                            <span className="text-xs font-normal text-gray-500">Enable</span>
+                          </div>
+                          {(cert.credentialId !== null && cert.credentialId !== undefined) && (
+                            <input
+                              type="text"
+                              name={`certificates[${idx}].credentialId`}
+                              value={cert.credentialId}
+                              placeholder="e.g. 123-ABC-456"
+                              onChange={e => {
+                                const updated = [...certificates];
+                                updated[idx].credentialId = e.target.value;
+                                setCertificates(updated);
+                              }}
+                              className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                            />
+                          )}
+                        </label>
+                        <label className="flex flex-col gap-2">
+                          <span className="font-semibold text-gray-700">Credential URL</span>
+                          <input
+                            type="url"
+                            name={`certificates[${idx}].credentialUrl`}
+                            value={cert.credentialUrl || ''}
+                            onChange={e => {
+                              const updated = [...certificates];
+                              updated[idx].credentialUrl = e.target.value || null;
+                              setCertificates(updated);
+                            }}
+                            className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                          />
+                        </label>
+
+                        <div className="flex flex-col gap-2">
+                          <span className="font-semibold text-gray-700">Certificate Images</span>
+                          <div className="flex flex-col gap-4">
+                            {cert.images && cert.images.length > 0 ? (
+                              cert.images.map((imgUrl, imgIdx) => (
+                                <div key={imgUrl + imgIdx} className="flex items-center gap-4">
+                                  <div className="relative w-[100px] h-[100px]">
+                                    <Image
+                                      src={imgUrl}
+                                      alt={`Certificate ${idx + 1} Image ${imgIdx + 1}`}
+                                      fill
+                                      sizes="100px"
+                                      className="rounded border border-primary object-contain"
+                                    />
+                                  </div>
+                                  <MoveImageVideo
+                                    index={imgIdx}
+                                    blobResult={cert.images}
+                                    setBlobResultAction={newArr => {
+                                      const updated = [...certificates];
+                                      updated[idx].images = newArr;
+                                      setCertificates(updated);
+                                    }}
+                                    showTop={imgIdx > 0}
+                                    showBottom={imgIdx < cert.images.length - 1}
+                                    removeAddress={`/api/delete/delete-picture?url=${encodeURIComponent(imgUrl)}`}
+                                  />
+                                </div>
+                              ))
+                            ) : (
+                              <span className="text-gray-400 text-sm">No images attached</span>
+                            )}
+                          </div>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            className="file-input file-input-bordered file-input-primary w-full mt-2"
+                            onChange={async e => {
+                              if (!e.target.files) return;
+                              const uploaded = await handleUploadCertificate(e, Array.from(e.target.files));
+                              if (uploaded.length) {
+                                const updated = [...certificates];
+                                updated[idx].images = [...(updated[idx].images || []), ...uploaded];
+                                setCertificates(updated);
+                              }
+                              e.target.value = "";
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <Divider addClass="my-4" />
+                <button
+                  type="button"
+                  onClick={() => setCertificates([
+                    ...certificates,
+                    {
+                      name: '',
+                      issuer: '',
+                      images: [],
+                      issueDate: new Date(),
+                      expiryDate: null,
+                      credentialId: null,
+                      credentialUrl: null,
+                    }
+                  ])}
+                  className="btn btn-outline btn-primary w-full mt-2 px-3 py-1 rounded"
+                >
+                  + Add Certificate
+                </button>
+                <Divider addClass="my-4" />
+              </fieldset>
+            </section>
+
+          </div>
+
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Schedule" />
+          <div className="tab-content border-primary p-10">
 
             <section>
               {schedule.map((item, idx) => (
@@ -772,7 +1110,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                   open: '',
                   close: ''
                 }])}
-                className="btn btn-outline btn-primary mt-2 px-3 py-1 rounded"
+                className="btn btn-outline btn-primary w-full mt-2 px-3 py-1 rounded"
               >
                 Add Schedule
               </button>
@@ -780,17 +1118,13 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           </div>
         </div >
-
         <div className="flex-1 flex flex-col w-full mt-4 p-4 border border-primary gap-4">
-          <GoToButton src="/dashboard" name="Back to Dashboard" className="btn btn-outline btn-primary" />
-
-          <Divider addClass="my-4" />
 
           <button
             type="submit"
-            className="mt-4 bg-primary text-white px-6 py-2 rounded-lg font-semibold hover:bg-primary-dark transition"
+            className="btn btn-success m-4  text-white rounded-lg font-semibold hover:bg-primary-dark transition-colors duration-300 ease-in-out "
           >
-            Save Changes
+            Save Changes and go to Dashboard
           </button>
 
         </div>
