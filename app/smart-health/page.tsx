@@ -9,7 +9,8 @@ async function getCategories() {
     where: { profileType: PROFILE_TYPE_SMART_HEALTH },
     select: {
       id: true,
-      category: true
+      category: true,
+      profileImages: true,
     }
   });
   return { user };
@@ -19,14 +20,14 @@ export default async function SmartHealthPage() {
 
   const { user } = await getCategories();
 
-  const uniqueCategories = Array.from(new Set(user.flatMap(u => u.category))).filter(u => u.length > 0).sort();
+  const uniqueCategories = Array.from(new Set(user.flatMap(u => u.profileImages.length > 0 ? u.category : null))).filter(u => u && u.length > 0).sort();
 
   return (
     <main className="w-full mb-auto max-w-full">
       {user && user.length > 0 ? (
         <div className="grid grid-cols-1 gap-4">
           {uniqueCategories.map((category, index) => {
-
+            if (!category || category.trim() === '') return null;
             const categoryLink = category.replace(/\s+/g, '-').replace(/%26/g, '&');
             return (
               <Link
