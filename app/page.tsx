@@ -1,7 +1,7 @@
 import NewsCarousel from "@/components/carousels/newsCarousel/NewsCarousel";
 import TopCarousel from "@/components/carousels/topCarousel/TopCarousel";
-import NewsSmartHealthMedizinButton from "@/components/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
-import TheHealthBarLink from "@/components/the-health-bar-link/TheHealthBarLink";
+import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
+import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealthBarLink";
 import prisma from "@/lib/db";
 
 

@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import CreatePostForm from "./CreatePostForm";
+import CreatePostForm from "../../../components/posts/create-post-form/CreatePostForm";
 import { redirect } from "next/navigation";
 
 export default async function CreatePostPage() {

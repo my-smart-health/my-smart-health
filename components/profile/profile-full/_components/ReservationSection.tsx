@@ -1,21 +1,26 @@
-import Divider from "@/components/divider/Divider";
-import { ClipboardPlus } from "lucide-react";
 import Link from "next/link";
+import { CalendarPlus2 } from "lucide-react";
 
-export default function PrescriptionSection() {
+import Divider from "@/components/divider/Divider";
+
+type Props = {
+  src: string;
+};
+export default function ReservationSection({ src }: Props) {
+  if (!src) return null;
   return (
     <section className="flex flex-col items-center space-y-4">
       <Divider addClass="my-4" />
       <div className="flex flex-row justify-center align-middle font-semibold text-primary text-2xl text-center">
-        <ClipboardPlus className="self-center mr-2" /><span className="mr-1">Rezept</span>
+        <CalendarPlus2 className="self-center mr-2" /><span className="mr-1">Reservierung</span>
       </div>
       <div className="flex align-middle w-full mb-8">
         <Link
-          href="https://moers.cms.shic.us/Arzttemin_reservieren"
+          href={src}
           target="_self"
           className="btn btn-primary text-lg mx-auto flex gap-2 rounded"
         >
-          <ClipboardPlus /> <span>online Rezept</span>
+          <CalendarPlus2 /> <span>online Termine - Reservierung</span>
         </Link>
       </div>
     </section>

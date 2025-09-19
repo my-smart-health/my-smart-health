@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
-import EditProfileForm from "../EditProfileForm";
+import EditProfileForm from "../../../../components/profile/edit-profile-form/EditProfileForm";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({

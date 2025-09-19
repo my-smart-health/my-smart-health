@@ -1,6 +1,6 @@
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
-import EditProfileForm from "./EditProfileForm";
+import EditProfileForm from "../../../components/profile/edit-profile-form/EditProfileForm";
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
 import Link from "next/link";

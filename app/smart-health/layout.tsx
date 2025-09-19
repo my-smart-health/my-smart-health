@@ -1,4 +1,4 @@
-import NewsSmartHealthMedizinButton from "@/components/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
+import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
 
 export default async function SmartHealthLayout({ children }: { children: React.ReactNode }) {
 

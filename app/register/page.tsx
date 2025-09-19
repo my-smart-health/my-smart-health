@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import RegisterForm from "./RegisterForm";
+import RegisterForm from "../../components/register-form/RegisterForm";
 import { redirect } from "next/navigation";
 
 export default async function RegisterPage() {

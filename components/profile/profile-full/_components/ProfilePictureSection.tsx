@@ -5,7 +5,11 @@ const ProfilePictureCarousel = dynamic(
   { ssr: false }
 );
 
-export default function ProfilePictureSection({ images }: { images: string[] }) {
+type Props = {
+  images: string[];
+};
+
+export default function ProfilePictureSection({ images }: Props) {
   if (!images?.length) return null;
   return (
     <section

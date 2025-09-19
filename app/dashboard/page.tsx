@@ -6,7 +6,7 @@ import { auth } from "@/auth";
 import { Certificate, Schedule } from "@/utils/types";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
-import ProfileFull from "@/components/profile-full/ProfileFull";
+import ProfileFull from "@/components/profile/profile-full/ProfileFull";
 import CreateNewAccount from "@/components/buttons/create-new-account/CreateNewAccount";
 import GoBack from "@/components/buttons/go-back/GoBack";
 

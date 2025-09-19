@@ -11,7 +11,7 @@ import SeeMoreLess from "@/components/buttons/see-more-less/SeeMoreLess";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
 import Divider from "@/components/divider/Divider";
 
-export default function NewsCardDetails({ newsData, session }: { newsData: NewsCardType | null, session?: Session | null }) {
+export default function PostCardDetails({ newsData, session }: { newsData: NewsCardType | null, session?: Session | null }) {
 
   const { id, title, content, createdAt, photos, author, tags } = newsData || {};
 

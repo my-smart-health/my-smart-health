@@ -1,4 +1,4 @@
-import NewsCardDetails from "@/app/news/NewsCardDetails";
+import NewsCardDetails from "@/components/posts/post-card/PostCardDetails";
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
 import { NewsCardType } from "@/utils/types";

@@ -5,6 +5,7 @@ import ProfileNewsCarousel from "@/components/carousels/profile-news/ProfileNews
 
 export default function NewsSection({ posts }: { posts: ProfileNewsCarouselItem[] }) {
   if (!posts?.length) return null;
+
   return (
     <>
       <Divider />

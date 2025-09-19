@@ -1,9 +1,9 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
 
-import NewsCard from "./NewsCard";
+import PostCard from "../../components/posts/post-card/PostCard";
 import GoBack from "@/components/buttons/go-back/GoBack";
-import NewsSmartHealthMedizinButton from "@/components/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
+import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
 
 import { NewsCardType } from "@/utils/types";
 
@@ -48,8 +48,8 @@ export default async function NewsPage() {
         </div>
       </div>
       {newsData && session
-        ? <NewsCard newsData={newsData} session={session} /> :
-        <NewsCard newsData={newsData} />}
+        ? <PostCard newsData={newsData} session={session} /> :
+        <PostCard newsData={newsData} />}
       <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/smart-health" />
       <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
     </div>

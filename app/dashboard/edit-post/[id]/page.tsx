@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
 import { redirect } from "next/navigation";
-import EditPostForm from "./EditPostForm";
+import EditPostForm from "../../../../components/posts/edit-post-form/EditPostForm";
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 
 

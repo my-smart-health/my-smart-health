@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 
 import { Certificate, Schedule } from "@/utils/types";
 
-import ProfileFull from "@/components/profile-full/ProfileFull";
+import ProfileFull from "@/components/profile/profile-full/ProfileFull";
 import GoBack from "@/components/buttons/go-back/GoBack";
 import prisma from "@/lib/db";
 

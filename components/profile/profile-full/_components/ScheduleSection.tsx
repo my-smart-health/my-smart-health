@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { Schedule } from "@/utils/types";
+import Divider from "@/components/divider/Divider";
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const daysDe = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
@@ -35,6 +36,7 @@ function isScheduleOpen(schedule: Schedule, now: Date) {
 }
 
 export default function ScheduleSection({ schedule }: { schedule: Schedule[] }) {
+  if (!schedule || schedule.length === 0) return null;
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -49,25 +51,29 @@ export default function ScheduleSection({ schedule }: { schedule: Schedule[] }) 
 
   return (
     <>
-      <h2 className="font-bold text-primary text-xl">Öffnungszeiten</h2>
-      {schedule && schedule.length > 0 ? (
-        schedule.map(sch => (
-          <div key={sch.id} className="grid grid-cols-2 justify-evenly gap-6 py-2">
-            <div>{getFirstLastDay(sch)}</div>
-            <div>
-              <span>{sch.open}</span>
-              <span> - </span>
-              <span>{sch.close}</span>
-              <span> Uhr</span>
+      <Divider addClass="my-4" />
+
+      <section className="flex flex-col space-y-4">
+        <h2 className="font-bold text-primary text-xl">Öffnungszeiten</h2>
+        {schedule && schedule.length > 0 ? (
+          schedule.map(sch => (
+            <div key={sch.id} className="grid grid-cols-2 justify-evenly gap-6 py-2">
+              <div>{getFirstLastDay(sch)}</div>
+              <div>
+                <span>{sch.open}</span>
+                <span> - </span>
+                <span>{sch.close}</span>
+                <span> Uhr</span>
+              </div>
             </div>
-          </div>
-        ))
-      ) : (
-        <p className="text-gray-400">Keine Öffnungszeiten angegeben</p>
-      )}
-      <span className={isOpenNow ? "font-bold text-green-500/95" : "font-bold text-red-500/95"}>
-        {isOpenNow ? "geöffnet" : "geschlossen"}
-      </span>
+          ))
+        ) : (
+          <p className="text-gray-400">Keine Öffnungszeiten angegeben</p>
+        )}
+        <span className={isOpenNow ? "font-bold text-green-500/95" : "font-bold text-red-500/95"}>
+          {isOpenNow ? "geöffnet" : "geschlossen"}
+        </span>
+      </section>
     </>
   );
 }

@@ -1,8 +1,8 @@
 import GoBack from "@/components/buttons/go-back/GoBack";
-import NewsSmartHealthMedizinButton from "@/components/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
+import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
 import prisma from "@/lib/db";
 import { NewsCardType } from "@/utils/types";
-import NewsCardDetails from "../NewsCardDetails";
+import NewsCardDetails from "../../../components/posts/post-card/PostCardDetails";
 import { auth } from "@/auth";
 
 

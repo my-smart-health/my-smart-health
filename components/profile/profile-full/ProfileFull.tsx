@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { parseSocials } from "@/utils/common";
 import { Certificate, ProfileNewsCarouselItem, Schedule } from "@/utils/types";
-import Divider from "../divider/Divider";
+import Divider from "../../divider/Divider";
 import {
   ProfilePictureSection,
   FieldOfExpertiseSection,
@@ -83,9 +83,6 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
 
       <NewsSection posts={posts} />
 
-      <Divider />
-
-      <h2 className="font-bold text-primary text-xl">Kontakt</h2>
       <ContactSection
         phone={phone}
         displayEmail={displayEmail}
@@ -97,19 +94,11 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
 
       <CertificatesSection certificates={certificates} />
 
-      {schedule.length > 0 && (
-        <>
-          <Divider />
-          <section>
-            <ScheduleSection schedule={schedule} />
-          </section>
-        </>
-      )}
+      <ScheduleSection schedule={schedule} />
 
-      <ReservationSection />
+      <ReservationSection src={"https://moers.cms.shic.us/Arzttemin_reservieren"} />
 
-      <PrescriptionSection />
-
+      <PrescriptionSection src={"https://moers.cms.shic.us/Arzttemin_reservieren"} />
 
     </div>
   );
