@@ -95,6 +95,8 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
         platformIcons={platformIcons}
       />
 
+      <CertificatesSection certificates={certificates} />
+
       {schedule.length > 0 && (
         <>
           <Divider />
@@ -108,7 +110,7 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
 
       <PrescriptionSection />
 
-      <CertificatesSection certificates={certificates} />
+
     </div>
   );
 }
