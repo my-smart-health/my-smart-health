@@ -11,7 +11,7 @@ import CreateNewAccount from "@/components/buttons/create-new-account/CreateNewA
 import GoBack from "@/components/buttons/go-back/GoBack";
 
 
-export async function getUser(id: string) {
+async function getUser(id: string) {
   const user = await prisma.user.findUnique({
     where: { id },
     select: {
@@ -33,7 +33,7 @@ export async function getUser(id: string) {
   return user;
 }
 
-export async function getAllPosts(userId: string) {
+async function getAllPosts(userId: string) {
   const posts = await prisma.posts.findMany({
     where: { authorId: userId },
     select: {
