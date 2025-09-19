@@ -19,7 +19,7 @@ export default function TheHealthBarPage() {
         <div className="flex justify-end mt-4">
           <GoBack />
         </div>
-        <Image loading="lazy" placeholder="empty" src="/healthbar.png" alt="Health Bar" width={410} height={130} className="self-center w-full max-w-full aspect-auto h-auto" />
+        <Image loading="lazy" placeholder="empty" src="/healthbar.png" alt="Health Bar" style={{ objectFit: "contain", width: "100%", height: "auto" }} width={410} height={130} className="self-center w-full max-w-full aspect-auto h-auto" />
       </div>
       <div className="flex border w-full border-primary"></div>
 
