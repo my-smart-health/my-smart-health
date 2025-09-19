@@ -25,9 +25,10 @@ export default function CertificatesSection({ certificates }: { certificates: Ce
               const formattedExpiryDate = expiryDate ? new Date(expiryDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A';
 
               return (
+
                 <div
                   key={id}
-                  className="bg-white p-6 flex flex-col items-center"
+                  className="bg-white p-6 flex flex-col items-center border-2 rounded-lg border-primary shadow-md hover:shadow-2xl transition-shadow duration-300"
                 >
                   {images && images.length > 0 && (
                     <div className="flex flex-row flex-wrap gap-4 justify-center mb-4">
@@ -58,6 +59,7 @@ export default function CertificatesSection({ certificates }: { certificates: Ce
                     <p className="mb-1 text-gray-700 text-center"><span className="font-medium">Zertifikats-ID:</span> {credentialId}</p>
                   )}
                 </div>
+
               );
             })}
           </div>
