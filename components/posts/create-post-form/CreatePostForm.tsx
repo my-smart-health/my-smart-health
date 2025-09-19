@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import { Session } from "next-auth";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { PutBlobResult } from "@vercel/blob";
 import { FormEvent, MouseEvent, useEffect, useRef, useState } from "react";
 
@@ -20,14 +20,17 @@ type CreatePostFormProps = {
   session: Session | null;
 };
 
+type ErrorType = "error" | "warning" | "success";
+type ErrorState = { type: ErrorType; message: string } | null;
+
 export default function CreatePostForm({ session }: CreatePostFormProps) {
 
   if (!session) {
     redirect('/login');
   }
-
+  const router = useRouter();
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<ErrorState>(null);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [isDefaultLogo, setIsDefaultLogo] = useState<boolean>(false);
 
@@ -37,6 +40,13 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
 
+  const errorModalRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    if (error) {
+      errorModalRef.current?.showModal();
+    }
+  }, [error]);
 
   useEffect(() => {
     if (blobResult.length > 0) {
@@ -46,7 +56,6 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         blobResult[0].search("youtu") === -1
       );
     }
-
   }, [blobResult]);
 
   const handleAddURL = (e: MouseEvent<HTMLButtonElement>) => {
@@ -57,7 +66,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
     const mediaUrl = formData.get(`media`)?.toString().trim();
 
     if (!mediaUrl || mediaUrl.length === 0) {
-      setError('Media URL cannot be empty');
+      setError({ type: "error", message: "Media URL cannot be empty" });
       return;
     }
     if (
@@ -69,7 +78,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       const resetMediaInput = form.querySelector('input[name="media"]') as HTMLInputElement;
       resetMediaInput.value = '';
     } else {
-      setError('Media URL must be a valid YouTube or Instagram link');
+      setError({ type: "error", message: "Media URL must be a valid YouTube or Instagram link" });
       return;
     }
   };
@@ -91,7 +100,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       const result = await response.json() as PutBlobResult;
 
       if (!response.ok) {
-        setError('Failed to upload image');
+        setError({ type: "error", message: "Failed to upload image" });
         setIsDisabled(false);
         throw new Error('Failed to upload image');
       }
@@ -102,9 +111,50 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       if (error instanceof Error) {
         message = error.message;
       }
-      setError(message);
+      setError({ type: "error", message });
       setIsDisabled(false);
       return logo.src;
+    }
+  };
+
+  interface HandleUploadImagesParams {
+    setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>;
+    setError: React.Dispatch<React.SetStateAction<ErrorState>>;
+    e: React.ChangeEvent<HTMLInputElement>;
+    handleImageUpload: (file: File) => Promise<string | undefined>;
+    setBlobResult: React.Dispatch<React.SetStateAction<string[]>>;
+  }
+
+  const handleUploadImages = async (
+    setIsDisabled: HandleUploadImagesParams['setIsDisabled'],
+    setError: HandleUploadImagesParams['setError'],
+    e: HandleUploadImagesParams['e'],
+    handleImageUpload: HandleUploadImagesParams['handleImageUpload'],
+    setBlobResult: HandleUploadImagesParams['setBlobResult']
+  ): Promise<void> => {
+    setIsDisabled(true);
+    setError(null);
+    const uploadedImages = await Promise.all(
+      Array.from(e.target.files ?? []).map(file => handleImageUpload(file))
+    );
+    setBlobResult(prev => [
+      ...prev,
+      ...uploadedImages.filter((url): url is string => typeof url === 'string'),
+    ]);
+    setIsDisabled(false);
+    e.target.value = "";
+  };
+
+  const handleError = () => {
+    if (error?.type === "success") {
+      setError(null);
+      errorModalRef.current?.close();
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 3000);
+    } else {
+      setError(null);
+      errorModalRef.current?.close();
     }
   };
 
@@ -126,7 +176,6 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-
     try {
       event.preventDefault();
       setIsDisabled(true);
@@ -149,7 +198,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       }
 
       if (!isImageFirst) {
-        setError("First media must be an image");
+        setError({ type: "warning", message: "First media must be an image" });
         setIsDisabled(false);
         return;
       }
@@ -170,41 +219,41 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       });
 
       if (!result.ok) {
-        setError('Failed to create post');
+        setError({ type: "error", message: "Failed to create post" });
         setIsDisabled(false);
         return;
       }
 
-      setError("Post created successfully");
-      setIsDisabled(true);
+      setError({ type: "success", message: "Post created successfully" });
     } catch (error) {
       let message = 'Error uploading files';
       if (error instanceof Error) {
         message = error.message;
       }
-      setError(message);
+      setError({ type: "error", message });
       setIsDisabled(false);
       return;
     }
   };
 
+  const getModalColor = () => {
+    if (!error) return '';
+    if (error.type === "success") return isDefaultLogo ? 'bg-yellow-500' : 'bg-green-500';
+    if (error.type === "warning") return 'bg-yellow-500';
+    return 'bg-red-500';
+  };
+
   return (
     <>
-      <span className="self-end mb-4">
-        <GoBack />
-      </span>
-      {error && <p className={`${error === 'Post created successfully' ? 'text-green-500' : 'text-red-500'} bg-secondary/10 border-2 border-primary rounded-2xl p-2 text-center break-all`}>{error}</p>}
-      {isDefaultLogo && <div className="flex flex-col items-center">
-        <p className="text-yellow-500 bg-secondary/10 border-2 border-primary rounded-2xl p-2 text-center break-all">
-          No image file was selected, default logo will be used
-        </p>
-        <p className="text-sm text-gray-500 italic">
-          You can change it later in the edit post section
-        </p>
-      </div>}
+
+
       <form
         onSubmit={handleSubmit}
         className={`flex flex-col gap-4 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}>
+
+        <span className="self-end mb-4">
+          <GoBack />
+        </span>
 
         <fieldset className="fieldset text-lg">
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">
@@ -214,6 +263,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
             id="title"
             name="title"
             required
+            rows={2}
             className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
           />
           <div className="label pt-1 text-xs flex flex-row justify-end">You can pull the right corner to resize it <ArrowUpRight /></div>
@@ -228,6 +278,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
           <textarea
             id="content"
             name="content"
+            rows={5}
             required
             className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
           />
@@ -269,32 +320,6 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
         <div className={blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''}>
           <fieldset className="fieldset">
-            <legend className="fieldset-legend">Select File</legend>
-            <div className="flex flex-wrap gap-4 w-full">
-              <input
-                type="file"
-                ref={inputFileRef}
-                id="image"
-                name="image"
-                accept="image/*"
-                className={`${blobResult && blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full max-w-xs`}
-                onChange={async e => {
-                  if (e.target.files && e.target.files.length > MAX_FILES_PER_POST) {
-                    setError(`You can select up to ${MAX_FILES_PER_POST} files only.`);
-                    e.target.value = "";
-                  } else {
-                    inputFileRef.current = e.target;
-                    const uploadedImage = await handleImageUpload(e.target.files?.[0] as File);
-                    setBlobResult(prev => [...prev, uploadedImage as string]);
-                    setError(null);
-                  }
-                }} />
-            </div>
-          </fieldset>
-
-          <div className="w-full my-5 mx-auto border border-primary h-0"></div>
-
-          <fieldset className="fieldset">
             <legend className="fieldset-legend">Add Media URL</legend>
             <div className="flex flex-col gap-4 w-full">
               <input
@@ -306,13 +331,38 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
               <label htmlFor={`media`} className="">Media URL must be a valid URL from YouTube or Instagram</label>
               <button
                 type="button"
-                onClick={(e) => {
-                  handleAddURL(e)
-                }}
+                onClick={handleAddURL}
                 className="btn w-full btn-primary mt-2"
               >
                 Upload Media URL
               </button>
+            </div>
+          </fieldset>
+
+          <Divider addClass="my-5" />
+
+          <fieldset className="fieldset">
+            <legend className="fieldset-legend">Select File</legend>
+            <div className="flex flex-wrap gap-4 w-full">
+              <input
+                type="file"
+                ref={inputFileRef}
+                id="image"
+                name="image"
+                accept="image/*"
+                multiple
+                className={`${blobResult && blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full max-w-xs`}
+                onChange={async e => {
+                  if (!e.target.files || e.target.files.length + blobResult.length > MAX_FILES_PER_POST) {
+                    setError({ type: "warning", message: `You can select up to ${MAX_FILES_PER_POST} files only.` });
+                    e.target.value = "";
+                  } else {
+                    inputFileRef.current = e.target;
+                    if (e.target.files) {
+                      await handleUploadImages(setIsDisabled, setError, e, handleImageUpload, setBlobResult);
+                    }
+                  }
+                }} />
             </div>
           </fieldset>
         </div>
@@ -335,7 +385,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                   loading="lazy"
                   placeholder="empty"
                   style={{ objectFit: "contain", width: WIDTH, height: HEIGHT }}
-                  className={`rounded-lg hover:border hover:bg-primary/50 z-10 hover:p-1 hover:border-primary hover:scale-200 cursor-pointer transition-all`}
+                  className={`rounded-lg hover:border hover:bg-primary/50 hover:z-10 hover:p-1 hover:border-primary hover:scale-200 cursor-pointer transition-all`}
                 />;
 
             return (
@@ -373,6 +423,58 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
           Create Post
         </button>
       </form >
+
+      <dialog
+        ref={errorModalRef}
+        id="error_modal"
+        className="modal modal-bottom backdrop-grayscale-100 transition-all ease-linear duration-500"
+        style={{ backgroundColor: 'transparent' }}
+        onClose={() => { setError(null); errorModalRef.current?.close() }}
+      >
+        <div
+          className={`modal-box ${getModalColor()} text-white rounded-2xl w-[95%]`}
+          style={{
+            width: "80vw",
+            maxWidth: "80vw",
+            margin: '2rem auto',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            position: "fixed",
+            minHeight: "unset",
+            padding: "2rem 1.5rem"
+          }}
+        >
+          <form method="dialog">
+            <button
+              className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-white"
+              onClick={handleError}
+              type="button"
+            >✕</button>
+          </form>
+          <h3 className="font-bold text-lg">
+            {error?.type === 'success'
+              ? 'Success!'
+              : error?.type === 'warning'
+                ? 'Warning'
+                : 'Error'}
+          </h3>
+          <p className="py-4">
+            {isDefaultLogo && error?.type === "success" ? (
+              <div className="flex flex-col items-center">
+                <span className="p-2 text-center break-after-auto">
+                  No image file was selected, default logo will be used
+                </span>
+                <span className="text-sm text-white italic">
+                  You can change it later in the edit post section
+                </span>
+              </div>
+            ) : error?.message}
+          </p>
+        </div>
+      </dialog>
     </>
   );
 }
+
+
