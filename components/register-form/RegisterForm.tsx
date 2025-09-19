@@ -1,6 +1,5 @@
 'use client'
 
-import GoToButton from "@/components/buttons/go-to/GoToButton";
 import { PROFILE_TYPE_MEDIZIN_UND_PFLEGE, PROFILE_TYPE_SMART_HEALTH } from "@/utils/constants";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState, useRef, useEffect } from "react";
