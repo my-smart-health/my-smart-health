@@ -1,5 +1,5 @@
 import GoBack from "@/components/buttons/go-back/GoBack";
-import ProfileShort from "@/components/profile-short/ProfileShort";
+import ProfileShort from "@/components/profile/profile-short/ProfileShort";
 import prisma from "@/lib/db";
 import { PROFILE_TYPE_SMART_HEALTH } from "@/utils/constants";
 import { Triangle } from "lucide-react";

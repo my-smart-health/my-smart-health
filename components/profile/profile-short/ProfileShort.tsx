@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function ProfileShort({ id, name, bio, image }: { id: string; name: string; bio: string; image: string }) {
   return (
