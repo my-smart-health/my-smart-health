@@ -32,7 +32,7 @@ export default async function MedizinUndPflegePage() {
               <Link
                 key={index}
                 className="flex items-center gap-2 p-4 indent-1 font-bold text-xl border border-gray-400 rounded-2xl shadow-xl transition-shadow cursor-pointer"
-                href={`/smart-health/${categoryLink}`}
+                href={`/medizin-und-pflege/${categoryLink}`}
               >
                 <Triangle className="rotate-90 text-primary stroke-3 fill-primary" /><p>{category}</p>
               </Link>
