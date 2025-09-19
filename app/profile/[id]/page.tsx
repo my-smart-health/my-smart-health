@@ -20,7 +20,6 @@ function UserNotFound() {
   );
 }
 
-
 async function getUser(id: string) {
   const user = await prisma.user.findUnique({
     where: { id },
@@ -56,7 +55,6 @@ async function getAllPosts(userId: string) {
 
   return posts;
 }
-
 
 export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
