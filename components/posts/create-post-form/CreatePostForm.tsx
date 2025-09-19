@@ -154,6 +154,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       }, 3000);
     } else {
       setError(null);
+      setIsDisabled(false);
       errorModalRef.current?.close();
     }
   };
@@ -182,6 +183,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       const formData = new FormData(event.currentTarget);
 
       if (blobResult.length === 0) {
+        setError(null);
         setIsDefaultLogo(true);
 
         const response = await fetch(logo.src);
@@ -202,7 +204,6 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         setIsDisabled(false);
         return;
       }
-      setError(null);
 
       const result = await fetch(`/api/create/create-post`, {
         method: 'POST',
@@ -245,8 +246,6 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
   return (
     <>
-
-
       <form
         onSubmit={handleSubmit}
         className={`flex flex-col gap-4 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}>
@@ -429,7 +428,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         id="error_modal"
         className="modal modal-bottom backdrop-grayscale-100 transition-all ease-linear duration-500"
         style={{ backgroundColor: 'transparent' }}
-        onClose={() => { setError(null); errorModalRef.current?.close() }}
+        onClose={handleError}
       >
         <div
           className={`modal-box ${getModalColor()} text-white rounded-2xl w-[95%]`}
