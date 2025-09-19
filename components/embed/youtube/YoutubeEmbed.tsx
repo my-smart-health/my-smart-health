@@ -22,8 +22,8 @@ const getYoutubeEmbedUrl = (url: string) => {
 
 export default function YoutubeEmbed({
   embedHtml,
-  height = 480,
-  width = 400,
+  height = "480px",
+  width = "400px",
 }: {
   embedHtml: string;
   height?: number | string;
@@ -43,7 +43,7 @@ export default function YoutubeEmbed({
     <Suspense
       fallback={
         <div
-          className={`skeleton animate-pulse h-[${height}px] w-[${width}px] bg-gray-200 rounded-lg`}
+          className={`skeleton animate-pulse h-[${height}] w-[${width}] bg-gray-200 rounded-lg`}
         ></div>
       }
     >
