@@ -2,19 +2,46 @@
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import { PROFILE_TYPE_MEDIZIN_UND_PFLEGE, PROFILE_TYPE_SMART_HEALTH } from "@/utils/constants";
-import { useRouter } from "next/router";
-import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState, useRef, useEffect } from "react";
+import GoBack from "../buttons/go-back/GoBack";
 
-type RegisterResponse = {
-  type: 'success' | 'passwordError' | 'missingName' | 'missingPhone' | 'missingEmail' | 'missingPassword' | 'missingCategory' | 'userExists' | 'someError' | 'missingFields';
-};
+type ErrorType = "success" | "warning" | "error";
+type ErrorState = { type: ErrorType; message: string } | null;
 
 export default function RegisterForm() {
-
   const router = useRouter();
-  const [userCreatedOrError, setUserCreatedOrError] = useState<RegisterResponse | null>(null);
+  const [error, setError] = useState<ErrorState>(null);
   const [categoryState, setCategoryState] = useState<string[]>(['']);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const errorModalRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    if (error) {
+      errorModalRef.current?.showModal();
+    }
+  }, [error]);
+
+  const getModalColor = () => {
+    if (!error) return '';
+    if (error.type === "success") return 'bg-green-500';
+    if (error.type === "warning") return 'bg-yellow-500';
+    return 'bg-red-500';
+  };
+
+  const handleError = () => {
+    setIsDisabled(false);
+    if (error?.type === "success") {
+      setError(null);
+      errorModalRef.current?.close();
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 3000);
+    } else {
+      setError(null);
+      errorModalRef.current?.close();
+    }
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     try {
@@ -28,14 +55,38 @@ export default function RegisterForm() {
       const profileType = formData.get('profileType');
       const category = categoryState;
 
-      if (!email || !password || !passwordConfirmation || !category || !profileType) {
-        setUserCreatedOrError({ type: 'missingFields' });
+      if (!name) {
+        setError({ type: "error", message: "Bitte geben Sie Ihren Namen ein" });
         setIsDisabled(false);
         return null;
       }
-
+      if (!phone || !phone[0]) {
+        setError({ type: "error", message: "Bitte geben Sie Ihre Telefonnummer ein" });
+        setIsDisabled(false);
+        return null;
+      }
+      if (!email) {
+        setError({ type: "error", message: "Bitte geben Sie Ihre E-Mail-Adresse ein" });
+        setIsDisabled(false);
+        return null;
+      }
+      if (!password || !passwordConfirmation) {
+        setError({ type: "error", message: "Bitte füllen Sie alle Felder aus" });
+        setIsDisabled(false);
+        return null;
+      }
+      if (!category || !category[0]) {
+        setError({ type: "error", message: "Bitte wählen Sie eine Kategorie aus" });
+        setIsDisabled(false);
+        return null;
+      }
+      if (!profileType) {
+        setError({ type: "error", message: "Bitte wählen Sie eine Kategorie aus" });
+        setIsDisabled(false);
+        return null;
+      }
       if (password !== passwordConfirmation) {
-        setUserCreatedOrError({ type: 'passwordError' });
+        setError({ type: "warning", message: "Passwörter stimmen nicht überein" });
         setIsDisabled(false);
         return null;
       }
@@ -57,31 +108,25 @@ export default function RegisterForm() {
       });
 
       if (res.status === 400) {
-        setUserCreatedOrError({ type: 'userExists' });
+        setError({ type: "error", message: "E-Mail existiert bereits" });
         setIsDisabled(false);
         return null;
       }
 
       if (!res.ok) {
-        setUserCreatedOrError({ type: 'someError' });
+        setError({ type: "error", message: "Ein Fehler ist aufgetreten" });
         setIsDisabled(false);
         return null;
       }
 
-      setUserCreatedOrError({ type: 'success' });
-
-      setTimeout(() => {
-        setUserCreatedOrError(null);
-        setIsDisabled(false);
-        router.push('/dashboard');
-      }, 3000);
+      setError({ type: "success", message: "Benutzer erfolgreich erstellt" });
 
       return await res.json();
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error registering user:', error);
       }
-      setUserCreatedOrError({ type: 'someError' });
+      setError({ type: "error", message: "Ein Fehler ist aufgetreten" });
       return null;
     }
   };
@@ -92,6 +137,9 @@ export default function RegisterForm() {
         onSubmit={handleSubmit}
         className={`mx-auto space-y-3 sm:p-8 w-full max-w-[90%] ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
       >
+        <div className="flex justify-end ">
+          <GoBack />
+        </div>
         <label htmlFor="name">Name</label>
         <input
           type="text"
@@ -187,73 +235,6 @@ export default function RegisterForm() {
           </button>
         </div>
 
-        {
-          userCreatedOrError && userCreatedOrError.type === 'success' && (
-            <div className="mb-4 p-3 rounded border text-center">
-              <span className="text-green-700 border-green-400">Benutzer erfolgreich erstellt</span>
-            </div>
-          )
-        }
-        {
-          userCreatedOrError && userCreatedOrError.type === 'userExists' && (
-            <div className="mb-4 p-3 rounded border text-center">
-              <span className="text-red-500 border-red-400">E-Mail existiert bereits</span>
-            </div>
-          )
-        }
-        {
-          userCreatedOrError && userCreatedOrError.type === 'someError' && (
-            <div className="mb-4 p-3 rounded border text-center">
-              <span className="text-red-500 border-red-400">Ein Fehler ist aufgetreten</span>
-            </div>
-          )
-        }
-        {
-          userCreatedOrError && userCreatedOrError.type === 'missingFields' && (
-            <div className="mb-4 p-3 rounded border text-center">
-              <span className="text-red-500 border-red-400">Bitte füllen Sie alle Felder aus</span>
-            </div>
-          )
-        }
-        {
-          userCreatedOrError && userCreatedOrError.type === 'passwordError' && (
-            <div className="mb-4 p-3 rounded border text-center">
-              <span className="text-red-500 border-red-400">Passwörter stimmen nicht überein</span>
-            </div>
-          )
-        }
-
-        {
-          userCreatedOrError && userCreatedOrError.type === 'missingName' && (
-            <div className="mb-4 p-3 rounded border text-center">
-              <span className="text-red-500 border-red-400">Bitte geben Sie Ihren Namen ein</span>
-            </div>
-          )
-        }
-
-        {
-          userCreatedOrError && userCreatedOrError.type === 'missingPhone' && (
-            <div className="mb-4 p-3 rounded border text-center">
-              <span className="text-red-500 border-red-400">Bitte geben Sie Ihre Telefonnummer ein</span>
-            </div>
-          )
-        }
-
-        {
-          userCreatedOrError && userCreatedOrError.type === 'missingEmail' && (
-            <div className="mb-4 p-3 rounded border text-center">
-              <span className="text-red-500 border-red-400">Bitte geben Sie Ihre E-Mail-Adresse ein</span>
-            </div>
-          )
-        }
-
-        {
-          userCreatedOrError && userCreatedOrError.type === 'missingCategory' && (
-            <div className="mb-4 p-3 rounded border text-center">
-              <span className="text-red-500 border-red-400">Bitte wählen Sie eine Kategorie aus</span>
-            </div>
-          )
-        }
         <div className="flex justify-end">
           <button
             type="submit"
@@ -262,11 +243,48 @@ export default function RegisterForm() {
             Register
           </button>
         </div>
+      </form>
 
-      </form >
-      <div className="mt-4">
-        <GoToButton src="/dashboard" name="Back to Dashboard" />
-      </div>
+      {error && (
+        <dialog
+          ref={errorModalRef}
+          id="register_error_modal"
+          className="modal modal-bottom backdrop-grayscale-100 transition-all ease-linear duration-500"
+          style={{ backgroundColor: 'transparent' }}
+          onClose={handleError}
+        >
+          <div
+            className={`modal-box ${getModalColor()} text-white rounded-2xl w-[95%]`}
+            style={{
+              width: "80vw",
+              maxWidth: "80vw",
+              margin: '2rem auto',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              position: "fixed",
+              minHeight: "unset",
+              padding: "2rem 1.5rem"
+            }}
+          >
+            <form method="dialog">
+              <button
+                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-white"
+                onClick={handleError}
+                type="button"
+              >✕</button>
+            </form>
+            <h3 className="font-bold text-lg">
+              {error.type === 'success'
+                ? 'Erfolg'
+                : error.type === 'warning'
+                  ? 'Warnung'
+                  : 'Fehler'}
+            </h3>
+            <p className="py-4 text-center">{error.message}</p>
+          </div>
+        </dialog>
+      )}
     </>
   );
 }
