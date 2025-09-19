@@ -1,4 +1,4 @@
-import { ChangeEvent, RefObject } from "react";
+import { RefObject } from "react";
 import { MAX_FILES_PER_USER } from "@/utils/constants";
 
 type Props = {
