@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
-import { MouseEvent, Suspense, useEffect, useRef, useState, ChangeEvent } from "react";
+import { MouseEvent, useEffect, useRef, useState, ChangeEvent } from "react";
 import { PutBlobResult } from "@vercel/blob";
 
 import { Certificate, CertificateForm, Schedule, Social } from "@/utils/types";
