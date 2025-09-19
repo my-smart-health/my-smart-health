@@ -11,8 +11,6 @@ type MediaUrlSectionProps = {
 
 export function MediaUrlSection({
   blobResult,
-  setError,
-  setBlobResult,
   handleAddURL,
 }: MediaUrlSectionProps) {
   return (
