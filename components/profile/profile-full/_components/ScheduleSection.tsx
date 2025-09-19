@@ -36,7 +36,7 @@ function isScheduleOpen(schedule: Schedule, now: Date) {
 }
 
 export default function ScheduleSection({ schedule }: { schedule: Schedule[] }) {
-  if (!schedule || schedule.length === 0) return null;
+
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -48,6 +48,8 @@ export default function ScheduleSection({ schedule }: { schedule: Schedule[] }) 
     () => schedule.some(sch => isScheduleOpen(sch, currentTime)),
     [schedule, currentTime]
   );
+
+  if (!schedule || schedule.length === 0) return null;
 
   return (
     <>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { parseSocials } from "@/utils/common";
 import { Certificate, ProfileNewsCarouselItem, Schedule } from "@/utils/types";
-import Divider from "../../divider/Divider";
+
 import {
   ProfilePictureSection,
   FieldOfExpertiseSection,
