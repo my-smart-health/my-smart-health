@@ -56,8 +56,7 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
               <Link href={`/news/${item.id}`}>
                 <div className="flex flex-col border-2 border-primary justify-center items-center rounded-box cursor-pointer">
                   <Image
-                    loading="lazy"
-                    placeholder="empty"
+                    priority
                     width={400}
                     height={400}
                     src={item.image}
