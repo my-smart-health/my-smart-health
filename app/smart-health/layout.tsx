@@ -6,7 +6,7 @@ export default async function SmartHealthLayout({ children }: { children: React.
   return (
     <main className="flex flex-col gap-3 w-full mb-auto max-w-[100%]">
       <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" />
-      <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/smart-health" active />
+      <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/" active />
       <div className="m-auto min-h-full w-full max-w-5xl flex flex-col gap-4 p-4">
         <span className="self-end"><GoBack /></span>
         {children}
