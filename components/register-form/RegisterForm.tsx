@@ -2,6 +2,7 @@
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import { PROFILE_TYPE_MEDIZIN_UND_PFLEGE, PROFILE_TYPE_SMART_HEALTH } from "@/utils/constants";
+import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 
 type RegisterResponse = {
@@ -10,6 +11,7 @@ type RegisterResponse = {
 
 export default function RegisterForm() {
 
+  const router = useRouter();
   const [userCreatedOrError, setUserCreatedOrError] = useState<RegisterResponse | null>(null);
   const [categoryState, setCategoryState] = useState<string[]>(['']);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
@@ -37,6 +39,7 @@ export default function RegisterForm() {
         setIsDisabled(false);
         return null;
       }
+      setIsDisabled(true);
 
       const data = {
         name: name,
@@ -45,7 +48,7 @@ export default function RegisterForm() {
         password: password,
         category: category,
         profileType: profileType
-      }
+      };
 
       const res = await fetch('/api/auth/register', {
         method: 'POST',
@@ -66,7 +69,13 @@ export default function RegisterForm() {
       }
 
       setUserCreatedOrError({ type: 'success' });
-      setIsDisabled(true);
+
+      setTimeout(() => {
+        setUserCreatedOrError(null);
+        setIsDisabled(false);
+        router.push('/dashboard');
+      }, 3000);
+
       return await res.json();
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
