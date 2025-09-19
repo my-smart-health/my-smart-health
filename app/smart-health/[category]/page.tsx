@@ -54,7 +54,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                 <Link
                   key={index}
                   className="flex items-center gap-2 p-4 indent-1 font-bold text-xl border border-gray-400 rounded-2xl shadow-xl transition-shadow cursor-pointer"
-                  href={`/smart-health/${formattedCategory}`}
+                  href={`/smart-health`}
                 >
                   <Triangle className='rotate-180 text-primary stroke-3 fill-primary' /><p>{cat}</p>
                 </Link>
