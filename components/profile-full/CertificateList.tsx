@@ -8,7 +8,7 @@ export default function CertificateList({ certificates }: { certificates: Certif
 
   return (
     <ul className="list-disc pl-5">
-      {certificates.map((cert, index) => {
+      {certificates.map((cert) => {
         if (!cert) return null;
         const { id, name, issuer, issueDate, expiryDate, credentialId, images } = cert;
 
