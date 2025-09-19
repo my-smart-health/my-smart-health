@@ -332,8 +332,10 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                   alt={`Photo ${idx + 1}`}
                   width={WIDTH}
                   height={HEIGHT}
+                  loading="lazy"
                   placeholder="empty"
-                  className={`object-cover rounded-lg w-[${WIDTH}px] h-[${HEIGHT}px] hover:z-10 hover:scale-200 hover:shadow-lg cursor-pointer transition-all`}
+                  style={{ objectFit: "contain", width: WIDTH, height: HEIGHT }}
+                  className={`rounded-lg hover:border hover:bg-primary/50 z-10 hover:p-1 hover:border-primary hover:scale-200 cursor-pointer transition-all`}
                 />;
 
             return (

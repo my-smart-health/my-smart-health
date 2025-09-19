@@ -24,7 +24,15 @@ export default function CertificateList({ certificates }: { certificates: Certif
             {images && images.length > 0 && (
               <div className="flex gap-2">
                 {images.map((image, idx) => (
-                  <Image key={idx} src={image} alt={`Certificate Image ${idx}`} width={100} height={100} />
+                  <Image
+                    key={idx}
+                    src={image}
+                    alt={`Certificate Image ${idx}`}
+                    width={100}
+                    height={100}
+                    style={{ objectFit: "contain", width: "auto", height: "auto" }}
+                    loading="lazy"
+                    placeholder="empty" />
                 ))}
               </div>
             )}

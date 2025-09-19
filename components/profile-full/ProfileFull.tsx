@@ -46,9 +46,9 @@ const platformIcons: Record<string, React.ReactNode> = {
   Phone: <Phone className="inline-block mr-1" size={20} />,
   Facebook: <Facebook className="inline-block mr-1" size={20} />,
   Linkedin: <Linkedin className="inline-block mr-1" size={20} />,
-  X: <Image src={Xlogo} width={20} height={20} alt="X.com" className="w-6 mr-1" />,
+  X: <Image src={Xlogo} width={16} height={16} alt="X.com" loading="lazy" placeholder="empty" style={{ objectFit: "contain", width: "auto", height: "auto" }} className="mr-2" />,
   Youtube: <Youtube className="inline-block mr-1" size={20} />,
-  TikTok: <Image src={TikTokLogo} width={20} height={20} alt="TikTok" className="w-8 -ml-1" />,
+  TikTok: <Image src={TikTokLogo} width={20} height={20} alt="TikTok" loading="lazy" placeholder="empty" style={{ objectFit: "contain", width: "auto", height: "auto" }} className="-m-1" />,
   Instagram: <Instagram className="inline-block mr-1" size={20} />,
 };
 

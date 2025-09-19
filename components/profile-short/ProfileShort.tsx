@@ -8,7 +8,7 @@ export default function ProfileShort({ id, name, bio, image }: { id: string; nam
       <div className="flex flex-col p-4 gap-1 border border-dashed rounded-lg bg-white/80 shadow-md hover:shadow-xl transition-shadow">
         <h3 className="font-bold text-lg">{name}</h3>
         <div className="flex h-full">
-          <Image src={image} alt={name} width={96} height={96} className=" w-full h-full aspect-square rounded-lg" />
+          <Image src={image} alt={name} width={96} height={96} loading="lazy" placeholder="empty" style={{ objectFit: "contain", width: "auto", height: "auto" }} className=" w-full h-full aspect-square rounded-lg" />
         </div>
         <p className="text-gray-600 line-clamp-3 pt-3 pb-4">{bio}</p>
       </div>

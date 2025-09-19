@@ -36,6 +36,8 @@ export function ProfileMediaList({ blobResult, setBlobResult, MEDIA_WIDTH, MEDIA
                     src={mediaUrl}
                     alt={`Photo ${idx + 1}`}
                     fill
+                    loading="lazy"
+                    placeholder="empty"
                     sizes="(max-width: 600px) 100vw, 200px"
                     style={{ objectFit: "contain" }}
                     className="rounded-lg border border-primary hover:scale-150 transition-transform duration-300 ease-in-out"

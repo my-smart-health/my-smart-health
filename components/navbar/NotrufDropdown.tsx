@@ -1,5 +1,8 @@
 import Image from "next/image";
 
+/**
+ * @deprecated This component is deprecated and will be removed in future releases.
+ */
 export default function NotrufButton() {
 
   return (
@@ -13,6 +16,7 @@ export default function NotrufButton() {
             alt="Notruf"
             width={60}
             height={60}
+            style={{ objectFit: "contain", width: "auto", height: "auto" }}
             className={`w-[60px] h-[60px] aspect-square hover:scale-110 transition-transform ease-in-out shadow-lg shadow-[#2a2a2ad9]`} />
         </div>
         <ul

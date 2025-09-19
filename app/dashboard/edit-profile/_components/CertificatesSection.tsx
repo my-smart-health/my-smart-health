@@ -179,6 +179,8 @@ export function CertificatesSection({
                           <div className="relative w-[100px] h-[100px]">
                             <Image
                               src={imgUrl}
+                              loading="lazy"
+                              placeholder="empty"
                               alt={`Certificate ${idx + 1} Image ${imgIdx + 1}`}
                               fill
                               sizes="100px"

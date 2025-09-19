@@ -45,9 +45,6 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
       >
         {imageSrcArray && imageSrcArray.map((image, idx) => {
 
-          const WIDTH = 350;
-          const HEIGHT = 350;
-
           const isValidImageUrl = (url: string) => {
             return /\.(jpeg|jpg|gif|png|bmp|webp|svg)$/.test(url);
           }
@@ -61,8 +58,8 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
           if (isValidYoutubeUrl(image)) {
             return (
               <SwiperSlide key={idx}>
-                <div className={`flex flex-col justify-center items-center aspect-video rounded-box cursor-pointer max-w-[calc(${HEIGHT}px * 0.65)] md:max-w-full`}>
-                  <YoutubeEmbed embedHtml={image} width={WIDTH} height={HEIGHT * 0.65} />
+                <div className={`flex flex-col justify-center items-center aspect-video rounded-box cursor-pointer max-w-full md:max-w-full`}>
+                  <YoutubeEmbed embedHtml={image} width={"100%"} height={"100%"} />
                 </div>
                 <br />
               </SwiperSlide>
@@ -71,8 +68,8 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
           if (isValidInstagramUrl(image)) {
             return (
               <SwiperSlide key={idx}>
-                <div className={`flex flex-col justify-center items-center rounded-box cursor-pointer max-w-[calc(${HEIGHT}px * 0.65)] md:max-w-full`}>
-                  <InstagramEmbed embedHtml={image} width={WIDTH} height={HEIGHT * 0.65} />
+                <div className={`flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full md:max-w-full`}>
+                  <InstagramEmbed embedHtml={image} width={"100%"} height={"280px"} />
                 </div>
                 <br />
               </SwiperSlide>
@@ -82,13 +79,14 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
               <SwiperSlide key={idx} className="my-4">
                 <div className="relative rounded-box cursor-zoom-in">
                   <Image
-                    loading="lazy"
+                    priority
+                    loading="eager"
                     placeholder="empty"
                     width={350}
                     height={350}
                     src={image}
                     alt={image}
-                    style={{ objectFit: "contain", width: "350px", height: "350px" }}
+                    style={{ objectFit: "contain", width: "420px", height: "300px" }}
                     className="aspect-square rounded-lg"
                     onClick={e => {
                       e.preventDefault();
@@ -131,12 +129,13 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
             </button>
             <div className="relative w-full h-[60vh] md:h-[80vh]">
               <Image
+                loading="eager"
+                placeholder="empty"
                 src={imageSrcArray[zoomedIdx!]}
                 alt={`Zoomed photo ${zoomedIdx! + 1}`}
                 fill
                 style={{ objectFit: "contain" }}
                 className="rounded-lg shadow-lg"
-                priority
               />
             </div>
           </div>

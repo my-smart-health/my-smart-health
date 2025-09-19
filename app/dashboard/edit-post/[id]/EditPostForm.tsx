@@ -443,6 +443,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                   width={200}
                   height={200}
                   style={{ objectFit: "contain" }}
+                  loading="lazy"
                   placeholder="empty"
                   className="rounded-lg w-[200px] h-[200px] hover:z-10 hover:scale-200 hover:shadow-lg cursor-pointer transition-all"
                 />;
