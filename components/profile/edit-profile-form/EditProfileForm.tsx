@@ -56,6 +56,7 @@ export default function EditProfileForm({ user }: { user: User }) {
   const bioRef = useRef<HTMLTextAreaElement>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const addressRef = useRef<HTMLTextAreaElement>(null);
+  const errorModalRef = useRef<HTMLDialogElement>(null);
 
   const [userData, setUserData] = useState<User>(user);
 
@@ -122,6 +123,12 @@ export default function EditProfileForm({ user }: { user: User }) {
     resize(bioRef.current, bio);
     resize(addressRef.current, address);
   }, [bio, address]);
+
+  useEffect(() => {
+    if (error) {
+      errorModalRef.current?.showModal();
+    }
+  }, [error]);
 
   const toggleScheduleDay = (id: string, day: keyof Schedule['day']) => {
     setSchedule(schedule.map(schedule => schedule.id === id ? { ...schedule, day: { ...schedule.day, [day]: !schedule.day[day] } } : schedule));
@@ -356,9 +363,47 @@ export default function EditProfileForm({ user }: { user: User }) {
     }
   }
 
+  const handleErrorClose = () => {
+    setError(null);
+    errorModalRef.current?.close();
+  };
+
   return (
     <>
-      {error && <p className="text-red-500 p-2">{error}</p>}
+      {error && (
+        <dialog
+          ref={errorModalRef}
+          id="edit_profile_error_modal"
+          className="modal modal-bottom backdrop-grayscale-100 transition-all ease-linear duration-500"
+          style={{ backgroundColor: 'transparent' }}
+          onClose={handleErrorClose}
+        >
+          <div
+            className="modal-box bg-red-500 text-white rounded-2xl w-[95%]"
+            style={{
+              width: "80vw",
+              maxWidth: "80vw",
+              margin: '2rem auto',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              position: "fixed",
+              minHeight: "unset",
+              padding: "2rem 1.5rem"
+            }}
+          >
+            <form method="dialog">
+              <button
+                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-white"
+                onClick={handleErrorClose}
+                type="button"
+              >✕</button>
+            </form>
+            <h3 className="font-bold text-lg">Fehler</h3>
+            <p className="py-4 text-center">{error}</p>
+          </div>
+        </dialog>
+      )}
 
       <form
         onSubmit={handleSubmit}
