@@ -1,28 +1,42 @@
 'use client'
 
+import { Session } from "next-auth";
+import { useEffect, useState } from "react";
+
 import { NewsCardType } from "@/utils/types";
 
-import { Session } from "next-auth";
 import PostCardDetails from "./PostCardDetails";
 
-export default function PostCard({ newsData, session }: { newsData: NewsCardType[] | NewsCardType, session?: Session | null }) {
+type PostCardProps = {
+  posts: NewsCardType[];
+  session?: Session | null;
+}
+
+export default function PostCard({ posts, session }: PostCardProps) {
+  const [postsState, setPostsState] = useState<NewsCardType[]>([]);
+
+  useEffect(() => {
+    setPostsState(posts);
+  }, [posts]);
+
+  const handleDeletePost = (deletedId: string) => {
+    setPostsState(prev => prev.filter(post => post.id !== deletedId));
+  };
+
+  if (!postsState.length) {
+    return <div className="text-gray-400 text-center">No active posts</div>;
+  }
+
   return (
     <>
-      {newsData ? (
-        Array.isArray(newsData) ? (
-          newsData.length > 0 ? (
-            newsData.map((news: NewsCardType) => (
-              <PostCardDetails key={news.id} newsData={news} session={session} />
-            ))
-          ) : (
-            <div className="text-red-500 border rounded-2xl p-2 text-center">Error: No News found</div>
-          )
-        ) : (
-          <PostCardDetails newsData={newsData} session={session} />
-        )
-      ) : (
-        <div className="text-red-500 border rounded-2xl p-2 text-center">Error: No News found</div>
-      )}
+      {postsState.map((post) => (
+        <PostCardDetails
+          key={post.id}
+          postData={post}
+          session={session}
+          onDeletePostAction={handleDeletePost}
+        />
+      ))}
     </>
-  )
+  );
 }

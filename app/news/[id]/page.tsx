@@ -1,16 +1,14 @@
-import GoBack from "@/components/buttons/go-back/GoBack";
-import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
+import { Suspense } from "react";
+import { auth } from "@/auth";
 import prisma from "@/lib/db";
 import { NewsCardType } from "@/utils/types";
-import NewsCardDetails from "../../../components/posts/post-card/PostCardDetails";
-import { auth } from "@/auth";
-
+import GoBack from "@/components/buttons/go-back/GoBack";
+import PostCard from "@/components/posts/post-card/PostCard";
+import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
 
 async function getData(id: string): Promise<NewsCardType | null> {
   const post = await prisma.posts.findUnique({
-    where: {
-      id: id
-    },
+    where: { id },
     select: {
       id: true,
       title: true,
@@ -27,13 +25,12 @@ async function getData(id: string): Promise<NewsCardType | null> {
         }
       }
     }
-  })
+  });
   return post as NewsCardType | null;
 }
 
 export default async function NewsPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
-
   const { id } = await params;
   const post = await getData(id);
 
@@ -45,14 +42,15 @@ export default async function NewsPage({ params }: { params: Promise<{ id: strin
           <GoBack />
         </div>
       </div>
-      {post ?
-        session ? (
-          <NewsCardDetails newsData={post} session={session} />
+      <Suspense fallback={<div className="text-center py-8">Loading post...</div>}>
+        {post ? (
+          <PostCard posts={[post]} session={session} />
         ) : (
-          <NewsCardDetails newsData={post} />
-        ) : (
-          <div className="text-center text-lg text-red-500 font-semibold">Post not found try to refresh the page.</div>
+          <div className="text-center text-lg text-red-500 font-semibold">
+            Post not found. Try to refresh the page.
+          </div>
         )}
+      </Suspense>
       <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/smart-health" />
       <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
     </main>

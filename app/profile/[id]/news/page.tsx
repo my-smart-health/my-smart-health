@@ -1,7 +1,9 @@
-import NewsCardDetails from "@/components/posts/post-card/PostCardDetails";
-import { auth } from "@/auth";
 import prisma from "@/lib/db";
+import { auth } from "@/auth";
+
 import { NewsCardType } from "@/utils/types";
+
+import PostCard from "@/components/posts/post-card/PostCard";
 
 async function getAllPostsByUserId(userId: string) {
   const posts = await prisma.posts.findMany({
@@ -51,23 +53,7 @@ export default async function ProfileNewsPage({ params }: { params: Promise<{ id
     return (
       <main className="flex flex-col gap-3 w-full mb-auto max-w-[100%]">
         <h1 className="flex flex-wrap mx-auto text-xl font-bold text-primary text-center">{authorName} News</h1>
-
-        {posts.length > 0 && session && (
-          posts.map((post) => (
-            <NewsCardDetails key={post.id} newsData={post} session={session} />
-          ))
-        )}
-
-        {posts.length > 0 && !session && (
-          posts.map((post) => (
-            <NewsCardDetails key={post.id} newsData={post} />
-          ))
-        )}
-
-        {posts && posts.length === 0 && (
-          <p className="text-center">No news articles found for this user.</p>
-        )}
-
+        <PostCard posts={posts} session={session} />
       </main>
     );
   }

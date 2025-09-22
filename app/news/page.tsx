@@ -8,7 +8,7 @@ import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health
 import { NewsCardType } from "@/utils/types";
 
 async function getData() {
-  const prismaResult = await prisma.posts.findMany({
+  const posts = await prisma.posts.findMany({
     take: 20,
     orderBy: {
       createdAt: "desc",
@@ -31,13 +31,13 @@ async function getData() {
     }
   })
 
-  return prismaResult;
+  return posts;
 }
 
 export default async function NewsPage() {
   const session = await auth();
 
-  const newsData = await getData() as NewsCardType[];
+  const posts = await getData() as NewsCardType[];
 
   return (
     <div className="flex flex-col gap-3 w-full mb-auto max-w-[100%]">
@@ -47,9 +47,9 @@ export default async function NewsPage() {
           <GoBack />
         </div>
       </div>
-      {newsData && session
-        ? <PostCard newsData={newsData} session={session} /> :
-        <PostCard newsData={newsData} />}
+      {posts && session
+        ? <PostCard posts={posts} session={session} /> :
+        <PostCard posts={posts} />}
       <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/smart-health" />
       <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
     </div>
