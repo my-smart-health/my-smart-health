@@ -9,6 +9,7 @@ import 'swiper/css/mousewheel';
 import Image from "next/image";
 import Link from "next/link";
 import { ProfileNewsCarouselItem } from "@/utils/types";
+import { PAGINATION_BULLET_QUANTITY } from "@/utils/constants";
 
 type ProfileNewsCarouselItemProps = {
   carouselItems: ProfileNewsCarouselItem[];
@@ -32,7 +33,7 @@ export default function ProfileNewsCarousel({ carouselItems, disableOnInteractio
           mousewheel={true}
           autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction, pauseOnMouseEnter: true, waitForTransition: true }}
           speed={300}
-          pagination={{ clickable: true, enabled: true }}
+          pagination={{ clickable: true, enabled: true, dynamicBullets: true, dynamicMainBullets: PAGINATION_BULLET_QUANTITY }}
         >
           {carouselItems.map((item, idx) => (
             <SwiperSlide

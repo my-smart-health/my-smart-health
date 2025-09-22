@@ -15,6 +15,7 @@ import 'swiper/css/mousewheel';
 import 'swiper/css/effect-cards';
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
+import { PAGINATION_BULLET_QUANTITY } from "@/utils/constants";
 
 
 export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArray?: string[] }) {
@@ -38,7 +39,7 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
         grabCursor={true}
         mousewheel={true}
         navigation={true}
-        pagination={{ clickable: true, enabled: true }}
+        pagination={{ clickable: true, enabled: true, dynamicBullets: true, dynamicMainBullets: PAGINATION_BULLET_QUANTITY }}
         autoplay={{ delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true }}
         speed={300}
         className="max-w-full mx-auto"

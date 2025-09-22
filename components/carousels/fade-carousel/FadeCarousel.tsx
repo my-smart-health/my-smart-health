@@ -14,6 +14,7 @@ import 'swiper/css/mousewheel';
 
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
+import { PAGINATION_BULLET_QUANTITY } from "@/utils/constants";
 
 export default function FadeCarousel({ photos }: { photos: string[] }) {
   const [zoomedIdx, setZoomedIdx] = useState<number | null>(null);
@@ -31,7 +32,7 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
             effect="slide"
             grabCursor={true}
             navigation={true}
-            pagination={{ clickable: true }}
+            pagination={{ clickable: true, enabled: true, dynamicBullets: true, dynamicMainBullets: PAGINATION_BULLET_QUANTITY }}
             mousewheel={true}
             autoplay={{
               delay: 3000,

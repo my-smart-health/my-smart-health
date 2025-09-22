@@ -15,6 +15,7 @@ import 'swiper/css/mousewheel';
 import 'swiper/css/effect-cube';
 
 import NewsCarouselSkeleton from "./NewsCarouselSkeleton";
+import { PAGINATION_BULLET_QUANTITY } from "@/utils/constants";
 
 type NewsCarouselProps = {
   props?: {
@@ -40,13 +41,14 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
           effect="cube"
           grabCursor={true}
           navigation={true}
-          pagination={{ clickable: true, enabled: true }}
+          pagination={{ clickable: true, enabled: true, dynamicBullets: true, dynamicMainBullets: PAGINATION_BULLET_QUANTITY }}
           cubeEffect={{
             shadow: true,
             slideShadows: true,
             shadowOffset: 20,
             shadowScale: 0.94
           }}
+
           mousewheel={true}
           autoplay={{ delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true }}
           speed={300}
