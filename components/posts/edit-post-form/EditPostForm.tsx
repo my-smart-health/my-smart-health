@@ -49,6 +49,8 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
 
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
 
+  const errorModalRef = useRef<HTMLDialogElement>(null);
+
   useEffect(() => {
     if (blobResult.length > 0) {
       setIsImageFirst(
@@ -69,6 +71,17 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
     resize(titleRef.current, title);
     resize(contentRef.current, content);
   }, [title, content]);
+
+  useEffect(() => {
+    if (error) {
+      errorModalRef.current?.showModal();
+    }
+  }, [error]);
+
+  const handleErrorClose = () => {
+    setError(null);
+    errorModalRef.current?.close();
+  };
 
   const handleAddURL = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -214,7 +227,6 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
     try {
       setIsDisabled(true);
       for (const photoUrl of blobResult) {
-        console.log('Deleting photo:', photoUrl);
         await fetch(`/api/delete/delete-picture?url=${encodeURIComponent(photoUrl)}`, {
           method: 'DELETE',
         });
@@ -251,14 +263,47 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       <span className="self-end mb-4">
         <GoBack />
       </span>
-      {error && <p className={`${error === 'Post updated successfully' ? 'text-green-500' : 'text-red-500'} bg-secondary/10 border-2 border-primary rounded-2xl p-2 text-center break-all`}>{error}</p>}
+
+      {error && (
+        <dialog
+          ref={errorModalRef}
+          id="edit_post_error_modal"
+          className="modal modal-bottom backdrop-grayscale-100 transition-all ease-linear duration-500"
+          style={{ backgroundColor: 'transparent' }}
+          onClose={handleErrorClose}
+        >
+          <div
+            className="modal-box bg-red-500 text-white rounded-2xl w-[95%]"
+            style={{
+              width: "80vw",
+              maxWidth: "80vw",
+              margin: '2rem auto',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              position: "fixed",
+              minHeight: "unset",
+              padding: "2rem 1.5rem"
+            }}
+          >
+            <form method="dialog">
+              <button
+                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-white"
+                onClick={handleErrorClose}
+                type="button"
+              >✕</button>
+            </form>
+            <h3 className="font-bold text-lg">Fehler</h3>
+            <p className="py-4 text-center">{error}</p>
+          </div>
+        </dialog>
+      )}
 
       <dialog id="delete_modal" className="modal modal-bottom sm:modal-middle">
         <div className="modal-box">
           <p className="py-4">Are you sure you want to delete this post? This action cannot be undone.</p>
           <div className="modal-action">
             <form method="dialog" className="space-x-4">
-              {/* if there is a button in form, it will close the modal */}
               <button
                 type="button"
                 className="btn btn-outline btn-error hover:text-white hover:bg-error/80 transition-colors p-2 rounded font-bold text-base"
