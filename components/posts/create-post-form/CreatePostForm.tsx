@@ -60,6 +60,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
   const handleAddURL = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setIsDisabled(true);
     const form = e.currentTarget.closest('form');
     if (!form) return;
     const formData = new FormData(form);
@@ -67,6 +68,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
     if (!mediaUrl || mediaUrl.length === 0) {
       setError({ type: "error", message: "Media URL cannot be empty" });
+      setIsDisabled(false);
       return;
     }
     if (
@@ -77,8 +79,10 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       setBlobResult([...blobResult, mediaUrl]);
       const resetMediaInput = form.querySelector('input[name="media"]') as HTMLInputElement;
       resetMediaInput.value = '';
+      setIsDisabled(false);
     } else {
       setError({ type: "error", message: "Media URL must be a valid YouTube or Instagram link" });
+      setIsDisabled(false);
       return;
     }
   };
@@ -117,21 +121,21 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
     }
   };
 
-  interface HandleUploadImagesParams {
+  type HandleUploadImagesParams = {
     setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>;
     setError: React.Dispatch<React.SetStateAction<ErrorState>>;
     e: React.ChangeEvent<HTMLInputElement>;
     handleImageUpload: (file: File) => Promise<string | undefined>;
     setBlobResult: React.Dispatch<React.SetStateAction<string[]>>;
-  }
+  };
 
-  const handleUploadImages = async (
-    setIsDisabled: HandleUploadImagesParams['setIsDisabled'],
-    setError: HandleUploadImagesParams['setError'],
-    e: HandleUploadImagesParams['e'],
-    handleImageUpload: HandleUploadImagesParams['handleImageUpload'],
-    setBlobResult: HandleUploadImagesParams['setBlobResult']
-  ): Promise<void> => {
+  const handleUploadImages = async ({
+    setIsDisabled,
+    setError,
+    e,
+    handleImageUpload,
+    setBlobResult
+  }: HandleUploadImagesParams): Promise<void> => {
     setIsDisabled(true);
     setError(null);
     const uploadedImages = await Promise.all(
@@ -147,11 +151,17 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
   const handleError = () => {
     if (error?.type === "success") {
+      setIsDisabled(true);
       setError(null);
       errorModalRef.current?.close();
       setTimeout(() => {
         router.push('/dashboard');
       }, 3000);
+      return;
+    } else if (isDefaultLogo === true) {
+      setIsDisabled(true);
+      setError(null);
+      errorModalRef.current?.close();
     } else {
       setError(null);
       setIsDisabled(false);
@@ -224,7 +234,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         setIsDisabled(false);
         return;
       }
-
+      setIsDisabled(true);
       setError({ type: "success", message: "Post created successfully" });
     } catch (error) {
       let message = 'Error uploading files';
@@ -358,7 +368,13 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                   } else {
                     inputFileRef.current = e.target;
                     if (e.target.files) {
-                      await handleUploadImages(setIsDisabled, setError, e, handleImageUpload, setBlobResult);
+                      await handleUploadImages({
+                        setIsDisabled,
+                        setError,
+                        e,
+                        handleImageUpload,
+                        setBlobResult
+                      });
                     }
                   }
                 }} />
@@ -458,22 +474,20 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                 ? 'Warning'
                 : 'Error'}
           </h3>
-          <p className="py-4">
-            {isDefaultLogo && error?.type === "success" ? (
-              <div className="flex flex-col items-center">
-                <span className="p-2 text-center break-after-auto">
-                  No image file was selected, default logo will be used
-                </span>
-                <span className="text-sm text-white italic">
-                  You can change it later in the edit post section
-                </span>
-              </div>
-            ) : error?.message}
-          </p>
+          {isDefaultLogo && error?.type === "success" ? (
+            <div className="flex flex-col items-center py-4">
+              <span className="p-2 text-center break-after-auto">
+                No image file was selected, default logo will be used
+              </span>
+              <span className="text-sm text-white italic">
+                You can change it later in the edit post section
+              </span>
+            </div>
+          ) : (
+            <p className="py-4">{error?.message}</p>
+          )}
         </div>
       </dialog>
     </>
   );
 }
-
-
