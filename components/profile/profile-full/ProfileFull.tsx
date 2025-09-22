@@ -20,6 +20,7 @@ import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube } from "lu
 import Image from "next/image";
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
+import Divider from "@/components/divider/Divider";
 
 const platformIcons: Record<string, React.ReactNode> = {
   Email: <AtSign className="inline-block mr-1" size={20} />,
@@ -71,13 +72,16 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
 
   return (
     <div className="flex flex-col gap-2 p-2 w-full max-w-[99%]">
-      <ProfilePictureSection images={profileImages} />
 
       <section>
         <h2 className="font-bold text-primary text-xl">{name}</h2>
       </section>
 
       <FieldOfExpertiseSection fieldOfExpertise={fieldOfExpertise} />
+
+      <Divider addClass="my-2" />
+
+      <ProfilePictureSection images={profileImages} />
 
       <BioSection bio={bio ?? ""} />
 
@@ -91,14 +95,13 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
         address={address}
         platformIcons={platformIcons}
       />
+      <ReservationSection src={"https://moers.cms.shic.us/Arzttemin_reservieren"} />
+
+      <PrescriptionSection src={"https://moers.cms.shic.us/Arzttemin_reservieren"} />
 
       <CertificatesSection certificates={certificates} />
 
       <ScheduleSection schedule={schedule} />
-
-      <ReservationSection src={"https://moers.cms.shic.us/Arzttemin_reservieren"} />
-
-      <PrescriptionSection src={"https://moers.cms.shic.us/Arzttemin_reservieren"} />
 
     </div>
   );
