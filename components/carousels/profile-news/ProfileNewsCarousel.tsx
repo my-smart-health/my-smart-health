@@ -1,5 +1,5 @@
 'use client'
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Pagination } from "swiper/modules";
 import 'swiper/css';
@@ -34,7 +34,7 @@ export default function ProfileNewsCarousel({ carouselItems, disableOnInteractio
           speed={300}
           pagination={{ clickable: true, enabled: true, dynamicBullets: true, dynamicMainBullets: PAGINATION_BULLET_QUANTITY }}
         >
-          {carouselItems.map((item, idx) => (
+          {carouselItems.map((item) => (
             <SwiperSlide
               key={item.id}
               className="cursor-pointer pb-6">
