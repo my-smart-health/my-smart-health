@@ -1,21 +1,16 @@
 'use client'
 
+import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-export default function GoBack() {
-  const handleGoBack = () => {
-    if (typeof window !== "undefined") {
-      window.history.back();
-    }
-  };
-
+export default function GoBack({ href = "/" }: { href?: string }) {
   return (
-    <button
-      type="button"
+    <Link
+      href={href}
       className="flex items-center text-primary btn btn-dash font-bold active:bg-primary active:text-white"
-      onClick={handleGoBack}
+      prefetch={false}
     >
       <ArrowLeft /> <span className="pl-2">Zurück</span>
-    </button>
+    </Link>
   );
 }
