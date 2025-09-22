@@ -10,6 +10,7 @@ import 'swiper/css/autoplay';
 import 'swiper/css/mousewheel';
 import Image from "next/image";
 import Link from "next/link";
+import { PAGINATION_BULLET_QUANTITY } from "@/utils/constants";
 
 type TopCarouselItemProps = {
   props?: {
@@ -37,7 +38,7 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
           autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction, pauseOnMouseEnter: true, waitForTransition: true }}
           speed={300}
 
-          pagination={{ clickable: true, enabled: true }}
+          pagination={{ clickable: true, enabled: true, dynamicBullets: true, dynamicMainBullets: PAGINATION_BULLET_QUANTITY }}
         >
           {props.map((news) => (
             <SwiperSlide
