@@ -55,11 +55,11 @@ export default function ScheduleSection({ schedule }: { schedule: Schedule[] }) 
     <>
       <Divider addClass="my-4" />
 
-      <section className="flex flex-col space-y-4">
+      <section className="flex flex-col space-y-2">
         <h2 className="font-bold text-primary text-xl">Öffnungszeiten</h2>
         {schedule && schedule.length > 0 ? (
           schedule.map(sch => (
-            <div key={sch.id} className="grid grid-cols-2 justify-evenly gap-6 py-2">
+            <div key={sch.id} className="grid grid-cols-2 justify-evenly gap-6 py-1">
               <div>{getFirstLastDay(sch)}</div>
               <div>
                 <span>{sch.open}</span>
