@@ -84,9 +84,9 @@ export default async function DashboardPage() {
     <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
 
       <h1 className="mx-3 text-4xl font-extrabold  text-primary mb-6">Welcome, {user?.name || "User"}!</h1>
-
+      <div className="flex gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg"><CreateNewAccount session={session} /></div>
       <div className="flex gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
-        <CreateNewAccount session={session} />
+        <GoToButton src="/dashboard/all-posts" name="All Posts" className="btn btn-outline btn-info hover:text-white shadow" />
         <GoToButton src="/dashboard/edit-profile" name="Edit Profile" className="btn btn-outline btn-warning hover:text-white shadow" />
         <GoToButton src="/dashboard/create-post" name="New Post" className="btn btn-outline btn-success hover:text-white shadow" />
       </div>
