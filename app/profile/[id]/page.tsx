@@ -7,6 +7,7 @@ import { Certificate, Schedule } from "@/utils/types";
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
 import GoBack from "@/components/buttons/go-back/GoBack";
 import prisma from "@/lib/db";
+import Divider from "@/components/divider/Divider";
 
 function UserNotFound() {
   return (
@@ -80,6 +81,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
   return (
     <>
+      <Divider />
       <main
         className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
         {(session?.user?.role === "ADMIN") && (
