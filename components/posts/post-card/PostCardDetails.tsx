@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import { Session } from "next-auth";
 
 import { NewsCardType } from "@/utils/types";
@@ -12,6 +12,7 @@ import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
 import Divider from "@/components/divider/Divider";
 import { Pencil, Trash2 } from "lucide-react";
 import DeletePostModal from "../delete-post-modal/DeletePostModal";
+import { env } from "process";
 
 type PostCardDetailsProps = {
   postData: NewsCardType | null;
@@ -45,6 +46,9 @@ export default function PostCardDetails({ postData, session, onDeletePostAction 
       setIsDeleting(false);
       if (onDeletePostAction) onDeletePostAction(id);
     } catch (error) {
+      if (env.NODE_ENV === 'development') {
+        console.error('Error deleting post:', error);
+      }
       setDeleteMessage("Fehler beim Löschen des Beitrags. Bitte versuchen Sie es erneut.");
       setTimeout(() => {
         setIsDeleting(false);
