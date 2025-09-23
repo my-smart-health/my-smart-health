@@ -36,13 +36,17 @@ function isScheduleOpen(schedule: Schedule, now: Date) {
 }
 
 export default function ScheduleSection({ schedule }: { schedule: Schedule[] }) {
-
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000 * 30);
     return () => clearInterval(timer);
   }, []);
+
+  const isOpenShown = useMemo(
+    () => schedule.some(sch => sch.open && sch.close),
+    [schedule]
+  );
 
   const isOpenNow = useMemo(
     () => schedule.some(sch => isScheduleOpen(sch, currentTime)),
@@ -57,24 +61,40 @@ export default function ScheduleSection({ schedule }: { schedule: Schedule[] }) 
 
       <section className="flex flex-col space-y-2">
         <h2 className="font-bold text-primary text-xl">Öffnungszeiten</h2>
-        {schedule && schedule.length > 0 ? (
-          schedule.map(sch => (
-            <div key={sch.id} className="grid grid-cols-2 justify-evenly gap-6 py-1">
-              <div>{getFirstLastDay(sch)}</div>
-              <div>
-                <span>{sch.open}</span>
-                <span> - </span>
-                <span>{sch.close}</span>
-                <span> Uhr</span>
+        {schedule.length > 0 ? (
+          schedule.map(sch => {
+            const activeDays = getActiveDays(sch);
+            if (activeDays.length === 0) {
+              return <p key={sch.id} className="text-gray-400">Keine Öffnungszeiten angegeben</p>;
+            }
+            if (!sch.open || !sch.close) {
+              return (
+                <div key={sch.id} className="grid grid-cols-2 justify-evenly gap-6 py-1">
+                  <div>{getFirstLastDay(sch)}</div>
+                  <div><span className="text-gray-400">Keine Öffnungszeiten angegeben</span></div>
+                </div>
+              );
+            }
+            return (
+              <div key={sch.id} className="grid grid-cols-2 justify-evenly gap-6 py-1">
+                <div>{getFirstLastDay(sch)}</div>
+                <div>
+                  {sch.open && <span>{sch.open}</span>}
+                  {sch.open && sch.close && <span> - </span>}
+                  {sch.close && <span>{sch.close}</span>}
+                  {sch.open && sch.close && <span> Uhr</span>}
+                </div>
               </div>
-            </div>
-          ))
+            )
+          })
         ) : (
           <p className="text-gray-400">Keine Öffnungszeiten angegeben</p>
         )}
-        <span className={isOpenNow ? "font-bold text-green-500/95" : "font-bold text-red-500/95"}>
-          {isOpenNow ? "geöffnet" : "geschlossen"}
-        </span>
+        {isOpenShown && (
+          <span className={isOpenNow ? "font-bold text-green-500/95" : "font-bold text-red-500/95"}>
+            {isOpenNow ? "geöffnet" : "geschlossen"}
+          </span>
+        )}
       </section>
     </>
   );
