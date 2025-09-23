@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
 import { MouseEvent, useEffect, useRef, useState, ChangeEvent } from "react";
 import { PutBlobResult } from "@vercel/blob";
 
@@ -58,36 +57,18 @@ export default function EditProfileForm({ user }: { user: User }) {
   const addressRef = useRef<HTMLTextAreaElement>(null);
   const errorModalRef = useRef<HTMLDialogElement>(null);
 
-  const [userData, setUserData] = useState<User>(user);
-
+  const [name, setName] = useState(user.name ?? "");
   const [fieldOfExpertise, setFieldOfExpertise] = useState<string[]>(user.fieldOfExpertise || []);
   const [phoneNumbers, setPhoneNumbers] = useState<string[]>(user.phone || []);
   const [socials, setSocials] = useState<Social[]>(parseSocials(user.socials || []));
-  const [schedule, setSchedule] = useState<Schedule[]>(user.schedule || [{
-    id: crypto.randomUUID(),
-    day: {
-      Monday: false,
-      Tuesday: false,
-      Wednesday: false,
-      Thursday: false,
-      Friday: false,
-      Saturday: false,
-      Sunday: false
-    },
-    open: '',
-    close: ''
-  }]);
-
+  const [schedule, setSchedule] = useState<Schedule[]>(user.schedule || []);
   const [error, setError] = useState<string | null>(null);
-
   const [bio, setBio] = useState(user.bio || "");
   const [address, setAddress] = useState(user.address || "");
   const [displayEmail, setDisplayEmail] = useState(user.displayEmail || "");
   const [website, setWebsite] = useState(user.website || "");
-  const [blobResult, setBlobResult] = useState<string[]>(userData.profileImages || []);
-
+  const [blobResult, setBlobResult] = useState<string[]>(user.profileImages || []);
   const [certificates, setCertificates] = useState<CertificateForm[]>(user.certificates?.map(cert => ({ ...cert })) || []);
-
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
 
@@ -170,7 +151,7 @@ export default function EditProfileForm({ user }: { user: User }) {
 
       for (const file of files) {
         const response = await fetch(
-          `/api/upload/upload-profile-picture/?userid=${userData.id}&filename=${file.name}`,
+          `/api/upload/upload-profile-picture/?userid=${user.id}&filename=${file.name}`,
           {
             method: 'PUT',
             body: file,
@@ -218,7 +199,7 @@ export default function EditProfileForm({ user }: { user: User }) {
 
       for (const cert of certificateFiles) {
         const response = await fetch(
-          `/api/upload/upload-certificate-images/?userid=${userData.id}&filename=${cert.name}`,
+          `/api/upload/upload-certificate-images/?userid=${user.id}&filename=${cert.name}`,
           {
             method: 'PUT',
             body: cert,
@@ -321,16 +302,16 @@ export default function EditProfileForm({ user }: { user: User }) {
       }));
 
       const data = {
-        name: formData.get('name') as string,
-        bio: formData.get('bio') as string,
-        fieldOfExpertise: fieldOfExpertise,
-        address: formData.get('address') as string,
-        displayEmail: formData.get('displayEmail') as string,
+        name,
+        bio,
+        fieldOfExpertise,
+        address,
+        displayEmail,
         phone: phoneNumbers,
-        website: formData.get('website') as string,
+        website,
         profileImages: blobResult,
         socials: serializeSocials(socials),
-        schedule: userData.schedule,
+        schedule,
         certificates: certificatesPayload,
       };
 
@@ -339,7 +320,7 @@ export default function EditProfileForm({ user }: { user: User }) {
 
       const res = await fetch('/api/update/update-profile', {
         method: 'PUT',
-        body: JSON.stringify({ id: userData.id, data: payload }),
+        body: JSON.stringify({ id: user.id, data: payload }),
         headers: { 'Content-Type': 'application/json' },
       });
 
@@ -349,8 +330,6 @@ export default function EditProfileForm({ user }: { user: User }) {
         return;
       }
 
-      const result = await res.json();
-      setUserData(result.data);
       setError(null);
       setIsDisabled(false);
 
@@ -416,7 +395,7 @@ export default function EditProfileForm({ user }: { user: User }) {
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Name/Bio" defaultChecked />
           <div className="tab-content border-primary p-10">
 
-            <NameSection name={userData.name ?? ""} onChange={val => setUserData({ ...userData, name: val })} />
+            <NameSection name={name} onChange={setName} />
 
             <Divider addClass="my-4" />
 
