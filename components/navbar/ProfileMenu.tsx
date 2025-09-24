@@ -25,6 +25,7 @@ export default async function ProfileMenu() {
               <li className="tab-disabled"></li>
               <li><Link href="/dashboard/edit-profile" className="flex gap-1">Edit profile</Link></li>
               <li className="tab-disabled"></li>
+              <li><Link href="/dashboard/edit-my-smart-health" className="flex gap-1">Edit My Smart Health</Link></li>
               <li><Link href="/register" className="flex gap-1">Register new user</Link></li>
               <li className="tab-disabled"></li>
               <li className="my-2"><LogOut /></li>
