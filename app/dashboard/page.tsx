@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import prisma from "@/lib/db";
@@ -5,11 +6,10 @@ import { auth } from "@/auth";
 
 import { Certificate, Schedule } from "@/utils/types";
 
+import Divider from "@/components/divider/Divider";
+import GoBack from "@/components/buttons/go-back/GoBack";
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
-import CreateNewAccount from "@/components/buttons/create-new-account/CreateNewAccount";
-import GoBack from "@/components/buttons/go-back/GoBack";
-import Divider from "@/components/divider/Divider";
 
 
 async function getUser(id: string) {
@@ -86,7 +86,12 @@ export default async function DashboardPage() {
       <Divider />
       <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
         <h1 className="mx-3 text-4xl font-extrabold  text-primary mb-6">Welcome, {user?.name || "User"}!</h1>
-        <div className="flex gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg"><CreateNewAccount session={session} /></div>
+        {session.user.role === "ADMIN" && (
+          <div className="flex gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
+            <Link href="/dashboard/edit-my-smart-health" className="btn btn-outline border-green-500 text-green-500 hover:text-white">Edit My Smart Health</Link>
+            <Link href="/register" className="btn btn-outline btn-error hover:text-white">Create new account</Link>
+          </div>
+        )}
         <div className="flex gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
           <GoToButton src="/dashboard/all-posts" name="All Posts" className="btn btn-outline btn-info hover:text-white shadow" />
           <GoToButton src="/dashboard/edit-profile" name="Edit Profile" className="btn btn-outline btn-warning hover:text-white shadow" />
