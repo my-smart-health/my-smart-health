@@ -1,8 +1,11 @@
 
-import prisma from "@/lib/db";
-import { PROFILE_TYPE_SMART_HEALTH } from "@/utils/constants";
-import { Triangle } from "lucide-react";
 import Link from "next/link";
+import prisma from "@/lib/db";
+
+import { Triangle } from "lucide-react";
+
+import { PROFILE_TYPE_SMART_HEALTH } from "@/utils/constants";
+import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
 
 async function getCategories() {
   const user = await prisma.user.findMany({
@@ -24,6 +27,7 @@ export default async function SmartHealthPage() {
 
   return (
     <main className="w-full mb-auto max-w-full">
+      <MySmartHealth />
       {user && user.length > 0 ? (
         <div className="grid grid-cols-1 gap-4">
           {uniqueCategories.map((category, index) => {
