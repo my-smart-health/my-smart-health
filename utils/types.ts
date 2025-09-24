@@ -94,3 +94,17 @@ export type ProfileNewsCarouselItem = {
   title: string;
   photos: string[];
 };
+
+export type MySmartHealthParagraph = {
+  id: string;
+  title: string;
+  content: string;
+  images: string[];
+  files: string[];
+};
+
+export type MySmartHealthInfo = {
+  id: string;
+  generalTitle: string;
+  paragraph: MySmartHealthParagraph[];
+};
