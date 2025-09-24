@@ -288,8 +288,6 @@ export default function EditProfileForm({ user }: { user: User }) {
         return;
       }
 
-      const formData = new FormData(e.currentTarget);
-
       const certificatesPayload = certificates.map(cert => ({
         id: cert.id,
         name: cert.name,
