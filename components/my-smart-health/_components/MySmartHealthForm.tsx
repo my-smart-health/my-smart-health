@@ -38,7 +38,7 @@ export default function MySmartHealthForm({ smartHealthData }: { smartHealthData
         setError({ message: "Information updated successfully", type: 'success' });
       }
     } catch (err) {
-      setError({ message: "An error occurred while updating the information", type: 'error' });
+      setError({ message: `An error occurred while updating the information ${err}`, type: 'error' });
     }
   }
 

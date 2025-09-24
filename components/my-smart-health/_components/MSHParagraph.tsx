@@ -29,7 +29,7 @@ export default function MSHParagraph({
           method: "DELETE",
         });
       } catch (error) {
-        setErrorAction({ message: "Error deleting image.", type: "error" });
+        setErrorAction({ message: `Error deleting image. ${error}`, type: "error" });
       }
     }
 
@@ -39,7 +39,7 @@ export default function MSHParagraph({
           method: "DELETE",
         });
       } catch (error) {
-        setErrorAction({ message: "Error deleting file.", type: "error" });
+        setErrorAction({ message: `Error deleting file. ${error}`, type: "error" });
       }
     }
 
@@ -92,7 +92,7 @@ export default function MSHParagraph({
       setParagraphsAction(updatedParagraphs);
       if (fileInputRefs.current[index]) fileInputRefs.current[index]!.value = "";
     } catch (error) {
-      setErrorAction({ message: "Error uploading images.", type: "error" });
+      setErrorAction({ message: `Error uploading images. ${error}`, type: "error" });
     }
   }
 
@@ -133,7 +133,7 @@ export default function MSHParagraph({
       );
       setParagraphsAction(updatedParagraphs);
     } catch (error) {
-      setErrorAction({ message: "Error uploading files.", type: "error" });
+      setErrorAction({ message: `Error uploading files. ${error}`, type: "error" });
     }
   }
 
