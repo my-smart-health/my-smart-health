@@ -57,3 +57,9 @@ model Certificate {
   user          User      @relation("UserCertificates", fields: [userId], references: [id])
   userId        String
 }
+
+model MySmartHealth {
+  id           String  @id @default(uuid())
+  generalTitle String?
+  paragraph    Json
+}
