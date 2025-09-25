@@ -87,9 +87,13 @@ export default async function DashboardPage() {
       <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
         <h1 className="mx-3 text-4xl font-extrabold  text-primary mb-6">Welcome, {user?.name || "User"}!</h1>
         {session.user.role === "ADMIN" && (
-          <div className="flex gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
-            <Link href="/dashboard/edit-my-smart-health" className="btn btn-outline border-green-500 text-green-500 hover:text-white">Edit My Smart Health</Link>
-            <Link href="/register" className="btn btn-outline btn-error hover:text-white">Create new account</Link>
+          <div className="flex flex-col gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
+            <span className="font-bold self-center">Admin Only</span>
+            <div className="flex flex-row gap-2">
+              <GoToButton src="/dashboard/all-users" name="All Users" className="btn btn-outline btn-info hover:text-white" />
+              <GoToButton src="/dashboard/edit-my-smart-health" name="Edit My Smart Health" className="btn btn-outline btn-success hover:text-white shadow" />
+              <GoToButton src="/register" name="Create new account" className="btn btn-outline btn-error hover:text-white" />
+            </div>
           </div>
         )}
         <div className="flex gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
