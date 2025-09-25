@@ -4,7 +4,6 @@ import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health
 import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealthBarLink";
 import prisma from "@/lib/db";
 
-
 async function getNews() {
   const news = await prisma.posts.findMany({
     orderBy: { createdAt: 'desc' },
