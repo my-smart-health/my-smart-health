@@ -3,14 +3,14 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
-export default function GoBack({ href = "/" }: { href?: string }) {
+export default function GoBack() {
   return (
-    <Link
-      href={href}
+    <button
+      onClick={() => window.history.back()}
       className="flex items-center text-primary btn btn-dash font-bold active:bg-primary active:text-white"
-      prefetch={false}
+      type="button"
     >
       <ArrowLeft /> <span className="pl-2">Zurück</span>
-    </Link>
+    </button>
   );
 }
