@@ -97,10 +97,10 @@ export type ProfileNewsCarouselItem = {
 
 export type MySmartHealthParagraph = {
   id: string;
-  title: string;
+  title?: string;
   content: string;
-  images: string[];
-  files: string[];
+  images?: string[];
+  files?: string[];
 };
 
 export type MySmartHealthInfo = {
