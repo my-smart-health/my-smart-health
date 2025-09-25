@@ -1,5 +1,5 @@
 'use client';
-import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Trash, Trash2 } from "lucide-react";
+import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 import { useState } from "react";
 
 type EditUserCategoryProps = {
