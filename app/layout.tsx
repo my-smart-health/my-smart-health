@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar/Navbar";
 import Link from "next/link";
 import { auth } from "@/auth";
 import LogOut from "@/components/buttons/log-out/LogOut";
+import { Analytics } from "@vercel/analytics/next";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -50,6 +51,7 @@ export default async function RootLayout({
       >
         <Navbar />
         {children}
+        <Analytics />
         <footer className="bg-primary w-full text-center text-white py-4 mt-8">
           <Link href="/impressum" className="hover:underline capitalize">Impressum</Link>
           <span className="mx-1">|</span>
