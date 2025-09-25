@@ -23,7 +23,7 @@ export default function MSHParagraph({
   async function handleDelete(index: number) {
     const paragraphToDelete = paragraphs[index];
 
-    for (const imgUrl of paragraphToDelete.images) {
+    for (const imgUrl of paragraphToDelete.images ?? []) {
       try {
         await fetch(`/api/delete/delete-picture?url=${encodeURIComponent(imgUrl)}`, {
           method: "DELETE",
@@ -33,7 +33,7 @@ export default function MSHParagraph({
       }
     }
 
-    for (const fileUrl of paragraphToDelete.files) {
+    for (const fileUrl of paragraphToDelete.files ?? []) {
       try {
         await fetch(`/api/delete/delete-picture?url=${encodeURIComponent(fileUrl)}`, {
           method: "DELETE",
@@ -56,7 +56,7 @@ export default function MSHParagraph({
 
   function handleTitleChange(index: number, value: string): void {
     const updatedParagraphs = paragraphs.map((paragraph, i) =>
-      i === index ? { ...paragraph, title: value } : paragraph
+      i === index ? { ...paragraph, title: value ?? "" } : paragraph
     );
     setParagraphsAction(updatedParagraphs);
   }
@@ -86,7 +86,7 @@ export default function MSHParagraph({
       }
       const updatedParagraphs = paragraphs.map((paragraph, i) =>
         i === index
-          ? { ...paragraph, images: [...paragraph.images, ...uploadedUrls] }
+          ? { ...paragraph, images: [...(paragraph.images ?? []), ...uploadedUrls] }
           : paragraph
       );
       setParagraphsAction(updatedParagraphs);
@@ -128,7 +128,7 @@ export default function MSHParagraph({
       }
       const updatedParagraphs = paragraphs.map((paragraph, i) =>
         i === index
-          ? { ...paragraph, files: [...paragraph.files, ...uploadedUrls] }
+          ? { ...paragraph, files: [...(paragraph.files ?? []), ...uploadedUrls] }
           : paragraph
       );
       setParagraphsAction(updatedParagraphs);
@@ -145,10 +145,9 @@ export default function MSHParagraph({
             Paragraph Title:
             <input
               type="text"
-              value={paragraph.title}
+              value={paragraph.title ?? ""}
               onChange={(e) => handleTitleChange(index, e.target.value)}
               className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
-              required
             />
           </label>
 
@@ -178,9 +177,9 @@ export default function MSHParagraph({
               onChange={(e) => handleUploadImages(index, e.target.files)}
             />
           </label>
-          {paragraph.images.length > 0 && (
+          {(paragraph.images ?? []).length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
-              {paragraph.images.map((img, imgIdx) => (
+              {(paragraph.images ?? []).map((img, imgIdx) => (
                 <Image
                   key={imgIdx}
                   src={img}
@@ -206,9 +205,9 @@ export default function MSHParagraph({
               accept="*"
             />
           </label>
-          {paragraph.files.length > 0 && (
+          {(paragraph.files ?? []).length > 0 && (
             <ul className="mt-2 space-y-1">
-              {paragraph.files.map((fileUrl, fileIdx) => (
+              {(paragraph.files ?? []).map((fileUrl, fileIdx) => (
                 <li key={fileIdx}>
                   <Link
                     href={fileUrl}
