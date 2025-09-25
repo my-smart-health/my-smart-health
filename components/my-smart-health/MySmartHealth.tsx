@@ -51,7 +51,7 @@ export default async function MySmartHealth() {
                       <div className="w-24 rounded-xl border border-primary">
                         <Image
                           src={imgUrl}
-                          alt={para.title}
+                          alt={para.title || `Image ${imgIndex + 1}`}
                           width={100}
                           height={100}
                           loading="lazy"
