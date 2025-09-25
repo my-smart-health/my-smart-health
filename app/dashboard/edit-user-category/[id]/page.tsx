@@ -1,7 +1,7 @@
 import prisma from "@/lib/db";
 import GoBack from "@/components/buttons/go-back/GoBack";
 import EditUserCategory from "./EditUserCategory";
-import { revalidatePath } from "next/cache";
+import { updateUserCategoryAction } from "./actions";
 
 async function getUserCategoryById(id: string) {
   const categories = await prisma.user.findUnique({
@@ -10,16 +10,6 @@ async function getUserCategoryById(id: string) {
   });
 
   return categories;
-}
-
-// --- Server Action ---
-export async function updateUserCategoryAction(id: string, categories: string[]) {
-  "use server";
-  await prisma.user.update({
-    where: { id },
-    data: { category: categories },
-  });
-  revalidatePath(`/dashboard/edit-user-category/${id}`);
 }
 
 export default async function EditUserCategoryPage({ params }: { params: Promise<{ id: string }> }) {
