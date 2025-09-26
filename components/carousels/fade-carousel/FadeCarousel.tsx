@@ -65,7 +65,7 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
                       alt={item}
                       fill
                       sizes="(max-width: 600px) 100vw, 600px"
-                      style={{ objectFit: "contain", width: "100%", height: "100%" }}
+                      style={{ objectFit: "contain" }}
                       className="rounded-lg"
                     />
                   </div>
