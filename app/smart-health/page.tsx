@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 
-import CategoryAccordion from "./CategoryAccordion";
+import CategoryAccordion from "@/components/buttons/category-accordion-button/CategoryAccordion";
 
 import { PROFILE_TYPE_SMART_HEALTH } from "@/utils/constants";
 import { CategoryNodeSH, UserProfileSH } from "@/utils/types";
