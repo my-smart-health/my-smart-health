@@ -28,7 +28,7 @@ export default async function MySmartHealth() {
           loading="lazy"
           placeholder="empty"
           className="rounded-full "
-          style={{ width: 40, height: 40 }}
+          style={{ objectFit: "cover" }}
         />
         <span>MY SMART HEALTH</span>
       </div>
