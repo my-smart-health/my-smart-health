@@ -108,3 +108,17 @@ export type MySmartHealthInfo = {
   generalTitle: string;
   paragraph: MySmartHealthParagraph[];
 };
+
+export type UserProfileSH = {
+  id: string;
+  name: string;
+  bio?: string;
+  profileImages: string[];
+  category: string[];
+};
+
+export type CategoryNodeSH = {
+  name: string;
+  children: Map<string, CategoryNodeSH>;
+  users: UserProfileSH[];
+};
