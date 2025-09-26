@@ -1,8 +1,11 @@
 'use client';
+
 import { useState } from "react";
-import ProfileShort from "@/components/profile/profile-short/ProfileShort";
 import { Triangle } from "lucide-react";
+
 import { CategoryNodeSH } from "@/utils/types";
+
+import ProfileShort from "@/components/profile/profile-short/ProfileShort";
 
 export default function CategoryAccordion({
   node,
