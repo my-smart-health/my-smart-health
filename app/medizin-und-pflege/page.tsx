@@ -1,47 +1,66 @@
-
 import prisma from "@/lib/db";
-import { PROFILE_TYPE_MEDIZIN_UND_PFLEGE } from "@/utils/constants";
-import { Triangle } from "lucide-react";
-import Link from "next/link";
 
-async function getCategories() {
-  const user = await prisma.user.findMany({
+import CategoryAccordion from "@/components/buttons/category-accordion-button/CategoryAccordion";
+
+import { PROFILE_TYPE_MEDIZIN_UND_PFLEGE } from "@/utils/constants";
+import { CategoryNodeSH, UserProfileSH } from "@/utils/types";
+
+
+function buildCategoryTree(users: UserProfileSH[]): CategoryNodeSH {
+  const root: CategoryNodeSH = { name: "", children: new Map(), users: [] };
+  for (const user of users) {
+    let node = root;
+    const cleanCategories = (user.category || []).map(c => c.trim()).filter(Boolean);
+    for (let i = 0; i < cleanCategories.length; i++) {
+      const cat = cleanCategories[i];
+      if (!node.children.has(cat)) {
+        node.children.set(cat, { name: cat, children: new Map(), users: [] });
+      }
+      node = node.children.get(cat)!;
+      if (i === cleanCategories.length - 1) {
+        node.users.push(user);
+      }
+    }
+  }
+  return root;
+}
+
+async function getSmartHealthUsers(): Promise<UserProfileSH[]> {
+  const users = await prisma.user.findMany({
     where: { profileType: PROFILE_TYPE_MEDIZIN_UND_PFLEGE },
     select: {
       id: true,
-      category: true
+      name: true,
+      bio: true,
+      category: true,
+      profileImages: true,
     }
   });
-  return { user };
+
+  return users
+    .filter(
+      u =>
+        Array.isArray(u.category) &&
+        u.category.length > 0 &&
+        Array.isArray(u.profileImages) &&
+        u.profileImages.length > 0
+    )
+    .map(u => ({
+      id: u.id,
+      name: u.name || "No Name",
+      bio: u.bio || "",
+      category: (u.category as string[]).map(c => c.trim()).filter(Boolean),
+      profileImages: u.profileImages as string[],
+    }));
 }
 
-export default async function MedizinUndPflegePage() {
-
-  const { user } = await getCategories();
-
-  const uniqueCategories = Array.from(new Set(user.flatMap(u => u.category))).filter(u => u.length > 0).sort();
+export default async function SmartHealthPage() {
+  const users = await getSmartHealthUsers();
+  const tree = buildCategoryTree(users);
 
   return (
-    <>
-      {user && user.length > 0 ? (
-        <div className="grid grid-cols-1 gap-4">
-          {uniqueCategories.map((category, index) => {
-
-            const categoryLink = category.replace(/\s+/g, '-').replace(/%26/g, '&');
-            return (
-              <Link
-                key={index}
-                className="flex items-center gap-2 p-4 indent-1 font-bold text-xl border border-gray-400 rounded-2xl shadow-xl transition-shadow cursor-pointer"
-                href={`/medizin-und-pflege/${categoryLink}`}
-              >
-                <Triangle className="rotate-90 text-primary stroke-3 fill-primary" /><p>{category}</p>
-              </Link>
-            );
-          })}
-        </div>
-      ) : (
-        <p className="text-center p-4">No profiles found.</p>
-      )}
-    </>
+    <div className="grid grid-cols-1 gap-2">
+      <CategoryAccordion node={tree} />
+    </div>
   );
 }
