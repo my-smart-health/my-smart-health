@@ -84,7 +84,7 @@ export default function UserTable({ users }: { users: User[] }) {
         </thead>
         <tbody>
           {sortedUsers.map((user, idx) => (
-            <tr key={user.id || idx}>
+            <tr key={user.id || idx} className="hover:bg-primary/50 bg-primary/30">
               <td className="font-semibold">{user.name || "No Name"}</td>
               <td>{user.email}</td>
               <td>
@@ -97,9 +97,10 @@ export default function UserTable({ users }: { users: User[] }) {
                   <Image
                     src={user.profileImages[0]}
                     alt={user.name || "Profile Image"}
-                    width={40}
-                    height={40}
-                    className="rounded-full border border-primary"
+                    width={100}
+                    height={100}
+                    style={{ objectFit: "contain" }}
+                    className="rounded aspect-square border border-primary hover:scale-200 transition-transform duration-200"
                   />
                 ) : (
                   <span className="text-gray-400">No Image</span>
