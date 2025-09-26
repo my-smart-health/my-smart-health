@@ -22,7 +22,7 @@ export default async function MedizinUndPflegePage() {
   const uniqueCategories = Array.from(new Set(user.flatMap(u => u.category))).filter(u => u.length > 0).sort();
 
   return (
-    <main className="w-full mb-auto max-w-full">
+    <>
       {user && user.length > 0 ? (
         <div className="grid grid-cols-1 gap-4">
           {uniqueCategories.map((category, index) => {
@@ -42,6 +42,6 @@ export default async function MedizinUndPflegePage() {
       ) : (
         <p className="text-center p-4">No profiles found.</p>
       )}
-    </main>
+    </>
   );
 }

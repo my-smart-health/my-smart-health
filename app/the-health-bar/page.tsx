@@ -12,7 +12,7 @@ import { defaultCarouselItems, defaultHealthBarItems } from "@/data/mockup-data"
 export default function TheHealthBarPage() {
   const healthBarItems = defaultHealthBarItems.map(item => item.imageSrc);
   return (
-    <main className="flex flex-col gap-3 justify-center items-center mx-auto mb-auto max-w-[90%] overflow-clip overscroll-x-none">
+    <>
       <div className="max-w-[95%]">
         {defaultCarouselItems && <TopCarousel props={defaultCarouselItems} />}
         {healthBarItems && <ProfilePictureCarousel imageSrcArray={healthBarItems} />}
@@ -25,6 +25,6 @@ export default function TheHealthBarPage() {
 
       <div className="flex border w-full border-primary"></div>
       <TheHealthBarInfo />
-    </main>
+    </>
   );
 }

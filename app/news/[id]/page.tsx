@@ -35,7 +35,7 @@ export default async function NewsPage({ params }: { params: Promise<{ id: strin
   const post = await getData(id);
 
   return (
-    <main className="flex flex-col gap-3 w-full mb-auto max-w-[100%]">
+    <>
       <div className="space-y-4 mx-auto w-full">
         <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" active />
         <div className="flex justify-end my-2">
@@ -53,6 +53,6 @@ export default async function NewsPage({ params }: { params: Promise<{ id: strin
       </Suspense>
       <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/smart-health" />
       <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
-    </main>
+    </>
   );
 }

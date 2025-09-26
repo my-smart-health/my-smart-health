@@ -23,9 +23,9 @@ export default async function EditMySmartHealthPage() {
   const mySmartHealth = await getMySmartHealthInfo();
 
   return (
-    <main className="my-auto w-full max-w-[90%] mx-auto bg-gray-50 border p-2 border-primary rounded">
+    <>
       <h1 className="mb-8 text-center text-wrap text-2xl font-bold text-primary">Edit My Smart Health Information</h1>
       <MySmartHealthForm smartHealthData={mySmartHealth} />
-    </main>
+    </>
   );
 }

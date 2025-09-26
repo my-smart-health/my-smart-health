@@ -4,7 +4,7 @@ import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health
 export default async function SmartHealthLayout({ children }: { children: React.ReactNode }) {
 
   return (
-    <main className="flex flex-col gap-3 w-full mb-auto max-w-[100%]">
+    <>
       <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" />
       <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/smart-health" active />
       <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
@@ -12,6 +12,6 @@ export default async function SmartHealthLayout({ children }: { children: React.
         <span className="self-end"><GoBack /></span>
         {children}
       </div>
-    </main>
+    </>
   );
 }

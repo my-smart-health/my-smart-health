@@ -1,11 +1,15 @@
-import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/components/navbar/Navbar";
 import Link from "next/link";
 import { auth } from "@/auth";
-import LogOut from "@/components/buttons/log-out/LogOut";
+
+import type { Metadata } from "next";
+import { Montserrat } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+
+import "./globals.css";
+
+import Navbar from "@/components/navbar/Navbar";
+import LogOut from "@/components/buttons/log-out/LogOut";
+import GoBackIndexCheck from "@/components/buttons/go-back-layout/GoBackIndexCheck";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -40,6 +44,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <head>
@@ -50,18 +55,31 @@ export default async function RootLayout({
         className={`${montserrat.variable} antialiased flex flex-col justify-center items-center pt-4 min-h-[100dvh] w-auto lg:max-w-3xl mx-auto p-2 overscroll-x-none border bg-white text-black`}
       >
         <Navbar />
-        {children}
+        <GoBackIndexCheck />
+        <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 pt-2 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
+          {children}
+        </main>
         <Analytics />
         <footer className="bg-primary w-full text-center text-white py-4 mt-8">
-          <Link href="/impressum" className="hover:underline capitalize">Impressum</Link>
+          <Link href="/impressum" className="hover:underline capitalize">
+            Impressum
+          </Link>
           <span className="mx-1">|</span>
-          <Link href="/datenschutz" className="hover:underline capitalize">Datenschutz</Link>
+          <Link href="/datenschutz" className="hover:underline capitalize">
+            Datenschutz
+          </Link>
           <span className="mx-1">|</span>
-          <Link href="/kontakt" className="hover:underline capitalize">Kontakt</Link>
+          <Link href="/kontakt" className="hover:underline capitalize">
+            Kontakt
+          </Link>
           <span className="mx-1">|</span>
-          {!session?.user ? <Link href="/login" className="hover:underline capitalize">Login</Link> :
+          {!session?.user ? (
+            <Link href="/login" className="hover:underline capitalize">
+              Login
+            </Link>
+          ) : (
             <LogOut addClasses="link link-error hover:text-white" />
-          }
+          )}
         </footer>
       </body>
     </html>

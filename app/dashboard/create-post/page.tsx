@@ -9,9 +9,9 @@ export default async function CreatePostPage() {
   }
 
   return (
-    <main className="flex flex-col gap-4 h-full min-h-[72dvh] max-w-[90%]">
+    <>
       <h1 className="text-4xl font-bold text-primary text-center">New Post</h1>
       <CreatePostForm session={session} />
-    </main>
+    </>
   );
 }

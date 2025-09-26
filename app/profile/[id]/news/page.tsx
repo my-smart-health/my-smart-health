@@ -51,11 +51,12 @@ export default async function ProfileNewsPage({ params }: { params: Promise<{ id
 
   if (posts) {
     return (
-      <main className="flex flex-col gap-3 w-full mb-auto max-w-[100%]">
+      <div className="flex flex-col gap-4 mb-8">
         <h1 className="flex flex-wrap mx-auto text-xl font-bold text-primary text-center">{authorName} News</h1>
         <PostCard posts={posts} session={session} />
-      </main>
+      </div>
     );
+
   }
 
   return <div>Error fetching news articles</div>;

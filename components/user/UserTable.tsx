@@ -108,7 +108,7 @@ export default function UserTable({ users }: { users: User[] }) {
               <td className="uppercase font-bold">{user.role}</td>
               <td>
                 <Link
-                  href={`/smart-health/${user.id}`}
+                  href={`/profile/${user.id}`}
                   className="text-blue-500 hover:underline"
                 >
                   View

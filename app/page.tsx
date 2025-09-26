@@ -40,7 +40,7 @@ export default async function Home() {
   })) : null;
 
   return (
-    <main className="flex flex-col items-center gap-4 max-w-[100%] min-h-[100dvh] mb-auto justify-items-center">
+    <>
       <div className="w-full">
         <TopCarousel props={newsTopCarousel} />
       </div>
@@ -53,6 +53,6 @@ export default async function Home() {
         <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
         <TheHealthBarLink />
       </div>
-    </main>
+    </>
   );
 }

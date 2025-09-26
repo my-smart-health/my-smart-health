@@ -3,7 +3,6 @@
 import { PROFILE_TYPE_MEDIZIN_UND_PFLEGE, PROFILE_TYPE_SMART_HEALTH } from "@/utils/constants";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState, useRef, useEffect } from "react";
-import GoBack from "../buttons/go-back/GoBack";
 
 type ErrorType = "success" | "warning" | "error";
 type ErrorState = { type: ErrorType; message: string } | null;
@@ -136,9 +135,6 @@ export default function RegisterForm() {
         onSubmit={handleSubmit}
         className={`mx-auto space-y-3 sm:p-8 w-full max-w-[90%] ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
       >
-        <div className="flex justify-end ">
-          <GoBack />
-        </div>
         <label htmlFor="name">Name</label>
         <input
           type="text"

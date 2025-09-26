@@ -24,20 +24,20 @@ export default async function EditPostIdPage({ params }: { params: Promise<{ id:
   const { post } = await getPostdata(id);
 
   if (!post) {
-    return <main className="flex flex-col items-center gap-8 max-w-[100%] mb-auto justify-items-center">
+    return <>
       <h1 className="text-xl font-bold">Post not found</h1>
       <div className="flex flex-row gap-4">
         <GoToButton name="Go to Home" src="/" className="btn btn-primary" />
         <GoToButton name="Go to Dashboard" src="/dashboard" className="btn btn-primary" />
       </div>
-    </main>;
+    </>;
   }
 
   if (session.user.role !== 'ADMIN' && session.user.id !== post.authorId) {
     return redirect('/dashboard');
   }
 
-  return <main className="flex flex-col items-center gap-8 max-w-[100%] mb-auto justify-items-center">
+  return <>
     <EditPostForm session={session} post={post} />
-  </main>;
+  </>;
 }

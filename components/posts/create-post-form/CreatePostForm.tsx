@@ -8,7 +8,6 @@ import { FormEvent, MouseEvent, useEffect, useRef, useState } from "react";
 
 import Divider from "@/components/divider/Divider";
 import { MAX_FILES_PER_POST } from "@/utils/constants";
-import GoBack from "@/components/buttons/go-back/GoBack";
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
@@ -259,10 +258,6 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       <form
         onSubmit={handleSubmit}
         className={`flex flex-col gap-4 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}>
-
-        <span className="self-end mb-4">
-          <GoBack />
-        </span>
 
         <fieldset className="fieldset text-lg">
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">

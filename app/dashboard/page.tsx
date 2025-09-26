@@ -6,10 +6,8 @@ import { auth } from "@/auth";
 import { Certificate, Schedule } from "@/utils/types";
 
 import Divider from "@/components/divider/Divider";
-import GoBack from "@/components/buttons/go-back/GoBack";
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
-
 
 async function getUser(id: string) {
   const user = await prisma.user.findUnique({
@@ -59,10 +57,9 @@ export default async function DashboardPage() {
 
   if (!user) {
     return (
-      <main className="flex flex-col items-center justify-center gap-3 w-full mb-auto max-w-[100%]">
+      <>
         <div>User not found</div>
-        <GoBack />
-      </main>
+      </>
     );
   }
 
@@ -83,27 +80,24 @@ export default async function DashboardPage() {
   return (
     <>
       <Divider />
-      <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
-        <h1 className="mx-3 text-4xl font-extrabold  text-primary mb-6">Welcome, {user?.name || "User"}!</h1>
-        {session.user.role === "ADMIN" && (
-          <div className="flex flex-col gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
-            <span className="font-bold self-center">Admin Only</span>
-            <div className="flex flex-row gap-2">
-              <GoToButton src="/dashboard/all-users" name="All Users" className="btn btn-outline btn-info hover:text-white" />
-              <GoToButton src="/dashboard/edit-my-smart-health" name="Edit My Smart Health" className="btn btn-outline btn-success hover:text-white shadow" />
-              <GoToButton src="/register" name="Create new account" className="btn btn-outline btn-error hover:text-white" />
-            </div>
+      <h1 className="mx-3 text-4xl font-extrabold  text-primary mb-6">Welcome, {user?.name || "User"}!</h1>
+      {session.user.role === "ADMIN" && (
+        <div className="flex flex-col gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
+          <span className="font-bold self-center">Admin Only</span>
+          <div className="flex flex-row gap-2">
+            <GoToButton src="/dashboard/all-users" name="All Users" className="btn btn-outline btn-info hover:text-white" />
+            <GoToButton src="/dashboard/edit-my-smart-health" name="Edit My Smart Health" className="btn btn-outline btn-success hover:text-white shadow" />
+            <GoToButton src="/register" name="Create new account" className="btn btn-outline btn-error hover:text-white" />
           </div>
-        )}
-        <div className="flex gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
-          <GoToButton src="/dashboard/all-posts" name="All Posts" className="btn btn-outline btn-info hover:text-white shadow" />
-          <GoToButton src="/dashboard/edit-profile" name="Edit Profile" className="btn btn-outline btn-warning hover:text-white shadow" />
-          <GoToButton src="/dashboard/create-post" name="New Post" className="btn btn-outline btn-success hover:text-white shadow" />
         </div>
+      )}
+      <div className="flex gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
+        <GoToButton src="/dashboard/all-posts" name="All Posts" className="btn btn-outline btn-info hover:text-white shadow" />
+        <GoToButton src="/dashboard/edit-profile" name="Edit Profile" className="btn btn-outline btn-warning hover:text-white shadow" />
+        <GoToButton src="/dashboard/create-post" name="New Post" className="btn btn-outline btn-success hover:text-white shadow" />
+      </div>
 
-        {safeUser && <ProfileFull user={safeUser} posts={posts} />}
-
-      </main >
+      {safeUser && <ProfileFull user={safeUser} posts={posts} />}
     </>
   );
 }

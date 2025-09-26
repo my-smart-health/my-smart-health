@@ -36,7 +36,7 @@ export default async function EditUserCategoryPage({ params }: { params: Promise
   }
 
   return (
-    <main>
+    <>
       <h1>Edit User Category</h1>
       <p>User ID: {id}</p>
       <p>User Name: {user.name}</p>
@@ -47,6 +47,6 @@ export default async function EditUserCategoryPage({ params }: { params: Promise
           await updateUserCategoryAction(id, newCategories);
         }}
       />
-    </main>
+    </>
   );
 }

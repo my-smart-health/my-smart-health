@@ -42,7 +42,7 @@ export default async function EditProfile() {
   };
 
   return (
-    <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 max-w-[90%] text-wrap break-normal">
+    <>
       <h1 className="text-4xl font-extrabold text-primary mb-6">Edit Profile</h1>
       <EditProfileForm user={parsedUser} />
       {
@@ -59,6 +59,6 @@ export default async function EditProfile() {
             </p>
           </div>
         )}
-    </main>
+    </>
   );
 }
