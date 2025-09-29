@@ -6,7 +6,7 @@ import { MouseEvent, useEffect, useRef, useState, ChangeEvent } from "react";
 import { PutBlobResult } from "@vercel/blob";
 
 import { Certificate, CertificateForm, Schedule, Social } from "@/utils/types";
-import { parseSocials, serializeSocials } from "@/utils/common";
+import { isInstagramLink, isYoutubeLink, parseSocials, serializeSocials } from "@/utils/common";
 
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
@@ -233,15 +233,17 @@ export default function EditProfileForm({ user }: { user: User }) {
   const handleRemoveImage = async (imageUrl: string, setCertificates?: React.Dispatch<React.SetStateAction<CertificateForm[]>> | null, setBlobResult?: React.Dispatch<React.SetStateAction<string[]>> | null) => {
     try {
       setIsDisabled(true);
-      const response = await fetch(`/api/delete/delete-picture?url=${imageUrl}`, {
-        method: 'DELETE',
-      });
 
-      if (!response.ok) {
-        setError('Failed to remove image');
-        throw new Error('Failed to remove image');
+      if (!isYoutubeLink(imageUrl) && !isInstagramLink(imageUrl)) {
+        const response = await fetch(`/api/delete/delete-picture?url=${encodeURIComponent(imageUrl)}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          setError('Failed to remove image');
+          throw new Error('Failed to remove image');
+        }
       }
-
       if (setCertificates) {
         setCertificates(certificates.map(cert => ({
           ...cert,
