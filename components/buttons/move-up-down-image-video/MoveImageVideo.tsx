@@ -1,6 +1,7 @@
 'use client';
 
 import Divider from "@/components/divider/Divider";
+import { isInstagramLink, isYoutubeLink } from "@/utils/common";
 import { Triangle } from "lucide-react";
 import React from "react";
 
@@ -41,7 +42,7 @@ export default function MoveImageVideo({ index, blobResult, setBlobResultAction,
     newBlobResult.splice(index, 1);
     setBlobResultAction(newBlobResult);
 
-    if (removeAddress) {
+    if (removeAddress && isYoutubeLink(removeAddress) && isInstagramLink(removeAddress)) {
       try {
         await fetch(removeAddress, { method: 'DELETE' });
       } catch (error) {
