@@ -22,3 +22,13 @@ export function safeCategory(category: string) {
 export function unsafeCategory(category: string) {
   return category.replace(/-/g, ' ').replace(/%26/g, '&');
 }
+
+export function isYoutubeLink(item: string) {
+  const isYoutube = /youtu(be)?/.test(item);
+  return isYoutube;
+}
+
+export function isInstagramLink(item: string) {
+  const isInstagram = /instagram/.test(item);
+  return isInstagram;
+}
