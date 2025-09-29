@@ -1,8 +1,13 @@
-'use client'
+'use client';
 
-import { PROFILE_TYPE_MEDIZIN_UND_PFLEGE, PROFILE_TYPE_SMART_HEALTH } from "@/utils/constants";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState, useRef, useEffect } from "react";
+import ErrorModal from "./ErrorModal";
+import {
+  PROFILE_TYPE_MEDIZIN_UND_PFLEGE,
+  PROFILE_TYPE_SMART_HEALTH,
+} from "@/utils/constants";
+import CategoryInputList from "./_components/CategoryInputList";
 
 type ErrorType = "success" | "warning" | "error";
 type ErrorState = { type: ErrorType; message: string } | null;
@@ -10,7 +15,8 @@ type ErrorState = { type: ErrorType; message: string } | null;
 export default function RegisterForm() {
   const router = useRouter();
   const [error, setError] = useState<ErrorState>(null);
-  const [categoryState, setCategoryState] = useState<string[]>(['']);
+  const [profileType, setProfileType] = useState<string>("");
+  const [categoryState, setCategoryState] = useState<string[]>([""]);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const errorModalRef = useRef<HTMLDialogElement>(null);
 
@@ -21,10 +27,10 @@ export default function RegisterForm() {
   }, [error]);
 
   const getModalColor = () => {
-    if (!error) return '';
-    if (error.type === "success") return 'bg-green-500';
-    if (error.type === "warning") return 'bg-yellow-500';
-    return 'bg-red-500';
+    if (!error) return "";
+    if (error.type === "success") return "bg-green-500";
+    if (error.type === "warning") return "bg-yellow-500";
+    return "bg-red-500";
   };
 
   const handleError = () => {
@@ -33,7 +39,7 @@ export default function RegisterForm() {
       setError(null);
       errorModalRef.current?.close();
       setTimeout(() => {
-        router.push('/dashboard');
+        router.push("/dashboard");
       }, 3000);
     } else {
       setError(null);
@@ -45,12 +51,12 @@ export default function RegisterForm() {
     try {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
-      const name = formData.get('name');
-      const phone = [formData.get('phone')?.toString()];
-      const email = formData.get('email');
-      const password = formData.get('password');
-      const passwordConfirmation = formData.get('passwordConfirmation');
-      const profileType = formData.get('profileType');
+      const name = formData.get("name");
+      const phone = [formData.get("phone")?.toString()];
+      const email = formData.get("email");
+      const password = formData.get("password");
+      const passwordConfirmation = formData.get("passwordConfirmation");
+      const profileTypeData: string = profileType;
       const category = categoryState;
 
       if (!name) {
@@ -96,12 +102,12 @@ export default function RegisterForm() {
         email: email,
         password: password,
         category: category,
-        profileType: profileType
+        profileType: profileTypeData,
       };
 
-      const res = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
@@ -121,8 +127,8 @@ export default function RegisterForm() {
 
       return await res.json();
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error registering user:', error);
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error registering user:", error);
       }
       setError({ type: "error", message: "Ein Fehler ist aufgetreten" });
       return null;
@@ -133,7 +139,7 @@ export default function RegisterForm() {
     <>
       <form
         onSubmit={handleSubmit}
-        className={`mx-auto space-y-3 sm:p-8 w-full max-w-[90%] ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
+        className={`mx-auto space-y-3 sm:p-8 w-full max-w-[90%] ${isDisabled ? "opacity-50 pointer-events-none" : ""}`}
       >
         <label htmlFor="name">Name</label>
         <input
@@ -180,56 +186,27 @@ export default function RegisterForm() {
           className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
         />
 
-        <label htmlFor="profileType">Profile Type</label>
-        <select
-          name="profileType"
-          required
-          defaultValue="Pick a font"
-          className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
-        >
-          <option disabled={true} value="">Select Profile Type</option>
-          <option value={PROFILE_TYPE_SMART_HEALTH}>Smart Health</option>
-          <option value={PROFILE_TYPE_MEDIZIN_UND_PFLEGE}>Medizin & Pflege</option>
-        </select>
-
-        <div className="flex flex-col w-full gap-2">
-          {categoryState.map((cat, index) => (
-            <div key={index} className="flex flex-col gap-2 max-w-full">
-              <label htmlFor={`category-${index}`}>Category {index + 1}</label>
-              <input
-                type="text"
-                value={cat}
-                onChange={(e) => {
-                  const newCategories = [...categoryState];
-                  newCategories[index] = e.target.value;
-                  setCategoryState(newCategories);
-                }}
-                placeholder="Category"
-                className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary"
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  const newCategories = [...categoryState];
-                  newCategories.splice(index, 1);
-                  setCategoryState(newCategories);
-                }}
-                className="text-red-500 hover:text-red-700 transition-colors cursor-pointer place-self-end"
-              >
-                Remove
-              </button>
-            </div>
-          ))}
-
-          <button
-            type="button"
-            onClick={() => setCategoryState([...categoryState, ''])}
-            className="p-2 rounded bg-primary text-white font-bold text-base hover:bg-primary/80 transition-colors w-full"
+        <label htmlFor="profileType">Profile Type
+          <select
+            required
+            name="profileType"
+            value={profileType}
+            onChange={(e) => {
+              setProfileType(e.target.value);
+              setCategoryState([""]);
+            }}
+            className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
           >
-            Add Category
-          </button>
-        </div>
-
+            <option disabled={true} value="">Select Profile Type</option>
+            <option value={PROFILE_TYPE_SMART_HEALTH}>Smart Health</option>
+            <option value={PROFILE_TYPE_MEDIZIN_UND_PFLEGE}>Medizin & Pflege</option>
+          </select>
+        </label>
+        <CategoryInputList
+          profileType={profileType}
+          categoryState={categoryState}
+          setCategoryState={setCategoryState}
+        />
         <div className="flex justify-end">
           <button
             type="submit"
@@ -239,47 +216,12 @@ export default function RegisterForm() {
           </button>
         </div>
       </form>
-
-      {error && (
-        <dialog
-          ref={errorModalRef}
-          id="register_error_modal"
-          className="modal modal-bottom backdrop-grayscale-100 transition-all ease-linear duration-500"
-          style={{ backgroundColor: 'transparent' }}
-          onClose={handleError}
-        >
-          <div
-            className={`modal-box ${getModalColor()} text-white rounded-2xl w-[95%]`}
-            style={{
-              width: "80vw",
-              maxWidth: "80vw",
-              margin: '2rem auto',
-              left: 0,
-              right: 0,
-              bottom: 0,
-              position: "fixed",
-              minHeight: "unset",
-              padding: "2rem 1.5rem"
-            }}
-          >
-            <form method="dialog">
-              <button
-                className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-white"
-                onClick={handleError}
-                type="button"
-              >✕</button>
-            </form>
-            <h3 className="font-bold text-lg">
-              {error.type === 'success'
-                ? 'Erfolg'
-                : error.type === 'warning'
-                  ? 'Warnung'
-                  : 'Fehler'}
-            </h3>
-            <p className="py-4 text-center">{error.message}</p>
-          </div>
-        </dialog>
-      )}
+      <ErrorModal
+        error={error}
+        errorModalRef={errorModalRef}
+        getModalColor={getModalColor}
+        handleError={handleError}
+      />
     </>
   );
 }
