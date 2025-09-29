@@ -16,3 +16,38 @@ export const PROFILE_TYPE_MEDIZIN_UND_PFLEGE = 'MEDIZIN_UND_PFLEGE';
 export const MAX_BIO_LENGTH_CLAMP = 100;
 
 export const PAGINATION_BULLET_QUANTITY = 4;
+
+export const CATEGORY_FACHARZTE = 'Fachärzte';
+
+export const SUB_CATEGORYES_OF_MEDIZIN_UND_PFLEGE_FACHAERZTE = [
+  'Allgemeinmedizin',
+  'Augenheilkunde',
+  'Allgemeine Chirurgie',
+  'Gefäßchirurgie',
+  'Herzchirurgie',
+  'Kinderchirurgie',
+  'Orthopädie und Unfallchirurgie',
+  'Plastische und Ästhetische Chirurgie',
+  'Thoraxchirurgie',
+  'Visceralchirurgie',
+  'Frauenheilkunde und Geburtshilfe',
+  'Hals Nasen Ohrenheilkunde',
+  'Haut und Geschlechtskrankheiten',
+  'Innere Medizin',
+  'Angiologie',
+  'Endokrinologie und Diabetologie',
+  'Gastroenterologie',
+  'Hämatologie und Onkologie',
+  'Kardiologie',
+  'Nephrologie',
+  'Pneumologie',
+  'Rheumatologie',
+  'Kinder und Jugendmedizin',
+  'Laboratoriumsmedizin',
+  'Mund Kiefer Gesichtschirurgie',
+  'Neurochirurgie',
+  'Neurologie',
+  'Psychiatrie und Psychotherapie',
+  'Radiologie',
+  'Urologie',
+];
