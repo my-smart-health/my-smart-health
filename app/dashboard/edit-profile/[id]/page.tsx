@@ -1,9 +1,10 @@
+import { auth } from "@/auth";
 import { Session } from "next-auth";
+
+import prisma from "@/lib/db";
 import { redirect } from "next/navigation";
 
-import { auth } from "@/auth";
-import prisma from "@/lib/db";
-import EditProfileForm from "../../../../components/profile/edit-profile-form/EditProfileForm";
+import EditProfileForm from "@/components/profile/edit-profile-form/EditProfileForm";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -29,16 +30,21 @@ async function getData(sessionId: string) {
 
 export default async function EditProfileId({ params }: { params: Promise<{ id: string }> }) {
   const session: Session | null = await auth();
+  const { id } = await params;
 
   if (!session) {
     redirect("/login");
+  }
+
+  if (!id) {
+    redirect("/dashboard");
   }
 
   if (session.user.role !== "ADMIN") {
     redirect("/dashboard");
   }
 
-  const { user } = await getData((await params).id);
+  const { user } = await getData(id);
 
   const parsedUser = {
     ...user,
