@@ -43,16 +43,20 @@ export default function CategoryAccordion({
             {isOpen && (
               <div>
                 <CategoryAccordion node={child} level={level + 1} parentKey={key + "-"} />
-                {child.users.map((user) => (
-                  <div key={user.id} style={{ marginLeft: `${24}px` }}>
-                    <ProfileShort
-                      id={user.id}
-                      name={user.name}
-                      bio={user.bio ?? ""}
-                      image={user.profileImages[0]}
-                    />
-                  </div>
-                ))}
+                {child.users.map((user) => {
+                  const { id, name, bio, profileImages } = user;
+                  if (!profileImages || profileImages.length === 0 || !bio || !name || !id) return null;
+                  return (
+                    <div key={id} style={{ marginLeft: `${24}px`, marginBottom: '10px' }}>
+                      <ProfileShort
+                        id={id}
+                        name={name}
+                        bio={bio}
+                        image={profileImages[0]}
+                      />
+                    </div>
+                  )
+                })}
               </div>
             )}
           </div>
