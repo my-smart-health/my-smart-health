@@ -2,6 +2,7 @@ import prisma from "@/lib/db";
 import Image from "next/image";
 import { MySmartHealthInfo } from "@/utils/types";
 import Divider from "../divider/Divider";
+import Link from "next/link";
 
 const getMySmartHealthInfo = async () => {
   const MySmartHealthData = await prisma.mySmartHealth.findFirst();
@@ -42,7 +43,7 @@ export default async function MySmartHealth() {
           paragraph.map((para, index) => (
             <div
               key={index}
-              className="card bg-base-200 shadow-md mb-6 p-4 rounded-xl"
+              className="card mb-6 p-4 rounded-xl"
             >
               {para.images && para.images.length > 0 && (
                 <div className="flex flex-wrap gap-3 mb-3">
@@ -70,11 +71,13 @@ export default async function MySmartHealth() {
 
               <Divider addClass="my-2" />
 
-              <h3 className="text-lg font-semibold mb-2 flex items-center gap-2">
-                <span className="badge badge-primary badge-outline">
-                  {para.title}
-                </span>
-              </h3>
+              {para.title && (
+                <h3 className="text-xl font-semibold mb-2">
+                  <span className="badge badge-primary badge-outline text-lg font-semibold p-4 border-2">
+                    {para.title}
+                  </span>
+                </h3>
+              )}
 
               <p className="mb-3 whitespace-pre-line">{para.content}</p>
 
@@ -86,15 +89,15 @@ export default async function MySmartHealth() {
                   <ul className="list-disc list-inside space-y-1">
                     {para.files.map((fileUrl, fileIndex) => (
                       <li key={fileIndex}>
-                        <a
+                        <Link
                           href={fileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="link link-primary break-all"
-                          download
+                          download={true}
                         >
                           {fileUrl.split("/").pop()}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>
