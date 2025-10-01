@@ -10,6 +10,9 @@ export type NavbarProps = {
   session: Session | null;
 };
 
+export type ErrorType = 'error' | 'warning' | 'success';
+export type ErrorState = { type: ErrorType; message: string } | null;
+
 export type UserAccount = {
   id: string;
   createdAt: Date;
