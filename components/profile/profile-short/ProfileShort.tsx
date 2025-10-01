@@ -1,6 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import SeeMoreLess from "@/components/buttons/see-more-less/SeeMoreLess";
 
 export default function ProfileShort({ id, name, bio, image }: { id: string; name: string; bio: string; image: string }) {
   return (
@@ -18,7 +17,7 @@ export default function ProfileShort({ id, name, bio, image }: { id: string; nam
       </div>
       <div className="flex flex-col justify-between flex-1 w-full h-full gap-2">
         <h2 className="font-bold text-xl text-primary mb-1">{name}</h2>
-        <SeeMoreLess lines={2} text={bio} />
+        <p className="line-clamp-2">{bio}</p>
         <div className="flex justify-end mt-2">
           <Link
             href={`/profile/${id}`}
