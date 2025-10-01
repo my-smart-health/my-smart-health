@@ -54,7 +54,7 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
           speed={300}
         >
           {props.map((item) => (
-            <SwiperSlide key={item.id}>
+            <SwiperSlide key={item.id} className="mb-10">
               <Link href={`/news/${item.id}`}>
                 <div className="flex flex-col border-2 border-primary justify-center items-center rounded-box cursor-pointer">
                   <Image
@@ -71,8 +71,6 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
                   </span>
                 </div>
               </Link>
-              <br />
-              <br />
             </SwiperSlide>
           ))}
         </Swiper>
