@@ -1,8 +1,10 @@
-import { Suspense } from "react";
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
+
+import { Suspense } from "react";
+
 import { NewsCardType } from "@/utils/types";
-import GoBack from "@/components/buttons/go-back/GoBack";
+
 import PostCard from "@/components/posts/post-card/PostCard";
 import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
 
