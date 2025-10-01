@@ -1,7 +1,7 @@
 'use client';
 
 import Divider from "@/components/divider/Divider";
-import { isInstagramLink, isYoutubeLink } from "@/utils/common";
+import { isBlobUrl, isInstagramLink, isYoutubeLink } from "@/utils/common";
 import { Triangle } from "lucide-react";
 import React from "react";
 
@@ -42,9 +42,9 @@ export default function MoveImageVideo({ index, blobResult, setBlobResultAction,
     newBlobResult.splice(index, 1);
     setBlobResultAction(newBlobResult);
 
-    if (removeAddress && isYoutubeLink(removeAddress) && isInstagramLink(removeAddress)) {
+    if (removeAddress && isBlobUrl(removeAddress)) {
       try {
-        await fetch(removeAddress, { method: 'DELETE' });
+        await fetch(`/api/delete/delete-picture?url=${encodeURIComponent(removeAddress)}`, { method: 'DELETE' });
       } catch (error) {
         if (process.env.NODE_ENV === 'development') {
           console.error('Error removing media:', error);
