@@ -42,7 +42,7 @@ export default function CategoryAccordion({
             </button>
             {isOpen && (
               <div>
-                <CategoryAccordion node={child} level={level + 1} parentKey={key + "-"} />
+
                 {child.users.map((user) => {
                   const { id, name, bio, profileImages } = user;
                   if (!profileImages || profileImages.length === 0 || !bio || !name || !id) return null;
@@ -57,6 +57,7 @@ export default function CategoryAccordion({
                     </div>
                   )
                 })}
+                <CategoryAccordion node={child} level={level + 1} parentKey={key + "-"} />
               </div>
             )}
           </div>
