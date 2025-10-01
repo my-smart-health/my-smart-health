@@ -2,7 +2,8 @@ import Link from "next/link";
 import { auth } from "@/auth";
 
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
+import { IBM_Plex_Sans } from "next/font/google";
+
 import { Analytics } from "@vercel/analytics/next";
 
 import "./globals.css";
@@ -11,10 +12,11 @@ import Navbar from "@/components/navbar/Navbar";
 import LogOut from "@/components/buttons/log-out/LogOut";
 import GoBackIndexCheck from "@/components/buttons/go-back-layout/GoBackIndexCheck";
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+
+const ibmPlexSans = IBM_Plex_Sans({
+  variable: "--font-ibm-plex-sans",
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800", "900"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -46,13 +48,13 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html lang="de" data-scroll-behavior="smooth">
       <head>
         <link rel="icon" href="/logo.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body
-        className={`${montserrat.variable} antialiased flex flex-col justify-center items-center pt-4 min-h-[100dvh] w-auto lg:max-w-3xl mx-auto p-2 overscroll-x-none border bg-white text-black`}
+        className={`${ibmPlexSans.variable} antialiased flex flex-col justify-center items-center pt-4 min-h-[100dvh] w-auto lg:max-w-3xl mx-auto p-2 overscroll-x-none border bg-white text-black`}
       >
         <Navbar />
         <GoBackIndexCheck />
