@@ -1,9 +1,11 @@
 'use client';
 
-import Divider from "@/components/divider/Divider";
-import { isBlobUrl, isInstagramLink, isYoutubeLink } from "@/utils/common";
-import { Triangle } from "lucide-react";
 import React from "react";
+import { Triangle } from "lucide-react";
+
+import { isBlobUrl } from "@/utils/common";
+
+import Divider from "@/components/divider/Divider";
 
 type MoveImageVideoProps = {
   index: number;
