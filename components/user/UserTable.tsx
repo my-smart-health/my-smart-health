@@ -9,12 +9,13 @@ type User = {
   id: string;
   name: string | null;
   email: string;
+  profileType: string
   category: string[];
   role: string;
   profileImages?: string[];
 };
 
-type SortKey = keyof Pick<User, "name" | "email"> | "category" | "role";
+type SortKey = keyof Pick<User, "name" | "email" | "profileType" | "category" | "role">;
 
 export default function UserTable({ users }: { users: User[] }) {
   const [sortKey, setSortKey] = useState<SortKey>("name");
@@ -84,6 +85,12 @@ export default function UserTable({ users }: { users: User[] }) {
             </th>
             <th
               className="cursor-pointer select-none"
+              onClick={() => handleSort("profileType")}
+            >
+              Profile Type
+            </th>
+            <th
+              className="cursor-pointer select-none"
               onClick={() => handleSort("category")}
             >
               Category {sortArrow("category")}
@@ -106,6 +113,7 @@ export default function UserTable({ users }: { users: User[] }) {
             <tr key={user.id || idx} className="hover:bg-primary/50 bg-primary/30">
               <td className="font-semibold">{user.name || "No Name"}</td>
               <td>{user.email}</td>
+              <td>{user.profileType || "No Profile Type"}</td>
               <td className="whitespace-pre-wrap min-w-[150px] max-w-sm">
                 {Array.isArray(user.category)
                   ? user.category.join(" > \n")
