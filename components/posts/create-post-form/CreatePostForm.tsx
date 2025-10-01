@@ -2,12 +2,15 @@
 
 import Image from "next/image";
 import { Session } from "next-auth";
-import { redirect, useRouter } from "next/navigation";
 import { PutBlobResult } from "@vercel/blob";
+import { redirect, useRouter } from "next/navigation";
 import { FormEvent, MouseEvent, useEffect, useRef, useState } from "react";
 
-import Divider from "@/components/divider/Divider";
+import { ErrorState } from "@/utils/types";
+import { getModalColor } from "@/utils/common";
 import { MAX_FILES_PER_POST } from "@/utils/constants";
+
+import Divider from "@/components/divider/Divider";
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
@@ -19,8 +22,13 @@ type CreatePostFormProps = {
   session: Session | null;
 };
 
-type ErrorType = "error" | "warning" | "success";
-type ErrorState = { type: ErrorType; message: string } | null;
+type HandleUploadImagesParams = {
+  setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>;
+  setError: React.Dispatch<React.SetStateAction<ErrorState>>;
+  e: React.ChangeEvent<HTMLInputElement>;
+  handleImageUpload: (file: File) => Promise<string | undefined>;
+  setBlobResult: React.Dispatch<React.SetStateAction<string[]>>;
+};
 
 export default function CreatePostForm({ session }: CreatePostFormProps) {
 
@@ -118,14 +126,6 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       setIsDisabled(false);
       return logo.src;
     }
-  };
-
-  type HandleUploadImagesParams = {
-    setIsDisabled: React.Dispatch<React.SetStateAction<boolean>>;
-    setError: React.Dispatch<React.SetStateAction<ErrorState>>;
-    e: React.ChangeEvent<HTMLInputElement>;
-    handleImageUpload: (file: File) => Promise<string | undefined>;
-    setBlobResult: React.Dispatch<React.SetStateAction<string[]>>;
   };
 
   const handleUploadImages = async ({
@@ -246,13 +246,6 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
     }
   };
 
-  const getModalColor = () => {
-    if (!error) return '';
-    if (error.type === "success") return isDefaultLogo ? 'bg-yellow-500' : 'bg-green-500';
-    if (error.type === "warning") return 'bg-yellow-500';
-    return 'bg-red-500';
-  };
-
   return (
     <>
       <form
@@ -355,7 +348,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                 name="image"
                 accept="image/*"
                 multiple
-                className={`${blobResult && blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full max-w-xs`}
+                className={`${blobResult && blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full`}
                 onChange={async e => {
                   if (!e.target.files || e.target.files.length + blobResult.length > MAX_FILES_PER_POST) {
                     setError({ type: "warning", message: `You can select up to ${MAX_FILES_PER_POST} files only.` });
@@ -414,7 +407,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                     setBlobResultAction={setBlobResult}
                     showTop={idx > 0}
                     showBottom={idx < blobResult.length - 1}
-                    removeAddress={`/api/delete/delete-picture?url=${encodeURIComponent(image)}`}
+                    removeAddress={image}
                   />
                 </div>
               </div>
@@ -442,7 +435,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         onClose={handleError}
       >
         <div
-          className={`modal-box ${getModalColor()} text-white rounded-2xl w-[95%]`}
+          className={`modal-box ${getModalColor(error, isDefaultLogo)} text-white rounded-2xl w-[95%]`}
           style={{
             width: "80vw",
             maxWidth: "80vw",
