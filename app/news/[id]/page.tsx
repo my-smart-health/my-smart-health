@@ -38,9 +38,6 @@ export default async function NewsPage({ params }: { params: Promise<{ id: strin
     <>
       <div className="space-y-4 mx-auto w-full">
         <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" active />
-        <div className="flex justify-end my-2">
-          <GoBack />
-        </div>
       </div>
       <Suspense fallback={<div className="text-center py-8">Loading post...</div>}>
         {post ? (
