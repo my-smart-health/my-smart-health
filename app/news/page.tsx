@@ -2,7 +2,6 @@ import { auth } from "@/auth";
 import prisma from "@/lib/db";
 
 import PostCard from "../../components/posts/post-card/PostCard";
-import GoBack from "@/components/buttons/go-back/GoBack";
 import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
 
 import { NewsCardType } from "@/utils/types";
