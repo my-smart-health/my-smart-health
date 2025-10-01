@@ -260,10 +260,6 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
 
   return (
     <>
-      <span className="self-end mb-4">
-        <GoBack />
-      </span>
-
       {error && (
         <dialog
           ref={errorModalRef}
