@@ -10,7 +10,6 @@ import logo from "@/public/og-logo.jpg";
 import { ArrowUpRight, XIcon } from "lucide-react";
 
 import { MAX_FILES_PER_POST } from "@/utils/constants";
-import GoBack from "@/components/buttons/go-back/GoBack";
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
