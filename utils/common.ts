@@ -1,4 +1,4 @@
-import { Social } from './types';
+import { ErrorState, Social } from './types';
 
 export function parseSocials(socials: string[]): Social[] {
   return socials
@@ -31,4 +31,19 @@ export function isYoutubeLink(item: string) {
 export function isInstagramLink(item: string) {
   const isInstagram = /instagram/.test(item);
   return isInstagram;
+}
+
+export function getModalColor(
+  error: ErrorState | null,
+  isDefaultLogo: boolean
+) {
+  if (!error) return '';
+  if (error.type === 'success')
+    return isDefaultLogo ? 'bg-yellow-500' : 'bg-green-500';
+  if (error.type === 'warning') return 'bg-yellow-500';
+  return 'bg-red-500';
+}
+
+export function isBlobUrl(url: string) {
+  return url.startsWith(process.env.BLOB_URL_PREFIX || '');
 }
