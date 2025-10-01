@@ -10,6 +10,7 @@ function getAllUsers() {
       name: true,
       email: true,
       category: true,
+      profileType: true,
       role: true,
       profileImages: true,
     }
