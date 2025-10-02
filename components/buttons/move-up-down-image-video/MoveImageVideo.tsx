@@ -14,9 +14,10 @@ type MoveImageVideoProps = {
   showTop: boolean;
   showBottom: boolean;
   removeAddress: string;
+  horizontal?: boolean;
 };
 
-export default function MoveImageVideo({ index, blobResult, setBlobResultAction, showTop = true, showBottom = true, removeAddress }: MoveImageVideoProps) {
+export default function MoveImageVideo({ index, blobResult, setBlobResultAction, showTop = true, showBottom = true, removeAddress, horizontal }: MoveImageVideoProps) {
 
   const handleOnePositionUp = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
     e.preventDefault();
@@ -73,7 +74,7 @@ export default function MoveImageVideo({ index, blobResult, setBlobResultAction,
           <button
             type="button"
             className="btn btn-outline btn-circle text-primary hover:text-primary/80 transition-colors cursor-pointer"
-            onClick={(e) => handleOnePositionUp(e, index)}><Triangle fill="currentColor" />
+            onClick={(e) => handleOnePositionUp(e, index)}><Triangle fill="currentColor" className={horizontal ? "rotate-270" : ""} />
           </button>
 
           <Divider />
@@ -91,7 +92,7 @@ export default function MoveImageVideo({ index, blobResult, setBlobResultAction,
           <button
             type="button"
             className="btn btn-outline btn-circle text-primary hover:text-primary/80 transition-colors cursor-pointer"
-            onClick={(e) => handleOnePositionDown(e, index)}><Triangle fill="currentColor" className="rotate-180" />
+            onClick={(e) => handleOnePositionDown(e, index)}><Triangle fill="currentColor" className={horizontal ? "rotate-90" : "rotate-180"} />
           </button>
         </>
       )}
