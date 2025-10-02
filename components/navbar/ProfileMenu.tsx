@@ -22,7 +22,7 @@ export default async function ProfileMenu() {
           <div className="border border-white h-full w-0 my-4 text-transparent">.</div>
 
           <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-circle m-2 border-2 border-white bg-primary"><Settings className="text-white spin-slow" /></div>
+            <div tabIndex={0} role="button" className="btn btn-circle m-2 max-sm:ml-0 border-2 border-white bg-primary"><Settings className="text-white spin-slow" /></div>
             <ul tabIndex={0} className="dropdown-content menu bg-primary border rounded-box z-1 w-52 p-2 shadow-sm transition-opacity ease-in-out">
               <li><Link href="/" className="flex gap-1">Home</Link></li>
               <li><Link href="/dashboard" className="flex gap-1">Dashboard</Link></li>
