@@ -79,19 +79,18 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <Divider />
-      <h1 className="mx-3 text-4xl font-extrabold  text-primary mb-6">Welcome, {user?.name || "User"}!</h1>
+      <h1 className="mx-3 text-4xl font-extrabold text-primary mb-6">Dashboard</h1>
       {session.user.role === "ADMIN" && (
         <div className="flex flex-col gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
           <span className="font-bold self-center">Admin Only</span>
-          <div className="flex flex-row gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <GoToButton src="/dashboard/all-users" name="All Users" className="btn btn-outline btn-info hover:text-white" />
             <GoToButton src="/dashboard/edit-my-smart-health" name="Edit My Smart Health" className="btn btn-outline btn-success hover:text-white shadow" />
             <GoToButton src="/register" name="Create new account" className="btn btn-outline btn-error hover:text-white" />
           </div>
         </div>
       )}
-      <div className="flex gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
+      <div className="flex flex-col sm:flex-row gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
         <GoToButton src="/dashboard/all-posts" name="All Posts" className="btn btn-outline btn-info hover:text-white shadow" />
         <GoToButton src="/dashboard/edit-profile" name="Edit Profile" className="btn btn-outline btn-warning hover:text-white shadow" />
         <GoToButton src="/dashboard/create-post" name="New Post" className="btn btn-outline btn-success hover:text-white shadow" />
