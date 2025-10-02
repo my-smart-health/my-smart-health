@@ -7,6 +7,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
 
 export default function MSHParagraph({
   paragraphs,
@@ -180,15 +181,33 @@ export default function MSHParagraph({
           {(paragraph.images ?? []).length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
               {(paragraph.images ?? []).map((img, imgIdx) => (
-                <Image
-                  key={imgIdx}
-                  src={img}
-                  alt={`Paragraph ${index + 1} Image ${imgIdx + 1}`}
-                  width={80}
-                  height={80}
-                  style={{ objectFit: 'contain' }}
-                  className="w-20 h-20  rounded"
-                />
+                <div key={imgIdx} className="relative">
+                  <Image
+                    key={imgIdx}
+                    src={img}
+                    alt={`Paragraph ${index + 1} Image ${imgIdx + 1}`}
+                    width={80}
+                    height={80}
+                    style={{ objectFit: 'contain' }}
+                    className="w-20 h-20  rounded"
+                  />
+                  <div className="flex justify-center align-middle">
+                    <MoveImageVideo
+                      index={imgIdx}
+                      blobResult={paragraph.images ?? []}
+                      setBlobResultAction={(newImages) => {
+                        const updatedParagraphs = paragraphs.map((p, i) =>
+                          i === index ? { ...p, images: newImages } : p
+                        );
+                        setParagraphsAction(updatedParagraphs);
+                      }}
+                      showTop={imgIdx > 0}
+                      showBottom={imgIdx < (paragraph.images?.length || 0) - 1}
+                      removeAddress={img}
+                      horizontal={true}
+                    />
+                  </div>
+                </div>
               ))}
             </div>
           )}
@@ -208,16 +227,31 @@ export default function MSHParagraph({
           {(paragraph.files ?? []).length > 0 && (
             <ul className="mt-2 space-y-1">
               {(paragraph.files ?? []).map((fileUrl, fileIdx) => (
-                <li key={fileIdx}>
+                <li key={fileIdx} className="break-all mb-4">
                   <Link
                     href={fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn btn-outline rounded btn-primary underline break-all"
+                    className="btn btn-outline rounded btn-primary h-fit w-full p-4 mb-2 border underline break-all"
                     download={true}
                   >
                     {fileUrl.split('/').pop()}
                   </Link>
+                  <div className="flex justify-end">
+                    <MoveImageVideo
+                      index={fileIdx}
+                      blobResult={paragraph.files ?? []}
+                      setBlobResultAction={(newFiles) => {
+                        const updatedParagraphs = paragraphs.map((p, i) =>
+                          i === index ? { ...p, files: newFiles } : p
+                        );
+                        setParagraphsAction(updatedParagraphs);
+                      }}
+                      showTop={fileIdx > 0}
+                      showBottom={fileIdx < (paragraph.files?.length || 0) - 1}
+                      removeAddress={fileUrl}
+                    />
+                  </div>
                 </li>
               ))}
             </ul>
