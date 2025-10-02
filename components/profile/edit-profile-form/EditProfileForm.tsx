@@ -388,9 +388,9 @@ export default function EditProfileForm({ user }: { user: User }) {
         onSubmit={handleSubmit}
         className={`w-full ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}
       >
-        <div className="tabs tabs-box w-full max-w-full">
+        <Divider addClass="mb-4" />
 
-          <Divider addClass="mb-4" />
+        <div className="tabs tabs-lift m-2 w-full max-w-full">
 
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Name/Bio" defaultChecked />
           <div className="tab-content border-primary p-10">

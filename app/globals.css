@@ -25,17 +25,19 @@ body {
 }
 
 .tab {
-  --tab-border-colors: var(--primary);
+  background-color: var(--color-base-100);
+  border-color: var(--primary);
+  color: var(--color-base-content);
 }
-input.tab:checked {
+input.tab:checked,
+.tab-active {
   background-color: var(--primary);
   color: white;
-}
-.tab-active {
-  --tab-border-colors: var(--primary);
-}
-.tab-border {
-  --tab-border-colors: var(--primary);
+  border-color: gray;
+  scale: 1.05;
+  z-index: 10;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 span.swiper-pagination-bullet-active {
