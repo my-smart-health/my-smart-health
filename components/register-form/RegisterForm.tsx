@@ -7,7 +7,7 @@ import {
   PROFILE_TYPE_MEDIZIN_UND_PFLEGE,
   PROFILE_TYPE_SMART_HEALTH,
 } from "@/utils/constants";
-import CategoryInputList from "./_components/CategoryInputList";
+// import CategoryInputList from "./_components/CategoryInputList";
 
 type ErrorType = "success" | "warning" | "error";
 type ErrorState = { type: ErrorType; message: string } | null;
@@ -17,6 +17,9 @@ export default function RegisterForm() {
   const [error, setError] = useState<ErrorState>(null);
   const [profileType, setProfileType] = useState<string>("");
   const [categoryState, setCategoryState] = useState<string[]>([""]);
+
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const errorModalRef = useRef<HTMLDialogElement>(null);
 
@@ -139,10 +142,13 @@ export default function RegisterForm() {
     <>
       <form
         onSubmit={handleSubmit}
+        autoComplete="on"
         className={`mx-auto space-y-3 sm:p-8 w-full max-w-[90%] ${isDisabled ? "opacity-50 pointer-events-none" : ""}`}
       >
         <label htmlFor="name">Name</label>
         <input
+          id="name"
+          autoComplete="on"
           type="text"
           name="name"
           placeholder="Name"
@@ -152,7 +158,9 @@ export default function RegisterForm() {
 
         <label htmlFor="phone">Telephone Number</label>
         <input
+          id="phone"
           type="tel"
+          autoComplete="on"
           name="phone"
           placeholder="Telephone Number"
           required
@@ -161,6 +169,8 @@ export default function RegisterForm() {
 
         <label htmlFor="email">Email</label>
         <input
+          id="email"
+          autoComplete="on"
           type="email"
           name="email"
           placeholder="Email"
@@ -169,25 +179,51 @@ export default function RegisterForm() {
         />
 
         <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-          className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
-        />
+        <div className="relative">
+          <input
+            id="password"
+            name="password"
+            autoComplete="on"
+            placeholder="Password"
+            type={showPassword ? "text" : "password"}
+            required
+            className="input validator p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
+          />
+          <button
+            type="button"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+            onClick={() => setShowPassword((prev) => !prev)}
+            tabIndex={-1}
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
 
         <label htmlFor="passwordConfirmation">Password Confirmation</label>
-        <input
-          type="password"
-          name="passwordConfirmation"
-          placeholder="Password Confirmation"
-          required
-          className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
-        />
+        <div className="relative">
+          <input
+            id="passwordConfirmation"
+            autoComplete="on"
+            type={showPasswordConfirmation ? "text" : "password"}
+            name="passwordConfirmation"
+            placeholder="Password Confirmation"
+            required
+            className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
+          />
+          <button
+            type="button"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+            onClick={() => setShowPasswordConfirmation((prev) => !prev)}
+            tabIndex={-1}
+          >
+            {showPasswordConfirmation ? "Hide" : "Show"}
+          </button>
+        </div>
 
         <label htmlFor="profileType">Profile Type
           <select
+            id="profileType"
+            autoComplete="on"
             required
             name="profileType"
             value={profileType}
@@ -202,12 +238,14 @@ export default function RegisterForm() {
             <option value={PROFILE_TYPE_MEDIZIN_UND_PFLEGE}>Medizin & Pflege</option>
           </select>
         </label>
-        <CategoryInputList
+
+        {/* <CategoryInputList
           profileType={profileType}
           categoryState={categoryState}
           setCategoryState={setCategoryState}
-        />
-        <div className="flex justify-end">
+        /> */}
+
+        <div className="flex mt-10 justify-end">
           <button
             type="submit"
             className="p-2 rounded bg-primary text-white font-bold text-base hover:bg-primary/80 transition-colors"
