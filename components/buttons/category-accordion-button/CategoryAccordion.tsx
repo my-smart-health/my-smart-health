@@ -28,7 +28,7 @@ export default function CategoryAccordion({
         const key = parentKey + catName;
         const isOpen = !!open[key];
         return (
-          <div key={key} style={{ marginLeft: `${level * 24}px` }}>
+          <div key={key} style={{ paddingLeft: `${level * 1}px` }} className="w-full">
             <button
               type="button"
               className="flex items-center gap-2 p-4 font-bold text-xl border border-gray-400 rounded-2xl shadow-xl transition-all cursor-pointer bg-base-100 my-1 w-full text-left"
@@ -41,13 +41,12 @@ export default function CategoryAccordion({
               <span>{catName}</span>
             </button>
             {isOpen && (
-              <div>
-
+              <div className="border-l-2 border-gray-300 pl-2">
                 {child.users.map((user) => {
                   const { id, name, bio, profileImages } = user;
                   if (!profileImages || profileImages.length === 0 || !bio || !name || !id) return null;
                   return (
-                    <div key={id} style={{ marginLeft: `${24}px`, marginBottom: '10px' }}>
+                    <div key={id} style={{ marginBottom: '10px' }} className="w-full">
                       <ProfileShort
                         id={id}
                         name={name}
