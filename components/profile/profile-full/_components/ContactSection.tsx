@@ -27,13 +27,15 @@ export default function ContactSection({
       <section className="grid grid-cols-1 gap-3">
         <h2 className="font-bold text-primary text-xl">Kontakt</h2>
         {phone && phone.length > 0 && (
-          <Link
-            href={`tel:${phone[0]}`}
-            target="_blank"
-            className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 link">
-            <span className="mr-1">{platformIcons.Phone}</span>{phone[0]}
-          </Link>
-        )}
+          phone.map((phone, idx) => (
+            <Link
+              key={idx}
+              href={`tel:${phone}`}
+              target="_blank"
+              className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 link">
+              <span className="mr-1">{platformIcons.Phone}</span>{phone}
+            </Link>
+          )))}
         {displayEmail && (
           <Link
             href={`mailto:${displayEmail}`}
