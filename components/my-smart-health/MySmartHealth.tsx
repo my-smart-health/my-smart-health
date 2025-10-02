@@ -75,8 +75,8 @@ export default async function MySmartHealth() {
               <Divider addClass="my-2" />
 
               {para.title && (
-                <h3 className="text-xl font-semibold mb-2">
-                  <span className="badge badge-primary badge-outline text-lg font-semibold p-4 border-2">
+                <h3 className="text-xl font-semibold p-4 mb-2">
+                  <span className="badge badge-primary badge-outline text-lg font-semibold p-2 min-h-fit border-2">
                     {para.title}
                   </span>
                 </h3>
