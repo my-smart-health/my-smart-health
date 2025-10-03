@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
-import { genSalt, hash } from 'bcrypt';
 import prisma from '@/lib/db';
 import { User } from '@prisma/client';
+import { genSalt, hash } from 'bcrypt';
+import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
-    const { email, password, category, phone, name, profileType } =
+    const { email, password, category, name, profileType } =
       (await request.json()) as User;
 
     if (!email || !password) {
@@ -21,7 +21,6 @@ export async function POST(request: Request) {
     const response = await prisma.user.create({
       data: {
         name: name,
-        phone: phone,
         email: email,
         password: hashedPassword,
         category: category,

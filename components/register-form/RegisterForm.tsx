@@ -2,15 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { FormEvent, useState, useRef, useEffect } from "react";
-import ErrorModal from "./ErrorModal";
+
 import {
   PROFILE_TYPE_MEDIZIN_UND_PFLEGE,
   PROFILE_TYPE_SMART_HEALTH,
 } from "@/utils/constants";
-// import CategoryInputList from "./_components/CategoryInputList";
+import { ErrorState } from "@/utils/types";
 
-type ErrorType = "success" | "warning" | "error";
-type ErrorState = { type: ErrorType; message: string } | null;
+import ErrorModal from "./ErrorModal";
+// import CategoryInputList from "./_components/CategoryInputList";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -55,7 +55,6 @@ export default function RegisterForm() {
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
       const name = formData.get("name");
-      const phone = [formData.get("phone")?.toString()];
       const email = formData.get("email");
       const password = formData.get("password");
       const passwordConfirmation = formData.get("passwordConfirmation");
@@ -64,11 +63,6 @@ export default function RegisterForm() {
 
       if (!name) {
         setError({ type: "error", message: "Bitte geben Sie Ihren Namen ein" });
-        setIsDisabled(false);
-        return null;
-      }
-      if (!phone || !phone[0]) {
-        setError({ type: "error", message: "Bitte geben Sie Ihre Telefonnummer ein" });
         setIsDisabled(false);
         return null;
       }
@@ -101,7 +95,6 @@ export default function RegisterForm() {
 
       const data = {
         name: name,
-        phone: phone,
         email: email,
         password: password,
         category: category,
@@ -152,17 +145,6 @@ export default function RegisterForm() {
           type="text"
           name="name"
           placeholder="Name"
-          required
-          className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
-        />
-
-        <label htmlFor="phone">Telephone Number</label>
-        <input
-          id="phone"
-          type="tel"
-          autoComplete="on"
-          name="phone"
-          placeholder="Telephone Number"
           required
           className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
         />
