@@ -5,7 +5,6 @@ import { auth } from "@/auth";
 
 import { Certificate, Schedule } from "@/utils/types";
 
-import Divider from "@/components/divider/Divider";
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
 
