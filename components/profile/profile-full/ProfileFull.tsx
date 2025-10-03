@@ -21,6 +21,7 @@ import Image from "next/image";
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
 import Divider from "@/components/divider/Divider";
+import { Location } from "@prisma/client";
 
 const platformIcons: Record<string, React.ReactNode> = {
   Email: <AtSign className="inline-block mr-1" size={20} />,
@@ -37,14 +38,13 @@ const platformIcons: Record<string, React.ReactNode> = {
 type User = {
   name: string | null;
   profileImages: string[];
-  address: string | null;
   bio: string | null;
-  phone: string[];
   socials: string[];
   website: string | null;
   fieldOfExpertise: string[];
   displayEmail: string | null;
   id: string;
+  locations: Location[];
   schedule: Schedule[];
   certificates: Certificate[];
 };
@@ -57,18 +57,18 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
   const {
     name,
     profileImages,
-    address,
     bio,
-    phone,
     socials,
     website,
     fieldOfExpertise,
     displayEmail,
     certificates,
+    locations = [],
     schedule = [],
   } = user || {};
 
   const parsedSocials = parseSocials(socials || []);
+
 
   return (
     <div className="flex flex-col gap-2 p-2 w-full max-w-[99%]">
@@ -88,11 +88,10 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
       <NewsSection posts={posts} />
 
       <ContactSection
-        phone={phone}
         displayEmail={displayEmail}
         website={website}
         parsedSocials={parsedSocials}
-        address={address}
+        locations={locations}
         platformIcons={platformIcons}
       />
       <ReservationSection src={"https://moers.cms.shic.us/Arzttemin_reservieren"} />

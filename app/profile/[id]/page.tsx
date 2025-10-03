@@ -11,10 +11,8 @@ import prisma from "@/lib/db";
 function UserNotFound() {
   return (
     <>
-      <>
-        <div>User not found</div>
-        <GoBack />
-      </>
+      <div>User not found</div>
+      <GoBack />
     </>
   );
 }
@@ -27,14 +25,13 @@ async function getUser(id: string) {
       name: true,
       email: true,
       profileImages: true,
-      address: true,
       bio: true,
-      phone: true,
       socials: true,
       website: true,
       fieldOfExpertise: true,
       displayEmail: true,
       schedule: true,
+      locations: true,
       certificates: true,
     },
   });
