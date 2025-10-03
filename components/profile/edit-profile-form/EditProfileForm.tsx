@@ -16,8 +16,6 @@ import Divider from "@/components/divider/Divider";
 import {
   NameSection,
   BioSection,
-  AddressSection,
-  PhoneNumbersSection,
   EmailSection,
   WebsiteSection,
   SocialsSection,
@@ -29,20 +27,21 @@ import {
   CertificatesSection,
   WorkScheduleSection,
 } from "./_components";
+import { Location } from "@prisma/client";
+import LocationSection from "./_components/LocationSection";
 
 type User = {
   id: string;
-  phone: string[];
   socials: string[];
   bio: string | null;
   name: string | null;
   profileImages: string[] | null;
-  address: string | null;
   website: string | null;
   fieldOfExpertise: string[];
   displayEmail: string | null;
   schedule: Schedule[] | null;
   certificates: Certificate[] | null;
+  locations: Location[];
 }
 
 export default function EditProfileForm({ user }: { user: User }) {
@@ -59,12 +58,11 @@ export default function EditProfileForm({ user }: { user: User }) {
 
   const [name, setName] = useState(user.name ?? "");
   const [fieldOfExpertise, setFieldOfExpertise] = useState<string[]>(user.fieldOfExpertise || []);
-  const [phoneNumbers, setPhoneNumbers] = useState<string[]>(user.phone || []);
   const [socials, setSocials] = useState<Social[]>(parseSocials(user.socials || []));
   const [schedule, setSchedule] = useState<Schedule[]>(user.schedule || []);
+  const [locations, setLocations] = useState<Location[]>(user.locations || []);
   const [error, setError] = useState<string | null>(null);
   const [bio, setBio] = useState(user.bio || "");
-  const [address, setAddress] = useState(user.address || "");
   const [displayEmail, setDisplayEmail] = useState(user.displayEmail || "");
   const [website, setWebsite] = useState(user.website || "");
   const [blobResult, setBlobResult] = useState<string[]>(user.profileImages || []);
@@ -102,8 +100,8 @@ export default function EditProfileForm({ user }: { user: User }) {
       }
     };
     resize(bioRef.current, bio);
-    resize(addressRef.current, address);
-  }, [bio, address]);
+    resize(addressRef.current, Array.isArray(locations) ? locations.join('\n') : locations);
+  }, [bio, locations]);
 
   useEffect(() => {
     if (error) {
@@ -301,18 +299,23 @@ export default function EditProfileForm({ user }: { user: User }) {
         credentialUrl: cert.credentialUrl || null,
       }));
 
+      const locationsPayload = locations.map(loc => ({
+        address: Array.isArray(loc.address) ? loc.address.join(", ") : loc.address,
+        phone: loc.phone,
+        id: loc.id,
+      }));
+
       const data = {
         name,
         bio,
         fieldOfExpertise,
-        address,
         displayEmail,
-        phone: phoneNumbers,
         website,
         profileImages: blobResult,
         socials: serializeSocials(socials),
         schedule,
         certificates: certificatesPayload,
+        locations: locationsPayload,
       };
 
       const payload = { ...data, socials: serializeSocials(socials) };
@@ -406,15 +409,7 @@ export default function EditProfileForm({ user }: { user: User }) {
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Address/Phone" />
           <div className="tab-content border-primary p-10">
 
-            <AddressSection address={address} setAddress={setAddress} addressRef={addressRef} />
-
-            <Divider addClass="my-4" />
-
-            <PhoneNumbersSection
-              phoneNumbers={phoneNumbers}
-              setPhoneNumbers={setPhoneNumbers}
-              platformIcon={platformIcons['Phone']}
-            />
+            <LocationSection locations={locations} setLocationsAction={setLocations} profileId={user.id} addressRef={addressRef} />
 
           </div>
 
