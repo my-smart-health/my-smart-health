@@ -14,22 +14,37 @@ export async function PUT(req: Request) {
     }
 
     const certificates: Certificate[] = body.data.certificates || [];
+    const locations = body.data.locations || [];
 
     const dbUser = await prisma.user.findUnique({
       where: { id: body.id },
-      include: { certificates: true },
+      include: { certificates: true, locations: true },
     });
+
     const dbCertIds = dbUser?.certificates.map((c) => c.id) || [];
     const incomingCertIds = certificates.filter((c) => c.id).map((c) => c.id);
     const certsToDelete = dbCertIds.filter(
       (id) => !incomingCertIds.includes(id)
     );
-
     const newCertificates = certificates.filter(
       (c) => !dbCertIds.includes(c.id)
     );
     const existingCertificates = certificates.filter((c) =>
       dbCertIds.includes(c.id)
+    );
+
+    const dbLocationIds = dbUser?.locations.map((l) => l.id) || [];
+    const incomingLocationIds = locations
+      .filter((l: { id: string }) => l.id)
+      .map((l: { id: string }) => l.id);
+    const locationsToDelete = dbLocationIds.filter(
+      (id) => !incomingLocationIds.includes(id)
+    );
+    const newLocations = locations.filter(
+      (l: { id: string }) => !dbLocationIds.includes(l.id)
+    );
+    const existingLocations = locations.filter((l: { id: string }) =>
+      dbLocationIds.includes(l.id)
     );
 
     const updateUser = await prisma.user.update({
@@ -66,8 +81,32 @@ export async function PUT(req: Request) {
             })),
           }),
         },
+        locations: {
+          ...(locationsToDelete.length > 0 && {
+            deleteMany: locationsToDelete.map((id) => ({ id })),
+          }),
+          ...(existingLocations.length > 0 && {
+            update: existingLocations.map(
+              (loc: { id: string; address: string; phone: string }) => ({
+                where: { id: loc.id },
+                data: {
+                  address: loc.address,
+                  phone: loc.phone,
+                },
+              })
+            ),
+          }),
+          ...(newLocations.length > 0 && {
+            create: newLocations.map(
+              (loc: { address: string; phone: string }) => ({
+                address: loc.address,
+                phone: loc.phone,
+              })
+            ),
+          }),
+        },
       },
-      include: { certificates: true },
+      include: { certificates: true, locations: true },
     });
 
     return NextResponse.json({
