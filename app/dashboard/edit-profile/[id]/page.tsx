@@ -13,15 +13,14 @@ async function getData(sessionId: string) {
       id: true,
       name: true,
       profileImages: true,
-      address: true,
       bio: true,
       displayEmail: true,
-      phone: true,
       website: true,
       socials: true,
       fieldOfExpertise: true,
       schedule: true,
       certificates: true,
+      locations: true,
     },
   });
 
