@@ -5,6 +5,7 @@ import prisma from "@/lib/db";
 import { redirect } from "next/navigation";
 
 import EditProfileForm from "@/components/profile/edit-profile-form/EditProfileForm";
+import Link from "next/link";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -13,15 +14,14 @@ async function getData(sessionId: string) {
       id: true,
       name: true,
       profileImages: true,
-      address: true,
       bio: true,
       displayEmail: true,
-      phone: true,
       website: true,
       socials: true,
       fieldOfExpertise: true,
       schedule: true,
       certificates: true,
+      locations: true,
     },
   });
 
@@ -44,6 +44,9 @@ export default async function EditProfile() {
 
   return (
     <>
+      <Link href="/dashboard/change-password" className="self-start ml-2 text-sm text-primary">
+        Change Password
+      </Link>
       <h1 className="text-4xl font-extrabold text-primary mb-6">Edit Profile</h1>
       <EditProfileForm user={parsedUser} />
     </>
