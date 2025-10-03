@@ -3,10 +3,13 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import StatusModal from "../modals/status-modal/StatusModal";
+import { ErrorState } from "@/utils/types";
 
 export default function LoginForm() {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<ErrorState>(null);
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -23,39 +26,43 @@ export default function LoginForm() {
       return response;
     }
 
-    setError("Falsche E-Mail oder Passwort.");
+    setError({ type: "error", message: "Falsche E-Mail oder Passwort." });
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-4 p-8 rounded-lg bg-white shadow-md max-w-[90%]"
-    >
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        required
-        className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+    <>
+      <StatusModal
+        isOpen={!!error}
+        onCloseAction={() => setError(null)}
+        message={error?.message || ""}
+        type={error?.type || "success"}
       />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        required
-        className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
-      {error && (
-        <div className="mb-4 p-3 rounded bg-red-100 text-red-700 border border-red-400">
-          {error}
-        </div>
-      )}
-      <button
-        type="submit"
-        className="p-2 rounded bg-primary text-white font-bold text-base hover:bg-primary/80 transition-colors"
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4 p-8 rounded-lg bg-white shadow-md max-w-[90%]"
       >
-        Login
-      </button>
-    </form>
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          required
+          className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+          className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+
+        <button
+          type="submit"
+          className="p-2 rounded bg-primary text-white font-bold text-base hover:bg-primary/80 transition-colors"
+        >
+          Login
+        </button>
+      </form>
+    </>
   );
 }
