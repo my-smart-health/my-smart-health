@@ -7,7 +7,7 @@ import Divider from "@/components/divider/Divider";
 export default function ContactSection({
   displayEmail,
   website,
-  locations = [],
+  locations,
   parsedSocials,
   platformIcons,
 }: {
@@ -17,9 +17,7 @@ export default function ContactSection({
   parsedSocials: { platform: string; url: string }[];
   platformIcons: Record<string, React.ReactNode>;
 }) {
-  if (!displayEmail && !website && (!parsedSocials || parsedSocials.length === 0)) {
-    return null;
-  }
+
   return (
     <>
       <Divider addClass="my-4" />
@@ -28,14 +26,14 @@ export default function ContactSection({
         <h2 className="font-bold text-primary text-xl">Kontakt</h2>
 
         {locations.length > 0 &&
-          locations.map((location) => {
+          locations.map((location, idx) => {
             const address = location.address;
-            const phone = location.phone || [];
+            const phone = location.phone;
             return (
-              <div key={address} className="flex flex-col gap-1 border border-primary rounded p-4">
+              <div key={idx} className="flex flex-col gap-1 border border-primary rounded p-4">
                 {address && (
                   <div className="flex flex-col">
-                    <div><MapPin className="inline-block mr-1" size={20} /> {address}</div>
+                    <div><MapPin className="inline-block mr-1" size={20} />{address}</div>
                     <Link
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
                       target="_blank"
