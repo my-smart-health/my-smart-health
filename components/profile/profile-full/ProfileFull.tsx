@@ -69,6 +69,8 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
 
   const parsedSocials = parseSocials(socials || []);
 
+  const filteredLocations = (locations || []).filter(loc => loc.address && loc.address.trim() !== "");
+
   return (
     <div className="flex flex-col gap-2 p-2 w-full max-w-[99%]">
 
@@ -90,7 +92,7 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
         displayEmail={displayEmail}
         website={website}
         parsedSocials={parsedSocials}
-        locations={locations}
+        locations={filteredLocations}
         platformIcons={platformIcons}
       />
       <ReservationSection src={"https://moers.cms.shic.us/Arzttemin_reservieren"} />
