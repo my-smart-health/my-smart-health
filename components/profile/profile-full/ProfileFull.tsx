@@ -63,12 +63,11 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
     fieldOfExpertise,
     displayEmail,
     certificates,
-    locations = [],
+    locations,
     schedule = [],
   } = user || {};
 
   const parsedSocials = parseSocials(socials || []);
-
 
   return (
     <div className="flex flex-col gap-2 p-2 w-full max-w-[99%]">
