@@ -11,6 +11,7 @@ export type NavbarProps = {
 };
 
 export type ErrorType = 'error' | 'warning' | 'success';
+
 export type ErrorState = { type: ErrorType; message: string } | null;
 
 export type UserAccount = {
