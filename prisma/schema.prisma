@@ -63,9 +63,10 @@ model MySmartHealth {
 }
 
 model Location {
-  id      String   @id @default(uuid())
-  address String
-  phone   String[]
-  user    User     @relation("UserLocations", fields: [userId], references: [id])
-  userId  String
+  id       String   @id @default(uuid())
+  address  String
+  phone    String[]
+  user     User     @relation("UserLocations", fields: [userId], references: [id])
+  userId   String
+  schedule Json?
 }
