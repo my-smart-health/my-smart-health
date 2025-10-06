@@ -3,6 +3,8 @@ import { MapPin } from "lucide-react";
 import { Location } from "@prisma/client";
 
 import Divider from "@/components/divider/Divider";
+import { Schedule } from "@/utils/types";
+import ScheduleSection from "./ScheduleSection";
 
 export default function ContactSection({
   displayEmail,
@@ -29,6 +31,7 @@ export default function ContactSection({
           locations.map((location, idx) => {
             const address = location.address;
             const phone = location.phone;
+            const schedule = location.schedule as Schedule[] | null;
             return (
               <div key={idx} className="flex flex-col gap-1 border border-primary rounded p-4">
                 {address && (
@@ -55,6 +58,17 @@ export default function ContactSection({
                     </Link>
                   ))
                 )}
+
+                {schedule && (
+                  <div className="mt-2">
+                    <strong className="text-primary">Öffnungszeiten:</strong>
+                    {schedule.length > 0 ? (
+                      schedule.map(sch => <ScheduleSection key={sch.id} schedule={[sch]} />)
+                    ) : (
+                      <div className="text-gray-500">Keine Öffnungszeiten angegeben</div>
+                    )}
+                  </div>
+                )}
               </div>
             );
           })}
@@ -66,6 +80,7 @@ export default function ContactSection({
             <span className="mr-1">{platformIcons.Email}</span>{displayEmail}
           </Link>
         )}
+
         {website && (
           <Link
             href={website}
@@ -74,6 +89,7 @@ export default function ContactSection({
             <span className="mr-1">{platformIcons.Website}</span>{website}
           </Link>
         )}
+
         {parsedSocials.length > 0 && parsedSocials.map((social, idx) => (
           <div key={social.url + idx} className="flex items-center w-full h-auto my-auto">
             <Link
