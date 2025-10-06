@@ -5,6 +5,7 @@ import prisma from "@/lib/db";
 import { redirect } from "next/navigation";
 
 import EditProfileForm from "@/components/profile/edit-profile-form/EditProfileForm";
+import { Schedule } from "@/utils/types";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -50,10 +51,19 @@ export default async function EditProfileId({ params }: { params: Promise<{ id: 
     schedule: typeof user.schedule === "string" ? JSON.parse(user.schedule) : user.schedule,
   };
 
+  const fixedLocations = parsedUser.locations.map(loc => ({
+    ...loc,
+    schedule: Array.isArray(loc.schedule)
+      ? (loc.schedule.filter((s: any) => s !== null) as Schedule[])
+      : [],
+  }));
+
+  const fixedUser = { ...parsedUser, locations: fixedLocations };
+
   return (
     <>
       <h1 className="text-4xl font-extrabold text-primary mb-6">Edit Profile</h1>
-      <EditProfileForm user={parsedUser} />
+      <EditProfileForm user={fixedUser} />
     </>
   );
 }
