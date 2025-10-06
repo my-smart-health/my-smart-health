@@ -1,5 +1,5 @@
 import prisma from '@/lib/db';
-import { Certificate } from '@/utils/types';
+import { Certificate, Schedule } from '@/utils/types';
 import { NextResponse } from 'next/server';
 
 export async function PUT(req: Request) {
@@ -87,11 +87,17 @@ export async function PUT(req: Request) {
           }),
           ...(existingLocations.length > 0 && {
             update: existingLocations.map(
-              (loc: { id: string; address: string; phone: string }) => ({
+              (loc: {
+                id: string;
+                address: string;
+                phone: string;
+                schedule: Schedule[];
+              }) => ({
                 where: { id: loc.id },
                 data: {
                   address: loc.address,
                   phone: loc.phone,
+                  schedule: Array.isArray(loc.schedule) ? loc.schedule : [],
                 },
               })
             ),
