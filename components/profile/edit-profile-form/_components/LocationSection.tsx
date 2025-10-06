@@ -26,16 +26,19 @@ export default function LocationSection({ locations, setLocationsAction, profile
       } as Location
     ]);
   };
+
   const updateLocation = (index: number, field: keyof Location, value: string | string[] | Schedule[]) => {
     const newLocations = [...locations];
     newLocations[index] = { ...newLocations[index], [field]: value };
     setLocationsAction(newLocations);
   };
+
   const removeLocation = (index: number) => {
     const newLocations = locations.filter((_, i) => i !== index);
     setLocationsAction(newLocations);
   };
-  function isSchedule(obj: any): obj is Schedule {
+
+  function isSchedule(obj: Schedule) {
     return obj && typeof obj === 'object' && 'id' in obj && 'day' in obj && 'open' in obj && 'close' in obj;
   }
 
