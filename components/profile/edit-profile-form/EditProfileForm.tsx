@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { MouseEvent, useEffect, useRef, useState, ChangeEvent } from "react";
 import { PutBlobResult } from "@vercel/blob";
 
-import { Certificate, CertificateForm, Schedule, Social } from "@/utils/types";
+import { Certificate, CertificateForm, Location, Schedule, Social } from "@/utils/types";
 import { isInstagramLink, isYoutubeLink, parseSocials, serializeSocials } from "@/utils/common";
 
 import Xlogo from '@/public/x-logo-black.png';
@@ -27,7 +27,7 @@ import {
   CertificatesSection,
   WorkScheduleSection,
 } from "./_components";
-import { Location } from "@prisma/client";
+
 import LocationSection from "./_components/LocationSection";
 
 type User = {
@@ -303,9 +303,10 @@ export default function EditProfileForm({ user }: { user: User }) {
         address: Array.isArray(loc.address) ? loc.address.join(", ") : loc.address,
         phone: loc.phone,
         id: loc.id,
+        schedule: Array.isArray(loc.schedule) ? loc.schedule : [],
       }));
 
-      const data = {
+      const payload = {
         name,
         bio,
         fieldOfExpertise,
@@ -318,7 +319,6 @@ export default function EditProfileForm({ user }: { user: User }) {
         locations: locationsPayload,
       };
 
-      const payload = { ...data, socials: serializeSocials(socials) };
       if (schedule.length > 0) payload.schedule = schedule;
 
       const res = await fetch('/api/update/update-profile', {
