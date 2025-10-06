@@ -1,8 +1,9 @@
 import Divider from "@/components/divider/Divider";
 import { AddressSection } from "./AddressSection";
 import { PhoneNumbersSection } from "./PhoneNumbersSection";
-import { Location } from "@prisma/client";
 import { Phone } from "lucide-react";
+import { WorkScheduleSection } from "./WorkScheduleSection";
+import type { Schedule, Location } from "@/utils/types";
 
 type LocationProps = {
   locations: Location[] | [];
@@ -12,6 +13,7 @@ type LocationProps = {
 }
 
 export default function LocationSection({ locations, setLocationsAction, profileId, addressRef }: LocationProps) {
+
   const addLocation = () => {
     setLocationsAction([
       ...locations,
@@ -19,11 +21,12 @@ export default function LocationSection({ locations, setLocationsAction, profile
         id: crypto.randomUUID(),
         address: "",
         phone: [],
-        userId: profileId
+        userId: profileId,
+        schedule: [] as Schedule[],
       } as Location
     ]);
   };
-  const updateLocation = (index: number, field: keyof Location, value: string | string[]) => {
+  const updateLocation = (index: number, field: keyof Location, value: string | string[] | Schedule[]) => {
     const newLocations = [...locations];
     newLocations[index] = { ...newLocations[index], [field]: value };
     setLocationsAction(newLocations);
@@ -31,6 +34,39 @@ export default function LocationSection({ locations, setLocationsAction, profile
   const removeLocation = (index: number) => {
     const newLocations = locations.filter((_, i) => i !== index);
     setLocationsAction(newLocations);
+  };
+  function isSchedule(obj: any): obj is Schedule {
+    return obj && typeof obj === 'object' && 'id' in obj && 'day' in obj && 'open' in obj && 'close' in obj;
+  }
+
+  const updateLocationSchedule = (index: number, newSchedule: Schedule[]) => {
+    const newLocations = [...locations];
+    newLocations[index] = { ...newLocations[index], schedule: newSchedule };
+    setLocationsAction(newLocations);
+  };
+
+  const toggleScheduleDay = (locationIdx: number, scheduleId: string, day: keyof Schedule['day']) => {
+    const location = locations[locationIdx];
+    const updatedSchedule = Array.isArray(location.schedule)
+      ? location.schedule
+        .filter(isSchedule)
+        .map(s =>
+          s.id === scheduleId ? { ...s, day: { ...s.day, [day]: !s.day[day] } } : s
+        )
+      : [];
+    updateLocationSchedule(locationIdx, updatedSchedule);
+  };
+
+  const setScheduleTime = (locationIdx: number, scheduleId: string, openClose: keyof Schedule, value: string) => {
+    const location = locations[locationIdx];
+    const updatedSchedule = Array.isArray(location.schedule)
+      ? location.schedule
+        .filter(isSchedule)
+        .map(s =>
+          s.id === scheduleId ? { ...s, [openClose]: value } : s
+        )
+      : [];
+    updateLocationSchedule(locationIdx, updatedSchedule);
   };
 
   return (
@@ -46,6 +82,15 @@ export default function LocationSection({ locations, setLocationsAction, profile
             phoneNumbers={location.phone}
             setPhoneNumbers={(value) => updateLocation(index, "phone", value)}
             platformIcon={<Phone className="inline-block mr-1" size={20} />}
+          />
+
+          <Divider addClass="my-4" />
+
+          <WorkScheduleSection
+            schedule={Array.isArray(location.schedule) ? location.schedule.filter(isSchedule) : []}
+            setSchedule={(value) => updateLocation(index, "schedule", value)}
+            toggleScheduleDay={(scheduleId, day) => toggleScheduleDay(index, scheduleId, day)}
+            setScheduleTime={(scheduleId, openClose, value) => setScheduleTime(index, scheduleId, openClose, value)}
           />
 
           <Divider addClass="my-4" />
@@ -70,4 +115,4 @@ export default function LocationSection({ locations, setLocationsAction, profile
 
     </section>
   );
-} 
+}
