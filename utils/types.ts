@@ -66,6 +66,14 @@ export type Schedule = {
   close: string;
 };
 
+export type Location = {
+  id: string;
+  address: string;
+  phone: string[];
+  userId: string;
+  schedule: Schedule[];
+};
+
 export type Social = { platform: string; url: string };
 
 export type Certificate = {
