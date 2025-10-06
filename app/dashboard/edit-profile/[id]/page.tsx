@@ -51,12 +51,25 @@ export default async function EditProfileId({ params }: { params: Promise<{ id: 
     schedule: typeof user.schedule === "string" ? JSON.parse(user.schedule) : user.schedule,
   };
 
-  const fixedLocations = parsedUser.locations.map(loc => ({
-    ...loc,
-    schedule: Array.isArray(loc.schedule)
-      ? (loc.schedule.filter((s: any) => s !== null) as Schedule[])
-      : [],
-  }));
+  const fixedLocations = parsedUser.locations.map((loc) => {
+    let schedule: Schedule[] = [];
+    if (Array.isArray(loc.schedule)) {
+      schedule = loc.schedule.filter((s) => s !== null) as Schedule[];
+    } else if (typeof loc.schedule === "string") {
+      try {
+        const parsed = JSON.parse(loc.schedule);
+        schedule = Array.isArray(parsed) ? parsed.filter((s) => s !== null) as Schedule[] : [];
+      } catch {
+        schedule = [];
+      }
+    } else if (loc.schedule !== null && typeof loc.schedule === "object") {
+      schedule = [loc.schedule as Schedule].filter((s) => s !== null) as Schedule[];
+    }
+    return {
+      ...loc,
+      schedule,
+    };
+  });
 
   const fixedUser = { ...parsedUser, locations: fixedLocations };
 
