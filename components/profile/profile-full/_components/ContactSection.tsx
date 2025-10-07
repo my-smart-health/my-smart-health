@@ -66,16 +66,12 @@ export default function ContactSection({
 
                 {schedule && (
                   <div className="mt-2">
-
-                    <Divider addClass="my-4" />
-
-                    {schedule.length > 0 ? (
+                    {schedule.length > 0 && (
                       <>
+                        <Divider addClass="my-4" />
                         <h2 className="font-bold text-primary text-xl">Öffnungszeiten</h2>
-                        {schedule.map((sch) => <ScheduleSection key={sch.id} schedule={[sch]} />)}
+                        <ScheduleSection schedule={schedule} />
                       </>
-                    ) : (
-                      <div className="text-gray-500">Keine Öffnungszeiten angegeben</div>
                     )}
                   </div>
                 )}
