@@ -36,6 +36,7 @@ export default function ContactSection({
               <div key={idx} className="flex flex-col gap-1 border border-primary rounded p-4">
                 {address && (
                   <div className="flex flex-col">
+                    <h2 className="font-bold text-primary text-lg">Adresse</h2>
                     <div><MapPin className="inline-block mr-1" size={20} />{address}</div>
                     <Link
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
@@ -48,22 +49,31 @@ export default function ContactSection({
                 )}
 
                 {phone.length > 0 && (
-                  phone.map((phone, idx) => (
-                    <Link
-                      key={idx}
-                      href={`tel:${phone}`}
-                      target="_blank"
-                      className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 link">
-                      <span className="mr-1">{platformIcons.Phone}</span>{phone}
-                    </Link>
-                  ))
+                  <>
+                    <Divider addClass="my-4" />
+                    <h2 className="font-bold text-primary text-lg">Telefon</h2>
+                    {phone.map((phone, idx) => (
+                      <Link
+                        key={idx}
+                        href={`tel:${phone}`}
+                        target="_blank"
+                        className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 link">
+                        <span className="mr-1">{platformIcons.Phone}</span>{phone}
+                      </Link>
+                    ))}
+                  </>
                 )}
 
                 {schedule && (
                   <div className="mt-2">
-                    <strong className="text-primary">Öffnungszeiten:</strong>
+
+                    <Divider addClass="my-4" />
+
                     {schedule.length > 0 ? (
-                      schedule.map(sch => <ScheduleSection key={sch.id} schedule={[sch]} />)
+                      <>
+                        <h2 className="font-bold text-primary text-xl">Öffnungszeiten</h2>
+                        {schedule.map((sch) => <ScheduleSection key={sch.id} schedule={[sch]} />)}
+                      </>
                     ) : (
                       <div className="text-gray-500">Keine Öffnungszeiten angegeben</div>
                     )}
