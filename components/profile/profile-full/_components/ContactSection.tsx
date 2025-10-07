@@ -48,6 +48,18 @@ export default function ContactSection({
                   </div>
                 )}
 
+                {schedule && (
+                  <div className="mt-2">
+                    {schedule.length > 0 && (
+                      <>
+                        <Divider addClass="my-4" />
+                        <h2 className="font-bold text-primary text-xl">Öffnungszeiten</h2>
+                        <ScheduleSection schedule={schedule} />
+                      </>
+                    )}
+                  </div>
+                )}
+
                 {phone.length > 0 && (
                   <>
                     <Divider addClass="my-4" />
@@ -64,17 +76,6 @@ export default function ContactSection({
                   </>
                 )}
 
-                {schedule && (
-                  <div className="mt-2">
-                    {schedule.length > 0 && (
-                      <>
-                        <Divider addClass="my-4" />
-                        <h2 className="font-bold text-primary text-xl">Öffnungszeiten</h2>
-                        <ScheduleSection schedule={schedule} />
-                      </>
-                    )}
-                  </div>
-                )}
               </div>
             );
           })}
