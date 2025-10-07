@@ -406,7 +406,7 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Address/Phone/Location" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Address/Phone/Local Schedule" />
           <div className="tab-content border-primary p-10">
 
             <LocationSection locations={locations} setLocationsAction={setLocations} profileId={user.id} addressRef={addressRef} />
