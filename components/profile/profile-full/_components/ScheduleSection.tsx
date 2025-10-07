@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { Schedule } from "@/utils/types";
-import Divider from "@/components/divider/Divider";
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const daysDe = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
@@ -57,10 +56,7 @@ export default function ScheduleSection({ schedule }: { schedule: Schedule[] }) 
 
   return (
     <>
-      <Divider addClass="my-4" />
-
       <section className="flex flex-col space-y-2">
-        <h2 className="font-bold text-primary text-xl">Öffnungszeiten</h2>
         {schedule.length > 0 ? (
           schedule.map(sch => {
             const activeDays = getActiveDays(sch);
