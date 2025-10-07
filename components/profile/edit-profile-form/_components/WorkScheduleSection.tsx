@@ -82,6 +82,7 @@ export function WorkScheduleSection({
                 </span>
               </div>
             </label>
+            <span>select Open and Close to 12:00 AM <br /> for 24/7 schedule</span>
             <button
               type="button"
               onClick={() => setSchedule(schedule.filter((_, i) => i !== idx))}
