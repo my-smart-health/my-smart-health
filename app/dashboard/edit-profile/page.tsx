@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 import EditProfileForm from "@/components/profile/edit-profile-form/EditProfileForm";
 import Link from "next/link";
-import { Location, Schedule } from "@/utils/types";
+import { Schedule } from "@/utils/types";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
