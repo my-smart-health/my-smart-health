@@ -54,6 +54,8 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
 
   if (!schedule || schedule.length === 0) return null;
 
+  const is247 = schedule.some(sch => sch.open === "00:00" && sch.close === "00:00");
+
   return (
     <>
       <section className="flex flex-col space-y-2">
@@ -71,24 +73,38 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
                 </div>
               );
             }
+            if (sch.open === "00:00" && sch.close === "00:00") {
+              return (
+                <div key={sch.id} className="grid grid-cols-2 justify-evenly gap-6 py-1">
+                  <div>{getFirstLastDay(sch)}</div>
+                  <div>
+                    <span className="text-green-500/95">24 Stunden geöffnet</span>
+                  </div>
+                </div>
+              );
+            }
             return (
               <div key={sch.id} className="grid grid-cols-2 justify-evenly gap-6 py-1">
                 <div>{getFirstLastDay(sch)}</div>
                 <div>
-                  {sch.open && <span>{sch.open}</span>}
-                  {sch.open && sch.close && <span> - </span>}
-                  {sch.close && <span>{sch.close}</span>}
-                  {sch.open && sch.close && <span> Uhr</span>}
+                  {sch.open && sch.close && (
+                    <>
+                      <span>{sch.open}</span>
+                      <span> - </span>
+                      <span>{sch.close}</span>
+                      <span> Uhr</span>
+                    </>
+                  )}
                 </div>
               </div>
-            )
+            );
           })
         ) : (
           <p className="text-gray-400">Keine Öffnungszeiten angegeben</p>
         )}
         {isOpenShown && displayIsOpen && (
-          <span className={isOpenNow ? "font-bold text-green-500/95" : "font-bold text-red-500/95"}>
-            {isOpenNow ? "geöffnet" : "geschlossen"}
+          <span className={is247 || isOpenNow ? "font-bold text-green-500/95" : "font-bold text-red-500/95"}>
+            {(is247 || isOpenNow) ? "geöffnet" : "geschlossen"}
           </span>
         )}
       </section>
