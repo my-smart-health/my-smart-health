@@ -34,7 +34,7 @@ function isScheduleOpen(schedule: Schedule, now: Date) {
   return nowMinutes >= openMinutes && nowMinutes <= closeMinutes;
 }
 
-export default function ScheduleSection({ schedule }: { schedule: Schedule[] }) {
+export default function ScheduleSection({ schedule, displayIsOpen = true }: { schedule: Schedule[]; displayIsOpen?: boolean }) {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export default function ScheduleSection({ schedule }: { schedule: Schedule[] }) 
         ) : (
           <p className="text-gray-400">Keine Öffnungszeiten angegeben</p>
         )}
-        {isOpenShown && (
+        {isOpenShown && displayIsOpen && (
           <span className={isOpenNow ? "font-bold text-green-500/95" : "font-bold text-red-500/95"}>
             {isOpenNow ? "geöffnet" : "geschlossen"}
           </span>
