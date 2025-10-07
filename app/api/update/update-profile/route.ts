@@ -104,9 +104,14 @@ export async function PUT(req: Request) {
           }),
           ...(newLocations.length > 0 && {
             create: newLocations.map(
-              (loc: { address: string; phone: string }) => ({
+              (loc: {
+                address: string;
+                phone: string;
+                schedule: Schedule[];
+              }) => ({
                 address: loc.address,
                 phone: loc.phone,
+                schedule: Array.isArray(loc.schedule) ? loc.schedule : [],
               })
             ),
           }),
