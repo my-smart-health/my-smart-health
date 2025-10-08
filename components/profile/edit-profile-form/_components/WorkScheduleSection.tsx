@@ -195,6 +195,9 @@ export function WorkScheduleSection({
             >
               <ArrowUp /> Remove
             </button>
+
+            <Divider addClass="my-4 col-span-2" />
+
           </div>
         </div>
       ))}
