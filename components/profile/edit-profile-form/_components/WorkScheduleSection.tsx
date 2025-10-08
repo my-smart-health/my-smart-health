@@ -1,6 +1,8 @@
 import Divider from "@/components/divider/Divider";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUp, ArrowUpRight, CalendarCheck } from "lucide-react";
 import { Schedule } from "@/utils/types";
+import { ScheduleSection } from "../../profile-full/_components";
+import { useState } from "react";
 
 type WorkScheduleSectionProps = {
   schedule: Schedule[];
@@ -25,74 +27,176 @@ export function WorkScheduleSection({
   toggleScheduleDay,
   setScheduleTime,
 }: WorkScheduleSectionProps) {
+  const [nonStopState, setNonStopState] = useState<{ [id: string]: boolean }>({});
+  const [prevValues, setPrevValues] = useState<{ [id: string]: Schedule | null }>({});
+
+  function handleNonStopToggle(id: string, checked: boolean, item: Schedule) {
+    if (checked) {
+      setPrevValues(prev => ({ ...prev, [id]: { ...item } }));
+      setNonStopState(prev => ({ ...prev, [id]: true }));
+      setSchedule(
+        schedule.map(sch =>
+          sch.id === id
+            ? {
+              ...sch,
+              day: {
+                Monday: true,
+                Tuesday: true,
+                Wednesday: true,
+                Thursday: true,
+                Friday: true,
+                Saturday: true,
+                Sunday: true,
+              },
+              open: "00:00",
+              close: "00:00",
+            }
+            : sch
+        )
+      );
+    } else {
+      setNonStopState(prev => ({ ...prev, [id]: false }));
+      setSchedule(
+        schedule.map(sch =>
+          sch.id === id
+            ? prevValues[id]
+              ? { ...sch, ...prevValues[id] }
+              : {
+                ...sch,
+                day: {
+                  Monday: false,
+                  Tuesday: false,
+                  Wednesday: false,
+                  Thursday: false,
+                  Friday: false,
+                  Saturday: false,
+                  Sunday: false,
+                },
+                open: "",
+                close: "",
+              }
+            : sch
+        )
+      );
+    }
+  }
+
+  function isNonStop(item: Schedule) {
+    return (
+      item.open === "00:00" &&
+      item.close === "00:00" &&
+      Object.values(item.day).every(Boolean)
+    );
+  }
+
   return (
     <section>
       {schedule.map((item, idx) => (
-        <fieldset
-          key={item.id}
-          className="fieldset grid-cols-2 max-w-[99.9%]"
-        >
-          <legend className="fieldset-legend">Work Schedule</legend>
-          <div className="grid grid-cols-1 w-full max-w-[99.9%] gap-2">
-            {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
-              <label key={day} htmlFor={`schedule-${day.toLowerCase()}`} className="label">
+        <div key={item.id} className="mb-3">
+          <fieldset
+            key={item.id}
+            className="fieldset grid-cols-2 max-w-[99.9%]"
+          >
+            <legend className="fieldset-legend">Work Schedule</legend>
+
+            <div
+              className="mx-auto border-2 border-primary rounded p-4 col-span-2 w-full max-w-[99.9%] flex flex-col justify-center"
+              style={{ minHeight: '120px', height: 'auto', boxSizing: 'border-box' }}
+            >
+              <label htmlFor="location" className="label">Schedule Preview</label>
+              <div style={{ minHeight: '48px', display: 'flex', alignItems: 'center' }}>
+                <ScheduleSection schedule={[item]} />
+              </div>
+            </div>
+
+            <Divider addClass="my-4 col-span-2" />
+
+            <div
+              className="grid grid-cols-1 w-full max-w-[99.9%] gap-2"
+              style={{ opacity: isNonStop(item) ? 0.5 : 1, pointerEvents: isNonStop(item) ? 'none' : 'auto' }}>
+              {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
+                <label key={day} htmlFor={`schedule-${day.toLowerCase()}`} className="label">
+                  <input
+                    type="checkbox"
+                    disabled={!!nonStopState[item.id]}
+                    name={`schedule-${day.toLowerCase()}`}
+                    value={day}
+                    className="checkbox checkbox-primary"
+                    checked={item.day[day as keyof Schedule['day']]}
+                    onChange={() => toggleScheduleDay(item.id, day as keyof Schedule['day'])}
+                  />
+                  {dayTranslations[day] || day}
+                </label>
+              ))}
+            </div>
+            <div
+              className="grid grid-rows-2 gap-3 justify-baseline mt-4 w-full max-w-[99.9%]"
+              style={{ opacity: isNonStop(item) ? 0.5 : 1, pointerEvents: isNonStop(item) ? 'none' : 'auto' }}>
+              <label htmlFor="time" className="label text-center flex-col">
+                <span className="label-text">Time start</span>
+                <div className="flex flex-col">
+                  <input
+                    type="time"
+                    value={item.open}
+                    className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                    onChange={(e) => setScheduleTime(item.id, 'open', e.target.value)}
+                    onClick={e => e.stopPropagation()}
+                    disabled={isNonStop(item)}
+                  />
+                  <span className="text-xs text-gray-500 w-fit flex flex-nowrap">
+                    click here to set <ArrowUpRight />
+                  </span>
+                </div>
+              </label>
+              <label htmlFor="time-end" className="label text-center flex-col">
+                <span className="label-text">Time end</span>
+                <div className="flex flex-col">
+                  <input
+                    type="time"
+                    name="time-end"
+                    value={item.close}
+                    style={{ textTransform: 'none' }}
+                    className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                    onChange={(e) => setScheduleTime(item.id, 'close', e.target.value)}
+                    onClick={e => e.stopPropagation()}
+                    disabled={isNonStop(item)}
+                  />
+                  <span className="text-xs text-gray-500 w-fit flex flex-nowrap">
+                    click here to set <ArrowUpRight />
+                  </span>
+                </div>
+              </label>
+
+            </div>
+          </fieldset>
+
+          <Divider addClass="my-4 col-span-2" />
+
+          <div>
+            <fieldset className="fieldset bg-base-100 border-primary flex justify-center rounded-box w-full border p-4">
+              <legend className="fieldset-legend">Non-stop</legend>
+              <label className="label">
                 <input
                   type="checkbox"
-                  name={`schedule-${day.toLowerCase()}`}
-                  value={day}
-                  className="checkbox checkbox-primary"
-                  checked={item.day[day as keyof Schedule['day']]}
-                  onChange={() => toggleScheduleDay(item.id, day as keyof Schedule['day'])}
+                  checked={isNonStop(item)}
+                  className="toggle"
+                  onChange={e => handleNonStopToggle(item.id, e.target.checked, item)}
                 />
-                {dayTranslations[day] || day}
+                <span className="label-text">Open 24 hours / 7 days</span>
               </label>
-            ))}
-          </div>
-          <div className="grid grid-rows-2 gap-3 justify-baseline mt-4 w-full max-w-[99.9%]">
-            <label htmlFor="time" className="label text-center flex-col">
-              <span className="label-text">Time start</span>
-              <div className="flex flex-col">
-                <input
-                  type="time"
-                  id="time"
-                  name="time-start"
-                  value={item.open}
-                  className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
-                  onChange={(e) => setScheduleTime(item.id, 'open', e.target.value)}
-                />
-                <span className="text-xs text-gray-500 w-fit flex flex-nowrap">
-                  click here to set <ArrowUpRight />
-                </span>
-              </div>
-            </label>
-            <label htmlFor="time-end" className="label text-center flex-col">
-              <span className="label-text">Time end</span>
-              <div className="flex flex-col">
-                <input
-                  type="time"
-                  id="time-end"
-                  name="time-end"
-                  value={item.close}
-                  style={{ textTransform: 'none' }}
-                  className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
-                  onChange={(e) => setScheduleTime(item.id, 'close', e.target.value)}
-                />
-                <span className="text-xs text-gray-500 w-fit flex flex-nowrap">
-                  click here to set <ArrowUpRight />
-                </span>
-              </div>
-            </label>
-            <span>select Open and Close to 12:00 AM <br /> for 24/7 schedule</span>
+            </fieldset>
+
+            <Divider addClass="my-4 col-span-2" />
+
             <button
               type="button"
               onClick={() => setSchedule(schedule.filter((_, i) => i !== idx))}
               className="btn btn-outline w-full text-red-500 self-end"
             >
-              Remove
+              <ArrowUp /> Remove
             </button>
           </div>
-          <Divider addClass="my-4 col-span-2" />
-        </fieldset>
+        </div>
       ))}
       <button
         type="button"
@@ -117,7 +221,7 @@ export function WorkScheduleSection({
         }
         className="btn btn-outline btn-primary w-full mt-2 px-3 py-1 rounded"
       >
-        Add Schedule
+        <CalendarCheck />  Add Schedule
       </button>
     </section>
   );
