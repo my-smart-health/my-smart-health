@@ -10,7 +10,7 @@ import { isInstagramLink, isYoutubeLink, parseSocials, serializeSocials } from "
 
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
-import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube } from "lucide-react";
+import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, SaveAll, Youtube } from "lucide-react";
 
 import Divider from "@/components/divider/Divider";
 import {
@@ -510,7 +510,7 @@ export default function EditProfileForm({ user }: { user: User }) {
             type="submit"
             className="btn btn-success m-4  text-white rounded-lg font-semibold hover:bg-primary-dark transition-colors duration-300 ease-in-out "
           >
-            Save Changes and go to Dashboard
+            <SaveAll />  Save Changes and go to Dashboard
           </button>
 
         </div>
