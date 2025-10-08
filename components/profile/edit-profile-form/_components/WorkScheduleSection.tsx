@@ -104,69 +104,70 @@ export function WorkScheduleSection({
               style={{ minHeight: '120px', height: 'auto', boxSizing: 'border-box' }}
             >
               <label htmlFor="location" className="label">Schedule Preview</label>
-              <div style={{ minHeight: '48px', display: 'flex', alignItems: 'center' }}>
+              <div style={{ minHeight: '48px' }}>
                 <ScheduleSection schedule={[item]} />
               </div>
             </div>
 
             <Divider addClass="my-4 col-span-2" />
 
-            <div
-              className="grid grid-cols-1 w-full max-w-[99.9%] gap-2"
-              style={{ opacity: isNonStop(item) ? 0.5 : 1, pointerEvents: isNonStop(item) ? 'none' : 'auto' }}>
-              {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
-                <label key={day} htmlFor={`schedule-${day.toLowerCase()}`} className="label">
-                  <input
-                    type="checkbox"
-                    disabled={!!nonStopState[item.id]}
-                    name={`schedule-${day.toLowerCase()}`}
-                    value={day}
-                    className="checkbox checkbox-primary"
-                    checked={item.day[day as keyof Schedule['day']]}
-                    onChange={() => toggleScheduleDay(item.id, day as keyof Schedule['day'])}
-                  />
-                  {dayTranslations[day] || day}
+            <div className="col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div
+                className="grid grid-cols-1 mx-auto w-fit max-w-[99.9%] gap-2"
+                style={{ opacity: isNonStop(item) ? 0.5 : 1, pointerEvents: isNonStop(item) ? 'none' : 'auto' }}>
+                {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
+                  <label key={day} htmlFor={`schedule-${day.toLowerCase()}`} className="label">
+                    <input
+                      type="checkbox"
+                      disabled={!!nonStopState[item.id]}
+                      name={`schedule-${day.toLowerCase()}`}
+                      value={day}
+                      className="checkbox checkbox-primary"
+                      checked={item.day[day as keyof Schedule['day']]}
+                      onChange={() => toggleScheduleDay(item.id, day as keyof Schedule['day'])}
+                    />
+                    {dayTranslations[day] || day}
+                  </label>
+                ))}
+              </div>
+              <div
+                className="grid grid-rows-2 gap-3 justify-baseline mt-4 w-full max-w-[99.9%]"
+                style={{ opacity: isNonStop(item) ? 0.5 : 1, pointerEvents: isNonStop(item) ? 'none' : 'auto' }}>
+                <label htmlFor="time" className="label text-center flex-col">
+                  <span className="label-text">Time start</span>
+                  <div className="flex flex-col">
+                    <input
+                      type="time"
+                      value={item.open}
+                      className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                      onChange={(e) => setScheduleTime(item.id, 'open', e.target.value)}
+                      onClick={e => e.stopPropagation()}
+                      disabled={isNonStop(item)}
+                    />
+                    <span className="text-xs text-gray-500 w-fit flex flex-nowrap">
+                      click here to set <ArrowUpRight />
+                    </span>
+                  </div>
                 </label>
-              ))}
-            </div>
-            <div
-              className="grid grid-rows-2 gap-3 justify-baseline mt-4 w-full max-w-[99.9%]"
-              style={{ opacity: isNonStop(item) ? 0.5 : 1, pointerEvents: isNonStop(item) ? 'none' : 'auto' }}>
-              <label htmlFor="time" className="label text-center flex-col">
-                <span className="label-text">Time start</span>
-                <div className="flex flex-col">
-                  <input
-                    type="time"
-                    value={item.open}
-                    className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
-                    onChange={(e) => setScheduleTime(item.id, 'open', e.target.value)}
-                    onClick={e => e.stopPropagation()}
-                    disabled={isNonStop(item)}
-                  />
-                  <span className="text-xs text-gray-500 w-fit flex flex-nowrap">
-                    click here to set <ArrowUpRight />
-                  </span>
-                </div>
-              </label>
-              <label htmlFor="time-end" className="label text-center flex-col">
-                <span className="label-text">Time end</span>
-                <div className="flex flex-col">
-                  <input
-                    type="time"
-                    name="time-end"
-                    value={item.close}
-                    style={{ textTransform: 'none' }}
-                    className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
-                    onChange={(e) => setScheduleTime(item.id, 'close', e.target.value)}
-                    onClick={e => e.stopPropagation()}
-                    disabled={isNonStop(item)}
-                  />
-                  <span className="text-xs text-gray-500 w-fit flex flex-nowrap">
-                    click here to set <ArrowUpRight />
-                  </span>
-                </div>
-              </label>
-
+                <label htmlFor="time-end" className="label text-center flex-col">
+                  <span className="label-text">Time end</span>
+                  <div className="flex flex-col">
+                    <input
+                      type="time"
+                      name="time-end"
+                      value={item.close}
+                      style={{ textTransform: 'none' }}
+                      className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                      onChange={(e) => setScheduleTime(item.id, 'close', e.target.value)}
+                      onClick={e => e.stopPropagation()}
+                      disabled={isNonStop(item)}
+                    />
+                    <span className="text-xs text-gray-500 w-fit flex flex-nowrap">
+                      click here to set <ArrowUpRight />
+                    </span>
+                  </div>
+                </label>
+              </div>
             </div>
           </fieldset>
 
