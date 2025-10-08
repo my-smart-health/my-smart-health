@@ -1,7 +1,7 @@
 import Divider from "@/components/divider/Divider";
 import { AddressSection } from "./AddressSection";
 import { PhoneNumbersSection } from "./PhoneNumbersSection";
-import { Phone } from "lucide-react";
+import { Navigation, NavigationOff, Phone } from "lucide-react";
 import { WorkScheduleSection } from "./WorkScheduleSection";
 import type { Schedule, Location } from "@/utils/types";
 
@@ -103,7 +103,7 @@ export default function LocationSection({ locations, setLocationsAction, profile
             onClick={() => removeLocation(index)}
             className="btn btn-outline w-full flex place-self-end mt-4 align-bottom text-red-500"
           >
-            Remove Location
+            <NavigationOff />  Remove Location
           </button>
         </div>
       ))}
@@ -113,7 +113,7 @@ export default function LocationSection({ locations, setLocationsAction, profile
         onClick={addLocation}
         className="btn btn-primary w-full flex place-self-end mt-4 align-bottom"
       >
-        Add Location
+        <Navigation /> Add Location
       </button>
 
     </section>
