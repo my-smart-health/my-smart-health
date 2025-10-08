@@ -24,6 +24,11 @@ body {
   @apply bg-white text-black;
 }
 
+input[type='time']::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(1);
+}
+
 .tab {
   background-color: var(--color-base-100);
   border-color: var(--primary);
