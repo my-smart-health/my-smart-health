@@ -11,7 +11,7 @@ export default function ImpressumPage() {
         <p className="font-bold">Future Health GmbH</p>
 
         <p>
-          Wildenbruchstr. 13<br />
+          Wildenbruchstr.13<br />
           40545 Düsseldorf<br />
           Deutschland<br />
           <Link href="mailto:info@future-health.de" className="link text-primary" target="_blank">info@future-health.de</Link>
@@ -29,7 +29,7 @@ export default function ImpressumPage() {
         <h3 className="mt-4 font-bold">Inhaltlich verantwortlich nach § 18 Abs. 2 MStV:</h3>
         <p>
           Dr. Ferdinand Jeute<br />
-          Wildenbruchstr. 13<br />
+          Wildenbruchstr.13<br />
           40545 Düsseldorf<br />
           Deutschland
         </p>
@@ -37,14 +37,13 @@ export default function ImpressumPage() {
         <br />
 
         <p>
-          Die EU-Kommission stellt eine Plattform für die Online-Streitbeilegung
-          (OS) bereit. Sie finden diese unter{' '}
+          Die EU-Kommission stellt eine Plattform für die Online-Streitbeilegung zur Verfügung. Sie finden
+          sie unter{' '}
           <Link href="https://ec.europa.eu/consumers/odr/" target="_blank" className="link text-primary">https://ec.europa.eu/consumers/odr/</Link>.
         </p>
         <p>
-          Future Health ist weder bereit noch verpflichtet, an einem
-          Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle
-          teilzunehmen.
+          Future Health  ist weder bereit noch verpflichtet, an
+          einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
         </p>
       </section>
     </main>
