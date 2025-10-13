@@ -3,10 +3,6 @@
 import { useRouter } from "next/navigation";
 import { FormEvent, useState, useRef, useEffect } from "react";
 
-import {
-  PROFILE_TYPE_MEDIZIN_UND_PFLEGE,
-  PROFILE_TYPE_SMART_HEALTH,
-} from "@/utils/constants";
 import { ErrorState } from "@/utils/types";
 
 import ErrorModal from "./ErrorModal";
@@ -14,8 +10,6 @@ import ErrorModal from "./ErrorModal";
 export default function RegisterForm() {
   const router = useRouter();
   const [error, setError] = useState<ErrorState>(null);
-  const [profileType, setProfileType] = useState<string>("");
-  const [categoryState, setCategoryState] = useState<string[]>([""]);
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState<boolean>(false);
@@ -74,11 +68,6 @@ export default function RegisterForm() {
         return null;
       }
 
-      if (!profileType) {
-        setError({ type: "error", message: "Bitte wählen Sie eine Kategorie aus" });
-        setIsDisabled(false);
-        return null;
-      }
       if (password !== passwordConfirmation) {
         setError({ type: "warning", message: "Passwörter stimmen nicht überein" });
         setIsDisabled(false);
