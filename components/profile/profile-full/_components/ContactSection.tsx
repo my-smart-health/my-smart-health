@@ -41,6 +41,7 @@ export default function ContactSection({
                     <Link
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
                       target="_blank"
+                      rel="noreferrer noopener"
                       className="indent-7 text-primary font-bold text-lg hover:text-primary transition-colors duration-200"
                     >
                       Route planen
@@ -68,7 +69,6 @@ export default function ContactSection({
                       <Link
                         key={idx}
                         href={`tel:${phone}`}
-                        target="_blank"
                         className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 link">
                         <span className="mr-1">{platformIcons.Phone}</span>{phone}
                       </Link>
@@ -92,6 +92,7 @@ export default function ContactSection({
           <Link
             href={website}
             target="_blank"
+            rel="noreferrer noopener"
             className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 break-all break-before-left link">
             <span className="mr-1">{platformIcons.Website}</span>{website}
           </Link>
@@ -102,6 +103,7 @@ export default function ContactSection({
             <Link
               href={social.url}
               target="_blank"
+              rel="noreferrer noopener"
               className="flex justify-center items-center text-gray-700 hover:text-primary transition-colors duration-200 break-all link max-w-[99%]">
               <span className="mr-1">{platformIcons[social.platform]}</span>{social.url}
             </Link>
