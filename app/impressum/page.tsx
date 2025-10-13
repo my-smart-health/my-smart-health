@@ -2,38 +2,51 @@ import Link from "next/link";
 
 export default function ImpressumPage() {
   return (
-    <>
-      <div className="flex justify-center align-baseline p-2 mb-4 mx-auto w-full bg-primary">
+    <main className="mx-auto max-w-3xl p-6">
+      <header className="flex justify-center items-center p-2 mb-6 bg-primary">
         <h1 className="text-white text-2xl font-bold">Impressum</h1>
-      </div>
-      <div className="mb-auto flex flex-col align-baseline justify-baseline w-full max-w-[90%]">
-        <p>Diese Webseite wird betrieben von:</p>
-        <br />
+      </header>
+
+      <section className="prose prose-lg">
+        <p className="font-bold">Future Health GmbH</p>
+
         <p>
-          Future Health GmbH
-          <br />
-          Wildenbruchstr. 13
-          <br />
-          40545 Düsseldorf
-          <br />
+          Wildenbruchstr. 13<br />
+          40545 Düsseldorf<br />
+          Deutschland<br />
+          <Link href="mailto:info@future-health.de" className="link text-primary" target="_blank">info@future-health.de</Link>
+        </p>
+
+        <h3 className="mt-4 font-bold">GF</h3>
+        <p>Dr. Ferdinand Jeute (CEO)</p>
+
+        <h3 className="mt-4 font-bold">Handelsregister</h3>
+        <p>Amtsgericht Düsseldorf, HRB / 72666</p>
+
+        <h3 className="mt-4 font-bold">USt-IdNr. (VAT-ID):</h3>
+        <p>DE 295913675</p>
+
+        <h3 className="mt-4 font-bold">Inhaltlich verantwortlich nach § 18 Abs. 2 MStV:</h3>
+        <p>
+          Dr. Ferdinand Jeute<br />
+          Wildenbruchstr. 13<br />
+          40545 Düsseldorf<br />
           Deutschland
-          <br />
-          Web: <Link href="https://www.tlhow.com" title="Website" className="link not-visited:text-blue-600 visited:text-purple-600">www.tlhow.com</Link>
-          <br />
-          Mail: <Link href="mailto:f.jeute@spitzenmedizin.com" title="Email" className="link not-visited:text-blue-600 visited:text-purple-600">f.jeute@spitzenmedizin.com</Link>
         </p>
+
         <br />
+
         <p>
-          Sitz der Gesellschaft: Düsseldorf, Deutschland
-          <br />
-          Vertretungsberechtigter Geschäftsführer: Dr. Ferdinand Jeute
-          <br />
-          HRB Nummer 72666 im Handelsregister des Amtsgericht Düsseldorf, Deutschland
-          <br />
-          <br />
-          Umsatzsteuer-Identifikationsnummer DE295913675
+          Die EU-Kommission stellt eine Plattform für die Online-Streitbeilegung
+          (OS) bereit. Sie finden diese unter{' '}
+          <Link href="https://ec.europa.eu/consumers/odr/" target="_blank" className="link text-primary">https://ec.europa.eu/consumers/odr/</Link>.
         </p>
-      </div>
-    </>
+        <p>
+          Future Health ist weder bereit noch verpflichtet, an einem
+          Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle
+          teilzunehmen.
+        </p>
+      </section>
+    </main>
   );
 }
