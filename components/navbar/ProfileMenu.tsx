@@ -31,15 +31,20 @@ export default async function ProfileMenu() {
               <li><Link href="/dashboard/all-posts" className="flex gap-1">All Posts</Link></li>
               <li><Link href="/dashboard/create-post" className="flex gap-1">Create Post</Link></li>
               <li className="tab-disabled"></li>
-              <span className="font-bold self-center">Admin Only</span>
-              <li><Link href="/dashboard/all-users" className="flex gap-1">All Users</Link></li>
-              <li><Link href="/dashboard/edit-my-smart-health" className="flex gap-1">Edit My Smart Health</Link></li>
-              <li><Link href="/register" className="flex gap-1">Register new user</Link></li>
-              <li className="tab-disabled"></li>
+              {session.user.role === "ADMIN" && (
+                <>
+                  <span className="font-bold self-center">Admin Only</span>
+                  <li><Link href="/dashboard/all-users" className="flex gap-1">All Users</Link></li>
+                  <li><Link href="/dashboard/edit-my-smart-health" className="flex gap-1">Edit My Smart Health</Link></li>
+                  <li><Link href="/register" className="flex gap-1">Register new user</Link></li>
+                  <li className="tab-disabled"></li>
+                </>
+              )
+              }
               <li className="my-2"><LogOut /></li>
             </ul>
           </div>
-        </div>
+        </div >
       }
     </>
   );
