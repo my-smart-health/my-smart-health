@@ -9,6 +9,7 @@ import { ErrorState } from "@/utils/types";
 export default function LoginForm() {
   const router = useRouter();
   const [error, setError] = useState<ErrorState>(null);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -48,13 +49,26 @@ export default function LoginForm() {
           required
           className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          required
-          className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+        <label htmlFor="password">Password</label>
+        <div className="relative">
+          <input
+            id="password"
+            name="password"
+            autoComplete="on"
+            placeholder="Password"
+            type={showPassword ? "text" : "password"}
+            required
+            className="input validator p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
+          />
+          <button
+            type="button"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+            onClick={() => setShowPassword((prev) => !prev)}
+            tabIndex={-1}
+          >
+            {showPassword ? "Hide" : "Show"}
+          </button>
+        </div>
 
         <button
           type="submit"
