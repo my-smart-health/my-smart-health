@@ -57,8 +57,6 @@ export default function RegisterForm() {
       const email = formData.get("email");
       const password = formData.get("password");
       const passwordConfirmation = formData.get("passwordConfirmation");
-      const profileTypeData: string = profileType;
-      const category = categoryState;
 
       if (!name) {
         setError({ type: "error", message: "Bitte geben Sie Ihren Namen ein" });
@@ -75,11 +73,7 @@ export default function RegisterForm() {
         setIsDisabled(false);
         return null;
       }
-      if (!category || !category[0]) {
-        setError({ type: "error", message: "Bitte wählen Sie eine Kategorie aus" });
-        setIsDisabled(false);
-        return null;
-      }
+
       if (!profileType) {
         setError({ type: "error", message: "Bitte wählen Sie eine Kategorie aus" });
         setIsDisabled(false);
@@ -96,8 +90,6 @@ export default function RegisterForm() {
         name: name,
         email: email,
         password: password,
-        category: category,
-        profileType: profileTypeData,
       };
 
       const res = await fetch("/api/auth/register", {
@@ -200,25 +192,6 @@ export default function RegisterForm() {
             {showPasswordConfirmation ? "Hide" : "Show"}
           </button>
         </div>
-
-        <label htmlFor="profileType">Profile Type
-          <select
-            id="profileType"
-            autoComplete="on"
-            required
-            name="profileType"
-            value={profileType}
-            onChange={(e) => {
-              setProfileType(e.target.value);
-              setCategoryState([""]);
-            }}
-            className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
-          >
-            <option disabled={true} value="">Select Profile Type</option>
-            <option value={PROFILE_TYPE_SMART_HEALTH}>Smart Health</option>
-            <option value={PROFILE_TYPE_MEDIZIN_UND_PFLEGE}>Medizin & Pflege</option>
-          </select>
-        </label>
 
         <div className="flex mt-10 justify-end">
           <button
