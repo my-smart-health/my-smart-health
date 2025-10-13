@@ -10,7 +10,6 @@ import {
 import { ErrorState } from "@/utils/types";
 
 import ErrorModal from "./ErrorModal";
-// import CategoryInputList from "./_components/CategoryInputList";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -220,12 +219,6 @@ export default function RegisterForm() {
             <option value={PROFILE_TYPE_MEDIZIN_UND_PFLEGE}>Medizin & Pflege</option>
           </select>
         </label>
-
-        {/* <CategoryInputList
-          profileType={profileType}
-          categoryState={categoryState}
-          setCategoryState={setCategoryState}
-        /> */}
 
         <div className="flex mt-10 justify-end">
           <button
