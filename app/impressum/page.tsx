@@ -14,7 +14,7 @@ export default function ImpressumPage() {
           Wildenbruchstr.13<br />
           40545 Düsseldorf<br />
           Deutschland<br />
-          <Link href="mailto:info@future-health.de" className="link text-primary" target="_blank">info@future-health.de</Link>
+          <Link href="mailto:info@future-health.de" className="link text-primary">info@future-health.de</Link>
         </p>
 
         <h3 className="mt-4 font-bold">GF</h3>
@@ -39,7 +39,7 @@ export default function ImpressumPage() {
         <p>
           Die EU-Kommission stellt eine Plattform für die Online-Streitbeilegung zur Verfügung. Sie finden
           sie unter{' '}
-          <Link href="https://ec.europa.eu/consumers/odr/" target="_blank" className="link text-primary">https://ec.europa.eu/consumers/odr/</Link>.
+          <Link href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noreferrer noopener" className="link text-primary">https://ec.europa.eu/consumers/odr/</Link>.
         </p>
         <p>
           Future Health  ist weder bereit noch verpflichtet, an
