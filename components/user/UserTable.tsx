@@ -1,6 +1,6 @@
 "use client";
 
-import { ChartBarStacked, Trash2, UserSearch } from "lucide-react";
+import { Trash2, UserSearch } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
@@ -9,13 +9,12 @@ type User = {
   id: string;
   name: string | null;
   email: string;
-  profileType: string
   category: string[];
   role: string;
   profileImages?: string[];
 };
 
-type SortKey = keyof Pick<User, "name" | "email" | "profileType" | "category" | "role">;
+type SortKey = keyof Pick<User, "name" | "email" | "category" | "role">;
 
 export default function UserTable({ users }: { users: User[] }) {
   const [sortKey, setSortKey] = useState<SortKey>("name");
@@ -85,12 +84,6 @@ export default function UserTable({ users }: { users: User[] }) {
             </th>
             <th
               className="cursor-pointer select-none"
-              onClick={() => handleSort("profileType")}
-            >
-              Profile Type
-            </th>
-            <th
-              className="cursor-pointer select-none"
               onClick={() => handleSort("category")}
             >
               Category {sortArrow("category")}
@@ -104,7 +97,6 @@ export default function UserTable({ users }: { users: User[] }) {
             </th>
             <th>View</th>
             <th>Edit User</th>
-            <th>Edit Category</th>
             <th className="text-red-500">Delete User</th>
           </tr>
         </thead>
@@ -113,11 +105,21 @@ export default function UserTable({ users }: { users: User[] }) {
             <tr key={user.id || idx} className="hover:bg-primary/50 bg-primary/30">
               <td className="font-semibold">{user.name || "No Name"}</td>
               <td>{user.email}</td>
-              <td>{user.profileType || "No Profile Type"}</td>
-              <td className="whitespace-pre-wrap min-w-[150px] max-w-sm">
-                {Array.isArray(user.category)
-                  ? user.category.join(" > \n")
-                  : user.category}
+              <td className="min-w-[200px] max-w-sm">
+                {Array.isArray(user.category) && user.category.length > 0 ? (
+                  <div className="space-y-1">
+                    {user.category.map((categoryPath, idx) => (
+                      <div
+                        key={idx}
+                        className="px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-sm border"
+                      >
+                        {categoryPath}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <span className="text-gray-400 italic">No categories assigned</span>
+                )}
               </td>
               <td>
                 {user.profileImages?.[0] ? (
@@ -148,14 +150,6 @@ export default function UserTable({ users }: { users: User[] }) {
                   className="font-semibold text-yellow-500 hover:underline flex flex-col justify-center items-center gap-1"
                 >
                   <UserSearch className="inline-block mr-1" /> Edit User
-                </Link>
-              </td>
-              <td>
-                <Link
-                  href={`/dashboard/edit-user-category/${user.id}`}
-                  className="font-semibold text-yellow-500 hover:underline flex flex-col justify-center items-center gap-1"
-                >
-                  <ChartBarStacked className="inline-block mr-1" /> Edit Category
                 </Link>
               </td>
               <td>

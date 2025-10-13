@@ -9,26 +9,35 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
+enum CategoryType {
+  SMART_HEALTH
+  MEDIZIN_UND_PFLEGE
+}
+
 model User {
-  id               String        @id @default(uuid())
-  email            String        @unique
-  password         String        @db.VarChar(255)
-  role             String        @default("USER")
-  createdAt        DateTime      @default(now())
-  emailVerified    DateTime?     @default(now())
+  id               String         @id @default(uuid())
+  email            String         @unique
+  password         String         @db.VarChar(255)
+  role             Role           @default(USER)
+  createdAt        DateTime       @default(now())
+  emailVerified    DateTime?      @default(now())
   name             String?
   displayEmail     String?
   website          String?
   bio              String?
-  profileType      String
   schedule         Json?
   profileImages    String[]
-  category         String[]
   fieldOfExpertise String[]
   socials          String[]
-  posts            Posts[]       @relation("UserPosts")
-  locations        Location[]    @relation("UserLocations")
-  certificates     Certificate[] @relation("UserCertificates")
+  posts            Posts[]        @relation("UserPosts")
+  locations        Location[]     @relation("UserLocations")
+  certificates     Certificate[]  @relation("UserCertificates")
+  categoryUsers    CategoryUser[]
 }
 
 model Posts {
@@ -69,4 +78,29 @@ model Location {
   user     User     @relation("UserLocations", fields: [userId], references: [id])
   userId   String
   schedule Json?
+}
+
+model Category {
+  id            String         @id @default(uuid())
+  name          String
+  parent        Category?      @relation("CategoryChildren", fields: [parentId], references: [id])
+  parentId      String?
+  position      Int
+  children      Category[]     @relation("CategoryChildren")
+  categoryUsers CategoryUser[]
+  type          CategoryType
+}
+
+model CategoryUser {
+  id         String   @id @default(uuid())
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  order      Int?
+  addedAt    DateTime @default(now())
+
+  @@unique([categoryId, userId])
+  @@index([categoryId, order])
+  @@index([userId])
 }

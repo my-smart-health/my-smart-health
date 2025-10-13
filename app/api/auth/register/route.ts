@@ -1,12 +1,14 @@
 import prisma from '@/lib/db';
-import { User } from '@prisma/client';
 import { genSalt, hash } from 'bcrypt';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   try {
-    const { email, password, category, name, profileType } =
-      (await request.json()) as User;
+    const { email, password, name } = (await request.json()) as {
+      email: string;
+      password: string;
+      name?: string;
+    };
 
     if (!email || !password) {
       return NextResponse.json(
@@ -14,17 +16,19 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
     const saltRounds = 10;
     const salt = await genSalt(saltRounds);
     const hashedPassword = await hash(password, salt);
+
+    const isFirstUser = (await prisma.user.count()) === 0;
 
     const response = await prisma.user.create({
       data: {
         name: name,
         email: email,
         password: hashedPassword,
-        category: category,
-        profileType: profileType,
+        role: isFirstUser ? 'ADMIN' : 'USER',
       },
     });
 

@@ -4,6 +4,7 @@ import CategoryAccordion from "@/components/buttons/category-accordion-button/Ca
 
 import { PROFILE_TYPE_SMART_HEALTH } from "@/utils/constants";
 import { CategoryNodeSH, UserProfileSH } from "@/utils/types";
+import { auth } from "@/auth";
 
 
 function buildCategoryTree(users: UserProfileSH[]): CategoryNodeSH {
@@ -26,41 +27,90 @@ function buildCategoryTree(users: UserProfileSH[]): CategoryNodeSH {
 }
 
 async function getSmartHealthUsers(): Promise<UserProfileSH[]> {
-  const users = await prisma.user.findMany({
-    where: { profileType: PROFILE_TYPE_SMART_HEALTH },
-    select: {
-      id: true,
-      name: true,
-      bio: true,
-      category: true,
-      profileImages: true,
-    }
-  });
+  // get category ids for the SMART_HEALTH type
+  const cats = await prisma.category.findMany({ where: { type: PROFILE_TYPE_SMART_HEALTH }, select: { id: true } });
+  const catIds = cats.map(c => c.id);
 
-  return users
-    .filter(
-      u =>
-        Array.isArray(u.category) &&
-        u.category.length > 0 &&
-        Array.isArray(u.profileImages) &&
-        u.profileImages.length > 0
-    )
-    .map(u => ({
-      id: u.id,
-      name: u.name || "No Name",
-      bio: u.bio || "",
-      category: (u.category as string[]).map(c => c.trim()).filter(Boolean),
-      profileImages: u.profileImages as string[],
-    }));
+  if (catIds.length === 0) return [];
+
+  const links = await prisma.categoryUser.findMany({ where: { categoryId: { in: catIds } }, orderBy: { order: 'asc' }, select: { categoryId: true, user: { select: { id: true, name: true, bio: true, profileImages: true } } } });
+
+  async function buildPath(categoryId: string) {
+    const path: string[] = [];
+    let currentId: string | null = categoryId;
+    while (currentId) {
+      const c: { name: string | null; parentId: string | null } | null = await prisma.category.findUnique({ where: { id: currentId }, select: { name: true, parentId: true } });
+      if (!c) break;
+      path.unshift(c.name as string);
+      currentId = (c.parentId as string) ?? null;
+    }
+    return path;
+  }
+
+  const results: UserProfileSH[] = [];
+  for (const link of links) {
+    const user = link.user;
+    if (!user || !Array.isArray(user.profileImages) || user.profileImages.length === 0) continue;
+    const path = await buildPath(link.categoryId);
+    if (!path.length) continue;
+    results.push({
+      id: user.id,
+      name: user.name || 'No Name',
+      bio: user.bio || '',
+      category: path,
+      profileImages: user.profileImages,
+    });
+  }
+
+  return results;
 }
 
 export default async function SmartHealthPage() {
   const users = await getSmartHealthUsers();
   const tree = buildCategoryTree(users);
 
+  const allCats = await prisma.category.findMany({ where: { type: PROFILE_TYPE_SMART_HEALTH }, select: { id: true, name: true, parentId: true } });
+  const byId = new Map(allCats.map(c => [c.id, c] as const));
+  const pathToCategoryId: Record<string, string> = {};
+  for (const c of allCats) {
+    const path: string[] = [];
+    let current: string | null = c.id;
+    while (current) {
+      const cur = byId.get(current);
+      if (!cur) break;
+      path.unshift(cur.name);
+      current = cur.parentId as string | null;
+    }
+    if (path.length) pathToCategoryId[path.join(' > ')] = c.id;
+  }
+
+  const ensurePath = (node: CategoryNodeSH, path: string[]) => {
+    let n = node;
+    for (const seg of path) {
+      if (!n.children.has(seg)) {
+        n.children.set(seg, { name: seg, children: new Map(), users: [] });
+      }
+      n = n.children.get(seg)!;
+    }
+  };
+
+  for (const c of allCats) {
+    const path: string[] = [];
+    let current: string | null = c.id;
+    while (current) {
+      const cur = byId.get(current);
+      if (!cur) break;
+      path.unshift(cur.name);
+      current = cur.parentId as string | null;
+    }
+    if (path.length) ensurePath(tree, path);
+  }
+
+  const session = await auth();
+
   return (
     <div className="grid grid-cols-1 gap-2">
-      <CategoryAccordion node={tree} />
+      <CategoryAccordion node={tree} type={PROFILE_TYPE_SMART_HEALTH} isAdmin={session?.user?.role === "ADMIN"} pathToCategoryId={pathToCategoryId} />
     </div>
   );
 }
