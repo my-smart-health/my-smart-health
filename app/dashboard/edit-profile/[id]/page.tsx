@@ -20,6 +20,7 @@ async function getData(sessionId: string) {
       socials: true,
       fieldOfExpertise: true,
       schedule: true,
+      phones: true,
       certificates: true,
       locations: true,
     },
