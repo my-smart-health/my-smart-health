@@ -1,48 +1,7 @@
-import Link from "next/link";
 
 export default function KontaktPage() {
   return (
     <>
-      <div className="flex justify-center align-baseline p-2 mb-4 mx-auto w-full bg-primary">
-        <h1 className="text-white text-2xl font-bold">Impressum</h1>
-      </div>
-      <div className="flex flex-col align-baseline justify-baseline w-full max-w-[90%]">
-        <p>Anbieter dieser Webseite ist:</p>
-        <br />
-        <p>
-          Verein zur Förderung der Patienteninteressen im Gesundheitswesen e.V.
-          <br />
-          Wildenbruchstr. 13
-          <br />
-          40545 Düsseldorf
-          <br />
-          Deutschland
-          <br />
-          Mail: <Link href="mailto:f.jeute@spitzenmedizin.com" title="Email" className="link not-visited:text-blue-600 visited:text-purple-600">f.jeute@spitzenmedizin.com</Link>
-          <br />
-          Telefon: <Link href="tel:+49(0)21156634710" title="Telefon" className="link not-visited:text-blue-600 visited:text-purple-600">+49.(0)211.56634710</Link>
-        </p>
-        <br />
-        <p>vertreten durch den Vorstand: Dr. Ferdinand Jeute (Vorsitzender), Olaf Joachim Lehne, Fabian-Konstantin Otto Hans-Gottfried Kränzlin</p>
-        <br />
-        <p>Vereinsregister Nummer: AG Düsseldorf, Vereinsregister 11546</p>
-        <br />
-        <h2 className="font-bold">Online-Streitbeilegungsplattform der EU-Kommission</h2>
-        <br />
-        <p className="text-wrap">Die Online-Streitbeilegungsplattform („OS-Plattform“) zur außergerichtlichen Beilegung von Streitigkeiten aus online abgeschlossenen Verträgen erreichen Sie unter folgendem Link:
-          <br />
-          <Link href="https://ec.europa.eu/consumers/odr/" className="link not-visited:text-blue-600 visited:text-purple-600 text-wrap">https://ec.europa.eu/consumers/odr/</Link>
-        </p>
-        <br />
-        <h2 className="font-bold">Informationspflicht nach dem Verbraucherstreitbeilegungsgesetz</h2>
-        <br />
-        <p>Der Verein zur Förderung der Patienteninteressen im Gesundheitswesen e.V. nimmt nicht an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teil.</p>
-        <br />
-        <h2 className="font-bold">Urheberrecht</h2>
-        <br />
-        <p>Die Inhalte dieser Webseite sind urheberrechtlich geschützt. Vervielfältigung, Verbreitung und/oder öffentlich Wiedergabe ohne Einwilligung des Verein zur Förderung der Patienteninteressen im Gesundheitswesen e.V. ist unzulässig.</p>
-      </div >
-      <br />
       <div className="flex flex-col justify-center align-baseline p-2 mb-4 mx-auto w-full bg-primary">
         <h1 className="text-white text-2xl font-bold">Kontakt</h1>
         <br />
