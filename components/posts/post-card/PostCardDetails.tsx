@@ -65,7 +65,7 @@ export default function PostCardDetails({ postData, session, onDeletePostAction 
       >
         <div className="flex flex-row gap-2 w-full ">
           {title && (
-            <span className="text-xl w-full m-5 font-semibold">
+            <span className="text-xl w-full m-5 font-semibold line-clamp-1 break-all">
               {title}
             </span>
           )}
