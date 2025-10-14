@@ -36,7 +36,7 @@ export default function RegisterForm() {
       errorModalRef.current?.close();
       setTimeout(() => {
         router.push("/dashboard");
-      }, 3000);
+      }, 1000);
     } else {
       setError(null);
       errorModalRef.current?.close();
