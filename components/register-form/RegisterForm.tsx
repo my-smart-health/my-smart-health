@@ -149,13 +149,14 @@ export default function RegisterForm() {
             placeholder="Password"
             type={showPassword ? "text" : "password"}
             required
-            className="input validator p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
+            className="input validator p-3 pr-12 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
           />
           <button
             type="button"
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 z-10 bg-transparent"
             onClick={() => setShowPassword((prev) => !prev)}
             tabIndex={-1}
+            aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {showPassword ? "Hide" : "Show"}
           </button>
@@ -170,13 +171,14 @@ export default function RegisterForm() {
             name="passwordConfirmation"
             placeholder="Password Confirmation"
             required
-            className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
+            className="p-3 pr-12 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
           />
           <button
             type="button"
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 z-10 bg-transparent"
             onClick={() => setShowPasswordConfirmation((prev) => !prev)}
             tabIndex={-1}
+            aria-label={showPasswordConfirmation ? "Hide password confirmation" : "Show password confirmation"}
           >
             {showPasswordConfirmation ? "Hide" : "Show"}
           </button>
