@@ -95,9 +95,9 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
         locations={filteredLocations}
         platformIcons={platformIcons}
       />
-      <ReservationSection src={"https://moers.cms.shic.us/Arzttemin_reservieren"} />
+      <ReservationSection />
 
-      <PrescriptionSection src={"https://moers.cms.shic.us/Arzttemin_reservieren"} />
+      <PrescriptionSection />
 
       <CertificatesSection certificates={certificates} />
 

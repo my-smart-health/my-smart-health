@@ -3,7 +3,7 @@ import { ClipboardPlus } from "lucide-react";
 import Link from "next/link";
 
 type Props = {
-  src: string;
+  src?: string;
 };
 export default function PrescriptionSection({ src }: Props) {
   if (!src) return null;

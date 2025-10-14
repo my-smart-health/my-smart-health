@@ -4,9 +4,10 @@ import { CalendarPlus2 } from "lucide-react";
 import Divider from "@/components/divider/Divider";
 
 type Props = {
-  src: string;
+  src?: string;
+  isDoctor?: boolean;
 };
-export default function ReservationSection({ src }: Props) {
+export default function ReservationSection({ src, isDoctor }: Props) {
   if (!src) return null;
   return (
     <section className="flex flex-col items-center space-y-4">
@@ -20,7 +21,7 @@ export default function ReservationSection({ src }: Props) {
           target="_self"
           className="btn btn-primary text-lg mx-auto flex gap-2 rounded"
         >
-          <CalendarPlus2 /> <span>online Termine - Reservierung</span>
+          <CalendarPlus2 /> <span>online {isDoctor ? "Termine" : "Reservierung"}</span>
         </Link>
       </div>
     </section>
