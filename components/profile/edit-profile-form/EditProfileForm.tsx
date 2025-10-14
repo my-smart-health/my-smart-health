@@ -339,7 +339,7 @@ export default function EditProfileForm({ user }: { user: User }) {
       setError(null);
       setIsDisabled(false);
 
-      redirect.push('/dashboard');
+      redirect.push(`/profile/${user.id}`);
       redirect.refresh();
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
