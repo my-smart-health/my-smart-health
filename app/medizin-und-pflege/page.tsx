@@ -26,7 +26,7 @@ function buildCategoryTree(users: UserProfileSH[]): CategoryNodeSH {
 }
 
 async function getSmartHealthUsers(): Promise<UserProfileSH[]> {
-  const cats = await prisma.category.findMany({ where: { type: PROFILE_TYPE_MEDIZIN_UND_PFLEGE }, select: { id: true } });
+  const cats = await prisma.category.findMany({ where: { type: PROFILE_TYPE_MEDIZIN_UND_PFLEGE }, select: { id: true }, orderBy: { name: 'asc' } });
   const catIds = cats.map(c => c.id);
 
   if (catIds.length === 0) return [];
@@ -103,6 +103,14 @@ export default async function SmartHealthPage() {
     }
     if (path.length) ensurePath(tree, path);
   }
+
+  const sortTree = (node: CategoryNodeSH) => {
+    const entries = Array.from(node.children.entries()).sort((a, b) => a[0].localeCompare(b[0], 'de', { sensitivity: 'base' }));
+    node.children = new Map(entries);
+    for (const [, child] of node.children) sortTree(child);
+  };
+
+  sortTree(tree);
 
   const session = await auth();
 
