@@ -20,7 +20,7 @@ export default function Navbar() {
               priority
               loading="eager"
               draggable={false}
-              src="/logo-nav.jpg"
+              src="/navbar.png"
               alt="My Smart Health"
               width={350}
               height={112}

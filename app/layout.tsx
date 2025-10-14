@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     siteName: "My Smart Health",
     images: [
       {
-        url: "https://my-smart-health.vercel.app/og-logo.jpg",
+        url: "https://my-smart-health.vercel.app/og-logo-red.png",
         width: 1200,
         height: 630,
         alt: "My Smart Health Logo",

@@ -15,7 +15,7 @@ import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
 
-import logo from '@/public/og-logo.jpg';
+import logo from '@/public/og-logo-red.png';
 import { ArrowUpRight, XIcon } from "lucide-react";
 
 type CreatePostFormProps = {
@@ -201,7 +201,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         }
 
         const blob = await response.blob();
-        const file = new File([blob], "og-logo.jpg", { type: blob.type });
+        const file = new File([blob], "og-logo-red.png", { type: blob.type });
 
         const uploadedUrl = await handleImageUpload(file);
 
