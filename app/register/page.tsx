@@ -26,7 +26,7 @@ export default async function RegisterPage() {
 
   return (
     <>
-      <h1 className="mb-8 text-center text-nowrap text-2xl font-bold text-primary">Create new account</h1>
+      <h1 className="mb-8 text-center text-nowrap text-2xl font-bold text-primary">Create new user</h1>
       <RegisterForm />
     </>
   );
