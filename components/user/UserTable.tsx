@@ -10,11 +10,12 @@ type User = {
   name: string | null;
   email: string;
   category: string[];
+  createdAt: string;
   role: string;
   profileImages?: string[];
 };
 
-type SortKey = keyof Pick<User, "name" | "email" | "category" | "role">;
+type SortKey = keyof Pick<User, "name" | "email" | "category" | "role" | "createdAt">;
 
 export default function UserTable({ users }: { users: User[] }) {
   const [sortKey, setSortKey] = useState<SortKey>("name");
@@ -88,6 +89,7 @@ export default function UserTable({ users }: { users: User[] }) {
             >
               Category {sortArrow("category")}
             </th>
+            <th>Created at</th>
             <th>Profile Image</th>
             <th
               className="cursor-pointer select-none"
@@ -121,6 +123,7 @@ export default function UserTable({ users }: { users: User[] }) {
                   <span className="text-gray-400 italic">No categories assigned</span>
                 )}
               </td>
+              <td>{user.createdAt}</td>
               <td>
                 {user.profileImages?.[0] ? (
                   <Image

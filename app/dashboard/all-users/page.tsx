@@ -10,6 +10,7 @@ async function getAllUsersWithCategories() {
       name: true,
       email: true,
       role: true,
+      createdAt: true,
       profileImages: true
     }
   });
@@ -59,7 +60,8 @@ async function getAllUsersWithCategories() {
 
   return users.map(u => ({
     ...u,
-    category: userCategoryMap.get(u.id) || []
+    category: userCategoryMap.get(u.id) || [],
+    createdAt: u.createdAt instanceof Date ? u.createdAt.toLocaleString('de-DE') : u.createdAt
   }));
 }
 
