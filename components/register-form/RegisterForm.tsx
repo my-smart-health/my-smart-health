@@ -34,9 +34,7 @@ export default function RegisterForm() {
     if (error?.type === "success") {
       setError(null);
       errorModalRef.current?.close();
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 1000);
+      router.push("/dashboard");
     } else {
       setError(null);
       errorModalRef.current?.close();
