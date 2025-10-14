@@ -27,7 +27,6 @@ export default function ContactSection({
       <Divider addClass="my-4" />
 
       <section className="grid grid-cols-1 gap-3">
-        <h2 className="font-bold text-primary text-xl">Kontakt</h2>
 
         {locations.length > 0 &&
           locations.map((location, idx) => {
