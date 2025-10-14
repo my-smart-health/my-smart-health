@@ -31,6 +31,7 @@ model User {
   website          String?
   bio              String?
   schedule         Json?
+  phones           String[]
   profileImages    String[]
   fieldOfExpertise String[]
   socials          String[]
