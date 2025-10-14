@@ -52,7 +52,7 @@ export default function ProfileNewsCarousel({ carouselItems, disableOnInteractio
                     style={{ objectFit: "contain", width: "auto", height: "auto" }}
                     className="rounded-box border-3 border-primary aspect-square"
                   />
-                  <span className="text-center space-x-0.5 line-clamp-1 text-lg mb-4">{item.title}</span>
+                  <span className="text-center space-x-0.5 line-clamp-1 max-w-[80%] mx-auto text-lg mb-4">{item.title}</span>
                 </Link>
               </div>
             </SwiperSlide>
