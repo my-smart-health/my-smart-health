@@ -24,15 +24,15 @@ import Divider from "@/components/divider/Divider";
 import { Location } from "@prisma/client";
 
 const platformIcons: Record<string, React.ReactNode> = {
-  Email: <AtSign className="inline-block mr-1" size={20} />,
-  Website: <Globe className="inline-block mr-1" size={20} />,
+  Email: <AtSign className="inline-block mr-1" size={30} />,
+  Website: <Globe className="inline-block mr-1" size={30} />,
   Phone: <Phone className="inline-block mr-1" size={20} />,
-  Facebook: <Facebook className="inline-block mr-1" size={20} />,
-  Linkedin: <Linkedin className="inline-block mr-1" size={20} />,
-  X: <Image src={Xlogo} width={20} height={20} alt="X.com" className="w-6 mr-1" />,
-  Youtube: <Youtube className="inline-block mr-1" size={20} />,
-  TikTok: <Image src={TikTokLogo} width={20} height={20} alt="TikTok" className="w-8 -ml-1" />,
-  Instagram: <Instagram className="inline-block mr-1" size={20} />,
+  Facebook: <Facebook className="inline-block mr-1" size={30} />,
+  Linkedin: <Linkedin className="inline-block mr-1" size={30} />,
+  X: <Image src={Xlogo} width={30} height={30} alt="X.com" className="w-6 mr-1" />,
+  Youtube: <Youtube className="inline-block mr-1" size={30} />,
+  TikTok: <Image src={TikTokLogo} width={30} height={30} alt="TikTok" className="w-8 -ml-1" />,
+  Instagram: <Instagram className="inline-block mr-1" size={30} />,
 };
 
 type User = {
@@ -44,6 +44,7 @@ type User = {
   fieldOfExpertise: string[];
   displayEmail: string | null;
   id: string;
+  phones: string[];
   locations: Location[];
   schedule: Schedule[];
   certificates: Certificate[];
@@ -65,6 +66,7 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
     certificates,
     locations,
     schedule = [],
+    phones = [],
   } = user || {};
 
   const parsedSocials = parseSocials(socials || []);
@@ -89,6 +91,7 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
       <NewsSection posts={posts} />
 
       <ContactSection
+        phoneNumbers={phones}
         displayEmail={displayEmail}
         website={website}
         parsedSocials={parsedSocials}

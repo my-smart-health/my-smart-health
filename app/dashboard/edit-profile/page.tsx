@@ -19,6 +19,7 @@ async function getData(sessionId: string) {
       displayEmail: true,
       website: true,
       socials: true,
+      phones: true,
       fieldOfExpertise: true,
       schedule: true,
       certificates: true,

@@ -7,12 +7,14 @@ import { Schedule } from "@/utils/types";
 import ScheduleSection from "./ScheduleSection";
 
 export default function ContactSection({
+  phoneNumbers,
   displayEmail,
   website,
   locations,
   parsedSocials,
   platformIcons,
 }: {
+  phoneNumbers: string[];
   displayEmail: string | null;
   website: string | null;
   locations: Location[];
@@ -80,35 +82,51 @@ export default function ContactSection({
             );
           })}
 
-        {displayEmail && (
+        {phoneNumbers.length > 0 && phoneNumbers.map((phone, idx) => (
           <Link
-            href={`mailto:${displayEmail}`}
-            className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 break-all break-before-left link">
-            <span className="mr-1">{platformIcons.Email}</span>{displayEmail}
+            key={idx}
+            href={`tel:${phone}`}
+            className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 link">
+            <span className="mr-1">{platformIcons.Phone}</span>{phone}
           </Link>
-        )}
+        ))}
 
-        {website && (
-          <Link
-            href={website}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 break-all break-before-left link">
-            <span className="mr-1">{platformIcons.Website}</span>{website}
-          </Link>
-        )}
+        <div className="grid grid-cols-4 justify-evenly my-3">
 
-        {parsedSocials.length > 0 && parsedSocials.map((social, idx) => (
-          <div key={social.url + idx} className="flex items-center w-full h-auto my-auto">
+          {displayEmail && (
             <Link
-              href={social.url}
+              href={`mailto:${displayEmail}`}
+              className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 break-all break-before-left link">
+              <span className="mr-1">{platformIcons.Email}</span>
+              {/* {displayEmail} */}
+            </Link>
+          )}
+
+          {website && (
+            <Link
+              href={website}
               target="_blank"
               rel="noreferrer noopener"
-              className="flex justify-center items-center text-gray-700 hover:text-primary transition-colors duration-200 break-all link max-w-[99%]">
-              <span className="mr-1">{platformIcons[social.platform]}</span>{social.url}
+              className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 break-all break-before-left link">
+              <span className="mr-1">{platformIcons.Website}</span>
+              {/* {website} */}
             </Link>
-          </div>
-        ))}
+          )}
+
+          {parsedSocials.length > 0 && parsedSocials.map((social, idx) => (
+            <div key={social.url + idx} className="flex items-center w-full h-auto my-auto">
+              <Link
+                href={social.url}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="flex justify-center items-center text-gray-700 hover:text-primary transition-colors duration-200 break-all link max-w-[99%]">
+                <span className="mr-1">{platformIcons[social.platform]}</span>
+                {/* {social.url} */}
+              </Link>
+            </div>
+          ))}
+
+        </div>
       </section>
     </>
   );

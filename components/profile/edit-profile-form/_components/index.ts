@@ -12,3 +12,4 @@ export { MediaUrlSection } from './MediaUrlSection';
 export { AreaOfExpertiseSection } from './AreaOfExpertiseSection';
 export { CertificatesSection } from './CertificatesSection';
 export { WorkScheduleSection } from './WorkScheduleSection';
+export { LocationSection } from './LocationSection';

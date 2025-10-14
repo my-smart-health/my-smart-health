@@ -12,7 +12,7 @@ type LocationProps = {
   addressRef?: React.RefObject<HTMLTextAreaElement | null>;
 }
 
-export default function LocationSection({ locations, setLocationsAction, profileId, addressRef }: LocationProps) {
+export function LocationSection({ locations, setLocationsAction, profileId, addressRef }: LocationProps) {
 
   const addLocation = () => {
     setLocationsAction([

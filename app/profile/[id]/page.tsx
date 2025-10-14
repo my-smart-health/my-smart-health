@@ -28,6 +28,7 @@ async function getUser(id: string) {
       bio: true,
       socials: true,
       website: true,
+      phones: true,
       fieldOfExpertise: true,
       displayEmail: true,
       schedule: true,

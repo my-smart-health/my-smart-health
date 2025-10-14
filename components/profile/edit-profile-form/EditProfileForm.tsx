@@ -26,9 +26,9 @@ import {
   AreaOfExpertiseSection,
   CertificatesSection,
   WorkScheduleSection,
+  PhoneNumbersSection,
+  LocationSection
 } from "./_components";
-
-import LocationSection from "./_components/LocationSection";
 
 type User = {
   id: string;
@@ -39,6 +39,7 @@ type User = {
   website: string | null;
   fieldOfExpertise: string[];
   displayEmail: string | null;
+  phones: string[];
   schedule: Schedule[] | null;
   certificates: Certificate[] | null;
   locations: Location[];
@@ -65,6 +66,7 @@ export default function EditProfileForm({ user }: { user: User }) {
   const [bio, setBio] = useState(user.bio || "");
   const [displayEmail, setDisplayEmail] = useState(user.displayEmail || "");
   const [website, setWebsite] = useState(user.website || "");
+  const [phones, setPhones] = useState(user.phones || []);
   const [blobResult, setBlobResult] = useState<string[]>(user.profileImages || []);
   const [certificates, setCertificates] = useState<CertificateForm[]>(user.certificates?.map(cert => ({ ...cert })) || []);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
@@ -314,6 +316,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         website,
         profileImages: blobResult,
         socials: serializeSocials(socials),
+        phones,
         schedule,
         certificates: certificatesPayload,
         locations: locationsPayload,
@@ -413,10 +416,14 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Email/Social Links" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Phone/Email/Social Links" />
           <div className="tab-content border-primary p-10">
 
             <section about="links" className="space-y-4">
+              <PhoneNumbersSection phoneNumbers={phones} setPhoneNumbers={setPhones} platformIcon={platformIcons['Phone']} />
+
+              <Divider addClass="my-4" />
+
               <EmailSection email={displayEmail} setEmail={setDisplayEmail} />
 
               <Divider addClass="my-4" />
