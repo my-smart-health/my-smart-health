@@ -20,7 +20,6 @@ import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube } from "lu
 import Image from "next/image";
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
-import Divider from "@/components/divider/Divider";
 import { Location } from "@prisma/client";
 
 const platformIcons: Record<string, React.ReactNode> = {
@@ -82,8 +81,6 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
 
       <FieldOfExpertiseSection fieldOfExpertise={fieldOfExpertise} />
 
-      <Divider addClass="my-2" />
-
       <ProfilePictureSection images={profileImages} />
 
       <BioSection bio={bio ?? ""} />
@@ -98,6 +95,7 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
         locations={filteredLocations}
         platformIcons={platformIcons}
       />
+
       <ReservationSection />
 
       <PrescriptionSection />

@@ -24,7 +24,9 @@ export default function ContactSection({
 
   return (
     <>
-      <Divider addClass="my-4" />
+      {phoneNumbers.length > 0 || displayEmail || website || locations.length > 0 || parsedSocials.length > 0 || !platformIcons && (
+        <Divider addClass="my-4" />
+      )}
 
       <section className="grid grid-cols-1 gap-3">
 
