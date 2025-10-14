@@ -10,7 +10,7 @@ type User = {
   name: string | null;
   email: string;
   category: string[];
-  createdAt: string;
+  createdAt: Date;
   role: string;
   profileImages?: string[];
 };
@@ -89,7 +89,11 @@ export default function UserTable({ users }: { users: User[] }) {
             >
               Category {sortArrow("category")}
             </th>
-            <th>Created at</th>
+            <th
+              className="cursor-pointer select-none"
+              onClick={() => handleSort("createdAt")}>
+              Created at {sortArrow("createdAt")}
+            </th>
             <th>Profile Image</th>
             <th
               className="cursor-pointer select-none"
@@ -103,68 +107,71 @@ export default function UserTable({ users }: { users: User[] }) {
           </tr>
         </thead>
         <tbody>
-          {sortedUsers.map((user, idx) => (
-            <tr key={user.id || idx} className="hover:bg-primary/50 bg-primary/30">
-              <td className="font-semibold">{user.name || "No Name"}</td>
-              <td>{user.email}</td>
-              <td className="min-w-[200px] max-w-sm">
-                {Array.isArray(user.category) && user.category.length > 0 ? (
-                  <div className="space-y-1">
-                    {user.category.map((categoryPath, idx) => (
-                      <div
-                        key={idx}
-                        className="px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-sm border"
-                      >
-                        {categoryPath}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <span className="text-gray-400 italic">No categories assigned</span>
-                )}
-              </td>
-              <td>{user.createdAt}</td>
-              <td>
-                {user.profileImages?.[0] ? (
-                  <Image
-                    src={user.profileImages[0]}
-                    alt={user.name || "Profile Image"}
-                    width={100}
-                    height={100}
-                    style={{ objectFit: "contain" }}
-                    className="rounded aspect-square border border-primary hover:scale-200 transition-transform duration-200"
-                  />
-                ) : (
-                  <span className="text-gray-400">No Image</span>
-                )}
-              </td>
-              <td className="uppercase font-bold">{user.role}</td>
-              <td>
-                <Link
-                  href={`/profile/${user.id}`}
-                  className="font-semibold text-blue-500 hover:underline flex flex-col justify-center items-center gap-1"
-                >
-                  <UserSearch className="inline-block mr-1" /> View
-                </Link>
-              </td>
-              <td>
-                <Link
-                  href={`/dashboard/edit-profile/${user.id}`}
-                  className="font-semibold text-yellow-500 hover:underline flex flex-col justify-center items-center gap-1"
-                >
-                  <UserSearch className="inline-block mr-1" /> Edit User
-                </Link>
-              </td>
-              <td>
-                <button
-                  onClick={() => handleDeleteUser(user.id)}
-                  className="font-semibold text-red-500 hover:underline flex flex-col justify-center items-center gap-1"
-                >
-                  <Trash2 className="inline-block mb-1" /> Delete User
-                </button>
-              </td>
-            </tr>
-          ))}
+          {sortedUsers.map((user, idx) => {
+            const createdAtFormatted = new Date(user.createdAt).toLocaleDateString('de-DE');
+            return (
+              <tr key={user.id || idx} className="hover:bg-primary/50 bg-primary/30">
+                <td className="font-semibold">{user.name || "No Name"}</td>
+                <td>{user.email}</td>
+                <td className="min-w-[200px] max-w-sm">
+                  {Array.isArray(user.category) && user.category.length > 0 ? (
+                    <div className="space-y-1">
+                      {user.category.map((categoryPath, idx) => (
+                        <div
+                          key={idx}
+                          className="px-2 py-1 bg-blue-100 text-blue-800 rounded-md text-sm border"
+                        >
+                          {categoryPath}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="text-gray-400 italic">No categories assigned</span>
+                  )}
+                </td>
+                <td>{createdAtFormatted}</td>
+                <td>
+                  {user.profileImages?.[0] ? (
+                    <Image
+                      src={user.profileImages[0]}
+                      alt={user.name || "Profile Image"}
+                      width={100}
+                      height={100}
+                      style={{ objectFit: "contain" }}
+                      className="rounded aspect-square border border-primary hover:scale-200 transition-transform duration-200"
+                    />
+                  ) : (
+                    <span className="text-gray-400">No Image</span>
+                  )}
+                </td>
+                <td className="uppercase font-bold">{user.role}</td>
+                <td>
+                  <Link
+                    href={`/profile/${user.id}`}
+                    className="font-semibold text-blue-500 hover:underline flex flex-col justify-center items-center gap-1"
+                  >
+                    <UserSearch className="inline-block mr-1" /> View
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    href={`/dashboard/edit-profile/${user.id}`}
+                    className="font-semibold text-yellow-500 hover:underline flex flex-col justify-center items-center gap-1"
+                  >
+                    <UserSearch className="inline-block mr-1" /> Edit User
+                  </Link>
+                </td>
+                <td>
+                  <button
+                    onClick={() => handleDeleteUser(user.id)}
+                    className="font-semibold text-red-500 hover:underline flex flex-col justify-center items-center gap-1"
+                  >
+                    <Trash2 className="inline-block mb-1" /> Delete User
+                  </button>
+                </td>
+              </tr>
+            )
+          })}
         </tbody>
       </table>
     </div>

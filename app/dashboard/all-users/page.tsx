@@ -61,7 +61,6 @@ async function getAllUsersWithCategories() {
   return users.map(u => ({
     ...u,
     category: userCategoryMap.get(u.id) || [],
-    createdAt: u.createdAt instanceof Date ? u.createdAt.toLocaleString('de-DE') : u.createdAt
   }));
 }
 
