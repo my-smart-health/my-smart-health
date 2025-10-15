@@ -42,7 +42,7 @@ export default async function NewsPage() {
   return (
     <div className="flex flex-col gap-3 w-full mb-auto max-w-[100%]">
       <div className="space-y-4 mx-auto w-full">
-        <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" active />
+        <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/" active />
       </div>
       {posts && session
         ? <PostCard posts={posts} session={session} /> :
