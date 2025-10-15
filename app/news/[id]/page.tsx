@@ -7,6 +7,7 @@ import { NewsCardType } from "@/utils/types";
 
 import PostCard from "@/components/posts/post-card/PostCard";
 import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
+import { CirclePlus } from "lucide-react";
 
 async function getData(id: string): Promise<NewsCardType | null> {
   const post = await prisma.posts.findUnique({
@@ -52,6 +53,7 @@ export default async function NewsPage({ params }: { params: Promise<{ id: strin
       </Suspense>
       <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/smart-health" />
       <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
+      <NewsSmartHealthMedizinButton name="Notfälle" icon={<CirclePlus size={34} />} goTo="/notfalle" />
     </>
   );
 }
