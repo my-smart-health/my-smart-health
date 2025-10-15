@@ -21,7 +21,7 @@ export default async function MySmartHealth() {
   const { generalTitle, paragraph } = mySmartHealthInfo as MySmartHealthInfo;
 
   return (
-    <div className="collapse collapse-arrow bg-base-100 shadow-xl border border-base-300 rounded-2xl mb-6">
+    <div className="collapse shadow-xl border border-primary rounded-2xl mb-6">
       <input type="checkbox" className="peer" />
       <div className="collapse-title flex items-center gap-3 font-bold text-xl">
         <Image
