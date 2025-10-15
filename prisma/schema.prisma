@@ -34,7 +34,7 @@ model User {
   schedule         Json?
   phones           String[]
   profileImages    String[]
-  fieldOfExpertise String[]
+  fieldOfExpertise Json?
   socials          String[]
   posts            Posts[]        @relation("UserPosts")
   locations        Location[]     @relation("UserLocations")
