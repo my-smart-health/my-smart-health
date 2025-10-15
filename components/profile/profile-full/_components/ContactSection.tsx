@@ -24,7 +24,7 @@ export default function ContactSection({
 
   return (
     <>
-      {phoneNumbers.length > 0 || displayEmail || website || locations.length > 0 || parsedSocials.length > 0 || !platformIcons && (
+      {(phoneNumbers.length > 0 || displayEmail || website || locations.length > 0 || parsedSocials.length > 0 || !platformIcons) && (
         <Divider addClass="my-4" />
       )}
 
