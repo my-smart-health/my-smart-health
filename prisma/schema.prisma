@@ -17,6 +17,7 @@ enum Role {
 enum CategoryType {
   SMART_HEALTH
   MEDIZIN_UND_PFLEGE
+  NOTFALLE
 }
 
 model User {
