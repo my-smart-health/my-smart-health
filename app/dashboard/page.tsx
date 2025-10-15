@@ -1,9 +1,8 @@
-import { redirect } from "next/navigation";
-
 import prisma from "@/lib/db";
 import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-import { Certificate, Schedule } from "@/utils/types";
+import { Certificate, FieldOfExpertise, Schedule } from "@/utils/types";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
@@ -64,17 +63,19 @@ export default async function DashboardPage() {
 
   const posts = await getAllPosts(user.id);
 
-  const safeUser = user
-    ? {
-      ...user,
-      schedule: Array.isArray(user.schedule)
-        ? user.schedule as Schedule[]
-        : [],
-      certificates: Array.isArray(user.certificates)
-        ? user.certificates as unknown as Certificate[]
-        : []
-    }
-    : null;
+  const safeUser = {
+    ...user,
+    schedule: Array.isArray(user.schedule)
+      ? user.schedule as Schedule[]
+      : [],
+    certificates: Array.isArray(user.certificates)
+      ? user.certificates as unknown as Certificate[]
+      : [],
+    fieldOfExpertise: Array.isArray(user.fieldOfExpertise)
+      ? user.fieldOfExpertise as unknown as FieldOfExpertise[]
+      : [],
+  };
+
 
   return (
     <>
@@ -95,7 +96,7 @@ export default async function DashboardPage() {
         <GoToButton src="/dashboard/create-post" name="New Post" className="btn btn-outline btn-success hover:text-white shadow" />
       </div>
 
-      {safeUser && <ProfileFull user={safeUser} posts={posts} />}
+      <ProfileFull user={safeUser} posts={posts} />
     </>
   );
 }

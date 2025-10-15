@@ -1,7 +1,9 @@
-import { auth } from "@/auth";
-import PostCard from "@/components/posts/post-card/PostCard";
 import prisma from "@/lib/db";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { FieldOfExpertise } from '@/utils/types';
+
+import PostCard from "@/components/posts/post-card/PostCard";
 
 async function getAllPosts(userId: string) {
   const allPosts = await prisma.posts.findMany({
@@ -34,7 +36,8 @@ export default async function AllPostsPage() {
     ...post,
     author: {
       ...post.author,
-      name: post.author.name ?? ""
+      name: post.author.name ?? "",
+      fieldOfExpertise: Array.isArray(post.author.fieldOfExpertise) ? (post.author.fieldOfExpertise as unknown as FieldOfExpertise[]) : []
     }
   }));
 

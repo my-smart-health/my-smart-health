@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { parseSocials } from "@/utils/common";
-import { Certificate, ProfileNewsCarouselItem, Schedule } from "@/utils/types";
+import { Certificate, FieldOfExpertise, ProfileNewsCarouselItem, Schedule } from "@/utils/types";
 
 import {
   ProfilePictureSection,
@@ -40,7 +40,7 @@ type User = {
   bio: string | null;
   socials: string[];
   website: string | null;
-  fieldOfExpertise: string[];
+  fieldOfExpertise: FieldOfExpertise[] | null;
   displayEmail: string | null;
   id: string;
   phones: string[];

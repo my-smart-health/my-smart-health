@@ -1,12 +1,11 @@
+import Link from "next/link";
+import prisma from "@/lib/db";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
-
-import prisma from "@/lib/db";
 import { redirect } from "next/navigation";
 
 import EditProfileForm from "@/components/profile/edit-profile-form/EditProfileForm";
-import Link from "next/link";
-import { Schedule } from "@/utils/types";
+import { FieldOfExpertise, Schedule } from "@/utils/types";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -65,7 +64,11 @@ export default async function EditProfile() {
     };
   });
 
-  const fixedUser = { ...parsedUser, locations: fixedLocations };
+  const fixedField = Array.isArray(parsedUser.fieldOfExpertise)
+    ? (parsedUser.fieldOfExpertise as unknown as FieldOfExpertise[])
+    : [];
+
+  const safeUser = { ...parsedUser, locations: fixedLocations, fieldOfExpertise: fixedField };
 
   return (
     <>
@@ -73,7 +76,7 @@ export default async function EditProfile() {
         Change Password
       </Link>
       <h1 className="text-4xl font-extrabold text-primary mb-6">Edit Profile</h1>
-      <EditProfileForm user={fixedUser} />
+      <EditProfileForm user={safeUser} />
     </>
   );
 }

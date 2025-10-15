@@ -1,12 +1,11 @@
 import Link from "next/link";
-
+import prisma from "@/lib/db";
 import { auth } from "@/auth";
 
-import { Certificate, Schedule } from "@/utils/types";
+import { Certificate, FieldOfExpertise, Schedule } from "@/utils/types";
 
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
 import GoBack from "@/components/buttons/go-back/GoBack";
-import prisma from "@/lib/db";
 
 function UserNotFound() {
   return (
@@ -72,8 +71,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
   }
   const safeSchedule = user.schedule ? user.schedule as Schedule[] : [];
   const safeCertificates = user.certificates ? user.certificates as unknown as Certificate[] : [];
+  const safeFieldOfExpertise = user.fieldOfExpertise ? user.fieldOfExpertise as unknown as FieldOfExpertise[] : [];
 
-  const safeUser = { ...user, schedule: safeSchedule, certificates: safeCertificates };
+  const safeUser = { ...user, fieldOfExpertise: safeFieldOfExpertise, schedule: safeSchedule, certificates: safeCertificates };
 
   return (
     <>

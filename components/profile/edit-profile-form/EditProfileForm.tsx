@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { MouseEvent, useEffect, useRef, useState, ChangeEvent } from "react";
 import { PutBlobResult } from "@vercel/blob";
+import { MouseEvent, useEffect, useRef, useState, ChangeEvent } from "react";
 
-import { Certificate, CertificateForm, Location, Schedule, Social } from "@/utils/types";
+import { Certificate, CertificateForm, FieldOfExpertise, Location, Schedule, Social } from "@/utils/types";
 import { isInstagramLink, isYoutubeLink, parseSocials, serializeSocials } from "@/utils/common";
 
 import Xlogo from '@/public/x-logo-black.png';
@@ -37,7 +37,7 @@ type User = {
   name: string | null;
   profileImages: string[] | null;
   website: string | null;
-  fieldOfExpertise: string[];
+  fieldOfExpertise: FieldOfExpertise[] | null;
   displayEmail: string | null;
   phones: string[];
   schedule: Schedule[] | null;
@@ -57,18 +57,19 @@ export default function EditProfileForm({ user }: { user: User }) {
   const addressRef = useRef<HTMLTextAreaElement>(null);
   const errorModalRef = useRef<HTMLDialogElement>(null);
 
-  const [name, setName] = useState(user.name ?? "");
-  const [fieldOfExpertise, setFieldOfExpertise] = useState<string[]>(user.fieldOfExpertise || []);
-  const [socials, setSocials] = useState<Social[]>(parseSocials(user.socials || []));
-  const [schedule, setSchedule] = useState<Schedule[]>(user.schedule || []);
-  const [locations, setLocations] = useState<Location[]>(user.locations || []);
-  const [error, setError] = useState<string | null>(null);
   const [bio, setBio] = useState(user.bio || "");
-  const [displayEmail, setDisplayEmail] = useState(user.displayEmail || "");
-  const [website, setWebsite] = useState(user.website || "");
+  const [name, setName] = useState(user.name ?? "");
+  const [error, setError] = useState<string | null>(null);
   const [phones, setPhones] = useState(user.phones || []);
+  const [website, setWebsite] = useState(user.website || "");
+  const [schedule, setSchedule] = useState<Schedule[]>(user.schedule || []);
+  const [displayEmail, setDisplayEmail] = useState(user.displayEmail || "");
+  const [locations, setLocations] = useState<Location[]>(user.locations || []);
   const [blobResult, setBlobResult] = useState<string[]>(user.profileImages || []);
+  const [socials, setSocials] = useState<Social[]>(parseSocials(user.socials || []));
+  const [fieldOfExpertise, setFieldOfExpertise] = useState<FieldOfExpertise[]>(user.fieldOfExpertise || []);
   const [certificates, setCertificates] = useState<CertificateForm[]>(user.certificates?.map(cert => ({ ...cert })) || []);
+
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
 

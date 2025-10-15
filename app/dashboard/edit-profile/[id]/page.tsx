@@ -1,11 +1,10 @@
+import prisma from "@/lib/db";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
-
-import prisma from "@/lib/db";
 import { redirect } from "next/navigation";
 
-import EditProfileForm from "@/components/profile/edit-profile-form/EditProfileForm";
 import { Schedule } from "@/utils/types";
+import EditProfileForm from "@/components/profile/edit-profile-form/EditProfileForm";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -72,7 +71,8 @@ export default async function EditProfileId({ params }: { params: Promise<{ id: 
     };
   });
 
-  const fixedUser = { ...parsedUser, locations: fixedLocations };
+  const fixedField = Array.isArray(parsedUser.fieldOfExpertise) ? (parsedUser.fieldOfExpertise as unknown as import('@/utils/types').FieldOfExpertise[]) : [];
+  const fixedUser = { ...parsedUser, locations: fixedLocations, fieldOfExpertise: fixedField };
 
   return (
     <>

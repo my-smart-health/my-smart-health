@@ -1,9 +1,11 @@
-import Divider from "@/components/divider/Divider";
 import React from "react";
+import { FieldOfExpertise } from "@/utils/types";
+
+import Divider from "@/components/divider/Divider";
 
 type AreaOfExpertiseSectionProps = {
-  fieldOfExpertise: string[];
-  setFieldOfExpertise: (fields: string[]) => void;
+  fieldOfExpertise: FieldOfExpertise[];
+  setFieldOfExpertise: (fields: FieldOfExpertise[]) => void;
   icon?: React.ReactNode;
 };
 
@@ -18,7 +20,7 @@ export function AreaOfExpertiseSection({
         <span className="font-semibold text-gray-700">Area of Expertise</span>
       )}
       {fieldOfExpertise.map((expertise, idx) => (
-        <div className="flex flex-row flex-1 gap-2 items-center" key={idx}>
+        <div className="flex flex-row flex-1 gap-2 items-center" key={expertise.id || idx}>
           <div className="flex flex-col flex-1">
             <span className="font-semibold text-gray-700">
               {icon} Area of Expertise
@@ -27,12 +29,27 @@ export function AreaOfExpertiseSection({
               <input
                 type="text"
                 name={`expertise[${idx}]`}
-                value={expertise}
+                value={expertise.label}
                 onChange={e => {
                   const updated = [...fieldOfExpertise];
-                  updated[idx] = e.target.value;
+                  updated[idx] = { ...updated[idx], label: e.target.value };
                   setFieldOfExpertise(updated);
                 }}
+                className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+              />
+            </label>
+            <label htmlFor={`expertise-desc-${idx}`} className="flex flex-row gap-2 mt-2">
+              <input
+                id={`expertise-desc-${idx}`}
+                type="text"
+                name={`expertise-desc-${idx}`}
+                value={expertise.description || ''}
+                onChange={e => {
+                  const updated = [...fieldOfExpertise];
+                  updated[idx] = { ...updated[idx], description: e.target.value };
+                  setFieldOfExpertise(updated);
+                }}
+                placeholder="Description (optional)"
                 className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
               />
             </label>
@@ -55,7 +72,10 @@ export function AreaOfExpertiseSection({
 
       <button
         type="button"
-        onClick={() => setFieldOfExpertise([...fieldOfExpertise, ""])}
+        onClick={() => {
+          const id = (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') ? crypto.randomUUID() : String(Date.now());
+          setFieldOfExpertise([...fieldOfExpertise, { id, label: '', description: '' }]);
+        }}
         className="btn btn-outline btn-primary w-full mt-2 px-3 py-1 rounded"
       >
         + Area of Expertise
