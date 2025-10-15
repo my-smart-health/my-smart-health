@@ -15,6 +15,12 @@ export type ErrorType = 'error' | 'warning' | 'success';
 
 export type ErrorState = { type: ErrorType; message: string } | null;
 
+export type FieldOfExpertise = {
+  id: string;
+  label: string;
+  description: string;
+};
+
 export type UserAccount = {
   id: string;
   createdAt: Date;
@@ -48,7 +54,7 @@ export type NewsCardType = {
   author: {
     id: string;
     name: string;
-    fieldOfExpertise: string[];
+    fieldOfExpertise: FieldOfExpertise[];
   };
 };
 
