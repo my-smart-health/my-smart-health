@@ -10,7 +10,7 @@ export default function NewsSection({ posts }: { posts: ProfileNewsCarouselItem[
     <>
       <Divider />
       <h2 className="font-bold text-primary text-xl">News</h2>
-      <section className="w-full">
+      <section className="w-full border border-primary rounded p-2 bg-white/90">
         <ProfileNewsCarousel carouselItems={posts} />
       </section>
     </>
