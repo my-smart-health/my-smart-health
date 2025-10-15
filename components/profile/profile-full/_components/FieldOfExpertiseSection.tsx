@@ -7,13 +7,14 @@ type FieldOfExpertiseSectionProps = {
 
 export default function FieldOfExpertiseSection({ fieldOfExpertise }: FieldOfExpertiseSectionProps) {
   if (!fieldOfExpertise) return null;
+  if (fieldOfExpertise.length === 0) return null;
 
   return (
     <>
       <Divider addClass="my-2" />
-      <section className="flex flex-wrap gap-2 mx-auto">
+      <section className="flex flex-wrap gap-2">
         {fieldOfExpertise.length > 0 && fieldOfExpertise.map((expertise) => (
-          <div className="tooltip tooltip-primary" data-tip={expertise.description} key={expertise.id}>
+          <div className="tooltip ml-6 tooltip-primary" data-tip={expertise.description} key={expertise.id}>
             <span className={`${expertise.description ? "link cursor-help" : ""}`}>{expertise.label}</span>
           </div>
         ))}
