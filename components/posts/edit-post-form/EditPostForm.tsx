@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { PutBlobResult } from "@vercel/blob";
 import { FormEvent, MouseEvent, useRef, useEffect, useState } from "react";
 
-import logo from "@/public/og-logo-red.png";
+import logo from "@/public/og-logo-blue.jpg";
 import { ArrowUpRight, XIcon } from "lucide-react";
 
 import { MAX_FILES_PER_POST } from "@/utils/constants";
@@ -170,7 +170,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         }
 
         const blob = await response.blob();
-        const file = new File([blob], "og-logo-red.png", { type: blob.type });
+        const file = new File([blob], "og-logo-blue.jpg", { type: blob.type });
 
         const uploadedUrl = await handleImageUpload(file);
 
