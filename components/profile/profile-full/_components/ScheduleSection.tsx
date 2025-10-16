@@ -76,7 +76,7 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
   return (
     <>
       <Divider addClass="my-4" />
-      <section className="flex flex-col mx-auto border-2 border-primary rounded p-2 sm:p-4 space-y-2">
+      <section className="flex flex-col mx-auto border-2 border-primary rounded p-2 sm:p-4 space-y-2 max-w-md">
         {orderedDays.map(dayEn => {
           const sch = findScheduleForDay(schedule, dayEn);
           const dayLabel = dayEn === "Sunday" ? daysDe["SundayIso"] : (daysDe[dayEn as keyof typeof daysDe] || dayEn);
@@ -93,13 +93,11 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
           }
 
           return (
-            <div key={dayEn} className="w-1/2 mx-auto">
-              <div className="flex flex-col md:flex-row justify-between items-center gap-1 md:gap-4 py-1">
-                <div className="flex-1">
-                  <span className="font-medium">{dayLabel}</span>
-                </div>
-                <div className="my-auto text-right whitespace-nowrap">{rightContent}</div>
+            <div key={dayEn} className="flex flex-col md:flex-row justify-between items-center gap-1 md:gap-4 py-1">
+              <div className="flex-1">
+                <span className="font-medium">{dayLabel}</span>
               </div>
+              <div className="my-auto text-right whitespace-nowrap">{rightContent}</div>
             </div>
           );
         })}
