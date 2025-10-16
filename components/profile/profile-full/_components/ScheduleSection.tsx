@@ -5,28 +5,41 @@ import { Schedule } from "@/utils/types";
 import Divider from "@/components/divider/Divider";
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-const daysDe = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
+const daysDe = { Monday: "Montag", Tuesday: "Dienstag", Wednesday: "Mittwoch", Thursday: "Donnerstag", Friday: "Freitag", Saturday: "Samstag", Sunday: "Sonntag", SundayIso: "Sonntag" } as const;
 
-function getActiveDays(schedule: Schedule) {
-  return days
-    .filter(day => schedule.day[day as keyof typeof schedule.day])
-    .map(day => daysDe[days.indexOf(day)]);
+const enWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+function formatTimeForLocale(hhmm: string, locale: string) {
+  if (!hhmm) return "";
+  const [h, m] = hhmm.split(":").map(Number);
+  const d = new Date();
+  d.setHours(h, m, 0, 0);
+  try {
+    return d.toLocaleTimeString(locale, { hour: "numeric", minute: "2-digit" });
+  } catch (e) {
+    // fallback
+    return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
+  }
 }
 
-function getFirstLastDay(schedule: Schedule) {
-  const activeDays = getActiveDays(schedule);
-  if (activeDays.length === 1) return <span>{activeDays[0]}</span>;
-  return <span>{activeDays[0]} - {activeDays[activeDays.length - 1]}</span>;
+function formatRange(open: string, close: string, locale: string) {
+  if (open === "00:00" && close === "00:00") return "24 Stunden geöffnet";
+  const start = formatTimeForLocale(open, locale);
+  const end = formatTimeForLocale(close, locale);
+  // append 'Uhr' for German locales for clarity
+  const addUhr = locale && locale.startsWith && locale.startsWith("de");
+  return addUhr ? `${start} - ${end} Uhr` : `${start} - ${end}`;
+}
+
+function findScheduleForDay(scheduleArr: Schedule[], dayEn: string) {
+  return scheduleArr.find(sch => Boolean(sch.day && sch.day[dayEn as keyof typeof sch.day]));
 }
 
 function isScheduleOpen(schedule: Schedule, now: Date) {
   const currentDay = now.getDay(); // 0 (Sunday) - 6 (Saturday)
-  const daysOfWeek = ["Sunday", ...days.slice(0, 6)];
-  const todayEn = daysOfWeek[currentDay];
-  const activeDays = days
-    .filter(day => schedule.day[day as keyof typeof schedule.day]);
-  if (!activeDays.includes(todayEn)) return false;
-
+  const todayEn = enWeek[currentDay];
+  if (!schedule.day || !schedule.day[todayEn as keyof typeof schedule.day]) return false;
+  if (!schedule.open || !schedule.close) return false;
   const [openH, openM] = schedule.open.split(":").map(Number);
   const [closeH, closeM] = schedule.close.split(":").map(Number);
   const nowMinutes = now.getHours() * 60 + now.getMinutes();
@@ -56,54 +69,40 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
   if (!schedule || schedule.length === 0) return null;
 
   const is247 = schedule.some(sch => sch.open === "00:00" && sch.close === "00:00");
+  const locale = typeof navigator !== "undefined" ? navigator.language || "de-DE" : "de-DE";
+
+  const todayIndex = currentTime.getDay(); // 0 (Sunday) - 6 (Saturday)
+  const orderedDays = enWeek.slice(todayIndex).concat(enWeek.slice(0, todayIndex));
 
   return (
     <>
       <Divider addClass="my-4" />
       <section className="flex flex-col space-y-2">
-        {schedule.length > 0 ? (
-          schedule.map(sch => {
-            const activeDays = getActiveDays(sch);
-            if (activeDays.length === 0) {
-              return <p key={sch.id} className="text-gray-400">Keine Öffnungszeiten angegeben</p>;
-            }
+        {orderedDays.map(dayEn => {
+          const sch = findScheduleForDay(schedule, dayEn);
+          const dayLabel = dayEn === "Sunday" ? daysDe["SundayIso"] : (daysDe[dayEn as keyof typeof daysDe] || dayEn);
+          let rightContent: React.ReactNode = <span className="text-gray-400">geschlossen</span>;
+
+          if (sch) {
             if (!sch.open || !sch.close) {
-              return (
-                <div key={sch.id} className="grid grid-cols-2 justify-evenly gap-6 py-1">
-                  <div>{getFirstLastDay(sch)}</div>
-                  <div><span className="text-gray-400">Keine Öffnungszeiten angegeben</span></div>
-                </div>
-              );
+              rightContent = <span className="text-gray-400">Keine Öffnungszeiten angegeben</span>;
+            } else if (sch.open === "00:00" && sch.close === "00:00") {
+              rightContent = <span className="text-green-500/95">24 Stunden geöffnet</span>;
+            } else {
+              rightContent = <span className="my-auto">{formatRange(sch.open, sch.close, locale)}</span>;
             }
-            if (sch.open === "00:00" && sch.close === "00:00") {
-              return (
-                <div key={sch.id} className="grid grid-cols-2 justify-evenly gap-6 py-1">
-                  <div>{getFirstLastDay(sch)}</div>
-                  <div>
-                    <span className="text-green-500/95">24 Stunden geöffnet</span>
-                  </div>
-                </div>
-              );
-            }
-            return (
-              <div key={sch.id} className="grid grid-cols-2 justify-evenly gap-6 py-1">
-                <div>{getFirstLastDay(sch)}</div>
-                <div>
-                  {sch.open && sch.close && (
-                    <>
-                      <span>{sch.open}</span>
-                      <span> - </span>
-                      <span>{sch.close}</span>
-                      <span> Uhr</span>
-                    </>
-                  )}
-                </div>
+          }
+
+          return (
+            <div key={dayEn} className="grid grid-cols-2 justify-evenly gap-6 py-1">
+              <div className="flex flex-col">
+                <span className="font-medium">{dayLabel}</span>
               </div>
-            );
-          })
-        ) : (
-          <p className="text-gray-400">Keine Öffnungszeiten angegeben</p>
-        )}
+              <div className="my-auto text-right">{rightContent}</div>
+            </div>
+          );
+        })}
+
         {isOpenShown && displayIsOpen && (
           <span className={is247 || isOpenNow ? "font-bold text-green-500/95" : "font-bold text-red-500/95"}>
             {(is247 || isOpenNow) ? "geöffnet" : "geschlossen"}
