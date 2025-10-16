@@ -39,16 +39,16 @@ export default function ContactSection({
               <div key={idx} className="flex flex-col gap-1 border border-primary rounded p-4">
                 {address && (
                   <div className="flex flex-col">
-                    <h2 className="font-bold text-primary text-lg">Adresse</h2>
-                    <div><MapPin className="inline-block mr-1" size={20} />{address}</div>
-                    <Link
+                    <h2 className="font-bold text-primary text-lg">Adresse | <Link
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
                       target="_blank"
                       rel="noreferrer noopener"
                       className="indent-7 text-primary font-bold text-lg hover:text-primary transition-colors duration-200"
                     >
                       Route planen
-                    </Link>
+                    </Link></h2>
+                    <div><MapPin className="inline-block mr-1" size={20} />{address}</div>
+
                   </div>
                 )}
 
