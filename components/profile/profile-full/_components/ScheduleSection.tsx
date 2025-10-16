@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Schedule } from "@/utils/types";
 import Divider from "@/components/divider/Divider";
 
-const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+// const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const daysDe = { Monday: "Montag", Tuesday: "Dienstag", Wednesday: "Mittwoch", Thursday: "Donnerstag", Friday: "Freitag", Saturday: "Samstag", Sunday: "Sonntag", SundayIso: "Sonntag" } as const;
 
 const enWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -17,7 +17,7 @@ function formatTimeForLocale(hhmm: string, locale: string) {
   try {
     return d.toLocaleTimeString(locale, { hour: "numeric", minute: "2-digit" });
   } catch (e) {
-    // fallback
+    if (process.env.NODE_ENV !== "production") console.warn("Locale time formatting failed, falling back to HH:MM format.", e);
     return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}`;
   }
 }
@@ -26,7 +26,6 @@ function formatRange(open: string, close: string, locale: string) {
   if (open === "00:00" && close === "00:00") return "24 Stunden geöffnet";
   const start = formatTimeForLocale(open, locale);
   const end = formatTimeForLocale(close, locale);
-  // append 'Uhr' for German locales for clarity
   const addUhr = locale && locale.startsWith && locale.startsWith("de");
   return addUhr ? `${start} - ${end} Uhr` : `${start} - ${end}`;
 }
