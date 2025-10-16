@@ -69,7 +69,7 @@ export default function ContactSection({
                     <Divider addClass="my-4" />
                     <h2 className="font-bold text-primary text-lg">Telefon</h2>
                     <Divider addClass="my-4" />
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                       {phone.map((phone, idx) => (
                         <Link
                           key={idx}
@@ -86,7 +86,7 @@ export default function ContactSection({
             );
           })}
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
           {phoneNumbers.length > 0 && phoneNumbers.map((phone, idx) => (
             <div key={idx} className="flex items-center w-full h-auto my-auto">
               <Link
@@ -98,7 +98,7 @@ export default function ContactSection({
           ))}
         </div>
 
-        <div className="grid grid-cols-4 justify-evenly my-3">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 justify-evenly my-3">
 
           {displayEmail && (
             <Link
