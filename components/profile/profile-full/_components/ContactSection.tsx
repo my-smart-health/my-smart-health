@@ -68,14 +68,17 @@ export default function ContactSection({
                   <>
                     <Divider addClass="my-4" />
                     <h2 className="font-bold text-primary text-lg">Telefon</h2>
-                    {phone.map((phone, idx) => (
-                      <Link
-                        key={idx}
-                        href={`tel:${phone}`}
-                        className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 link">
-                        <span className="mr-1">{platformIcons.Phone}</span>{phone}
-                      </Link>
-                    ))}
+                    <Divider addClass="my-4" />
+                    <div className="grid grid-cols-3 gap-2">
+                      {phone.map((phone, idx) => (
+                        <Link
+                          key={idx}
+                          href={`tel:${phone}`}
+                          className="badge badge-primary py-5 text-white w-full hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
+                          <span className="mr-1">{platformIcons.Phone}</span>{phone}
+                        </Link>
+                      ))}
+                    </div>
                   </>
                 )}
 
@@ -83,14 +86,17 @@ export default function ContactSection({
             );
           })}
 
-        {phoneNumbers.length > 0 && phoneNumbers.map((phone, idx) => (
-          <Link
-            key={idx}
-            href={`tel:${phone}`}
-            className="text-gray-700 w-fit hover:text-primary transition-colors duration-200 link">
-            <span className="mr-1">{platformIcons.Phone}</span>{phone}
-          </Link>
-        ))}
+        <div className="grid grid-cols-3 gap-2">
+          {phoneNumbers.length > 0 && phoneNumbers.map((phone, idx) => (
+            <div key={idx} className="flex items-center w-full h-auto my-auto">
+              <Link
+                href={`tel:${phone}`}
+                className="badge badge-primary py-5 text-white w-full hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
+                <span className="mr-1">{platformIcons.Phone}</span>{phone}
+              </Link>
+            </div>
+          ))}
+        </div>
 
         <div className="grid grid-cols-4 justify-evenly my-3">
 
@@ -128,7 +134,7 @@ export default function ContactSection({
           ))}
 
         </div>
-      </section>
+      </section >
     </>
   );
 }
