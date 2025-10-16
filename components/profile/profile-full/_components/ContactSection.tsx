@@ -47,13 +47,13 @@ export default function ContactSection({
                     >
                       Route planen
                     </Link></h2>
+                    <Divider addClass="my-4" />
                     <div><MapPin className="inline-block mr-1" size={20} />{address}</div>
-
                   </div>
                 )}
 
                 {schedule && (
-                  <div className="mt-2">
+                  <div>
                     {schedule.length > 0 && (
                       <>
                         <Divider addClass="my-4" />
