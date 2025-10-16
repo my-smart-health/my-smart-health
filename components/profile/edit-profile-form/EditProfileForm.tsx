@@ -417,7 +417,7 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Phone/Email/Social Links" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Phone/Email" />
           <div className="tab-content border-primary p-10">
 
             <section about="links" className="space-y-4">
@@ -434,8 +434,13 @@ export default function EditProfileForm({ user }: { user: User }) {
                 setWebsite={setWebsite}
                 icon={platformIcons['Website']}
               />
+            </section>
+          </div>
 
-              <Divider addClass="my-4" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Additional Social Links" />
+          <div className="tab-content border-primary p-10">
+
+            <section about="links" className="space-y-4">
 
               <SocialsSection
                 socials={socials}
@@ -444,6 +449,7 @@ export default function EditProfileForm({ user }: { user: User }) {
               />
             </section>
           </div>
+
 
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Image/Video" />
           <div className="tab-content border-primary p-10">
