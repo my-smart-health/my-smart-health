@@ -60,6 +60,7 @@ export type NewsCardType = {
 
 export type Schedule = {
   id: string;
+  title?: string;
   day: {
     Monday: boolean;
     Tuesday: boolean;
