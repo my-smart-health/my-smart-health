@@ -100,7 +100,7 @@ export function WorkScheduleSection({
             <legend className="fieldset-legend">Work Schedule</legend>
 
             <div
-              className="mx-auto border-2 border-primary rounded p-4 col-span-2 w-full max-w-[99.9%] flex flex-col justify-center"
+              className="mx-auto  rounded p-4 col-span-2 w-full max-w-[99.9%] flex flex-col justify-center"
               style={{ minHeight: '120px', height: 'auto', boxSizing: 'border-box' }}
             >
               <label htmlFor="location" className="label">Schedule Preview</label>
@@ -115,6 +115,18 @@ export function WorkScheduleSection({
               <div
                 className="grid grid-cols-1 mx-auto w-fit max-w-[99.9%] gap-2"
                 style={{ opacity: isNonStop(item) ? 0.5 : 1, pointerEvents: isNonStop(item) ? 'none' : 'auto' }}>
+                <div className="mb-2">
+                  <label className="label flex flex-col">
+                    <span className="label-text">Title (optional)</span>
+                    <input
+                      type="text"
+                      value={item.title ?? ''}
+                      onChange={(e) => setSchedule(schedule.map(s => s.id === item.id ? { ...s, title: e.target.value } : s))}
+                      className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                      placeholder="e.g. Monday - Friday"
+                    />
+                  </label>
+                </div>
                 {["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].map((day) => (
                   <label key={day} htmlFor={`schedule-${day.toLowerCase()}`} className="label">
                     <input
@@ -174,7 +186,7 @@ export function WorkScheduleSection({
           <Divider addClass="my-4 col-span-2" />
 
           <div>
-            <fieldset className="fieldset bg-base-100 border-primary flex justify-center rounded-box w-full border p-4">
+            <fieldset className="fieldset bg-base-100 border-primary flex justify-center rounded-box w-full border p-2 md:p-4">
               <legend className="fieldset-legend">Non-stop</legend>
               <label className="label">
                 <input
@@ -209,6 +221,7 @@ export function WorkScheduleSection({
             ...schedule,
             {
               id: crypto.randomUUID(),
+              title: '',
               day: {
                 Monday: false,
                 Tuesday: false,
