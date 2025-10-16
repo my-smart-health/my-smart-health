@@ -93,11 +93,11 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
           }
 
           return (
-            <div key={dayEn} className="grid grid-cols-2 justify-evenly gap-6 py-1">
-              <div className="flex flex-col">
+            <div key={dayEn} className="flex justify-between items-center gap-4 py-1">
+              <div className="flex-1">
                 <span className="font-medium">{dayLabel}</span>
               </div>
-              <div className="my-auto text-right">{rightContent}</div>
+              <div className="my-auto text-right whitespace-nowrap">{rightContent}</div>
             </div>
           );
         })}
