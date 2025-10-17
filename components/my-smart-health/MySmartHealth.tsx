@@ -25,7 +25,7 @@ export default async function MySmartHealth() {
       <input type="checkbox" className="peer" />
       <div className="collapse-title flex items-center gap-3 font-bold text-xl">
         <Image
-          src="/logo.png"
+          src="/smart-health-cross.png"
           alt="My Smart Health"
           width={40}
           height={40}
