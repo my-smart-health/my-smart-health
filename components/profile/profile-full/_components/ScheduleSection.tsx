@@ -52,7 +52,11 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
 
           return (
             <section key={schBlock.id || idx} className="flex flex-col mx-auto border-2 border-primary rounded p-2 sm:p-4 space-y-2 max-w-md">
+
               {schBlock.title && <h3 className="font-bold text-primary text-lg">{schBlock.title}</h3>}
+
+              {schBlock.title && <Divider addClass="my-4" />}
+
               {(() => {
                 const activeDays = orderedDays.filter(dayEn => Boolean(schBlock.day && schBlock.day[dayEn as keyof typeof schBlock.day]));
                 if (activeDays.length === 0) {
