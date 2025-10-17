@@ -61,10 +61,10 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
 
                 return activeDays.map(dayEn => {
                   const dayLabel = dayEn === "Sunday" ? daysDe["SundayIso"] : (daysDe[dayEn as keyof typeof daysDe] || dayEn);
-                  let rightContent: React.ReactNode = <span className="text-gray-400 break-words whitespace-normal">Keine Öffnungszeiten angegeben</span>;
+                  let rightContent: React.ReactNode = <span className="text-gray-400">Keine Öffnungszeiten angegeben</span>;
 
                   if (!schBlock.open || !schBlock.close) {
-                    rightContent = <span className="text-gray-400 break-after-auto">Keine Öffnungszeiten angegeben</span>;
+                    rightContent = <span className="text-gray-400">Keine Öffnungszeiten angegeben</span>;
                   } else if (schBlock.open === "00:00" && schBlock.close === "00:00") {
                     rightContent = <span className="text-green-500/95">24 Stunden geöffnet</span>;
                   } else {
@@ -72,11 +72,11 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
                   }
 
                   return (
-                    <div key={dayEn} className="flex flex-col md:flex-row justify-between items-center gap-1 md:gap-4 py-1">
-                      <div className="flex-1">
-                        <span className="font-medium">{dayLabel}</span>
+                    <div key={dayEn} className="flex flex-row justify-between items-center gap-1 py-1">
+                      <div className="flex-1 min-w-0">
+                        <span className="font-medium truncate">{dayLabel}</span>
                       </div>
-                      <div className="my-auto text-right break-words whitespace-normal">{rightContent}</div>
+                      <div className="my-auto text-right whitespace-nowrap">{rightContent}</div>
                     </div>
                   );
                 });
