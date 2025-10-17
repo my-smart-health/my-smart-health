@@ -67,8 +67,6 @@ export default function ContactSection({
                 {phone.length > 0 && (
                   <>
                     <Divider addClass="my-4" />
-                    <h2 className="font-bold text-primary text-lg">Telefon</h2>
-                    <Divider addClass="my-4" />
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                       {phone.map((phone, idx) => (
                         <Link
