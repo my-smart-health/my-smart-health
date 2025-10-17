@@ -13,7 +13,11 @@ export type ProfileType = 'SMART_HEALTH' | 'MEDIZIN_UND_PFLEGE' | 'NOTFALLE';
 
 export type ErrorType = 'error' | 'warning' | 'success';
 
-export type ErrorState = { type: ErrorType; message: string } | null;
+export type ErrorState = {
+  type: ErrorType;
+  message: string;
+  userId?: string;
+} | null;
 
 export type FieldOfExpertise = {
   id: string;

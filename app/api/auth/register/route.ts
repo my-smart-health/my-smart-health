@@ -40,7 +40,7 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(
-      { message: 'User registered successfully' },
+      { message: 'User registered successfully', userId: response.id },
       { status: 201 }
     );
   } catch (error) {

@@ -34,7 +34,9 @@ export default function RegisterForm() {
     if (error?.type === "success") {
       setError(null);
       errorModalRef.current?.close();
-      router.push("/dashboard");
+      error.userId
+        ? router.push(`/profile/${error.userId}`)
+        : router.push("/dashboard");
     } else {
       setError(null);
       errorModalRef.current?.close();
@@ -96,10 +98,11 @@ export default function RegisterForm() {
         setIsDisabled(false);
         return null;
       }
+      const responseData = await res.json();
+      const userId = String(responseData.userId);
+      setError({ type: "success", message: "Benutzer erfolgreich erstellt", userId });
 
-      setError({ type: "success", message: "Benutzer erfolgreich erstellt" });
-
-      return await res.json();
+      return responseData;
     } catch (error) {
       if (process.env.NODE_ENV === "development") {
         console.error("Error registering user:", error);
