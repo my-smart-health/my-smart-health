@@ -83,7 +83,7 @@ export default function ContactSection({
           })}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-          <Divider addClass="my-4 sm:col-span-2 md:col-span-3" />
+          {phoneNumbers.length > 0 && <Divider addClass="my-4 sm:col-span-2 md:col-span-3" />}
           {phoneNumbers.length > 0 && phoneNumbers.map((phone, idx) => (
             <div key={idx} className="flex items-center w-full h-auto my-auto">
               <Link
