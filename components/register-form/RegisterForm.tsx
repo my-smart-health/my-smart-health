@@ -34,9 +34,11 @@ export default function RegisterForm() {
     if (error?.type === "success") {
       setError(null);
       errorModalRef.current?.close();
-      error.userId
-        ? router.push(`/profile/${error.userId}`)
-        : router.push("/dashboard");
+      if (error.userId) {
+        router.push(`/profile/${error.userId}`);
+      } else {
+        router.push("/dashboard");
+      }
     } else {
       setError(null);
       errorModalRef.current?.close();
