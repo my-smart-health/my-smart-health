@@ -97,7 +97,7 @@ export default function ContactSection({
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 justify-evenly my-3 border border-primary rounded p-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 justify-evenly my-3 border-2 border-primary rounded p-4">
 
           {displayEmail && (
             <Link
