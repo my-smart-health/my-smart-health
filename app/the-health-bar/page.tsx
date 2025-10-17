@@ -1,30 +1,29 @@
-import Image from "next/image";
+import prisma from "@/lib/db";
+import { normalizeUser } from "@/utils/normalize";
+import ProfileFull from "@/components/profile/profile-full/ProfileFull";
 
-import GoBack from "@/components/buttons/go-back/GoBack";
-import TopCarousel from "@/components/carousels/topCarousel/TopCarousel";
-import TheHealthBarInfo from "@/components/the-health-bar-info/TheHealthBarInfo";
-import ProfilePictureCarousel from "@/components/carousels/profile-picture-carousel/ProfilePictureCarousel";
+async function getTheHealthBarProfile() {
+  const theHealthBar = await prisma.user.findUnique({
+    where: { email: 'healthbar@healthbar.de' },
+    include: {
+      locations: true,
+      certificates: true,
+    },
+  });
 
-import { defaultCarouselItems, defaultHealthBarItems } from "@/data/mockup-data";
+  return normalizeUser(theHealthBar);
+}
 
+async function getTheHealthBarPosts() {
+  const posts = await prisma.posts.findMany({
+    where: { author: { email: 'healthbar@healthbar.de' } },
+  });
 
+  return posts;
+}
 
-export default function TheHealthBarPage() {
-  const healthBarItems = defaultHealthBarItems.map(item => item.imageSrc);
-  return (
-    <>
-      <div className="max-w-[95%]">
-        {defaultCarouselItems && <TopCarousel props={defaultCarouselItems} />}
-        {healthBarItems && <ProfilePictureCarousel imageSrcArray={healthBarItems} />}
-        <div className="flex justify-end mt-4">
-          <GoBack />
-        </div>
-        <Image loading="lazy" placeholder="empty" src="/healthbar.png" alt="Health Bar" style={{ objectFit: "contain", width: "100%", height: "auto" }} width={410} height={130} className="self-center w-full max-w-full aspect-auto h-auto" />
-      </div>
-      <div className="flex border w-full border-primary"></div>
-
-      <div className="flex border w-full border-primary"></div>
-      <TheHealthBarInfo />
-    </>
-  );
+export default async function TheHealthBarPage() {
+  const theHealthBar = await getTheHealthBarProfile();
+  const posts = await getTheHealthBarPosts();
+  return <ProfileFull user={theHealthBar} posts={posts} />;
 }
