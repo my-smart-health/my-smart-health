@@ -4,7 +4,7 @@ import ProfileFull from "@/components/profile/profile-full/ProfileFull";
 
 async function getTheHealthBarProfile() {
   const theHealthBar = await prisma.user.findUnique({
-    where: { email: 'healthbar@healthbar.de' },
+    where: { email: 'health@future-health.de' },
     include: {
       locations: true,
       certificates: true,
@@ -16,7 +16,7 @@ async function getTheHealthBarProfile() {
 
 async function getTheHealthBarPosts() {
   const posts = await prisma.posts.findMany({
-    where: { author: { email: 'healthbar@healthbar.de' } },
+    where: { author: { email: 'health@future-health.de' } },
   });
 
   return posts;
