@@ -40,8 +40,7 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
 
   if (!schedule || schedule.length === 0) return null;
 
-  const todayIndex = currentTime.getDay(); // 0 (Sunday) - 6 (Saturday)
-  const orderedDays = enWeek.slice(todayIndex).concat(enWeek.slice(0, todayIndex));
+  const orderedDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   return (
     <>
