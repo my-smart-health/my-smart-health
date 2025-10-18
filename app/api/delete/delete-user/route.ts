@@ -1,5 +1,5 @@
 import prisma from '@/lib/db';
-import { del, list } from '@vercel/blob';
+import { del, list, type ListBlobResult } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 
 export async function DELETE(request: Request) {
@@ -13,19 +13,33 @@ export async function DELETE(request: Request) {
       });
     }
 
-    const blobs = await list({ prefix: `${id}/` });
-
-    for (const blob of blobs.blobs) {
-      await del(blob.url);
-    }
-
-    await del(`${id}/`);
+    let cursor: string | undefined = undefined;
+    do {
+      const res: ListBlobResult = await list({ prefix: `${id}/`, cursor });
+      for (const blob of res.blobs) {
+        try {
+          if (blob.pathname) await del(blob.pathname);
+        } catch (err) {
+          if (process.env.NODE_ENV === 'development')
+            console.error('Failed to delete blob', blob.pathname, err);
+        }
+      }
+      cursor = res.cursor;
+    } while (cursor);
 
     await prisma.posts.deleteMany({
       where: { authorId: id },
     });
 
     await prisma.certificate.deleteMany({
+      where: { userId: id },
+    });
+
+    await prisma.location.deleteMany({
+      where: { userId: id },
+    });
+
+    await prisma.categoryUser.deleteMany({
       where: { userId: id },
     });
 
