@@ -1,4 +1,5 @@
 import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
+import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealthBarLink";
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
 import { CirclePlus } from "lucide-react";
 
@@ -14,6 +15,7 @@ export default async function SmartHealthLayout({ children }: { children: React.
       </div>
       <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
       <NewsSmartHealthMedizinButton name="Notfälle" icon={<CirclePlus size={34} />} goTo="/notfalle" />
+      <TheHealthBarLink />
     </>
   );
 }

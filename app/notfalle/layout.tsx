@@ -1,4 +1,5 @@
 import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
+import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealthBarLink";
 import { CirclePlus } from "lucide-react";
 
 export default async function SmartHealthLayout({ children }: { children: React.ReactNode }) {
@@ -12,6 +13,7 @@ export default async function SmartHealthLayout({ children }: { children: React.
       <div className="min-h-full w-full max-w-5xl flex flex-col gap-4">
         {children}
       </div>
+      <TheHealthBarLink />
     </>
   );
 }
