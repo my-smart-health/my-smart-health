@@ -3,6 +3,8 @@ import { normalizeUser } from "@/utils/normalize";
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import { auth } from "@/auth";
+import CategoryIndex from "@/components/pages/CategoryIndex";
+import { PROFILE_TYPE_THE_HEALTH_BAR } from "@/utils/constants";
 
 async function getTheHealthBarProfile() {
   const theHealthBar = await prisma.user.findUnique({
@@ -38,6 +40,9 @@ export default async function TheHealthBarPage() {
         />
       )}
       <ProfileFull user={theHealthBar} posts={posts} />
+      <div className="w-full">
+        <CategoryIndex profileType={PROFILE_TYPE_THE_HEALTH_BAR} />
+      </div>
     </>
   );
 }
