@@ -1,7 +1,6 @@
 import { auth } from "@/auth";
 import ChangePasswordForm from "@/components/forms/change-password/ChangePasswordForm";
 import prisma from "@/lib/db";
-import { compare } from "bcrypt";
 import { redirect } from "next/navigation";
 
 function getUser(id: string) {
@@ -23,14 +22,6 @@ export default async function ChangePasswordPage() {
 
   if (!currentUser) {
     redirect("/login");
-  }
-
-  async function comparePasswords(password: string, newPassword: string, setError: (error: { type: "error" | "success"; message: string } | null) => void) {
-
-    if (!await compare(password, newPassword)) {
-      setError({ type: "error", message: "Current password is incorrect." });
-      return;
-    }
   }
 
   return (
