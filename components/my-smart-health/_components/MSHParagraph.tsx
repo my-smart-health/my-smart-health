@@ -6,7 +6,7 @@ import { PutBlobResult } from "@vercel/blob";
 import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, File } from "lucide-react";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
 
 export default function MSHParagraph({
@@ -45,6 +45,23 @@ export default function MSHParagraph({
     }
 
     const updatedParagraphs = paragraphs.filter((_, i) => i !== index);
+    setParagraphsAction(updatedParagraphs);
+  }
+
+  async function handleDeleteFile(fileUrl: string) {
+    try {
+      await fetch(`/api/delete/delete-picture?url=${encodeURIComponent(fileUrl)}`, {
+        method: "DELETE",
+      });
+    } catch (error) {
+      setErrorAction({ message: `Error deleting file. ${error}`, type: "error" });
+    }
+    const updatedParagraphs = paragraphs.map((paragraph) => {
+      return {
+        ...paragraph,
+        files: paragraph.files?.filter((url) => url !== fileUrl) || [],
+      };
+    });
     setParagraphsAction(updatedParagraphs);
   }
 
@@ -165,6 +182,7 @@ export default function MSHParagraph({
             />
           </label>
           <span className="flex justify-end text-sm text-gray-500">You can resize images by dragging the corner. <ArrowUpRight /></span>
+
           <Divider addClass="my-4" />
 
           <label>
@@ -178,19 +196,21 @@ export default function MSHParagraph({
               onChange={(e) => handleUploadImages(index, e.target.files)}
             />
           </label>
-          {(paragraph.images ?? []).length > 0 && (
+          {paragraph.images && paragraph.images.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
-              {(paragraph.images ?? []).map((img, imgIdx) => (
+              {paragraph.images.map((img, imgIdx) => (
                 <div key={imgIdx} className="relative">
-                  <Image
-                    key={imgIdx}
-                    src={img}
-                    alt={`Paragraph ${index + 1} Image ${imgIdx + 1}`}
-                    width={80}
-                    height={80}
-                    style={{ objectFit: 'contain' }}
-                    className="w-20 h-20  rounded"
-                  />
+                  <Link href={img} target="_blank" rel="noreferrer noopener" className="inline-block">
+                    <Image
+                      key={imgIdx}
+                      src={img}
+                      alt={`Paragraph ${index + 1} Image ${imgIdx + 1}`}
+                      width={100}
+                      height={100}
+                      style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+                      className="rounded"
+                    />
+                  </Link>
                   <div className="flex justify-center align-middle">
                     <MoveImageVideo
                       index={imgIdx}
@@ -226,34 +246,42 @@ export default function MSHParagraph({
           </label>
           {(paragraph.files ?? []).length > 0 && (
             <ul className="mt-2 space-y-1">
-              {(paragraph.files ?? []).map((fileUrl, fileIdx) => (
-                <li key={fileIdx} className="break-all mb-4">
-                  <Link
-                    href={fileUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn btn-outline rounded btn-primary h-fit w-full p-4 mb-2 border underline break-all"
-                    download={true}
-                  >
-                    {fileUrl.split('/').pop()}
-                  </Link>
-                  <div className="flex justify-end">
-                    <MoveImageVideo
-                      index={fileIdx}
-                      blobResult={paragraph.files ?? []}
-                      setBlobResultAction={(newFiles) => {
-                        const updatedParagraphs = paragraphs.map((p, i) =>
-                          i === index ? { ...p, files: newFiles } : p
-                        );
-                        setParagraphsAction(updatedParagraphs);
-                      }}
-                      showTop={fileIdx > 0}
-                      showBottom={fileIdx < (paragraph.files?.length || 0) - 1}
-                      removeAddress={fileUrl}
-                    />
+              <section className="grid grid-cols-1 gap-3">
+                {paragraph.files && paragraph.files.length > 0 && (
+                  <div className="mt-2">
+                    <h4 className="font-semibold mb-1">Dateien:</h4>
+                    <ul className="list-disc list-inside space-y-1">
+                      {paragraph.files.map((fileUrl, fileIndex) => {
+                        const fileName = fileUrl.replace(/^.*[\\\/]/, '').replaceAll('?download=1', '');
+                        return (
+                          <li key={fileIndex} className="grid grid-cols-2 items-center gap-2">
+                            <div key={fileUrl + fileIndex} className="col-span-1 h-auto my-auto">
+                              <Link
+                                href={fileUrl}
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                className="badge badge-primary p-5 text-white w-fit hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link"
+                                download={true}
+                              >
+                                <File /> {fileName}
+                              </Link>
+                            </div>
+                            <button
+                              type="button"
+                              className="btn btn-circle btn-error text-white hover:bg-error/75 transition-colors duration-200 col-span-1"
+                              onClick={async () => {
+                                await handleDeleteFile(fileUrl);
+                              }}
+                            >
+                              X
+                            </button>
+                          </li>
+                        )
+                      })}
+                    </ul>
                   </div>
-                </li>
-              ))}
+                )}
+              </section>
             </ul>
           )}
 
