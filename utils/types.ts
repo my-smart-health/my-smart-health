@@ -9,7 +9,11 @@ export interface SessionUser extends User {
 export type NavbarProps = {
   session: Session | null;
 };
-export type ProfileType = 'SMART_HEALTH' | 'MEDIZIN_UND_PFLEGE' | 'NOTFALLE';
+export type ProfileType =
+  | 'SMART_HEALTH'
+  | 'MEDIZIN_UND_PFLEGE'
+  | 'NOTFALLE'
+  | 'THE_HEALTH_BAR';
 
 export type ErrorType = 'error' | 'warning' | 'success';
 
