@@ -1,6 +1,8 @@
 import prisma from "@/lib/db";
 import { normalizeUser } from "@/utils/normalize";
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
+import GoToButton from "@/components/buttons/go-to/GoToButton";
+import { auth } from "@/auth";
 
 async function getTheHealthBarProfile() {
   const theHealthBar = await prisma.user.findUnique({
@@ -23,7 +25,19 @@ async function getTheHealthBarPosts() {
 }
 
 export default async function TheHealthBarPage() {
+  const session = await auth();
   const theHealthBar = await getTheHealthBarProfile();
   const posts = await getTheHealthBarPosts();
-  return <ProfileFull user={theHealthBar} posts={posts} />;
+  return (
+    <>
+      {session?.user.role === "ADMIN" && (
+        <GoToButton
+          name="Edit The Health Bar"
+          src={`/dashboard/edit-profile/${theHealthBar.id}`}
+          className="btn btn-warning rounded text-white mb-2"
+        />
+      )}
+      <ProfileFull user={theHealthBar} posts={posts} />
+    </>
+  );
 }
