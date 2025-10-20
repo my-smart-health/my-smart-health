@@ -12,9 +12,24 @@ export async function DELETE(request: Request) {
       });
     }
 
-    await del(url);
+    let target = url;
+    try {
+      const parsed = new URL(url);
+      target = parsed.pathname.startsWith('/')
+        ? parsed.pathname.slice(1)
+        : parsed.pathname;
+    } catch (e) {}
 
-    return NextResponse.json('Image removed successfully', { status: 200 });
+    const result = await del(target);
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('delete-picture: requested', { url, target, result });
+    }
+
+    return NextResponse.json(
+      { message: 'Image removed', url, target, result },
+      { status: 200 }
+    );
   } catch (error) {
     if (process.env.NODE_ENV === 'development') {
       console.error('Error removing image:', error);
