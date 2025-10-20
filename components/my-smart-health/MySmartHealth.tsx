@@ -25,16 +25,14 @@ export default async function MySmartHealth() {
       <input type="checkbox" className="peer" />
       <div className="collapse-title flex items-center gap-3 font-bold text-xl">
         <Image
-          src="/smart-health-cross.png"
+          src="/navbar.jpg"
           alt="My Smart Health"
-          width={40}
-          height={40}
+          width={150}
+          height={60}
           loading="lazy"
           placeholder="empty"
-          className="rounded-full "
           style={{ objectFit: "cover", width: "auto", height: "auto" }}
         />
-        <span>MY SMART HEALTH</span>
       </div>
       <div className="collapse-content">
         {generalTitle && (
