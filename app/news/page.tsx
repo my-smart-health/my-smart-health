@@ -6,6 +6,7 @@ import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health
 
 import { NewsCardType } from "@/utils/types";
 import { CirclePlus } from "lucide-react";
+import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealthBarLink";
 
 async function getData() {
   const posts = await prisma.posts.findMany({
@@ -50,6 +51,7 @@ export default async function NewsPage() {
       <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/smart-health" />
       <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
       <NewsSmartHealthMedizinButton name="Notfälle" icon={<CirclePlus size={34} />} goTo="/notfalle" />
+      <TheHealthBarLink />
     </div>
   );
 }
