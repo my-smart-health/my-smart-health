@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
     const blob = await put(`/my-smart-health/files/${filename}`, fileStream, {
       access: 'public',
-      addRandomSuffix: true,
+      allowOverwrite: true,
     });
 
     if (!blob || !blob.url) {
@@ -30,7 +30,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Note: blob.url provides the URL to access the file publicly, while blob.downloadUrl is a direct download link.
     return NextResponse.json(
       { message: 'File uploaded successfully', url: blob.downloadUrl },
       { status: 200 }
