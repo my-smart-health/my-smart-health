@@ -16,7 +16,6 @@ function formatRange(open: string, close: string) {
   return `${start} - ${end}`;
 }
 
-
 function isScheduleOpen(schedule: Schedule, now: Date) {
   const currentDay = now.getDay(); // 0 (Sunday) - 6 (Saturday)
   const todayEn = enWeek[currentDay];
@@ -50,41 +49,66 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
           const blockIs247 = schBlock.open === "00:00" && schBlock.close === "00:00";
           const blockIsOpenNow = isScheduleOpen(schBlock, currentTime);
 
+          const activeDays = orderedDays.filter(dayEn => Boolean(schBlock.day && schBlock.day[dayEn as keyof typeof schBlock.day]));
+
+          let renderDays: React.ReactNode;
+          if (blockIs247) {
+            renderDays = (
+              <div className="flex flex-col justify-between items-center gap-1 py-1">
+                <div className="flex-1 min-w-0">
+                  <span className="font-medium truncate">{`${daysDe.Monday} - ${daysDe.SundayIso}`}</span>
+                </div>
+                <div className="my-auto text-right whitespace-nowrap"><span className="text-green-500/95">24 Stunden geöffnet</span></div>
+              </div>
+            );
+          } else {
+            renderDays = activeDays.length === 0
+              ? <p className="text-gray-400 break-words whitespace-normal">Keine Öffnungszeiten angegeben</p>
+              : activeDays.map(dayEn => {
+                const dayLabel = dayEn === "Sunday" ? daysDe["SundayIso"] : (daysDe[dayEn as keyof typeof daysDe] || dayEn);
+                let rightContent: React.ReactNode = <span className="text-gray-400">Keine Öffnungszeiten angegeben</span>;
+
+                if (!schBlock.open || !schBlock.close) {
+                  rightContent = <span className="text-gray-400">Keine Öffnungszeiten angegeben</span>;
+                } else if (schBlock.open === "00:00" && schBlock.close === "00:00") {
+                  rightContent = <span className="text-green-500/95">24 Stunden geöffnet</span>;
+                } else {
+                  rightContent = <span className="my-auto">{formatRange(schBlock.open, schBlock.close)}</span>;
+                }
+
+                const hasHours = Boolean(schBlock.open && schBlock.close) && !(schBlock.open === "00:00" && schBlock.close === "00:00");
+
+                return (
+                  <div key={dayEn} className="py-1">
+                    <div className="flex flex-row justify-between items-center gap-1">
+                      <div className="flex-1 min-w-0">
+                        <span className="font-medium truncate">{dayLabel}</span>
+                      </div>
+                      {hasHours ? (
+                        <div className="my-auto text-right whitespace-nowrap">
+                          {rightContent}
+                        </div>
+                      ) : null}
+                    </div>
+
+                    {!hasHours && (
+                      <div className="mt-1 w-full">
+                        <p className="text-gray-400 break-words whitespace-normal">Keine Öffnungszeiten angegeben</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              });
+
+          }
           return (
-            <section key={schBlock.id || idx} className="flex flex-col mx-auto border-2 border-primary rounded p-2 sm:p-4 space-y-2 max-w-md">
+            <section key={schBlock.id || idx} className="flex flex-col mx-auto border-2 border-primary rounded p-2 sm:p-4 space-y-2 max-w-2xs">
 
               {schBlock.title && <h3 className="font-bold text-primary text-lg">{schBlock.title}</h3>}
 
               {schBlock.title && <Divider addClass="my-4" />}
 
-              {(() => {
-                const activeDays = orderedDays.filter(dayEn => Boolean(schBlock.day && schBlock.day[dayEn as keyof typeof schBlock.day]));
-                if (activeDays.length === 0) {
-                  return <p className="text-gray-400 break-words whitespace-normal">Keine Öffnungszeiten angegeben</p>;
-                }
-
-                return activeDays.map(dayEn => {
-                  const dayLabel = dayEn === "Sunday" ? daysDe["SundayIso"] : (daysDe[dayEn as keyof typeof daysDe] || dayEn);
-                  let rightContent: React.ReactNode = <span className="text-gray-400">Keine Öffnungszeiten angegeben</span>;
-
-                  if (!schBlock.open || !schBlock.close) {
-                    rightContent = <span className="text-gray-400">Keine Öffnungszeiten angegeben</span>;
-                  } else if (schBlock.open === "00:00" && schBlock.close === "00:00") {
-                    rightContent = <span className="text-green-500/95">24 Stunden geöffnet</span>;
-                  } else {
-                    rightContent = <span className="my-auto">{formatRange(schBlock.open, schBlock.close)}</span>;
-                  }
-
-                  return (
-                    <div key={dayEn} className="flex flex-row justify-between items-center gap-1 py-1">
-                      <div className="flex-1 min-w-0">
-                        <span className="font-medium truncate">{dayLabel}</span>
-                      </div>
-                      <div className="my-auto text-right whitespace-nowrap">{rightContent}</div>
-                    </div>
-                  );
-                });
-              })()}
+              {renderDays}
 
               {displayIsOpen && ((schBlock.open && schBlock.close) || blockIs247) && (
                 <span className={blockIs247 || blockIsOpenNow ? "font-bold text-green-500/95" : "font-bold text-red-500/95"}>
