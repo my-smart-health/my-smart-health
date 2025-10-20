@@ -41,13 +41,17 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
 
   const orderedDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
+  const anyBlockOpen = schedule.some(sch => {
+    const is247 = sch.open === "00:00" && sch.close === "00:00";
+    return is247 || isScheduleOpen(sch, currentTime);
+  });
+
   return (
     <>
       <Divider addClass="my-4" />
       <div className="space-y-4">
         {schedule.map((schBlock, idx) => {
           const blockIs247 = schBlock.open === "00:00" && schBlock.close === "00:00";
-          const blockIsOpenNow = isScheduleOpen(schBlock, currentTime);
 
           const activeDays = orderedDays.filter(dayEn => Boolean(schBlock.day && schBlock.day[dayEn as keyof typeof schBlock.day]));
 
@@ -99,7 +103,6 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
                   </div>
                 );
               });
-
           }
           return (
             <section key={schBlock.id || idx} className="flex flex-col mx-auto border-2 border-primary rounded p-2 sm:p-4 space-y-2 max-w-2xs">
@@ -109,15 +112,16 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
               {schBlock.title && <Divider addClass="my-4" />}
 
               {renderDays}
-
-              {displayIsOpen && ((schBlock.open && schBlock.close) || blockIs247) && (
-                <span className={blockIs247 || blockIsOpenNow ? "font-bold text-green-500/95" : "font-bold text-red-500/95"}>
-                  {(blockIs247 || blockIsOpenNow) ? "geöffnet" : "geschlossen"}
-                </span>
-              )}
             </section>
           );
         })}
+        {displayIsOpen && (
+          <div className=" place-self-center">
+            <span className={anyBlockOpen ? "font-bold text-green-500/95" : "font-bold text-red-500/95"}>
+              {anyBlockOpen ? "geöffnet" : "geschlossen"}
+            </span>
+          </div>
+        )}
       </div>
     </>
   );
