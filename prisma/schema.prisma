@@ -69,18 +69,28 @@ model Certificate {
 }
 
 model MySmartHealth {
-  id           String  @id @default(uuid())
+  id           String                  @id @default(uuid())
   generalTitle String?
   paragraph    Json
+  locations    MySmartHealthLocation[]
+}
+
+model MySmartHealthLocation {
+  id              String         @id @default(uuid())
+  address         String
+  phone           String[]
+  schedule        Json?
+  MySmartHealth   MySmartHealth? @relation(fields: [mySmartHealthId], references: [id])
+  mySmartHealthId String?
 }
 
 model Location {
   id       String   @id @default(uuid())
   address  String
   phone    String[]
+  schedule Json?
   user     User     @relation("UserLocations", fields: [userId], references: [id])
   userId   String
-  schedule Json?
 }
 
 model Category {
