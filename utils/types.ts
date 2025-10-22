@@ -49,6 +49,7 @@ export type Posts = {
   content: string;
   author: User;
   authorId: string;
+  socialLinks: Social[];
 };
 
 export type NewsCardType = {
@@ -59,6 +60,7 @@ export type NewsCardType = {
   updatedAt: Date | null;
   photos: string[];
   tags: string[];
+  socialLinks: Social[];
   author: {
     id: string;
     name: string;
