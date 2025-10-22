@@ -128,6 +128,7 @@ export type MySmartHealthParagraph = {
   title?: string;
   content: string;
   images?: string[];
+  socialLinks?: { platform: string; url: string }[];
   files?: string[];
 };
 
