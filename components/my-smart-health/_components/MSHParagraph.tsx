@@ -8,6 +8,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, File } from "lucide-react";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
+import { AtSign, Facebook, Globe, Instagram, Linkedin, Youtube } from "lucide-react";
+import Xlogo from '@/public/x-logo-black.png';
+import TikTokLogo from '@/public/tik-tok-logo.png';
 
 export default function MSHParagraph({
   paragraphs,
@@ -20,6 +23,17 @@ export default function MSHParagraph({
 }) {
 
   const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  const platformIcons: Record<string, React.ReactNode> = {
+    Email: <AtSign className="inline-block mr-1" size={30} />,
+    Website: <Globe className="inline-block mr-1" size={30} />,
+    Facebook: <Facebook className="inline-block mr-1" size={30} />,
+    Linkedin: <Linkedin className="inline-block mr-1" size={30} />,
+    X: <Image src={Xlogo} width={30} height={30} alt="X.com" className="w-6 mr-1" />,
+    Youtube: <Youtube className="inline-block mr-1" size={30} />,
+    TikTok: <Image src={TikTokLogo} width={30} height={30} alt="TikTok" className="w-8 -ml-1" />,
+    Instagram: <Instagram className="inline-block mr-1" size={30} />,
+  };
 
   async function handleDelete(index: number) {
     const paragraphToDelete = paragraphs[index];
@@ -82,6 +96,36 @@ export default function MSHParagraph({
   function handleContentChange(index: number, value: string): void {
     const updatedParagraphs = paragraphs.map((paragraph, i) =>
       i === index ? { ...paragraph, content: value } : paragraph
+    );
+    setParagraphsAction(updatedParagraphs);
+  }
+
+  function handleAddSocialLink(index: number) {
+    const updatedParagraphs = paragraphs.map((paragraph, i) =>
+      i === index
+        ? { ...paragraph, socialLinks: [...(paragraph.socialLinks ?? []), { platform: '', url: '' }] }
+        : paragraph
+    );
+    setParagraphsAction(updatedParagraphs);
+  }
+
+  function handleSocialLinkChange(paragraphIdx: number, linkIdx: number, field: 'platform' | 'url', value: string) {
+    const updatedParagraphs = paragraphs.map((paragraph, i) => {
+      if (i === paragraphIdx) {
+        const updatedLinks = [...(paragraph.socialLinks ?? [])];
+        updatedLinks[linkIdx] = { ...updatedLinks[linkIdx], [field]: value };
+        return { ...paragraph, socialLinks: updatedLinks };
+      }
+      return paragraph;
+    });
+    setParagraphsAction(updatedParagraphs);
+  }
+
+  function handleRemoveSocialLink(paragraphIdx: number, linkIdx: number) {
+    const updatedParagraphs = paragraphs.map((paragraph, i) =>
+      i === paragraphIdx
+        ? { ...paragraph, socialLinks: paragraph.socialLinks?.filter((_, idx) => idx !== linkIdx) }
+        : paragraph
     );
     setParagraphsAction(updatedParagraphs);
   }
@@ -284,6 +328,59 @@ export default function MSHParagraph({
               </section>
             </ul>
           )}
+
+          <Divider addClass="my-4" />
+
+          <div className="mb-4">
+            <h4 className="font-semibold mb-2">Social Links:</h4>
+            {(paragraph.socialLinks ?? []).map((link, linkIdx) => (
+              <div key={linkIdx} className="flex flex-row flex-wrap gap-4 items-center mb-4">
+                <input
+                  type="text"
+                  placeholder="URL"
+                  value={link.url}
+                  onChange={(e) => handleSocialLinkChange(index, linkIdx, 'url', e.target.value)}
+                  className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary flex-1 min-w-[200px]"
+                />
+                <div className="flex flex-col w-full gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="flex items-center justify-center max-w-[40px]">
+                      {platformIcons[link.platform] || null}
+                    </span>
+                    <select
+                      className="select select-bordered select-primary w-full max-w-xs border-primary"
+                      value={link.platform}
+                      onChange={(e) => handleSocialLinkChange(index, linkIdx, 'platform', e.target.value)}
+                    >
+                      <option disabled value="">Pick a platform</option>
+                      <option value="Email">Email</option>
+                      <option value="Website">Website</option>
+                      <option value="Facebook">Facebook</option>
+                      <option value="Linkedin">Linkedin</option>
+                      <option value="X">X.com</option>
+                      <option value="Youtube">Youtube</option>
+                      <option value="TikTok">TikTok</option>
+                      <option value="Instagram">Instagram</option>
+                    </select>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveSocialLink(index, linkIdx)}
+                    className="btn btn-outline text-red-500 self-end"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => handleAddSocialLink(index)}
+              className="btn btn-outline btn-primary px-3 py-1 w-full rounded"
+            >
+              Add Social Link
+            </button>
+          </div>
 
           <Divider addClass="my-4" />
 
