@@ -143,8 +143,28 @@ export default async function MySmartHealth() {
                   </ul>
                 </div>
               )}
+
+              {para.socialLinks && para.socialLinks.length > 0 && (
+                <div className="mt-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                    {para.socialLinks.map((social, socialIdx) => (
+                      <Link
+                        key={socialIdx}
+                        href={social.url}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="badge badge-primary p-5 text-white w-full hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link"
+                      >
+                        <span className="mr-1">{platformIcons[social.platform]}</span>
+                        {social.platform}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ))}
+
           <MSHLocations
             phoneNumbers={[]}
             locations={locations || []}
