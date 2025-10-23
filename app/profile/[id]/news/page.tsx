@@ -1,7 +1,7 @@
 import prisma from "@/lib/db";
 import { auth } from "@/auth";
 
-import { NewsCardType } from "@/utils/types";
+import { NewsCardType, Social } from "@/utils/types";
 
 import PostCard from "@/components/posts/post-card/PostCard";
 
@@ -17,6 +17,7 @@ async function getAllPostsByUserId(userId: string) {
       updatedAt: true,
       photos: true,
       tags: true,
+      socialLinks: true,
       author: {
         select: {
           id: true,
@@ -27,7 +28,10 @@ async function getAllPostsByUserId(userId: string) {
     }
   });
 
-  return posts as NewsCardType[];
+  return posts.map(post => ({
+    ...post,
+    socialLinks: Array.isArray(post.socialLinks) ? (post.socialLinks as unknown as Social[]) : []
+  })) as NewsCardType[];
 }
 
 async function getAuthorNameById(authorId: string) {
