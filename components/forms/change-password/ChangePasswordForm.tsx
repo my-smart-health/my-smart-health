@@ -4,12 +4,7 @@ import { useState } from "react";
 import { ErrorState } from "@/utils/types";
 import StatusModal from "@/components/modals/status-modal/StatusModal";
 
-type Props = {
-  user: { password: string };
-
-};
-
-export default function ChangePasswordForm({ user }: Props) {
+export default function ChangePasswordForm() {
 
   const [error, setError] = useState<ErrorState>(null);
 
@@ -37,19 +32,71 @@ export default function ChangePasswordForm({ user }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (user.password) {
-      setError({ type: "error", message: "Current password is incorrect." });
+
+    if (!password) {
+      setError({ type: "error", message: "Please enter your current password." });
       return;
     }
 
-    // Call API to change password
+    if (!newPassword) {
+      setError({ type: "error", message: "Please enter a new password." });
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      setError({ type: "error", message: "New password must be at least 8 characters long." });
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setError({ type: "error", message: "New password and confirmation do not match." });
+      return;
+    }
+
+    if (password === newPassword) {
+      setError({ type: "error", message: "New password must be different from current password." });
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/update/change-password', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          currentPassword: password,
+          newPassword: newPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError({ type: "error", message: data.error || "Failed to change password." });
+        return;
+      }
+
+      setError({ type: "success", message: "Password changed successfully!" });
+
+      setTimeout(() => {
+        setPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        setError(null);
+      }, 2000);
+    } catch (err) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error changing password:', err);
+      }
+      setError({ type: "error", message: "An error occurred. Please try again." });
+    }
   };
 
   return (
     <>
       <StatusModal isOpen={!!error} onCloseAction={() => setError(null)} message={error?.message || ""} type={error?.type || "success"} />
-      <form className="flex flex-col gap-4 border border-primary p-4 rounded">
-        MUST REFACTOR THE COMPONENT!!! NOT READY !!!
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4 border border-primary p-4 rounded">
         <section className="flex flex-col gap-2">
           <label>Current Password:</label>
           <div className="relative">
@@ -126,8 +173,7 @@ export default function ChangePasswordForm({ user }: Props) {
         </section>
 
         <button
-          type="button"
-          onClick={handleSubmit}
+          type="submit"
           className="btn btn-primary p-2 rounded mt-4"
         >
           Update Password
