@@ -23,7 +23,6 @@ export async function PUT(request: Request) {
       );
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(newEmail)) {
       return NextResponse.json(
@@ -32,7 +31,6 @@ export async function PUT(request: Request) {
       );
     }
 
-    // Get user with password
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       select: { password: true, email: true },
@@ -42,7 +40,6 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Check if new email is same as current
     if (user.email === newEmail) {
       return NextResponse.json(
         { error: 'New email must be different from current email' },
@@ -50,7 +47,6 @@ export async function PUT(request: Request) {
       );
     }
 
-    // Verify password
     const isPasswordValid = await compare(password, user.password);
 
     if (!isPasswordValid) {
@@ -60,7 +56,6 @@ export async function PUT(request: Request) {
       );
     }
 
-    // Check if email is already in use
     const existingUser = await prisma.user.findUnique({
       where: { email: newEmail },
     });
@@ -72,7 +67,6 @@ export async function PUT(request: Request) {
       );
     }
 
-    // Update email
     await prisma.user.update({
       where: { id: session.user.id },
       data: { email: newEmail },
