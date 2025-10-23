@@ -36,7 +36,11 @@ export default function MSHParagraph({
   };
 
   async function handleDelete(index: number) {
+
     const paragraphToDelete = paragraphs[index];
+
+    const confirmDelete = window.confirm(`Delete paragraph "${paragraphToDelete.title}"?`);
+    if (!confirmDelete) return;
 
     for (const imgUrl of paragraphToDelete.images ?? []) {
       try {
@@ -317,6 +321,8 @@ export default function MSHParagraph({
                               type="button"
                               className="btn btn-circle btn-error text-white hover:bg-error/75 transition-colors duration-200 "
                               onClick={async () => {
+                                const confirmDelete = window.confirm(`Delete file "${fileName}"?`);
+                                if (!confirmDelete) return;
                                 await handleDeleteFile(fileUrl);
                               }}
                             >
