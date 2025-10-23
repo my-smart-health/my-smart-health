@@ -102,11 +102,7 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
 
       <CertificatesSection certificates={certificates} />
 
-      {schedule.length > 0 && (
-
-        <ScheduleSection schedule={schedule} />
-
-      )}
+      {schedule.length > 0 && <ScheduleSection schedule={schedule} />}
 
     </div>
   );
