@@ -103,19 +103,23 @@ export default function ChangePasswordForm() {
             <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              autoComplete="on"
+              autoComplete="current-password"
               placeholder="Current Password"
               type={showPassword ? "text" : "password"}
               required
-              className="input validator p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
+              className="input validator p-3 pr-12 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
             />
             <button
               type="button"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 z-40 -translate-y-1/2 text-gray-500 hover:text-primary transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowPassword((prev) => !prev);
+              }}
               tabIndex={-1}
+              aria-label={showPassword ? "Hide password" : "Show password"}
             >
-              {showPassword ? "Hide" : "Show"}
+              {showPassword ? 'Hide' : 'Show'}
             </button>
           </div>
         </section>
@@ -126,19 +130,23 @@ export default function ChangePasswordForm() {
             <input
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
-              autoComplete="on"
+              autoComplete="new-password"
               placeholder="New Password"
               type={showNewPassword ? "text" : "password"}
               required
-              className="input validator p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
+              className="input validator p-3 pr-12 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
             />
             <button
               type="button"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-              onClick={() => setShowNewPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 z-40 -translate-y-1/2 text-gray-500 hover:text-primary transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowNewPassword((prev) => !prev);
+              }}
               tabIndex={-1}
+              aria-label={showNewPassword ? "Hide password" : "Show password"}
             >
-              {showNewPassword ? "Hide" : "Show"}
+              {showNewPassword ? 'Hide' : 'Show'}
             </button>
           </div>
         </section>
@@ -149,26 +157,30 @@ export default function ChangePasswordForm() {
             <input
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              autoComplete="on"
+              autoComplete="new-password"
               placeholder="Confirm New Password"
               type={showConfirmPassword ? "text" : "password"}
               required
-              className="input validator p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
+              className="input validator p-3 pr-12 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
             />
             <button
               type="button"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-              onClick={() => setShowConfirmPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 z-40 -translate-y-1/2 text-gray-500 hover:text-primary transition-colors"
+              onClick={(e) => {
+                e.preventDefault();
+                setShowConfirmPassword((prev) => !prev);
+              }}
               tabIndex={-1}
+              aria-label={showConfirmPassword ? "Hide password" : "Show password"}
             >
-              {showConfirmPassword ? "Hide" : "Show"}
+              {showConfirmPassword ? 'Hide' : 'Show'}
             </button>
           </div>
         </section>
 
-        <section className={`flex flex-col items-start ${newPassword.length > 0 ? "" : "hidden"}`}>
-          <div className={`text-sm ${getPasswordStrength(newPassword) === "weak" ? "text-red-500" : getPasswordStrength(newPassword) === "medium" ? "text-yellow-500" : "text-green-500"}`}>
-            New Password Strength: {getPasswordStrength(newPassword)[0].toUpperCase() + getPasswordStrength(newPassword).slice(1)}
+        <section className="flex flex-col items-start">
+          <div className={`text-sm ${newPassword.length === 0 ? "text-gray-400" : getPasswordStrength(newPassword) === "weak" ? "text-red-500" : getPasswordStrength(newPassword) === "medium" ? "text-yellow-500" : "text-green-500"}`}>
+            New Password Strength: {newPassword.length === 0 ? "Not entered" : getPasswordStrength(newPassword)[0].toUpperCase() + getPasswordStrength(newPassword).slice(1)}
           </div>
         </section>
 
