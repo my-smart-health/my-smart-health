@@ -48,13 +48,13 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
 
   return (
     <>
-      <h2 className="font-bold text-primary text-xl">Öffnungszeiten - {displayIsOpen && (
+      <Divider addClass="my-4" />
+      <h2 className="font-bold text-primary text-xl mb-4">Öffnungszeiten - {displayIsOpen && (
         <span className={anyBlockOpen ? "font-bold text-green-500/95" : "font-bold text-red-500/95"}>
           {anyBlockOpen ? "geöffnet" : "geschlossen"}
         </span>
       )}</h2>
 
-      <Divider addClass="my-4" />
 
       <div className="space-y-4">
         {schedule.map((schBlock, idx) => {
