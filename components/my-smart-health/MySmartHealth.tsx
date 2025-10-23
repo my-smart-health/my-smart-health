@@ -130,10 +130,13 @@ export default async function MySmartHealth() {
                                 href={fileUrl}
                                 target="_blank"
                                 rel="noreferrer noopener"
-                                className="badge badge-primary p-5 text-white w-fit hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link"
+                                className="badge badge-primary p-5 text-white w-fit h-fit hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link"
                                 download={true}
                               >
-                                <File /> {fileName}
+                                <div className='min-w-fit'>
+                                  <File size={30} />
+                                </div>
+                                {fileName}
                               </Link>
                             </div>
                           </li>
