@@ -10,9 +10,11 @@ import GoBack from "@/components/buttons/go-back/GoBack";
 import SeeMoreLess from "@/components/buttons/see-more-less/SeeMoreLess";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
 import Divider from "@/components/divider/Divider";
-import { Pencil, Trash2 } from "lucide-react";
+import { AtSign, Pencil, Trash2, Globe, Facebook, Linkedin, Youtube, Instagram } from "lucide-react";
+import Xlogo from "@/public/x-logo-black.png";
+import TikTokLogo from "@/public/tik-tok-logo.png";
 import DeletePostModal from "../delete-post-modal/DeletePostModal";
-import { env } from "process";
+import Image from "next/image";
 
 type PostCardDetailsProps = {
   postData: NewsCardType | null;
@@ -26,7 +28,18 @@ export default function PostCardDetails({ postData, session, onDeletePostAction 
 
   if (!postData) return <div className="text-red-500 border rounded-2xl p-2 text-center">Error: No data found</div>;
 
-  const { id, title, content, createdAt, photos, author, tags } = postData as NewsCardType;
+  const { id, title, content, createdAt, photos, author, tags, socialLinks } = postData as NewsCardType;
+
+  const platformIcons = {
+    Email: <AtSign size={18} />,
+    Website: <Globe size={18} />,
+    Facebook: <Facebook size={18} />,
+    Linkedin: <Linkedin size={18} />,
+    X: <Image src={Xlogo} alt="X logo" width={18} height={18} />,
+    Youtube: <Youtube size={18} />,
+    TikTok: <Image src={TikTokLogo} alt="TikTok logo" width={18} height={18} />,
+    Instagram: <Instagram size={18} />,
+  };
 
   const createdDate = new Date(createdAt ? createdAt : '').toLocaleString('de-DE', {
     year: 'numeric',
@@ -46,7 +59,7 @@ export default function PostCardDetails({ postData, session, onDeletePostAction 
       setIsDeleting(false);
       if (onDeletePostAction) onDeletePostAction(id);
     } catch (error) {
-      if (env.NODE_ENV === 'development') {
+      if (process.env.NODE_ENV === 'development') {
         console.error('Error deleting post:', error);
       }
       setDeleteMessage("Fehler beim Löschen des Beitrags. Bitte versuchen Sie es erneut.");
@@ -71,7 +84,9 @@ export default function PostCardDetails({ postData, session, onDeletePostAction 
           )}
           <span className="badge text-xl my-5 ml-2 font-semibold ">{createdDate}</span>
         </div>
+
         <Divider />
+
         <section>
           <div className="card-body">
             {photos &&
@@ -79,16 +94,40 @@ export default function PostCardDetails({ postData, session, onDeletePostAction 
             }
             {content && <div className="text-base indent-4 break-before"><SeeMoreLess text={content} /></div>}
           </div>
-          <Divider />
           <div className="card-actions justify-end m-4">
             {tags && tags.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {tags.map((tag, index) => (
-                  <span key={index} className="badge badge-dash">{tag}</span>
-                ))}
-              </div>
+              <>
+                <Divider />
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tag, index) => (
+                    <span key={index} className="badge badge-dash">{tag}</span>
+                  ))}
+                </div>
+              </>
             )}
           </div>
+          {socialLinks && socialLinks.length > 0 && (
+            <>
+              <Divider />
+              <div className="m-4">
+                <h3 className="text-lg font-semibold mb-3">Links</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                  {socialLinks.map((link, index) => (
+                    <Link
+                      key={index}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="badge badge-lg badge-primary gap-2 p-3 hover:bg-primary/75 transition-colors"
+                    >
+                      {platformIcons[link.platform as keyof typeof platformIcons]}
+                      <span>{link.platform}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
         </section>
 
         <div className="flex flex-col items-center space-y-2 mb-4">
