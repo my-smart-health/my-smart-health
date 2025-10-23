@@ -84,8 +84,8 @@ export default function MySmartHealthForm({ smartHealthData, initialLocations }:
       }
 
       setError({ message: "Information updated successfully", type: 'success' });
-      router.refresh();
       router.push("/smart-health");
+      router.refresh();
     } catch (err) {
       setError({ message: `An error occurred while updating the information ${err}`, type: 'error' });
     }
