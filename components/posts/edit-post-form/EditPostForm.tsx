@@ -7,9 +7,16 @@ import { PutBlobResult } from "@vercel/blob";
 import { FormEvent, MouseEvent, useRef, useEffect, useState } from "react";
 
 import logo from "@/public/og-logo-blue.jpg";
-import { ArrowUpRight, XIcon } from "lucide-react";
+import { ArrowUpRight, XIcon, AtSign, Facebook, Globe, Instagram, Linkedin, Youtube } from "lucide-react";
+import Xlogo from '@/public/x-logo-black.png';
+import TikTokLogo from '@/public/tik-tok-logo.png';
 
 import { MAX_FILES_PER_POST } from "@/utils/constants";
+
+type Social = {
+  platform: string;
+  url: string;
+};
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
@@ -23,6 +30,7 @@ type EditPostFormProps = {
     content: string;
     photos: string[];
     tags: string[];
+    socialLinks?: Social[];
   };
 };
 
@@ -35,10 +43,11 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [status, setStatus] = useState<{ message: string; type: 'error' | 'success' } | null>(null);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   const [tags, setTags] = useState<string[]>(post.tags || []);
+  const [socialLinks, setSocialLinks] = useState<Social[]>(post.socialLinks || []);
   const [title, setTitle] = useState(post.title || "");
   const [content, setContent] = useState(post.content || "");
 
@@ -46,9 +55,18 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
 
   const [blobResult, setBlobResult] = useState<string[]>(post.photos || []);
 
-  const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
+  const platformIcons: Record<string, React.ReactNode> = {
+    Email: <AtSign className="inline-block mr-1" size={30} />,
+    Website: <Globe className="inline-block mr-1" size={30} />,
+    Facebook: <Facebook className="inline-block mr-1" size={30} />,
+    Linkedin: <Linkedin className="inline-block mr-1" size={30} />,
+    X: <Image src={Xlogo} width={30} height={30} alt="X.com" className="w-6 mr-1" />,
+    Youtube: <Youtube className="inline-block mr-1" size={30} />,
+    TikTok: <Image src={TikTokLogo} width={30} height={30} alt="TikTok" className="w-8 -ml-1" />,
+    Instagram: <Instagram className="inline-block mr-1" size={30} />,
+  };
 
-  const errorModalRef = useRef<HTMLDialogElement>(null);
+  const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
 
   useEffect(() => {
     if (blobResult.length > 0) {
@@ -71,15 +89,17 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
     resize(contentRef.current, content);
   }, [title, content]);
 
-  useEffect(() => {
-    if (error) {
-      errorModalRef.current?.showModal();
-    }
-  }, [error]);
+  const statusModalRef = useRef<HTMLDialogElement>(null);
 
-  const handleErrorClose = () => {
-    setError(null);
-    errorModalRef.current?.close();
+  useEffect(() => {
+    if (status) {
+      statusModalRef.current?.showModal();
+    }
+  }, [status]);
+
+  const handleStatusClose = () => {
+    setStatus(null);
+    statusModalRef.current?.close();
   };
 
   const handleAddURL = (e: MouseEvent<HTMLButtonElement>) => {
@@ -91,11 +111,11 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
     const mediaUrl = formData.get(`media`)?.toString().trim();
 
     if (!mediaUrl || mediaUrl.length === 0) {
-      setError('Media URL cannot be empty');
+      setStatus({ message: 'Media URL cannot be empty', type: 'error' });
       return;
     }
 
-    setError(null);
+    setStatus(null);
     setBlobResult([...blobResult, mediaUrl]);
     const resetMediaInput = form.querySelector('input[name="media"]') as HTMLInputElement;
     resetMediaInput.value = '';
@@ -119,7 +139,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       const result = await response.json() as PutBlobResult;
 
       if (!response.ok) {
-        setError('Failed to upload image');
+        setStatus({ message: 'Failed to upload image', type: 'error' });
         setIsDisabled(false);
         throw new Error('Failed to upload image');
       }
@@ -130,7 +150,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       if (error instanceof Error) {
         message = error.message;
       }
-      setError(message);
+      setStatus({ message, type: 'error' });
       setIsDisabled(false);
       return logo.src;
     }
@@ -150,6 +170,22 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
   const handleRemoveTag = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
     e.preventDefault();
     setTags(tags.filter((_, i) => i !== index));
+  };
+
+  const handleAddSocialLink = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setSocialLinks([...socialLinks, { platform: '', url: '' }]);
+  };
+
+  const handleSocialLinkChange = (index: number, field: 'platform' | 'url', value: string) => {
+    const newLinks = [...socialLinks];
+    newLinks[index] = { ...newLinks[index], [field]: value };
+    setSocialLinks(newLinks);
+  };
+
+  const handleRemoveSocialLink = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
+    e.preventDefault();
+    setSocialLinks(socialLinks.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -178,11 +214,11 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       }
 
       if (!isImageFirst) {
-        setError("First media must be an image");
+        setStatus({ message: "First media must be an image", type: 'error' });
         setIsDisabled(false);
         return;
       }
-      setError(null);
+      setStatus(null);
 
       const result = await fetch(`/api/update/update-post`, {
         method: 'PUT',
@@ -192,6 +228,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
           content: formData.get('content'),
           photos: blobResult,
           tags: tags.filter(tag => tag.trim() !== ''),
+          socialLinks: socialLinks.filter(link => link.url.trim() !== '' && link.platform.trim() !== ''),
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -199,11 +236,11 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       });
 
       if (!result.ok) {
-        setError('Failed to update post');
+        setStatus({ message: 'Failed to update post', type: 'error' });
         setIsDisabled(false);
         return;
       }
-      setError("Post updated successfully");
+      setStatus({ message: "Post updated successfully", type: 'success' });
       setIsDisabled(true);
 
       setTimeout(() => {
@@ -214,7 +251,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       if (error instanceof Error) {
         message = error.message;
       }
-      setError(message);
+      setStatus({ message, type: 'error' });
       setIsDisabled(false);
       return;
     }
@@ -239,7 +276,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         throw new Error('Failed to delete post');
       }
 
-      setError('Post deleted successfully');
+      setStatus({ message: 'Post deleted successfully', type: 'success' });
 
       setTimeout(() => {
         redirect(`/profile/${session.user.id}/news`);
@@ -251,7 +288,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         message = error.message;
         console.error(message);
       }
-      setError(message);
+      setStatus({ message, type: 'error' });
     } finally {
       setIsDisabled(false);
     }
@@ -259,16 +296,16 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
 
   return (
     <>
-      {error && (
+      {status && (
         <dialog
-          ref={errorModalRef}
-          id="edit_post_error_modal"
+          ref={statusModalRef}
+          id="edit_post_status_modal"
           className="modal modal-bottom backdrop-grayscale-100 transition-all ease-linear duration-500"
           style={{ backgroundColor: 'transparent' }}
-          onClose={handleErrorClose}
+          onClose={handleStatusClose}
         >
           <div
-            className="modal-box bg-red-500 text-white rounded-2xl w-[95%]"
+            className={`modal-box ${status.type === 'success' ? 'bg-green-500' : 'bg-red-500'} text-white rounded-2xl w-[95%]`}
             style={{
               width: "80vw",
               maxWidth: "80vw",
@@ -284,12 +321,12 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
             <form method="dialog">
               <button
                 className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-white"
-                onClick={handleErrorClose}
+                onClick={handleStatusClose}
                 type="button"
               >✕</button>
             </form>
-            <h3 className="font-bold text-lg">Fehler</h3>
-            <p className="py-4 text-center">{error}</p>
+            <h3 className="font-bold text-lg">{status.type === 'success' ? 'Erfolg' : 'Fehler'}</h3>
+            <p className="py-4 text-center">{status.message}</p>
           </div>
         </dialog>
       )}
@@ -410,6 +447,59 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
 
         <Divider />
 
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Social Links</legend>
+          {socialLinks.length > 0 && (
+            <div className="flex flex-col gap-4 mb-4">
+              {socialLinks.map((link, index) => (
+                <div key={index} className="flex flex-row flex-wrap gap-4 items-center">
+                  <input
+                    type="text"
+                    placeholder="URL"
+                    value={link.url}
+                    onChange={(e) => handleSocialLinkChange(index, 'url', e.target.value)}
+                    className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary flex-1 min-w-[200px]"
+                  />
+                  <div className="flex flex-col w-full gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex items-center justify-center max-w-[40px]">
+                        {platformIcons[link.platform] || null}
+                      </span>
+                      <select
+                        className="select select-bordered select-primary w-full max-w-xs border-primary"
+                        value={link.platform}
+                        onChange={(e) => handleSocialLinkChange(index, 'platform', e.target.value)}
+                      >
+                        <option disabled value="">Pick a platform</option>
+                        <option value="Email">Email</option>
+                        <option value="Website">Website</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="Linkedin">Linkedin</option>
+                        <option value="X">X.com</option>
+                        <option value="Youtube">Youtube</option>
+                        <option value="TikTok">TikTok</option>
+                        <option value="Instagram">Instagram</option>
+                      </select>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => handleRemoveSocialLink(e, index)}
+                      className="btn btn-outline text-red-500 self-end"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          <button type="button" onClick={handleAddSocialLink} className="btn btn-outline btn-primary px-3 py-1 w-full rounded">
+            Add Social Link
+          </button>
+        </fieldset>
+
+        <Divider />
+
         <div className={blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''}>
           <fieldset>
             <legend className="fieldset-legend text-base">Add Media URL</legend>
@@ -450,7 +540,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                 onChange={async e => {
                   if (e.target.files && e.target.files.length + blobResult.length > MAX_FILES_PER_POST) {
                     window.scrollTo({ top: 0, behavior: "smooth" });
-                    setError(`You can select up to ${MAX_FILES_PER_POST} files only.`);
+                    setStatus({ message: `You can select up to ${MAX_FILES_PER_POST} files only.`, type: 'error' });
                     e.target.value = "";
                   } else {
                     inputFileRef.current = e.target;
@@ -461,7 +551,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                       );
                     }
                     setBlobResult(prev => [...prev, ...uploadedImages.filter((url): url is string => typeof url === 'string')]);
-                    setError(null);
+                    setStatus(null);
                   }
                 }} />
             </div>
