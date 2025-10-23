@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 
 import { Suspense } from "react";
 
-import { NewsCardType } from "@/utils/types";
+import { NewsCardType, Social } from "@/utils/types";
 
 import PostCard from "@/components/posts/post-card/PostCard";
 import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
@@ -21,6 +21,7 @@ async function getData(id: string): Promise<NewsCardType | null> {
       updatedAt: true,
       photos: true,
       tags: true,
+      socialLinks: true,
       author: {
         select: {
           id: true,
@@ -30,7 +31,13 @@ async function getData(id: string): Promise<NewsCardType | null> {
       }
     }
   });
-  return post as NewsCardType | null;
+
+  if (!post) return null;
+
+  return {
+    ...post,
+    socialLinks: Array.isArray(post.socialLinks) ? (post.socialLinks as unknown as Social[]) : []
+  } as NewsCardType;
 }
 
 export default async function NewsPage({ params }: { params: Promise<{ id: string }> }) {
