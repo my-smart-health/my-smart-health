@@ -3,13 +3,22 @@ import prisma from "@/lib/db";
 import { redirect } from "next/navigation";
 import EditPostForm from "../../../../components/posts/edit-post-form/EditPostForm";
 import GoToButton from "@/components/buttons/go-to/GoToButton";
+import { Social } from "@/utils/types";
 
 
 async function getPostdata(id: string) {
   const post = await prisma.posts.findUnique({
     where: { id },
   });
-  return { post };
+
+  if (!post) return { post: null };
+
+  return {
+    post: {
+      ...post,
+      socialLinks: Array.isArray(post.socialLinks) ? (post.socialLinks as unknown as Social[]) : []
+    }
+  };
 }
 
 export default async function EditPostIdPage({ params }: { params: Promise<{ id: string }> }) {
