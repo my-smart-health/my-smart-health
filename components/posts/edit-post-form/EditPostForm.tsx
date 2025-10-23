@@ -494,7 +494,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
             </div>
           )}
           <button type="button" onClick={handleAddSocialLink} className="btn btn-outline btn-primary px-3 py-1 w-full rounded">
-            Add Social Link
+            <Globe className="inline-block mr-1" size={30} />  Add Social Link
           </button>
         </fieldset>
 
@@ -518,7 +518,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                 }}
                 className="btn w-full btn-primary mt-2"
               >
-                Upload Media URL
+                <Youtube className="inline-block mr-1" size={30} /> Upload Media URL
               </button>
             </div>
           </fieldset>
