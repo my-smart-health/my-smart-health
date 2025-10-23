@@ -1,4 +1,3 @@
-import Link from "next/link";
 import prisma from "@/lib/db";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
@@ -72,9 +71,6 @@ export default async function EditProfile() {
 
   return (
     <>
-      <Link href="/dashboard/change-password" className="self-start ml-2 text-sm text-primary">
-        Change Password
-      </Link>
       <h1 className="text-4xl font-extrabold text-primary mb-6">Edit Profile</h1>
       <EditProfileForm user={safeUser} />
     </>
