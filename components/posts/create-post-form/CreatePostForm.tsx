@@ -16,7 +16,14 @@ import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
 
 import logo from '@/public/og-logo-blue.jpg';
-import { ArrowUpRight, XIcon } from "lucide-react";
+import { ArrowUpRight, XIcon, AtSign, Facebook, Globe, Instagram, Linkedin, Youtube } from "lucide-react";
+import Xlogo from '@/public/x-logo-black.png';
+import TikTokLogo from '@/public/tik-tok-logo.png';
+
+type Social = {
+  platform: string;
+  url: string;
+};
 
 type CreatePostFormProps = {
   session: Session | null;
@@ -42,10 +49,22 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
   const [isDefaultLogo, setIsDefaultLogo] = useState<boolean>(false);
 
   const [tags, setTags] = useState<string[]>([]);
+  const [socialLinks, setSocialLinks] = useState<Social[]>([]);
 
   const [blobResult, setBlobResult] = useState<string[]>([]);
 
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
+
+  const platformIcons: Record<string, React.ReactNode> = {
+    Email: <AtSign className="inline-block mr-1" size={30} />,
+    Website: <Globe className="inline-block mr-1" size={30} />,
+    Facebook: <Facebook className="inline-block mr-1" size={30} />,
+    Linkedin: <Linkedin className="inline-block mr-1" size={30} />,
+    X: <Image src={Xlogo} width={30} height={30} alt="X.com" className="w-6 mr-1" />,
+    Youtube: <Youtube className="inline-block mr-1" size={30} />,
+    TikTok: <Image src={TikTokLogo} width={30} height={30} alt="TikTok" className="w-8 -ml-1" />,
+    Instagram: <Instagram className="inline-block mr-1" size={30} />,
+  };
 
   const errorModalRef = useRef<HTMLDialogElement>(null);
 
@@ -184,6 +203,22 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
     setTags(tags.filter((_, i) => i !== index));
   };
 
+  const handleAddSocialLink = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    setSocialLinks([...socialLinks, { platform: '', url: '' }]);
+  };
+
+  const handleSocialLinkChange = (index: number, field: 'platform' | 'url', value: string) => {
+    const newLinks = [...socialLinks];
+    newLinks[index] = { ...newLinks[index], [field]: value };
+    setSocialLinks(newLinks);
+  };
+
+  const handleRemoveSocialLink = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
+    e.preventDefault();
+    setSocialLinks(socialLinks.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     try {
@@ -222,6 +257,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
           content: formData.get('content'),
           photos: blobResult,
           tags: tags.filter(tag => tag.trim() !== ''),
+          socialLinks: socialLinks.filter(link => link.url.trim() !== '' && link.platform.trim() !== ''),
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -311,6 +347,59 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
             </div>
           )}
           <button type="button" onClick={handleAddTag} className="btn btn-primary mt-2">Add Tag</button>
+        </fieldset>
+
+        <Divider />
+
+        <fieldset className="fieldset">
+          <legend className="fieldset-legend">Social Links</legend>
+          {socialLinks.length > 0 && (
+            <div className="flex flex-col gap-4 mb-4">
+              {socialLinks.map((link, index) => (
+                <div key={index} className="flex flex-row flex-wrap gap-4 items-center">
+                  <input
+                    type="text"
+                    placeholder="URL"
+                    value={link.url}
+                    onChange={(e) => handleSocialLinkChange(index, 'url', e.target.value)}
+                    className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary flex-1 min-w-[200px]"
+                  />
+                  <div className="flex flex-col w-full gap-2">
+                    <div className="flex items-center gap-2">
+                      <span className="flex items-center justify-center max-w-[40px]">
+                        {platformIcons[link.platform] || null}
+                      </span>
+                      <select
+                        className="select select-bordered select-primary w-full max-w-xs border-primary"
+                        value={link.platform}
+                        onChange={(e) => handleSocialLinkChange(index, 'platform', e.target.value)}
+                      >
+                        <option disabled value="">Pick a platform</option>
+                        <option value="Email">Email</option>
+                        <option value="Website">Website</option>
+                        <option value="Facebook">Facebook</option>
+                        <option value="Linkedin">Linkedin</option>
+                        <option value="X">X.com</option>
+                        <option value="Youtube">Youtube</option>
+                        <option value="TikTok">TikTok</option>
+                        <option value="Instagram">Instagram</option>
+                      </select>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => handleRemoveSocialLink(e, index)}
+                      className="btn btn-outline text-red-500 self-end"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+          <button type="button" onClick={handleAddSocialLink} className="btn btn-outline btn-primary px-3 py-1 w-full rounded">
+            Add Social Link
+          </button>
         </fieldset>
 
         <Divider />
