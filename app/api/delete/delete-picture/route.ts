@@ -18,9 +18,9 @@ export async function DELETE(request: Request) {
       target = parsed.pathname.startsWith('/')
         ? parsed.pathname.slice(1)
         : parsed.pathname;
-    } catch (e) {
+    } catch (error) {
       if (process.env.NODE_ENV === 'development') {
-        console.error('Invalid URL provided:', url);
+        console.error('Invalid URL provided:', url, 'ERROR:', error);
       }
       return NextResponse.json('Invalid URL provided', { status: 400 });
     }
