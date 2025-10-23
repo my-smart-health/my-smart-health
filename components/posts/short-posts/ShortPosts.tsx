@@ -41,7 +41,6 @@ export default function ShortPosts({ posts, session = null }: { posts: Posts[]; 
               {post.content}
             </p>
 
-
             <div
               className="flex flex-row-reverse gap-2 mt-4 mb-2">
               <GoToButton
