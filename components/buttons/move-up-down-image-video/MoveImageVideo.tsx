@@ -41,6 +41,11 @@ export default function MoveImageVideo({ index, blobResult, setBlobResultAction,
 
   const handleRemove = async (e: React.MouseEvent<HTMLButtonElement>, index: number, removeAddress?: string) => {
     e.preventDefault();
+    const fileUrl = blobResult[index];
+    const fileName = fileUrl ? fileUrl.split('/').pop() : `item ${index + 1}`;
+    const confirmDelete = window.confirm(`Delete media "${fileName}"?`);
+    if (!confirmDelete) return;
+
     const newBlobResult = [...blobResult];
     newBlobResult.splice(index, 1);
     setBlobResultAction(newBlobResult);
