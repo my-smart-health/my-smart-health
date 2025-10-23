@@ -298,21 +298,24 @@ export default function MSHParagraph({
                       {paragraph.files.map((fileUrl, fileIndex) => {
                         const fileName = fileUrl.replace(/^.*[\\\/]/, '').replaceAll('?download=1', '');
                         return (
-                          <li key={fileIndex} className="grid grid-cols-2 items-center gap-2">
-                            <div key={fileUrl + fileIndex} className="col-span-1 h-auto my-auto">
+                          <li key={fileIndex} className="flex items-center gap-2">
+                            <div key={fileUrl + fileIndex} className="w-full h-auto my-auto">
                               <Link
                                 href={fileUrl}
                                 target="_blank"
                                 rel="noreferrer noopener"
-                                className="badge badge-primary p-5 text-white w-fit hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link"
+                                className="badge badge-primary p-5 text-white w-full h-fit hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link"
                                 download={true}
                               >
-                                <File /> {fileName}
+                                <div className='min-w-fit'>
+                                  <File size={30} />
+                                </div>
+                                {fileName}
                               </Link>
                             </div>
                             <button
                               type="button"
-                              className="btn btn-circle btn-error text-white hover:bg-error/75 transition-colors duration-200 col-span-1"
+                              className="btn btn-circle btn-error text-white hover:bg-error/75 transition-colors duration-200 "
                               onClick={async () => {
                                 await handleDeleteFile(fileUrl);
                               }}
