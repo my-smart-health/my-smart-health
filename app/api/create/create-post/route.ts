@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   try {
-    const { authorId, title, content, photos, tags } = await req.json();
+    const { authorId, title, content, photos, tags, socialLinks } =
+      await req.json();
 
     if (!authorId || !title || !content) {
       return NextResponse.json(
@@ -19,6 +20,7 @@ export async function POST(req: Request) {
         content,
         photos,
         tags,
+        socialLinks,
       },
     });
 
