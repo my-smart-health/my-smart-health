@@ -32,6 +32,11 @@ export default async function ProfileMenu() {
               <li className="tab-disabled"></li>
               <li><Link href="/dashboard/edit-profile" className="flex gap-1">Edit profile</Link></li>
               <li>
+                <Link href="/dashboard/change-email" className="flex gap-1">
+                  Change Email
+                </Link>
+              </li>
+              <li>
                 <Link href="/dashboard/change-password" className="flex gap-1">
                   Change Password
                 </Link>
