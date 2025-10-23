@@ -81,7 +81,7 @@ export default async function MySmartHealth() {
           )}
 
           {paragraph?.map((para, index) => (
-            <div key={para.id ?? index} className="card mb-6 p-4 rounded-xl">
+            <div key={para.id ?? index} className="card p-4 rounded-xl">
               {para.images && para.images.length > 0 && (
                 <div className="flex flex-wrap gap-3 mb-3">
                   {para.images.map((imgUrl, imgIndex) => (
