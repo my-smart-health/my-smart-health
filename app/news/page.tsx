@@ -4,7 +4,7 @@ import prisma from "@/lib/db";
 import PostCard from "../../components/posts/post-card/PostCard";
 import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
 
-import { NewsCardType } from "@/utils/types";
+import { NewsCardType, Social } from "@/utils/types";
 import { CirclePlus } from "lucide-react";
 import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealthBarLink";
 
@@ -22,6 +22,7 @@ async function getData() {
       updatedAt: true,
       photos: true,
       tags: true,
+      socialLinks: true,
       author: {
         select: {
           id: true,
@@ -32,7 +33,10 @@ async function getData() {
     }
   })
 
-  return posts;
+  return posts.map(post => ({
+    ...post,
+    socialLinks: Array.isArray(post.socialLinks) ? (post.socialLinks as unknown as Social[]) : []
+  }));
 }
 
 export default async function NewsPage() {
