@@ -102,22 +102,22 @@ export default async function MySmartHealth() {
                 </div>
               )}
 
-              <Divider addClass="my-2" />
-
               {para.title && (
-                <h3 className="text-xl font-semibold p-4 mb-2">
-                  <span className="badge badge-primary badge-outline text-lg font-semibold p-2 min-h-fit border-2">
-                    {para.title}
-                  </span>
-                </h3>
+                <>
+                  <Divider addClass="my-2" />
+                  <h3 className="text-xl font-semibold p-4 mb-2">
+                    <span className="badge badge-primary badge-outline text-lg font-semibold p-2 min-h-fit border-2">
+                      {para.title}
+                    </span>
+                  </h3>
+                </>
               )}
 
               <SeeMoreLess text={para.content} lines={1} />
 
-              <Divider addClass="my-2" />
-
               {para.files && para.files.length > 0 && (
-                <div className="mt-2">
+                <div >
+                  <Divider addClass="my-2" />
                   <h4 className="font-semibold mb-1">Dateien:</h4>
                   <ul className="list-none">
                     <section className="grid grid-cols-1 gap-3">
