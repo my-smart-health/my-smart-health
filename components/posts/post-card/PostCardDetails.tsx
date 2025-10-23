@@ -137,7 +137,6 @@ export default function PostCardDetails({ postData, session, onDeletePostAction 
                 href={`/profile/${author.id}`}
                 className="flex flex-col py-2 w-full max-w-[90%] btn bg-primary rounded-xl text-white text-lg h-fit"
               >
-                <div className="w-full">zum Anbieter</div>
                 <div className="w-full">{author.name}</div>
               </Link>
             </div>
