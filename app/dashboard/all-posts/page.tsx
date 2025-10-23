@@ -1,7 +1,7 @@
 import prisma from "@/lib/db";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { FieldOfExpertise } from '@/utils/types';
+import { FieldOfExpertise, Social } from '@/utils/types';
 
 import PostCard from "@/components/posts/post-card/PostCard";
 
@@ -38,7 +38,8 @@ export default async function AllPostsPage() {
       ...post.author,
       name: post.author.name ?? "",
       fieldOfExpertise: Array.isArray(post.author.fieldOfExpertise) ? (post.author.fieldOfExpertise as unknown as FieldOfExpertise[]) : []
-    }
+    },
+    socialLinks: Array.isArray(post.socialLinks) ? (post.socialLinks as unknown as Social[]) : []
   }));
 
   return (
