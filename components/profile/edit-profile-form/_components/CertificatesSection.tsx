@@ -29,6 +29,9 @@ export function CertificatesSection({
               <button
                 type="button"
                 onClick={() => {
+                  const fileName = cert.name || `certificate ${idx + 1}`;
+                  const confirmDelete = window.confirm(`Delete certificate "${fileName}" and its images?`);
+                  if (!confirmDelete) return;
                   cert.images.forEach(imageURL => handleRemoveImage(imageURL, setCertificates));
                   setCertificates(certificates.filter((_, i) => i !== idx));
                 }}
