@@ -36,7 +36,7 @@ export default function ContactSection({
             const phone = location.phone;
             const schedule = location.schedule as Schedule[] | null;
             return (
-              <div key={idx} className="flex flex-col gap-1 border border-primary rounded p-4">
+              <div key={idx} className="flex flex-col gap-1 rounded p-4">
                 {address && (
                   <div className="flex flex-col">
                     <h2 className="font-bold text-primary text-lg">Adresse | <Link
@@ -102,7 +102,7 @@ export default function ContactSection({
               href={`mailto:${displayEmail}`}
               className="badge badge-primary p-5 text-white w-fit hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
               <span className="mr-1">{platformIcons.Email}</span>
-              {/* {displayEmail} */}Email
+              Email
             </Link>
           )}
 
@@ -113,7 +113,7 @@ export default function ContactSection({
               rel="noreferrer noopener"
               className="badge badge-primary p-5 text-white w-fit hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
               <span className="mr-1">{platformIcons.Website}</span>
-              {/* {website} */}Website
+              Website
             </Link>
           )}
 
@@ -125,7 +125,7 @@ export default function ContactSection({
                 rel="noreferrer noopener"
                 className="badge badge-primary p-5 text-white w-fit hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
                 <span className="mr-1">{platformIcons[social.platform]}</span>
-                {/* {social.url} */}{social.platform}
+                {social.platform}
               </Link>
             </div>
           ))}
