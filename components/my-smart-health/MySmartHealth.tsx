@@ -60,8 +60,8 @@ export default async function MySmartHealth() {
     <>
       <div className="collapse shadow-xl border-2 border-primary rounded-2xl mb-6">
 
-        <input type="checkbox" />
-        <div className="collapse-title flex items-center gap-3 font-bold text-xl">
+        <input type="checkbox" className='w-full h-full' />
+        <div className="collapse-title flex items-center gap-3 w-full h-full font-bold text-xl">
           <Image
             src="/navbar.jpg"
             alt="My Smart Health"
@@ -69,7 +69,7 @@ export default async function MySmartHealth() {
             height={60}
             loading="lazy"
             placeholder="empty"
-            style={{ objectFit: 'cover', width: 'auto', height: 'auto' }}
+            style={{ objectFit: 'contain', width: 'auto', height: 'auto' }}
           />
         </div>
 
