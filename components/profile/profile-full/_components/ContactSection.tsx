@@ -28,7 +28,7 @@ export default function ContactSection({
         <Divider addClass="my-4" />
       )}
 
-      <section className="grid grid-cols-1 gap-3">
+      <section className="flex flex-col gap-3">
 
         {locations.length > 0 &&
           locations.map((location, idx) => {
@@ -65,12 +65,12 @@ export default function ContactSection({
                 {phone.length > 0 && (
                   <>
                     <Divider addClass="my-4" />
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                    <div className="flex flex-wrap mx-auto gap-2">
                       {phone.map((phone, idx) => (
                         <Link
                           key={idx}
                           href={`tel:${phone}`}
-                          className="badge badge-primary py-5 text-white w-full hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
+                          className="badge badge-primary py-5 text-white hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
                           <span className="mr-1">{platformIcons.Phone}</span>{phone}
                         </Link>
                       ))}
@@ -82,25 +82,25 @@ export default function ContactSection({
             );
           })}
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-          {phoneNumbers.length > 0 && <Divider addClass="my-4 sm:col-span-2 md:col-span-3" />}
+        {phoneNumbers.length > 0 && <Divider addClass="my-4" />}
+        <div className="flex flex-wrap mx-auto gap-2">
           {phoneNumbers.length > 0 && phoneNumbers.map((phone, idx) => (
-            <div key={idx} className="flex items-center w-full h-auto my-auto">
+            <div key={idx} className="flex items-center h-auto my-auto">
               <Link
                 href={`tel:${phone}`}
-                className="badge badge-primary py-5 text-white w-full hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
+                className="badge badge-primary py-5 text-white hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
                 <span className="mr-1">{platformIcons.Phone}</span>{phone}
               </Link>
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-2 justify-evenly my-3 border border-primary rounded p-4">
+        <div className="flex flex-wrap gap-2 mx-auto my-3 border border-primary rounded p-4">
 
           {displayEmail && (
             <Link
               href={`mailto:${displayEmail}`}
-              className="badge badge-primary p-5 text-white w-fit hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
+              className="badge badge-primary p-5 text-white hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
               <span className="mr-1">{platformIcons.Email}</span>
               Email
             </Link>
@@ -111,19 +111,19 @@ export default function ContactSection({
               href={website}
               target="_blank"
               rel="noreferrer noopener"
-              className="badge badge-primary p-5 text-white w-fit hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
+              className="badge badge-primary p-5 text-white hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
               <span className="mr-1">{platformIcons.Website}</span>
               Website
             </Link>
           )}
 
           {parsedSocials.length > 0 && parsedSocials.map((social, idx) => (
-            <div key={social.url + idx} className="flex items-center w-full h-auto my-auto">
+            <div key={social.url + idx} className="flex items-center my-auto">
               <Link
                 href={social.url}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="badge badge-primary p-5 text-white w-fit hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
+                className="badge badge-primary p-5 text-white hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
                 <span className="mr-1">{platformIcons[social.platform]}</span>
                 {social.platform}
               </Link>
