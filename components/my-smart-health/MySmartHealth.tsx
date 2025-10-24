@@ -60,7 +60,7 @@ export default async function MySmartHealth() {
     <>
       <div className="collapse shadow-xl border-2 border-primary rounded-2xl mb-6">
 
-        <input type="checkbox" className="peer" />
+        <input type="checkbox" />
         <div className="collapse-title flex items-center gap-3 font-bold text-xl">
           <Image
             src="/navbar.jpg"
@@ -73,9 +73,15 @@ export default async function MySmartHealth() {
           />
         </div>
 
-        {session?.user.role === 'ADMIN' && <GoToButton src="/dashboard/edit-my-smart-health" name="Edit My Smart Health Info" className="z-10 btn btn-sm btn-primary bg-green-500 hover:bg-green-500/75" />}
-
         <div className="collapse-content">
+
+          {session?.user.role === 'ADMIN' &&
+            <GoToButton
+              src="/dashboard/edit-my-smart-health"
+              name="Edit My Smart Health Info"
+              className="z-10 btn w-full btn-primary bg-green-500 hover:bg-green-500/75" />
+          }
+
           {generalTitle && (
             <h2 className="text-2xl font-bold mb-4 text-primary">{generalTitle}</h2>
           )}
