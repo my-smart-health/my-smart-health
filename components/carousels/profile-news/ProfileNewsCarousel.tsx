@@ -2,7 +2,7 @@
 import { Suspense } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Pagination } from "swiper/modules";
-// Swiper CSS is imported globally in app/globals.css
+
 import Image from "next/image";
 import Link from "next/link";
 import { ProfileNewsCarouselItem } from "@/utils/types";

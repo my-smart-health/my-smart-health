@@ -6,7 +6,6 @@ import { Suspense, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Scrollbar, EffectCards, Navigation, Pagination } from "swiper/modules";
 
-// Swiper CSS is imported globally in app/globals.css to avoid dynamic chunk loading issues with Turbopack
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 import { PAGINATION_BULLET_QUANTITY } from "@/utils/constants";

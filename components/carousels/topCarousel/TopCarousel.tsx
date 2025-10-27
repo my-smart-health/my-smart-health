@@ -4,7 +4,7 @@ import TopCarouselSkeleton from "./TopCarouselSkeleton";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Pagination } from "swiper/modules";
-// Swiper CSS is imported globally in app/globals.css
+
 import Image from "next/image";
 import Link from "next/link";
 import { PAGINATION_BULLET_QUANTITY } from "@/utils/constants";

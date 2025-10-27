@@ -5,7 +5,6 @@ import { Suspense, useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Navigation, Pagination, Scrollbar } from "swiper/modules";
-// Swiper CSS is imported globally in app/globals.css to avoid dynamic chunk loading issues
 
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
