@@ -4,6 +4,7 @@ import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health
 import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealthBarLink";
 import prisma from "@/lib/db";
 import { CirclePlus } from "lucide-react";
+import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
 
 async function getNews() {
   const news = await prisma.posts.findMany({
@@ -48,9 +49,10 @@ export default async function Home() {
       <div className="w-full">
         {safeNews && <NewsCarousel props={safeNews} />}
       </div>
-      <div className="flex flex-col gap-3 w-full mx-auto max-w-[100%]">
+      <div className="flex flex-col mt-3 gap-3 w-full mx-auto max-w-[100%]">
+        <MySmartHealth />
         <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" />
-        <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/smart-health" />
+        <NewsSmartHealthMedizinButton name="Meine Gesundheit - Smart Health" icon="/icon3.png" goTo="/smart-health" />
         <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
         <NewsSmartHealthMedizinButton name="Notfälle" icon={<CirclePlus size={34} />} goTo="/notfalle" />
         <TheHealthBarLink />

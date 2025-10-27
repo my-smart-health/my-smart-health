@@ -58,7 +58,7 @@ export default async function MySmartHealth() {
 
   return (
     <>
-      <div className="collapse shadow-xl border-2 border-primary rounded-2xl mb-6">
+      <div className="collapse shadow-xl border-2 border-primary rounded-2xl mb-1">
 
         <input type="checkbox" className='w-full h-full' />
         <div className="collapse-title flex items-center gap-3 w-full h-full font-bold text-xl">

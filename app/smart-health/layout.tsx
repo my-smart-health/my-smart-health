@@ -7,10 +7,10 @@ export default async function SmartHealthLayout({ children }: { children: React.
 
   return (
     <>
+      <MySmartHealth />
       <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" />
-      <NewsSmartHealthMedizinButton name="Smart Health" icon="/icon3.png" goTo="/" active />
+      <NewsSmartHealthMedizinButton name="Meine Gesundheit - Smart Health" icon="/icon3.png" goTo="/" active />
       <div className="min-h-full w-full max-w-5xl flex flex-col gap-4">
-        <MySmartHealth />
         {children}
       </div>
       <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
