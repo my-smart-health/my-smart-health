@@ -31,7 +31,7 @@ model User {
   name             String?
   displayEmail     String?
   website          String?
-  bio              String?
+  bio              String?        @db.Text
   schedule         Json?
   phones           String[]
   profileImages    String[]
