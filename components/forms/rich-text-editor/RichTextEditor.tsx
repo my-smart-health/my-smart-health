@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
@@ -7,10 +8,9 @@ import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
 import Placeholder from '@tiptap/extension-placeholder';
 import Color from '@tiptap/extension-color';
-import { TextStyle } from '@tiptap/extension-text-style';
 import Blockquote from '@tiptap/extension-blockquote';
 import HardBreak from '@tiptap/extension-hard-break';
-import { useEffect, useCallback, useState } from 'react';
+import { TextStyle } from '@tiptap/extension-text-style';
 
 type RichTextEditorProps = {
   value: string;
@@ -18,34 +18,31 @@ type RichTextEditorProps = {
   placeholder?: string;
 };
 
+/**
+ * Professional rich text editor for bio content.
+ * Uses StarterKit with carefully configured extensions to avoid conflicts.
+ */
 export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const [selectedColor, setSelectedColor] = useState('#000000');
+  const isSettingFromParent = useRef(false);
+  const [toolbarKey, setToolbarKey] = useState(0);
 
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
       StarterKit.configure({
-        heading: {
-          levels: [1, 2, 3],
-        },
-        bulletList: {
-          keepMarks: true,
-          keepAttributes: false,
-        },
-        orderedList: {
-          keepMarks: true,
-          keepAttributes: false,
-        },
+        heading: { levels: [1, 2, 3] },
         blockquote: false,
         hardBreak: false,
+        codeBlock: false,
+        horizontalRule: false,
       }),
+      Blockquote,
+      HardBreak,
       Underline,
       Link.configure({
         openOnClick: false,
-        HTMLAttributes: {
-          class: 'text-primary underline',
-        },
+        HTMLAttributes: { class: 'text-primary underline' },
       }),
       TextAlign.configure({
         types: ['heading', 'paragraph'],
@@ -55,55 +52,48 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
       }),
       TextStyle,
       Color,
-      Blockquote.configure({
-        HTMLAttributes: {
-          class: 'blockquote-custom',
-        },
-      }),
-      HardBreak,
     ],
-    content: value,
-    onUpdate: ({ editor }) => {
-      const html = editor.getHTML();
-      onChange(html);
-    },
+    content: value || '',
     editorProps: {
       attributes: {
         class: 'prose prose-sm max-w-none focus:outline-none min-h-[150px] p-4',
       },
     },
+    onUpdate: ({ editor }) => {
+      if (isSettingFromParent.current) return;
+      const html = editor.getHTML();
+      onChange(html);
+      // Trigger toolbar refresh to update active states
+      setToolbarKey(k => k + 1);
+    },
+    onSelectionUpdate: () => {
+      // Update toolbar when selection changes
+      setToolbarKey(k => k + 1);
+    },
   });
 
+  // Sync value from parent to editor (only when not focused)
   useEffect(() => {
-    if (!editor) return;
+    if (!editor || editor.isDestroyed) return;
 
-    const isSame = editor.getHTML() === value;
-    if (isSame) return;
+    const currentContent = editor.getHTML();
+    const newContent = value || '';
 
+    // Skip if content is the same
+    if (currentContent === newContent) return;
+
+    // Skip if editor is focused (user is typing)
     if (editor.isFocused) return;
 
-    editor.commands.setContent(value || '', { emitUpdate: false });
-  }, [value, editor]);
+    // Set content without triggering onUpdate
+    isSettingFromParent.current = true;
+    editor.commands.setContent(newContent, { emitUpdate: false });
 
-  const handleToolbarClick = useCallback((action: () => boolean) => {
-    return (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault();
-      e.stopPropagation();
-      action();
-    };
-  }, []);
-
-  const handleColorChange = useCallback((color: string) => {
-    if (editor) {
-      editor.chain().focus().setColor(color).run();
-      setSelectedColor(color);
-    }
-  }, [editor]);
-
-  const commonColors = [
-    '#000000', '#FF0000', '#00FF00', '#0000FF', '#FFFF00',
-    '#FF00FF', '#00FFFF', '#FFA500', '#800080', '#808080'
-  ];
+    // Small delay to ensure state is flushed
+    requestAnimationFrame(() => {
+      isSettingFromParent.current = false;
+    });
+  }, [editor, value]);
 
   if (!editor) {
     return (
@@ -114,87 +104,146 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     );
   }
 
+  const ToolbarButton = ({
+    onClick,
+    isActive = false,
+    disabled = false,
+    title,
+    children
+  }: {
+    onClick: () => void;
+    isActive?: boolean;
+    disabled?: boolean;
+    title?: string;
+    children: React.ReactNode;
+  }) => {
+    const handleMouseDown = (e: React.MouseEvent) => {
+      // CRITICAL: Prevent ALL default behavior and event propagation
+      e.preventDefault();
+      e.stopPropagation();
+
+      if (disabled) return;
+
+      // Execute the command directly on mousedown to avoid any click event issues
+      onClick();
+    };
+
+    return (
+      <button
+        type="button"
+        onMouseDown={handleMouseDown}
+        // Disable onClick entirely to avoid double-firing or event bubbling issues
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        disabled={disabled}
+        className={`btn btn-xs ${isActive ? 'btn-primary' : 'btn-ghost'} ${disabled ? 'btn-disabled' : ''}`}
+        title={title}
+      >
+        {children}
+      </button>
+    );
+  };
+
+  const commonColors = [
+    '#000000', '#EF4444', '#10B981', '#3B82F6', '#F59E0B',
+    '#8B5CF6', '#EC4899', '#14B8A6', '#F97316', '#6B7280'
+  ];
+
   return (
     <div className="tiptap-editor border border-primary rounded bg-white">
-      <div className="border-b border-primary p-2 flex flex-wrap gap-1 bg-base-200" onMouseDown={(e) => e.preventDefault()}>
+      <div
+        className="border-b border-primary p-2 flex flex-wrap gap-1 bg-base-200"
+        key={toolbarKey}
+        onMouseDown={(e) => {
+          // Prevent toolbar area from interfering with editor focus
+          // Only stop propagation if the click is on the toolbar background, not buttons
+          const target = e.target as HTMLElement;
+          if (target.classList.contains('bg-base-200') || target.classList.contains('divider')) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+      >
+        <ToolbarButton
+          onClick={() => editor.chain().focus().undo().run()}
+          disabled={!editor.can().undo()}
+          title="Undo (Ctrl+Z)"
+        >
+          ↶
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().redo().run()}
+          disabled={!editor.can().redo()}
+          title="Redo (Ctrl+Y)"
+        >
+          ↷
+        </ToolbarButton>
 
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().toggleHeading({ level: 1 }).run())}
-          className={`btn btn-xs ${editor.isActive('heading', { level: 1 }) ? 'btn-primary' : 'btn-ghost'}`}
-          tabIndex={-1}
+        <div className="divider divider-horizontal m-0" />
+
+        <ToolbarButton
+          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          isActive={editor.isActive('heading', { level: 1 })}
           title="Heading 1"
         >
           H1
-        </button>
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().toggleHeading({ level: 2 }).run())}
-          className={`btn btn-xs ${editor.isActive('heading', { level: 2 }) ? 'btn-primary' : 'btn-ghost'}`}
-          tabIndex={-1}
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          isActive={editor.isActive('heading', { level: 2 })}
           title="Heading 2"
         >
           H2
-        </button>
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().toggleHeading({ level: 3 }).run())}
-          className={`btn btn-xs ${editor.isActive('heading', { level: 3 }) ? 'btn-primary' : 'btn-ghost'}`}
-          tabIndex={-1}
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          isActive={editor.isActive('heading', { level: 3 })}
           title="Heading 3"
         >
           H3
-        </button>
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().setParagraph().run())}
-          className={`btn btn-xs ${editor.isActive('paragraph') ? 'btn-primary' : 'btn-ghost'}`}
-          tabIndex={-1}
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().setParagraph().run()}
+          isActive={editor.isActive('paragraph')}
           title="Paragraph"
         >
           P
-        </button>
+        </ToolbarButton>
 
-        <div className="divider divider-horizontal m-0"></div>
+        <div className="divider divider-horizontal m-0" />
 
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().toggleBold().run())}
-          className={`btn btn-xs ${editor.isActive('bold') ? 'btn-primary' : 'btn-ghost'}`}
-          tabIndex={-1}
+        <ToolbarButton
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          isActive={editor.isActive('bold')}
           title="Bold (Ctrl+B)"
         >
           <strong>B</strong>
-        </button>
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().toggleItalic().run())}
-          className={`btn btn-xs ${editor.isActive('italic') ? 'btn-primary' : 'btn-ghost'}`}
-          tabIndex={-1}
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          isActive={editor.isActive('italic')}
           title="Italic (Ctrl+I)"
         >
           <em>I</em>
-        </button>
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().toggleUnderline().run())}
-          className={`btn btn-xs ${editor.isActive('underline') ? 'btn-primary' : 'btn-ghost'}`}
-          tabIndex={-1}
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          isActive={editor.isActive('underline')}
           title="Underline (Ctrl+U)"
         >
           <u>U</u>
-        </button>
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().toggleStrike().run())}
-          className={`btn btn-xs ${editor.isActive('strike') ? 'btn-primary' : 'btn-ghost'}`}
-          tabIndex={-1}
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().toggleStrike().run()}
+          isActive={editor.isActive('strike')}
           title="Strikethrough"
         >
           <s>S</s>
-        </button>
+        </ToolbarButton>
 
-        <div className="divider divider-horizontal m-0"></div>
+        <div className="divider divider-horizontal m-0" />
 
         <div className="relative">
           <button
@@ -204,142 +253,129 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
               e.stopPropagation();
               setShowColorPicker(!showColorPicker);
             }}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
             className="btn btn-xs btn-ghost"
-            tabIndex={-1}
             title="Text Color"
           >
-            <span style={{ color: selectedColor }}>A</span>
+            <span style={{ color: editor.getAttributes('textStyle').color || '#000000' }}>
+              A
+            </span>
           </button>
+
           {showColorPicker && (
-            <div className="absolute z-50 bg-white border border-primary rounded shadow-lg p-2 mt-1 flex flex-wrap gap-1 w-48" style={{ top: '100%', left: 0 }}>
-              {commonColors.map((color) => (
-                <button
-                  key={color}
-                  type="button"
-                  className="w-6 h-6 rounded border border-gray-300 hover:scale-110 transition-transform"
-                  style={{ backgroundColor: color }}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleColorChange(color);
-                    setShowColorPicker(false);
-                  }}
-                  title={color}
-                />
-              ))}
-              <button
-                type="button"
-                className="btn btn-xs btn-ghost w-full mt-1"
+            <>
+              <div
+                className="fixed inset-0 z-40"
                 onMouseDown={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  editor.chain().focus().unsetColor().run();
-                  setSelectedColor('#000000');
                   setShowColorPicker(false);
                 }}
-              >
-                Reset
-              </button>
-            </div>
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              />
+              <div className="absolute z-50 bg-white border border-primary rounded shadow-lg p-2 mt-1 flex flex-wrap gap-1 w-48 left-0">
+                {commonColors.map((color) => (
+                  <button
+                    key={color}
+                    type="button"
+                    className="w-6 h-6 rounded border border-gray-300 hover:scale-110 transition-transform"
+                    style={{ backgroundColor: color }}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      editor.chain().focus().setColor(color).run();
+                      setShowColorPicker(false);
+                    }}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                    title={color}
+                  />
+                ))}
+                <button
+                  type="button"
+                  className="btn btn-xs btn-ghost w-full mt-1"
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    editor.chain().focus().unsetColor().run();
+                    setShowColorPicker(false);
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  Reset
+                </button>
+              </div>
+            </>
           )}
         </div>
 
-        <div className="divider divider-horizontal m-0"></div>
+        <div className="divider divider-horizontal m-0" />
 
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().toggleBulletList().run())}
-          className={`btn btn-xs ${editor.isActive('bulletList') ? 'btn-primary' : 'btn-ghost'}`}
-          tabIndex={-1}
+        <ToolbarButton
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          isActive={editor.isActive('bulletList')}
           title="Bullet List"
         >
           • List
-        </button>
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().toggleOrderedList().run())}
-          className={`btn btn-xs ${editor.isActive('orderedList') ? 'btn-primary' : 'btn-ghost'}`}
-          tabIndex={-1}
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          isActive={editor.isActive('orderedList')}
           title="Numbered List"
         >
           1. List
-        </button>
+        </ToolbarButton>
 
-        <div className="divider divider-horizontal m-0"></div>
+        <div className="divider divider-horizontal m-0" />
 
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().toggleBlockquote().run())}
-          className={`btn btn-xs ${editor.isActive('blockquote') ? 'btn-primary' : 'btn-ghost'}`}
-          tabIndex={-1}
+        <ToolbarButton
+          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+          isActive={editor.isActive('blockquote')}
           title="Blockquote"
         >
           ❝❞
-        </button>
-
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().setHardBreak().run())}
-          className="btn btn-xs btn-ghost"
-          tabIndex={-1}
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().setHardBreak().run()}
           title="Line Break (Shift+Enter)"
         >
           ↵
-        </button>
+        </ToolbarButton>
 
-        <div className="divider divider-horizontal m-0"></div>
+        <div className="divider divider-horizontal m-0" />
 
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().undo().run())}
-          className="btn btn-xs btn-ghost"
-          tabIndex={-1}
-          disabled={!editor.can().undo()}
-          title="Undo (Ctrl+Z)"
-        >
-          ↶
-        </button>
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().redo().run())}
-          className="btn btn-xs btn-ghost"
-          tabIndex={-1}
-          disabled={!editor.can().redo()}
-          title="Redo (Ctrl+Y)"
-        >
-          ↷
-        </button>
-
-        <div className="divider divider-horizontal m-0"></div>
-
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().setTextAlign('left').run())}
-          className={`btn btn-xs ${editor.isActive({ textAlign: 'left' }) ? 'btn-primary' : 'btn-ghost'}`}
-          tabIndex={-1}
+        <ToolbarButton
+          onClick={() => editor.chain().focus().setTextAlign('left').run()}
+          isActive={editor.isActive({ textAlign: 'left' })}
           title="Align Left"
         >
           ⇤
-        </button>
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().setTextAlign('center').run())}
-          className={`btn btn-xs ${editor.isActive({ textAlign: 'center' }) ? 'btn-primary' : 'btn-ghost'}`}
-          tabIndex={-1}
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().setTextAlign('center').run()}
+          isActive={editor.isActive({ textAlign: 'center' })}
           title="Align Center"
         >
           ⇔
-        </button>
-        <button
-          type="button"
-          onMouseDown={handleToolbarClick(() => editor.chain().focus().setTextAlign('right').run())}
-          className={`btn btn-xs ${editor.isActive({ textAlign: 'right' }) ? 'btn-primary' : 'btn-ghost'}`}
-          tabIndex={-1}
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={() => editor.chain().focus().setTextAlign('right').run()}
+          isActive={editor.isActive({ textAlign: 'right' })}
           title="Align Right"
         >
           ⇥
-        </button>
-
+        </ToolbarButton>
       </div>
 
       <EditorContent editor={editor} />
