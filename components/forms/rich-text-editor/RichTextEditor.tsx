@@ -18,10 +18,6 @@ type RichTextEditorProps = {
   placeholder?: string;
 };
 
-/**
- * Professional rich text editor for bio content.
- * Uses StarterKit with carefully configured extensions to avoid conflicts.
- */
 export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const isSettingFromParent = useRef(false);
@@ -63,33 +59,26 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
       if (isSettingFromParent.current) return;
       const html = editor.getHTML();
       onChange(html);
-      // Trigger toolbar refresh to update active states
       setToolbarKey(k => k + 1);
     },
     onSelectionUpdate: () => {
-      // Update toolbar when selection changes
       setToolbarKey(k => k + 1);
     },
   });
 
-  // Sync value from parent to editor (only when not focused)
   useEffect(() => {
     if (!editor || editor.isDestroyed) return;
 
     const currentContent = editor.getHTML();
     const newContent = value || '';
 
-    // Skip if content is the same
     if (currentContent === newContent) return;
 
-    // Skip if editor is focused (user is typing)
     if (editor.isFocused) return;
 
-    // Set content without triggering onUpdate
     isSettingFromParent.current = true;
     editor.commands.setContent(newContent, { emitUpdate: false });
 
-    // Small delay to ensure state is flushed
     requestAnimationFrame(() => {
       isSettingFromParent.current = false;
     });
@@ -118,13 +107,11 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     children: React.ReactNode;
   }) => {
     const handleMouseDown = (e: React.MouseEvent) => {
-      // CRITICAL: Prevent ALL default behavior and event propagation
       e.preventDefault();
       e.stopPropagation();
 
       if (disabled) return;
 
-      // Execute the command directly on mousedown to avoid any click event issues
       onClick();
     };
 
@@ -132,7 +119,6 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
       <button
         type="button"
         onMouseDown={handleMouseDown}
-        // Disable onClick entirely to avoid double-firing or event bubbling issues
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -157,8 +143,6 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         className="border-b border-primary p-2 flex flex-wrap gap-1 bg-base-200"
         key={toolbarKey}
         onMouseDown={(e) => {
-          // Prevent toolbar area from interfering with editor focus
-          // Only stop propagation if the click is on the toolbar background, not buttons
           const target = e.target as HTMLElement;
           if (target.classList.contains('bg-base-200') || target.classList.contains('divider')) {
             e.preventDefault();
