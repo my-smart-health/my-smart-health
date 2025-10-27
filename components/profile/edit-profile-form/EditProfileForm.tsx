@@ -406,7 +406,7 @@ export default function EditProfileForm({ user }: { user: User }) {
 
             <Divider addClass="my-4" />
 
-            <BioSection bio={bio} setBio={setBio} bioRef={bioRef} />
+            <BioSection bio={bio} setBio={setBio} />
 
           </div>
 
