@@ -1,11 +1,7 @@
 'use client'
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Scrollbar } from "swiper/modules";
-
-import 'swiper/css';
-import 'swiper/css/scrollbar';
-import 'swiper/css/autoplay';
-import 'swiper/css/mousewheel';
+// Swiper CSS is imported globally in app/globals.css
 
 type TopCarouselSkeletonProps = {
   times?: number;

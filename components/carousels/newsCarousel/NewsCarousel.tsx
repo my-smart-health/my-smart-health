@@ -5,14 +5,7 @@ import { Suspense } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectCube, Mousewheel, Navigation, Pagination, Scrollbar } from "swiper/modules";
-
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
-import 'swiper/css/scrollbar';
-import 'swiper/css/autoplay';
-import 'swiper/css/mousewheel';
-import 'swiper/css/effect-cube';
+// Swiper CSS is imported globally in app/globals.css
 
 import NewsCarouselSkeleton from "./NewsCarouselSkeleton";
 import { PAGINATION_BULLET_QUANTITY } from "@/utils/constants";

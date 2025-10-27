@@ -2,11 +2,7 @@
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectCube, Mousewheel, Scrollbar } from "swiper/modules";
-import 'swiper/css';
-import 'swiper/css/scrollbar';
-import 'swiper/css/autoplay';
-import 'swiper/css/mousewheel';
-import 'swiper/css/effect-cube';
+// Swiper CSS is imported globally in app/globals.css
 
 type NewsCarouselSkeletonProps = {
   times?: number;
