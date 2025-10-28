@@ -28,7 +28,7 @@ export default function ContactSection({
         <Divider addClass="my-4" />
       )}
 
-      <section className="flex flex-col gap-3">
+      <section className="flex flex-col gap-3 w-full overflow-hidden">
 
         {locations.length > 0 &&
           locations.map((location, idx) => {
@@ -38,17 +38,24 @@ export default function ContactSection({
             return (
               <div key={idx} className="flex flex-col gap-1 rounded p-4">
                 {address && (
-                  <div className="flex flex-col">
-                    <h2 className="font-bold text-primary text-lg">Adresse | <Link
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="indent-7 text-primary font-bold text-lg hover:text-primary transition-colors duration-200"
-                    >
-                      Route planen
-                    </Link></h2>
+                  <div className="flex flex-col w-full">
+                    <h2 className="font-bold text-primary text-lg mb-2 flex flex-wrap items-center gap-2">
+                      <span>Adresse</span>
+                      <span>|</span>
+                      <Link
+                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="text-primary font-bold text-lg hover:text-primary/75 transition-colors duration-200 underline"
+                      >
+                        Route planen
+                      </Link>
+                    </h2>
                     <Divider addClass="my-4" />
-                    <div><MapPin className="inline-block mr-1" size={20} />{address}</div>
+                    <div className="flex items-start gap-1 break-words w-full">
+                      <MapPin className="flex-shrink-0 mt-1" size={20} />
+                      <span className="break-words flex-1">{address}</span>
+                    </div>
                   </div>
                 )}
 
