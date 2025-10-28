@@ -55,14 +55,12 @@ export default function ProfileShort({ id, name, bio, image }: { id: string; nam
 
     const checkHeight = () => {
       if (contentRef.current) {
-        // Check if content exceeds 2 lines (approximately 3.2em based on line-height 1.6)
         const maxHeight = parseFloat(getComputedStyle(contentRef.current).lineHeight) * 2;
         const actualHeight = contentRef.current.scrollHeight;
-        setNeedsExpand(actualHeight > maxHeight + 5); // +5 for tolerance
+        setNeedsExpand(actualHeight > maxHeight + 5);
       }
     };
 
-    // Wait for editor to fully render
     const timer = setTimeout(checkHeight, 200);
 
     window.addEventListener('resize', checkHeight);
@@ -92,7 +90,7 @@ export default function ProfileShort({ id, name, bio, image }: { id: string; nam
           <div
             ref={contentRef}
             style={{
-              maxHeight: expanded ? 'none' : '3.2em',
+              maxHeight: expanded ? 'none' : '7em',
               overflow: 'hidden',
               lineHeight: '1.6',
               transition: 'max-height 0.3s ease',

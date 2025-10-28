@@ -54,14 +54,12 @@ export default function BioSection({ bio }: { bio: string }) {
 
     const checkHeight = () => {
       if (contentRef.current) {
-        // Check if content exceeds 3 lines (approximately 4.8em based on line-height 1.6)
         const maxHeight = parseFloat(getComputedStyle(contentRef.current).lineHeight) * 3;
         const actualHeight = contentRef.current.scrollHeight;
-        setNeedsExpand(actualHeight > maxHeight + 5); // +5 for tolerance
+        setNeedsExpand(actualHeight > maxHeight + 5);
       }
     };
 
-    // Wait for editor to fully render
     const timer = setTimeout(checkHeight, 200);
 
     window.addEventListener('resize', checkHeight);
@@ -82,7 +80,7 @@ export default function BioSection({ bio }: { bio: string }) {
           <div
             ref={contentRef}
             style={{
-              maxHeight: expanded ? 'none' : '4.8em',
+              maxHeight: expanded ? 'none' : '7em',
               overflow: 'hidden',
               lineHeight: '1.6',
               transition: 'max-height 0.3s ease',
