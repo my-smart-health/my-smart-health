@@ -56,7 +56,10 @@ export function SocialsSection({ socials, setSocials, platformIcons }: SocialsSe
             </div>
             <button
               type="button"
-              onClick={() => setSocials(socials.filter((_, i) => i !== idx))}
+              onClick={() => {
+                if (!confirm("Are you sure you want to remove this social link?")) return;
+                setSocials(socials.filter((_, i) => i !== idx));
+              }}
               className="btn btn-outline text-red-500 self-end"
             >
               Remove
