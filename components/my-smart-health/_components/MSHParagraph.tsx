@@ -11,15 +11,18 @@ import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveIm
 import { AtSign, Facebook, Globe, Instagram, Linkedin, Youtube } from "lucide-react";
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
+import { MAX_IMAGE_SIZE_MB, MAX_IMAGE_SIZE_BYTES } from "@/utils/constants";
 
 export default function MSHParagraph({
   paragraphs,
   setParagraphsAction,
   setErrorAction,
+  onAfterChange,
 }: {
   paragraphs: MySmartHealthParagraph[];
   setParagraphsAction: (paragraphs: MySmartHealthParagraph[]) => void;
   setErrorAction: (err: { message: string; type: 'success' | 'error' | 'warning' }) => void;
+  onAfterChange?: (updatedParagraphs: MySmartHealthParagraph[]) => Promise<void> | void;
 }) {
 
   const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -136,6 +139,18 @@ export default function MSHParagraph({
 
   async function handleUploadImages(index: number, files: FileList | null) {
     if (!files || files.length === 0) return;
+
+    for (const file of Array.from(files)) {
+      if (file.size > MAX_IMAGE_SIZE_BYTES) {
+        setErrorAction({
+          message: `Image "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`,
+          type: "error",
+        });
+        if (fileInputRefs.current[index]) fileInputRefs.current[index]!.value = "";
+        return;
+      }
+    }
+
     try {
       const uploadedUrls: string[] = [];
       for (const file of Array.from(files)) {
@@ -157,21 +172,22 @@ export default function MSHParagraph({
       );
       setParagraphsAction(updatedParagraphs);
       if (fileInputRefs.current[index]) fileInputRefs.current[index]!.value = "";
+
+      if (onAfterChange) {
+        await onAfterChange(updatedParagraphs);
+      }
     } catch (error) {
       setErrorAction({ message: `Error uploading images. ${error}`, type: "error" });
     }
   }
 
-  const MAX_FILE_SIZE_MB = 4;
-  const MAX_FILE_SIZE = MAX_FILE_SIZE_MB * 1024 * 1024;
-
   async function handleUploadFiles(index: number, files: FileList | null) {
     if (!files || files.length === 0) return;
 
     for (const file of Array.from(files)) {
-      if (file.size > MAX_FILE_SIZE) {
+      if (file.size > MAX_IMAGE_SIZE_BYTES) {
         setErrorAction({
-          message: `File "${file.name}" is too large. Max size is ${MAX_FILE_SIZE_MB}MB.`,
+          message: `File "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`,
           type: "error",
         });
         return;
@@ -198,6 +214,10 @@ export default function MSHParagraph({
           : paragraph
       );
       setParagraphsAction(updatedParagraphs);
+
+      if (onAfterChange) {
+        await onAfterChange(updatedParagraphs);
+      }
     } catch (error) {
       setErrorAction({ message: `Error uploading files. ${error}`, type: "error" });
     }
@@ -243,6 +263,9 @@ export default function MSHParagraph({
               className="file-input file-input-bordered file-input-primary w-full"
               onChange={(e) => handleUploadImages(index, e.target.files)}
             />
+            <div className="label pt-1">
+              <span className="label-text-alt text-gray-500">Maximum file size: {MAX_IMAGE_SIZE_MB}MB per file</span>
+            </div>
           </label>
           {paragraph.images && paragraph.images.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
@@ -271,8 +294,24 @@ export default function MSHParagraph({
                       }}
                       showTop={imgIdx > 0}
                       showBottom={imgIdx < (paragraph.images?.length || 0) - 1}
-                      removeAddress={img}
+                      removeAddress={`/api/delete/delete-picture?url=${encodeURIComponent(img)}`}
                       horizontal={true}
+                      onAfterDelete={async (newImages) => {
+                        const updatedParagraphs = paragraphs.map((p, i) =>
+                          i === index ? { ...p, images: newImages } : p
+                        );
+                        if (onAfterChange) {
+                          await onAfterChange(updatedParagraphs);
+                        }
+                      }}
+                      onAfterMove={async (newImages) => {
+                        const updatedParagraphs = paragraphs.map((p, i) =>
+                          i === index ? { ...p, images: newImages } : p
+                        );
+                        if (onAfterChange) {
+                          await onAfterChange(updatedParagraphs);
+                        }
+                      }}
                     />
                   </div>
                 </div>
@@ -291,6 +330,9 @@ export default function MSHParagraph({
               onChange={(e) => handleUploadFiles(index, e.target.files)}
               accept="*"
             />
+            <div className="label pt-1">
+              <span className="label-text-alt text-gray-500">Maximum file size: {MAX_IMAGE_SIZE_MB}MB per file</span>
+            </div>
           </label>
           {(paragraph.files ?? []).length > 0 && (
             <ul className="mt-2 space-y-1">
