@@ -8,9 +8,18 @@ type Props = {
   setBlobResult: (urls: string[]) => void;
   MEDIA_WIDTH: number;
   MEDIA_HEIGHT: number;
+  onAfterDelete?: (updatedBlobs: string[]) => Promise<void> | void;
+  onAfterMove?: (updatedBlobs: string[]) => Promise<void> | void;
 };
 
-export function ProfileMediaList({ blobResult, setBlobResult, MEDIA_WIDTH, MEDIA_HEIGHT }: Props) {
+export function ProfileMediaList({
+  blobResult,
+  setBlobResult,
+  MEDIA_WIDTH,
+  MEDIA_HEIGHT,
+  onAfterDelete,
+  onAfterMove
+}: Props) {
   return (
     <section>
       <div className="flex flex-col items-center gap-8 w-full max-w-full">
@@ -61,6 +70,8 @@ export function ProfileMediaList({ blobResult, setBlobResult, MEDIA_WIDTH, MEDIA
                   showTop={idx > 0}
                   showBottom={idx < blobResult.length - 1}
                   removeAddress={`/api/delete/delete-picture?url=${encodeURIComponent(mediaUrl)}`}
+                  onAfterDelete={onAfterDelete}
+                  onAfterMove={onAfterMove}
                 />
               </div>
             </div>
