@@ -13,11 +13,23 @@ type MoveImageVideoProps = {
   showBottom: boolean;
   removeAddress: string;
   horizontal?: boolean;
+  onAfterDelete?: (updatedBlobs: string[]) => Promise<void> | void;
+  onAfterMove?: (updatedBlobs: string[]) => Promise<void> | void;
 };
 
-export default function MoveImageVideo({ index, blobResult, setBlobResultAction, showTop = true, showBottom = true, removeAddress, horizontal }: MoveImageVideoProps) {
+export default function MoveImageVideo({
+  index,
+  blobResult,
+  setBlobResultAction,
+  showTop = true,
+  showBottom = true,
+  removeAddress,
+  horizontal,
+  onAfterDelete,
+  onAfterMove
+}: MoveImageVideoProps) {
 
-  const handleOnePositionUp = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
+  const handleOnePositionUp = async (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
     e.preventDefault();
     if (index === 0) return;
     const newBlobResult = [...blobResult];
@@ -25,9 +37,13 @@ export default function MoveImageVideo({ index, blobResult, setBlobResultAction,
     newBlobResult[index - 1] = newBlobResult[index];
     newBlobResult[index] = previous;
     setBlobResultAction(newBlobResult);
+
+    if (onAfterMove) {
+      await onAfterMove(newBlobResult);
+    }
   };
 
-  const handleOnePositionDown = (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
+  const handleOnePositionDown = async (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
     e.preventDefault();
     if (index === blobResult.length - 1) return;
     const newBlobResult = [...blobResult];
@@ -35,6 +51,10 @@ export default function MoveImageVideo({ index, blobResult, setBlobResultAction,
     newBlobResult[index + 1] = newBlobResult[index];
     newBlobResult[index] = next;
     setBlobResultAction(newBlobResult);
+
+    if (onAfterMove) {
+      await onAfterMove(newBlobResult);
+    }
   };
 
   const handleRemove = async (e: React.MouseEvent<HTMLButtonElement>, index: number, removeAddress?: string) => {
@@ -50,11 +70,26 @@ export default function MoveImageVideo({ index, blobResult, setBlobResultAction,
 
     if (removeAddress) {
       try {
-        await fetch(removeAddress, { method: 'DELETE' });
+        const response = await fetch(removeAddress, {
+          method: 'DELETE'
+        });
+
+        if (!response.ok) {
+          console.error('Failed to delete file from storage');
+          return;
+        }
+
+        if (onAfterDelete) {
+          await onAfterDelete(newBlobResult);
+        }
       } catch (error) {
         if (process.env.NODE_ENV === 'development') {
           console.error('Error removing media:', error);
         }
+      }
+    } else {
+      if (onAfterDelete) {
+        await onAfterDelete(newBlobResult);
       }
     }
   };
