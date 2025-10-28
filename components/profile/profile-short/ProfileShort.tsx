@@ -11,8 +11,13 @@ import Color from '@tiptap/extension-color';
 import Blockquote from '@tiptap/extension-blockquote';
 import HardBreak from '@tiptap/extension-hard-break';
 import { TextStyle } from '@tiptap/extension-text-style';
+import { useState, useRef, useEffect } from 'react';
 
 export default function ProfileShort({ id, name, bio, image }: { id: string; name: string; bio: string; image: string }) {
+  const [expanded, setExpanded] = useState(false);
+  const [needsExpand, setNeedsExpand] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -40,10 +45,33 @@ export default function ProfileShort({ id, name, bio, image }: { id: string; nam
     editable: false,
     editorProps: {
       attributes: {
-        class: 'prose prose-sm max-w-none bio-content focus:outline-none line-clamp-2',
+        class: 'prose prose-sm max-w-none bio-content focus:outline-none',
       },
     },
   });
+
+  useEffect(() => {
+    if (!editor || !contentRef.current) return;
+
+    const checkHeight = () => {
+      if (contentRef.current) {
+        // Check if content exceeds 2 lines (approximately 3.2em based on line-height 1.6)
+        const maxHeight = parseFloat(getComputedStyle(contentRef.current).lineHeight) * 2;
+        const actualHeight = contentRef.current.scrollHeight;
+        setNeedsExpand(actualHeight > maxHeight + 5); // +5 for tolerance
+      }
+    };
+
+    // Wait for editor to fully render
+    const timer = setTimeout(checkHeight, 200);
+
+    window.addEventListener('resize', checkHeight);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', checkHeight);
+    };
+  }, [editor, bio]);
 
   return (
     <section className="flex flex-col md:flex-row items-center gap-4 p-4 w-full border rounded-xl bg-white/90 shadow-lg hover:shadow-2xl transition-shadow">
@@ -60,10 +88,29 @@ export default function ProfileShort({ id, name, bio, image }: { id: string; nam
       </div>
       <div className="flex flex-col justify-between flex-1 w-full h-full gap-2">
         <h2 className="font-bold text-xl text-primary mb-1">{name}</h2>
-        <div className="line-clamp-2">
-          <EditorContent editor={editor} />
+        <div className="w-full flex-1">
+          <div
+            ref={contentRef}
+            style={{
+              maxHeight: expanded ? 'none' : '3.2em',
+              overflow: 'hidden',
+              lineHeight: '1.6',
+              transition: 'max-height 0.3s ease',
+            }}
+          >
+            <EditorContent editor={editor} />
+          </div>
+          {needsExpand && (
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="text-primary mt-1 text-sm italic hover:underline focus:outline-none"
+              type="button"
+            >
+              {expanded ? "Weniger anzeigen" : "Mehr erfahren"}
+            </button>
+          )}
         </div>
-        <div className="flex justify-end mt-2">
+        <div className="flex justify-end mt-auto">
           <Link
             href={`/profile/${id}`}
             className="btn btn-primary btn-sm rounded-full px-6 font-semibold shadow"

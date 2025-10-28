@@ -10,9 +10,13 @@ import Blockquote from '@tiptap/extension-blockquote';
 import HardBreak from '@tiptap/extension-hard-break';
 import { TextStyle } from '@tiptap/extension-text-style';
 import Divider from "@/components/divider/Divider";
-import SeeMoreLess from "@/components/buttons/see-more-less/SeeMoreLess";
+import { useState, useRef, useEffect } from 'react';
 
 export default function BioSection({ bio }: { bio: string }) {
+  const [expanded, setExpanded] = useState(false);
+  const [needsExpand, setNeedsExpand] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -45,16 +49,56 @@ export default function BioSection({ bio }: { bio: string }) {
     },
   });
 
+  useEffect(() => {
+    if (!editor || !contentRef.current) return;
+
+    const checkHeight = () => {
+      if (contentRef.current) {
+        // Check if content exceeds 3 lines (approximately 4.8em based on line-height 1.6)
+        const maxHeight = parseFloat(getComputedStyle(contentRef.current).lineHeight) * 3;
+        const actualHeight = contentRef.current.scrollHeight;
+        setNeedsExpand(actualHeight > maxHeight + 5); // +5 for tolerance
+      }
+    };
+
+    // Wait for editor to fully render
+    const timer = setTimeout(checkHeight, 200);
+
+    window.addEventListener('resize', checkHeight);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', checkHeight);
+    };
+  }, [editor, bio]);
+
   if (!bio) return null;
 
   return (
     <>
       <Divider addClass="my-4" />
       <section className="w-full overflow-hidden">
-        <article className="text-base w-full max-w-full overflow-hidden">
-          <SeeMoreLess lines={3}>
+        <article className="text-base w-full max-w-full">
+          <div
+            ref={contentRef}
+            style={{
+              maxHeight: expanded ? 'none' : '4.8em',
+              overflow: 'hidden',
+              lineHeight: '1.6',
+              transition: 'max-height 0.3s ease',
+            }}
+          >
             <EditorContent editor={editor} />
-          </SeeMoreLess>
+          </div>
+          {needsExpand && (
+            <button
+              onClick={() => setExpanded(!expanded)}
+              className="text-primary mt-2 cursor-pointer select-none italic hover:underline focus:outline-none"
+              type="button"
+            >
+              {expanded ? "Weniger anzeigen" : "Mehr erfahren"}
+            </button>
+          )}
         </article>
       </section>
     </>
