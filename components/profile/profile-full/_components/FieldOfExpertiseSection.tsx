@@ -1,6 +1,5 @@
 'use client';
 
-import Divider from "@/components/divider/Divider";
 import { FieldOfExpertise } from "@/utils/types";
 import { useState, useRef, useEffect } from "react";
 
