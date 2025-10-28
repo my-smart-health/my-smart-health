@@ -17,13 +17,13 @@ export function AreaOfExpertiseSection({
   return (
     <section>
       {!fieldOfExpertise.length && (
-        <span className="font-semibold text-gray-700">Area of Expertise</span>
+        <span className="font-semibold text-gray-700">Expertise</span>
       )}
       {fieldOfExpertise.map((expertise, idx) => (
         <div className="flex flex-row flex-1 gap-2 items-center" key={expertise.id || idx}>
           <div className="flex flex-col flex-1">
             <span className="font-semibold text-gray-700">
-              {icon} Area of Expertise
+              {icon} Expertise {idx + 1}
             </span>
             <label htmlFor={`expertise[${idx}]`} className="flex flex-row gap-2">
               <input
@@ -78,7 +78,7 @@ export function AreaOfExpertiseSection({
         }}
         className="btn btn-outline btn-primary w-full mt-2 px-3 py-1 rounded"
       >
-        + Area of Expertise
+        + Expertise
       </button>
     </section>
   );

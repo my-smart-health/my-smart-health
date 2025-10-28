@@ -399,12 +399,22 @@ export default function EditProfileForm({ user }: { user: User }) {
 
         <div className="tabs tabs-lift m-2 w-full max-w-full">
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Name/Bio" defaultChecked />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Name/Expertise" defaultChecked />
           <div className="tab-content border-primary p-10">
 
             <NameSection name={name} onChange={setName} />
 
             <Divider addClass="my-4" />
+
+            <AreaOfExpertiseSection
+              fieldOfExpertise={fieldOfExpertise}
+              setFieldOfExpertise={setFieldOfExpertise}
+              icon={platformIcons['Expertise']}
+            />
+
+          </div>
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Bio" />
+          <div className="tab-content border-primary p-10">
 
             <BioSection bio={bio} setBio={setBio} />
 
@@ -485,16 +495,8 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Field of Expertise/Certificates" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Certificates" />
           <div className="tab-content border-primary p-10">
-
-            <AreaOfExpertiseSection
-              fieldOfExpertise={fieldOfExpertise}
-              setFieldOfExpertise={setFieldOfExpertise}
-              icon={platformIcons['Expertise']}
-            />
-
-            <Divider addClass="my-4" />
 
             <CertificatesSection
               certificates={certificates}
