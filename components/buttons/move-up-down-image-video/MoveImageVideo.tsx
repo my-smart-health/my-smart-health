@@ -3,8 +3,6 @@
 import React from "react";
 import { Triangle } from "lucide-react";
 
-import { isBlobUrl } from "@/utils/common";
-
 import Divider from "@/components/divider/Divider";
 
 type MoveImageVideoProps = {
@@ -50,9 +48,9 @@ export default function MoveImageVideo({ index, blobResult, setBlobResultAction,
     newBlobResult.splice(index, 1);
     setBlobResultAction(newBlobResult);
 
-    if (removeAddress && isBlobUrl(removeAddress)) {
+    if (removeAddress) {
       try {
-        await fetch(`/api/delete/delete-picture?url=${encodeURIComponent(removeAddress)}`, { method: 'DELETE' });
+        await fetch(removeAddress, { method: 'DELETE' });
       } catch (error) {
         if (process.env.NODE_ENV === 'development') {
           console.error('Error removing media:', error);
