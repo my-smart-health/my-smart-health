@@ -73,10 +73,10 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
   const filteredLocations = (locations || []).filter(loc => loc.address && loc.address.trim() !== "");
 
   return (
-    <div className="flex flex-col gap-2 p-2 w-full max-w-[99%]">
+    <div className="flex flex-col gap-4 p-3 sm:p-4 w-full max-w-full overflow-hidden">
 
-      <section>
-        <h2 className="font-bold text-primary text-xl">{name}</h2>
+      <section className="w-full">
+        <h2 className="font-bold text-primary text-2xl break-words">{name}</h2>
       </section>
 
       <FieldOfExpertiseSection fieldOfExpertise={fieldOfExpertise} />
