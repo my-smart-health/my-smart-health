@@ -78,7 +78,8 @@ span.swiper-pagination-bullet-active {
   animation: spin 10s linear infinite;
 }
 
-.tiptap-editor .ProseMirror {
+.tiptap-editor .ProseMirror,
+.bio-content .ProseMirror {
   outline: none;
 }
 
@@ -90,141 +91,87 @@ span.swiper-pagination-bullet-active {
   pointer-events: none;
 }
 
+.tiptap-editor .ProseMirror,
+.bio-content {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
 .tiptap-editor .ProseMirror ul,
-.tiptap-editor .ProseMirror ol {
-  padding-left: 1.5rem;
-  margin: 0.5rem 0;
-}
-
-.tiptap-editor .ProseMirror ul li {
-  list-style-type: disc;
-}
-
-.tiptap-editor .ProseMirror ol li {
-  list-style-type: decimal;
-}
-
-.tiptap-editor .ProseMirror h1 {
-  font-size: 2em;
-  font-weight: bold;
-  margin: 0.5rem 0;
-}
-
-.tiptap-editor .ProseMirror h2 {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin: 0.5rem 0;
-}
-
-.tiptap-editor .ProseMirror h3 {
-  font-size: 1.25em;
-  font-weight: bold;
-  margin: 0.5rem 0;
-}
-
-.tiptap-editor .ProseMirror p {
-  margin: 0.25rem 0;
-}
-
-.tiptap-editor .ProseMirror strong {
-  font-weight: bold;
-}
-
-.tiptap-editor .ProseMirror em {
-  font-style: italic;
-}
-
-.tiptap-editor .ProseMirror u {
-  text-decoration: underline;
-}
-
-.tiptap-editor .ProseMirror s {
-  text-decoration: line-through;
-}
-
-.tiptap-editor .ProseMirror blockquote,
-.tiptap-editor .ProseMirror .blockquote-custom {
-  border-left: 4px solid var(--primary);
-  padding-left: 1rem;
-  margin-left: 0;
-  margin-right: 0;
-  font-style: italic;
-  color: #6c757d;
-}
-
-.tiptap-editor .ProseMirror br {
-  display: block;
-  content: '';
-  margin-top: 0.5em;
-}
-
-.bio-content h1 {
-  font-size: 2em;
-  font-weight: bold;
-  margin: 0.5rem 0;
-  line-height: 1.2;
-}
-
-.bio-content h2 {
-  font-size: 1.5em;
-  font-weight: bold;
-  margin: 0.5rem 0;
-  line-height: 1.3;
-}
-
-.bio-content h3 {
-  font-size: 1.25em;
-  font-weight: bold;
-  margin: 0.5rem 0;
-  line-height: 1.4;
-}
-
-.bio-content p {
-  margin: 0.5rem 0;
-  line-height: 1.6;
-}
-
-.bio-content strong {
-  font-weight: bold;
-}
-
-.bio-content em {
-  font-style: italic;
-}
-
-.bio-content u {
-  text-decoration: underline;
-}
-
-.bio-content s {
-  text-decoration: line-through;
-}
-
+.tiptap-editor .ProseMirror ol,
 .bio-content ul,
 .bio-content ol {
   padding-left: 1.5rem;
   margin: 0.5rem 0;
 }
 
+.tiptap-editor .ProseMirror ul li,
 .bio-content ul li {
   list-style-type: disc;
-  margin: 0.25rem 0;
 }
 
+.tiptap-editor .ProseMirror ol li,
 .bio-content ol li {
   list-style-type: decimal;
-  margin: 0.25rem 0;
 }
 
-.bio-content a {
-  color: var(--primary);
+.tiptap-editor .ProseMirror h1,
+.bio-content h1 {
+  font-size: 1.75em;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  line-height: 1.3;
+  word-wrap: break-word;
+}
+
+.tiptap-editor .ProseMirror h2,
+.bio-content h2 {
+  font-size: 1.4em;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.tiptap-editor .ProseMirror h3,
+.bio-content h3 {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.tiptap-editor .ProseMirror p,
+.bio-content p {
+  margin: 0.5rem 0;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+.tiptap-editor .ProseMirror strong,
+.bio-content strong {
+  font-weight: bold;
+}
+
+.tiptap-editor .ProseMirror em,
+.bio-content em {
+  font-style: italic;
+}
+
+.tiptap-editor .ProseMirror u,
+.bio-content u {
   text-decoration: underline;
 }
 
-.bio-content a:hover {
-  opacity: 0.8;
+.tiptap-editor .ProseMirror s,
+.bio-content s {
+  text-decoration: line-through;
 }
 
+.tiptap-editor .ProseMirror blockquote,
 .bio-content blockquote {
   border-left: 4px solid var(--primary);
   padding-left: 1rem;
@@ -236,10 +183,20 @@ span.swiper-pagination-bullet-active {
   color: #6c757d;
 }
 
+.tiptap-editor .ProseMirror br,
 .bio-content br {
   display: block;
   content: '';
   margin-top: 0.5em;
+}
+
+.bio-content a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+.bio-content a:hover {
+  opacity: 0.8;
 }
 
 .bio-content [style*='text-align: center'] {
