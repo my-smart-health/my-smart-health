@@ -1,5 +1,6 @@
 import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
+import { MAX_IMAGE_SIZE_BYTES, MAX_IMAGE_SIZE_MB } from '@/utils/constants';
 
 export async function PUT(request: Request) {
   try {
@@ -22,6 +23,14 @@ export async function PUT(request: Request) {
     }
     if (!request.body) {
       return NextResponse.json({ error: 'File is required' }, { status: 400 });
+    }
+
+    const contentLength = request.headers.get('content-length');
+    if (contentLength && parseInt(contentLength) > MAX_IMAGE_SIZE_BYTES) {
+      return NextResponse.json(
+        { error: `File size exceeds ${MAX_IMAGE_SIZE_MB}MB limit` },
+        { status: 413 }
+      );
     }
 
     const blob = await put(

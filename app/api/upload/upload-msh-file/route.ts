@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { put } from '@vercel/blob';
+import { MAX_IMAGE_SIZE_BYTES, MAX_IMAGE_SIZE_MB } from '@/utils/constants';
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,6 +17,14 @@ export async function POST(req: NextRequest) {
     const fileStream = req.body;
     if (!fileStream) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+    }
+
+    const contentLength = req.headers.get('content-length');
+    if (contentLength && parseInt(contentLength) > MAX_IMAGE_SIZE_BYTES) {
+      return NextResponse.json(
+        { error: `File size exceeds ${MAX_IMAGE_SIZE_MB}MB limit` },
+        { status: 413 }
+      );
     }
 
     const blob = await put(`/my-smart-health/files/${filename}`, fileStream, {
