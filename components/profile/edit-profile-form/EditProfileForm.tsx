@@ -13,6 +13,7 @@ import TikTokLogo from '@/public/tik-tok-logo.png';
 import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, SaveAll, Youtube } from "lucide-react";
 
 import Divider from "@/components/divider/Divider";
+import { MAX_IMAGE_SIZE_MB, MAX_IMAGE_SIZE_BYTES } from "@/utils/constants";
 import {
   NameSection,
   BioSection,
@@ -72,6 +73,43 @@ export default function EditProfileForm({ user }: { user: User }) {
 
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
+
+  const handleUpdateProfileImagesInDB = async (updatedImages: string[]) => {
+    try {
+      const response = await fetch('/api/update/update-profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: user.id,
+          data: {
+            profileImages: updatedImages,
+            bio,
+            name,
+            website,
+            displayEmail,
+            socials: serializeSocials(socials),
+            phones,
+            schedule,
+            fieldOfExpertise,
+            certificates,
+            locations,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        setError('Failed to auto-save profile images. Your changes may not be saved.');
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Failed to auto-save profile images to database');
+        }
+      }
+    } catch (error) {
+      setError('Error saving profile images. Please try again or contact support.');
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error auto-saving profile images:', error);
+      }
+    }
+  };
 
   const platformIcons: Record<string, React.ReactNode> = {
     Email: <AtSign className="inline-block mr-1" size={20} />,
@@ -150,6 +188,15 @@ export default function EditProfileForm({ user }: { user: User }) {
         return [];
       }
 
+      for (const file of Array.from(files)) {
+        if (file.size > MAX_IMAGE_SIZE_BYTES) {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          setError(`Image "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`);
+          setIsDisabled(false);
+          return [];
+        }
+      }
+
       for (const file of files) {
         const response = await fetch(
           `/api/upload/upload-profile-picture/?userid=${user.id}&filename=${file.name}`,
@@ -196,6 +243,15 @@ export default function EditProfileForm({ user }: { user: User }) {
         setError('No certificate file selected');
         setIsDisabled(false);
         return [];
+      }
+
+      for (const cert of certificateFiles) {
+        if (cert.size > MAX_IMAGE_SIZE_BYTES) {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          setError(`Certificate image "${cert.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`);
+          setIsDisabled(false);
+          return [];
+        }
       }
 
       for (const cert of certificateFiles) {
@@ -473,6 +529,7 @@ export default function EditProfileForm({ user }: { user: User }) {
               inputFileRef={inputFileRef}
               handleUploadProfileImages={handleUploadProfileImages}
               isDisabled={isDisabled}
+              onAfterUpload={handleUpdateProfileImagesInDB}
             />
 
             <Divider addClass="my-4" />
@@ -491,6 +548,8 @@ export default function EditProfileForm({ user }: { user: User }) {
               setBlobResult={setBlobResult}
               MEDIA_WIDTH={MEDIA_WIDTH}
               MEDIA_HEIGHT={MEDIA_HEIGHT}
+              onAfterDelete={handleUpdateProfileImagesInDB}
+              onAfterMove={handleUpdateProfileImagesInDB}
             />
 
           </div>
