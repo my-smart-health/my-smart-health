@@ -3,7 +3,7 @@ import TopCarousel from "@/components/carousels/topCarousel/TopCarousel";
 import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
 import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealthBarLink";
 import prisma from "@/lib/db";
-import { CirclePlus } from "lucide-react";
+import { Circle } from "lucide-react";
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
 
 async function getNews() {
@@ -52,9 +52,9 @@ export default async function Home() {
       <div className="flex flex-col mt-3 gap-3 w-full mx-auto max-w-[100%]">
         <MySmartHealth />
         <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/news" />
-        <NewsSmartHealthMedizinButton name="Meine Gesundheit - Smart Health" icon="/icon3.png" goTo="/smart-health" />
+        <NewsSmartHealthMedizinButton name="Meine Gesundheit" icon="/icon3.png" goTo="/smart-health" />
         <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
-        <NewsSmartHealthMedizinButton name="Notfälle" icon={<CirclePlus size={34} />} goTo="/notfalle" />
+        <NewsSmartHealthMedizinButton name="Notfälle" icon={<Circle size={34} color="red" />} goTo="/notfalle" />
         <TheHealthBarLink />
       </div>
     </>
