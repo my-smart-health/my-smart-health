@@ -70,6 +70,7 @@ export default async function MySmartHealth() {
             loading="lazy"
             placeholder="empty"
             style={{ objectFit: 'contain', width: 'auto', height: 'auto' }}
+            className='mx-auto'
           />
         </div>
 
