@@ -37,6 +37,7 @@ export function PhoneNumbersSection({ phoneNumbers, setPhoneNumbers, platformIco
             <button
               type="button"
               onClick={() => {
+                if (!confirm("Are you sure you want to remove this phone number?")) return;
                 const updated = [...phoneNumbers];
                 updated.splice(idx, 1);
                 setPhoneNumbers(updated);
