@@ -26,6 +26,34 @@ export default function MySmartHealthForm({ smartHealthData, initialLocations }:
   const router = useRouter();
   const [error, setError] = useState<{ message: string, type: 'success' | 'error' | 'warning' } | null>(null);
 
+  const handleUpdateParagraphsInDB = async (updatedParagraphs: typeof paragraphs) => {
+    try {
+      const response = await fetch("/api/update/update-my-smart-health", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: smartHealthData?.id,
+          generalTitle,
+          paragraph: updatedParagraphs,
+        }),
+      });
+
+      if (!response.ok) {
+        setError({ message: 'Failed to auto-save paragraphs. Your changes may not be saved.', type: 'error' });
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Failed to auto-save paragraphs to database');
+        }
+      }
+    } catch (error) {
+      setError({ message: 'Error saving paragraphs. Please try again or contact support.', type: 'error' });
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error auto-saving paragraphs:', error);
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -103,6 +131,7 @@ export default function MySmartHealthForm({ smartHealthData, initialLocations }:
           paragraphs={paragraphs}
           setParagraphsAction={setParagraphs}
           setErrorAction={setError}
+          onAfterChange={handleUpdateParagraphsInDB}
         />
 
         <Divider />
