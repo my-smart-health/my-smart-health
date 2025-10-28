@@ -1,5 +1,5 @@
 import { RefObject } from "react";
-import { MAX_FILES_PER_USER } from "@/utils/constants";
+import { MAX_FILES_PER_USER, MAX_IMAGE_SIZE_MB } from "@/utils/constants";
 
 type Props = {
   blobResult: string[];
@@ -8,6 +8,7 @@ type Props = {
   inputFileRef: RefObject<HTMLInputElement | null>;
   handleUploadProfileImages: (files: FileList) => Promise<string[]>;
   isDisabled: boolean;
+  onAfterUpload?: (updatedBlobs: string[]) => Promise<void> | void;
 };
 
 export function ProfileMediaUpload({
@@ -17,6 +18,7 @@ export function ProfileMediaUpload({
   inputFileRef,
   handleUploadProfileImages,
   isDisabled,
+  onAfterUpload,
 }: Props) {
   return (
     <section>
@@ -42,10 +44,18 @@ export function ProfileMediaUpload({
                 return;
               }
               const uploadedImages = await handleUploadProfileImages(files);
-              setBlobResult([...blobResult, ...uploadedImages]);
+              const newImages = [...blobResult, ...uploadedImages];
+              setBlobResult(newImages);
               setError(null);
+
+              if (onAfterUpload) {
+                await onAfterUpload(newImages);
+              }
             }}
           />
+          <div className="label pt-1">
+            <span className="label-text-alt text-gray-500">Maximum file size: {MAX_IMAGE_SIZE_MB}MB per file</span>
+          </div>
         </div>
       </fieldset>
     </section>
