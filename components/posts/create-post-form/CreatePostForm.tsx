@@ -8,7 +8,7 @@ import { FormEvent, MouseEvent, useEffect, useRef, useState } from "react";
 
 import { ErrorState } from "@/utils/types";
 import { getModalColor } from "@/utils/common";
-import { MAX_FILES_PER_POST } from "@/utils/constants";
+import { MAX_FILES_PER_POST, MAX_IMAGE_SIZE_MB, MAX_IMAGE_SIZE_BYTES } from "@/utils/constants";
 
 import Divider from "@/components/divider/Divider";
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
@@ -119,6 +119,16 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         setIsDisabled(false);
         return;
       }
+
+      if (file.size > MAX_IMAGE_SIZE_BYTES) {
+        setError({
+          type: "error",
+          message: `File "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`
+        });
+        setIsDisabled(false);
+        return logo.src;
+      }
+
       const response = await fetch(
         `/api/upload/upload-picture/?userid=${session.user.id}&filename=${file.name}`,
         {
@@ -455,6 +465,9 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                     }
                   }
                 }} />
+              <div className="label pt-1">
+                <span className="label-text-alt text-gray-500">Maximum file size: {MAX_IMAGE_SIZE_MB}MB per file</span>
+              </div>
             </div>
           </fieldset>
         </div>
