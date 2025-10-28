@@ -75,11 +75,10 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
   return (
     <div className="flex flex-col gap-4 p-3 sm:p-4 w-full max-w-full overflow-hidden">
 
-      <section className="w-full">
+      <section className="flex flex-wrap w-full">
         <h2 className="font-bold text-primary text-2xl break-words">{name}</h2>
+        <FieldOfExpertiseSection fieldOfExpertise={fieldOfExpertise} />
       </section>
-
-      <FieldOfExpertiseSection fieldOfExpertise={fieldOfExpertise} />
 
       <ProfilePictureSection images={profileImages} />
 
