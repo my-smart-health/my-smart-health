@@ -203,7 +203,10 @@ export function WorkScheduleSection({
 
             <button
               type="button"
-              onClick={() => setSchedule(schedule.filter((_, i) => i !== idx))}
+              onClick={() => {
+                if (!confirm("Are you sure you want to remove this schedule?")) return;
+                setSchedule(schedule.filter((_, i) => i !== idx));
+              }}
               className="btn btn-outline w-full text-red-500 self-end"
             >
               <ArrowUp /> Remove
