@@ -34,6 +34,7 @@ export function LocationSection({ locations, setLocationsAction, profileId, addr
   };
 
   const removeLocation = (index: number) => {
+    if (!confirm("Are you sure you want to remove this location?")) return;
     const newLocations = locations.filter((_, i) => i !== index);
     setLocationsAction(newLocations);
   };
