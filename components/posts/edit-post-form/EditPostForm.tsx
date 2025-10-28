@@ -11,7 +11,8 @@ import { ArrowUpRight, XIcon, AtSign, Facebook, Globe, Instagram, Linkedin, Yout
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
 
-import { MAX_FILES_PER_POST } from "@/utils/constants";
+import { MAX_FILES_PER_POST, MAX_IMAGE_SIZE_MB, MAX_IMAGE_SIZE_BYTES } from "@/utils/constants";
+import { isInstagramLink, isYoutubeLink } from "@/utils/common";
 
 type Social = {
   platform: string;
@@ -54,6 +55,41 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
   const [isDefaultLogo, setIsDefaultLogo] = useState<boolean>(false);
 
   const [blobResult, setBlobResult] = useState<string[]>(post.photos || []);
+
+  const handleUpdatePhotosInDB = async (updatedPhotos: string[]) => {
+    try {
+      const response = await fetch('/api/update/update-post', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: post.id,
+          title: title || post.title,
+          content: content || post.content,
+          photos: updatedPhotos,
+          tags: tags,
+          socialLinks: socialLinks,
+        }),
+      });
+
+      if (!response.ok) {
+        setStatus({
+          message: 'Failed to auto-save photos. Your changes may not be saved.',
+          type: 'error'
+        });
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Failed to auto-save photos to database');
+        }
+      }
+    } catch (error) {
+      setStatus({
+        message: 'Error saving photos. Please try again or contact support.',
+        type: 'error'
+      });
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error auto-saving photos:', error);
+      }
+    }
+  };
 
   const platformIcons: Record<string, React.ReactNode> = {
     Email: <AtSign className="inline-block mr-1" size={30} />,
@@ -102,7 +138,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
     statusModalRef.current?.close();
   };
 
-  const handleAddURL = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleAddURL = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const form = e.currentTarget.closest('form');
 
@@ -115,16 +151,32 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       return;
     }
 
+    if (!isYoutubeLink(mediaUrl) && !isInstagramLink(mediaUrl)) {
+      setStatus({ message: "Media URL must be a valid YouTube or Instagram link", type: 'error' });
+      return;
+    }
+
     setStatus(null);
-    setBlobResult([...blobResult, mediaUrl]);
+    const newPhotos = [...blobResult, mediaUrl];
+    setBlobResult(newPhotos);
     const resetMediaInput = form.querySelector('input[name="media"]') as HTMLInputElement;
     resetMediaInput.value = '';
+
+    await handleUpdatePhotosInDB(newPhotos);
   };
 
   const handleImageUpload = async (file: File) => {
     try {
       if (!file) {
         return;
+      }
+
+      if (file.size > MAX_IMAGE_SIZE_BYTES) {
+        setStatus({
+          message: `File "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`,
+          type: 'error'
+        });
+        return logo.src;
       }
 
       setIsDisabled(true);
@@ -550,8 +602,11 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                         Array.from(e.target.files).map(file => handleImageUpload(file))
                       );
                     }
-                    setBlobResult(prev => [...prev, ...uploadedImages.filter((url): url is string => typeof url === 'string')]);
+                    const newPhotos = [...blobResult, ...uploadedImages.filter((url): url is string => typeof url === 'string')];
+                    setBlobResult(newPhotos);
                     setStatus(null);
+
+                    await handleUpdatePhotosInDB(newPhotos);
                   }
                 }} />
             </div>
@@ -595,6 +650,8 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                     showTop={idx > 0}
                     showBottom={idx < blobResult.length - 1}
                     removeAddress={`/api/delete/delete-picture?url=${encodeURIComponent(image)}`}
+                    onAfterDelete={handleUpdatePhotosInDB}
+                    onAfterMove={handleUpdatePhotosInDB}
                   />
                 </div>
               </div>
