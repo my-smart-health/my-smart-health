@@ -30,6 +30,7 @@ html {
 
 body {
   @apply bg-white text-black;
+  overflow-x: hidden;
 }
 
 input[type='time']::-webkit-calendar-picker-indicator {
@@ -97,6 +98,13 @@ span.swiper-pagination-bullet-active {
   overflow-wrap: break-word;
   word-break: break-word;
   hyphens: auto;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.bio-content .ProseMirror {
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .tiptap-editor .ProseMirror ul,

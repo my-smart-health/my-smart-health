@@ -51,11 +51,9 @@ export default function BioSection({ bio }: { bio: string }) {
     <>
       <Divider addClass="my-4" />
       <section className="w-full overflow-hidden">
-        <article className="text-base max-w-full">
-          <SeeMoreLess>
-            <div className="w-full overflow-hidden">
-              <EditorContent editor={editor} />
-            </div>
+        <article className="text-base w-full max-w-full overflow-hidden">
+          <SeeMoreLess lines={3}>
+            <EditorContent editor={editor} />
           </SeeMoreLess>
         </article>
       </section>
