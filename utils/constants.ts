@@ -10,7 +10,8 @@ export const SHADOW_COLOR = '#2a2a2ad9';
 export const MAX_FILES_PER_POST = 5;
 export const MAX_FILES_PER_USER = 10;
 
-export const MAX_IMAGE_SIZE_MB = 10;
+export const MAX_IMAGE_SIZE_MB = 9;
+export const MAX_IMAGE_SIZE_BYTES = MAX_IMAGE_SIZE_MB * 1024 * 1024;
 
 export const PROFILE_TYPE_SMART_HEALTH = 'SMART_HEALTH';
 export const PROFILE_TYPE_MEDIZIN_UND_PFLEGE = 'MEDIZIN_UND_PFLEGE';
