@@ -92,6 +92,18 @@ export default async function MySmartHealth() {
 
           {paragraph?.map((para, index) => (
             <div key={para.id ?? index} className="card p-4 rounded-xl">
+
+              {para.title && (
+                <>
+                  <Divider addClass="my-2" />
+                  <h3 className="badge badge-outline text-lg font-semibold text-primary h-full p-4">
+                    {para.title}
+                  </h3>
+                </>
+              )}
+
+              <SeeMoreLess text={para.content} lines={1} />
+
               {para.images && para.images.length > 0 && (
                 <div className="flex flex-wrap gap-3 mb-3">
                   {para.images.map((imgUrl, imgIndex) => {
@@ -129,16 +141,6 @@ export default async function MySmartHealth() {
                 </div>
               )}
 
-              {para.title && (
-                <>
-                  <Divider addClass="my-2" />
-                  <h3 className="badge badge-outline text-lg font-semibold text-primary h-full p-4">
-                    {para.title}
-                  </h3>
-                </>
-              )}
-
-              <SeeMoreLess text={para.content} lines={1} />
 
               {para.files && para.files.length > 0 && (
                 <div >
