@@ -3,7 +3,7 @@
 import { MySmartHealthParagraph } from "@/utils/types";
 import Divider from "@/components/divider/Divider";
 import { PutBlobResult } from "@vercel/blob";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, File } from "lucide-react";
@@ -12,6 +12,9 @@ import { AtSign, Facebook, Globe, Instagram, Linkedin, Youtube } from "lucide-re
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
 import { MAX_IMAGE_SIZE_MB, MAX_IMAGE_SIZE_BYTES } from "@/utils/constants";
+import { isYoutubeLink, isInstagramLink } from "@/utils/common";
+import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
+import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 
 export default function MSHParagraph({
   paragraphs,
@@ -26,6 +29,7 @@ export default function MSHParagraph({
 }) {
 
   const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [youtubeUrls, setYoutubeUrls] = useState<string[]>([]);
 
   const platformIcons: Record<string, React.ReactNode> = {
     Email: <AtSign className="inline-block mr-1" size={30} />,
@@ -254,6 +258,49 @@ export default function MSHParagraph({
           <Divider addClass="my-4" />
 
           <label>
+            Add YouTube or Instagram Video:
+            <div className="flex gap-2 mt-1">
+              <input
+                type="text"
+                placeholder="Enter YouTube or Instagram video URL"
+                value={youtubeUrls[index] || ""}
+                onChange={(e) => {
+                  const newUrls = [...youtubeUrls];
+                  newUrls[index] = e.target.value;
+                  setYoutubeUrls(newUrls);
+                }}
+                className="input input-bordered input-primary w-full"
+              />
+              <button
+                type="button"
+                onClick={async () => {
+                  const url = youtubeUrls[index]?.trim();
+                  if (url) {
+                    const updatedParagraphs = paragraphs.map((p, i) =>
+                      i === index
+                        ? { ...p, images: [...(p.images ?? []), url] }
+                        : p
+                    );
+                    setParagraphsAction(updatedParagraphs);
+                    const newUrls = [...youtubeUrls];
+                    newUrls[index] = "";
+                    setYoutubeUrls(newUrls);
+                    if (onAfterChange) {
+                      await onAfterChange(updatedParagraphs);
+                    }
+                  }
+                }}
+                className="btn btn-primary whitespace-nowrap"
+              >
+                <Youtube className="inline-block" size={20} />
+                Add
+              </button>
+            </div>
+          </label>
+
+          <Divider addClass="my-4" />
+
+          <label>
             Paragraph Images:
             <input
               ref={el => { fileInputRefs.current[index] = el; }}
@@ -269,53 +316,62 @@ export default function MSHParagraph({
           </label>
           {paragraph.images && paragraph.images.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
-              {paragraph.images.map((img, imgIdx) => (
-                <div key={imgIdx} className="relative">
-                  <Link href={img} target="_blank" rel="noreferrer noopener" className="inline-block">
-                    <Image
-                      key={imgIdx}
-                      src={img}
-                      alt={`Paragraph ${index + 1} Image ${imgIdx + 1}`}
-                      width={100}
-                      height={100}
-                      style={{ objectFit: 'contain', width: '100%', height: '100%' }}
-                      className="rounded"
-                    />
-                  </Link>
-                  <div className="flex justify-center align-middle">
-                    <MoveImageVideo
-                      index={imgIdx}
-                      blobResult={paragraph.images ?? []}
-                      setBlobResultAction={(newImages) => {
-                        const updatedParagraphs = paragraphs.map((p, i) =>
-                          i === index ? { ...p, images: newImages } : p
-                        );
-                        setParagraphsAction(updatedParagraphs);
-                      }}
-                      showTop={imgIdx > 0}
-                      showBottom={imgIdx < (paragraph.images?.length || 0) - 1}
-                      removeAddress={`/api/delete/delete-picture?url=${encodeURIComponent(img)}`}
-                      horizontal={true}
-                      onAfterDelete={async (newImages) => {
-                        const updatedParagraphs = paragraphs.map((p, i) =>
-                          i === index ? { ...p, images: newImages } : p
-                        );
-                        if (onAfterChange) {
-                          await onAfterChange(updatedParagraphs);
-                        }
-                      }}
-                      onAfterMove={async (newImages) => {
-                        const updatedParagraphs = paragraphs.map((p, i) =>
-                          i === index ? { ...p, images: newImages } : p
-                        );
-                        if (onAfterChange) {
-                          await onAfterChange(updatedParagraphs);
-                        }
-                      }}
-                    />
+              {paragraph.images.map((img, imgIdx) => {
+                const media = isYoutubeLink(img)
+                  ? <YoutubeEmbed embedHtml={img} width={200} height={200} />
+                  : isInstagramLink(img)
+                    ? <InstagramEmbed embedHtml={img} width={200} height={200} />
+                    : (
+                      <Link href={img} target="_blank" rel="noreferrer noopener" className="inline-block">
+                        <Image
+                          src={img}
+                          alt={`Paragraph ${index + 1} Image ${imgIdx + 1}`}
+                          width={100}
+                          height={100}
+                          style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+                          className="rounded"
+                        />
+                      </Link>
+                    );
+
+                return (
+                  <div key={imgIdx} className="relative">
+                    {media}
+                    <div className="flex justify-center align-middle">
+                      <MoveImageVideo
+                        index={imgIdx}
+                        blobResult={paragraph.images ?? []}
+                        setBlobResultAction={(newImages) => {
+                          const updatedParagraphs = paragraphs.map((p, i) =>
+                            i === index ? { ...p, images: newImages } : p
+                          );
+                          setParagraphsAction(updatedParagraphs);
+                        }}
+                        showTop={imgIdx > 0}
+                        showBottom={imgIdx < (paragraph.images?.length || 0) - 1}
+                        removeAddress={`/api/delete/delete-picture?url=${encodeURIComponent(img)}`}
+                        horizontal={true}
+                        onAfterDelete={async (newImages) => {
+                          const updatedParagraphs = paragraphs.map((p, i) =>
+                            i === index ? { ...p, images: newImages } : p
+                          );
+                          if (onAfterChange) {
+                            await onAfterChange(updatedParagraphs);
+                          }
+                        }}
+                        onAfterMove={async (newImages) => {
+                          const updatedParagraphs = paragraphs.map((p, i) =>
+                            i === index ? { ...p, images: newImages } : p
+                          );
+                          if (onAfterChange) {
+                            await onAfterChange(updatedParagraphs);
+                          }
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
 

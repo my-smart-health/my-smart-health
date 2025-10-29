@@ -13,6 +13,9 @@ import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube } from "lu
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
 import MSHLocations from './_components/MSHLocations';
+import { isYoutubeLink, isInstagramLink } from '@/utils/common';
+import YoutubeEmbed from '../embed/youtube/YoutubeEmbed';
+import InstagramEmbed from '../embed/instagram/InstagramEmbed';
 
 const getMySmartHealthInfo = async () => {
   return prisma.mySmartHealth.findFirst();
@@ -91,21 +94,37 @@ export default async function MySmartHealth() {
             <div key={para.id ?? index} className="card p-4 rounded-xl">
               {para.images && para.images.length > 0 && (
                 <div className="flex flex-wrap gap-3 mb-3">
-                  {para.images.map((imgUrl, imgIndex) => (
-                    <div key={imgIndex} className="avatar">
-                      <div className="w-52 rounded-xl border border-primary">
-                        <Image
-                          src={imgUrl}
-                          alt={para.title || `Image ${imgIndex + 1}`}
-                          width={100}
-                          height={100}
-                          loading="lazy"
-                          placeholder="empty"
-                          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                        />
+                  {para.images.map((imgUrl, imgIndex) => {
+                    if (isYoutubeLink(imgUrl)) {
+                      return (
+                        <div key={imgIndex} className="w-full max-w-md mx-auto">
+                          <YoutubeEmbed embedHtml={imgUrl} width="100%" height={300} />
+                        </div>
+                      );
+                    }
+                    if (isInstagramLink(imgUrl)) {
+                      return (
+                        <div key={imgIndex} className="w-full max-w-md mx-auto">
+                          <InstagramEmbed embedHtml={imgUrl} width="100%" height={300} />
+                        </div>
+                      );
+                    }
+                    return (
+                      <div key={imgIndex} className="avatar mx-auto">
+                        <div className="w-full rounded-xl border border-primary">
+                          <Image
+                            src={imgUrl}
+                            alt={para.title || `Image ${imgIndex + 1}`}
+                            width={225}
+                            height={225}
+                            loading="lazy"
+                            placeholder="empty"
+                            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
 
