@@ -110,16 +110,17 @@ export default async function MySmartHealth() {
                       );
                     }
                     return (
-                      <div key={imgIndex} className="avatar mx-auto">
-                        <div className="w-full rounded-xl border border-primary">
+                      <div key={imgIndex} className="w-52 mx-auto">
+                        <div className="rounded-xl border border-primary overflow-hidden">
                           <Image
                             src={imgUrl}
                             alt={para.title || `Image ${imgIndex + 1}`}
-                            width={225}
-                            height={225}
+                            width={208}
+                            height={208}
                             loading="lazy"
                             placeholder="empty"
-                            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                            style={{ objectFit: 'contain' }}
+                            className="w-full h-auto"
                           />
                         </div>
                       </div>
