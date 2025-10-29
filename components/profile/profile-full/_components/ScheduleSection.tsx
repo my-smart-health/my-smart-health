@@ -29,6 +29,40 @@ function isScheduleOpen(schedule: Schedule, now: Date) {
   return nowMinutes >= openMinutes && nowMinutes <= closeMinutes;
 }
 
+function timeLeftCalc(schedules: Schedule[], now: Date) {
+  const currentDay = now.getDay();
+  const todayEn = enWeek[currentDay];
+
+  for (const schedule of schedules) {
+    if (!schedule.day || !schedule.day[todayEn as keyof typeof schedule.day]) continue;
+    if (!schedule.open || !schedule.close) continue;
+
+    if (schedule.open === "00:00" && schedule.close === "00:00") {
+      return "24 Stunden geöffnet";
+    }
+
+    const [openH, openM] = schedule.open.split(":").map(Number);
+    const [closeH, closeM] = schedule.close.split(":").map(Number);
+    const nowMinutes = now.getHours() * 60 + now.getMinutes();
+    const openMinutes = openH * 60 + openM;
+    const closeMinutes = closeH * 60 + closeM;
+
+    if (nowMinutes >= openMinutes && nowMinutes <= closeMinutes) {
+      const minutesLeft = closeMinutes - nowMinutes;
+      const hoursLeft = Math.floor(minutesLeft / 60);
+      const minsLeft = minutesLeft % 60;
+
+      if (hoursLeft > 0) {
+        return `schließt in ${hoursLeft}h ${minsLeft}min`;
+      } else {
+        return `schließt in ${minsLeft}min`;
+      }
+    }
+  }
+
+  return null;
+}
+
 export default function ScheduleSection({ schedule, displayIsOpen = true }: { schedule: Schedule[]; displayIsOpen?: boolean }) {
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -46,15 +80,22 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
     return is247 || isScheduleOpen(sch, currentTime);
   });
 
+  const timeLeft = anyBlockOpen ? timeLeftCalc(schedule, currentTime) : null;
+
   return (
     <>
       <Divider addClass="my-4" />
-      <h2 className="font-bold text-primary text-xl mb-4">Öffnungszeiten - {displayIsOpen && (
-        <span className={anyBlockOpen ? "font-bold text-green-500/95" : "font-bold text-red-500/95"}>
-          {anyBlockOpen ? "geöffnet" : "geschlossen"}
-        </span>
+      <h2 className="font-bold text-primary text-xl mb-4">Öffnungszeiten{displayIsOpen && (
+        <>
+          {" - "}
+          <span className={anyBlockOpen ? "font-bold text-green-500/95" : "font-bold text-red-500/95"}>
+            {anyBlockOpen ? "geöffnet" : "geschlossen"}
+          </span>
+          {anyBlockOpen && timeLeft && (
+            <span className="text-gray-500"> ({timeLeft})</span>
+          )}
+        </>
       )}</h2>
-
 
       <div className="space-y-4">
         {schedule.map((schBlock, idx) => {
