@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Session } from "next-auth";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { PutBlobResult } from "@vercel/blob";
 import { FormEvent, MouseEvent, useRef, useEffect, useState } from "react";
 
@@ -36,11 +36,12 @@ type EditPostFormProps = {
 };
 
 export default function EditPostForm({ session, post }: EditPostFormProps) {
-
-  if (!session) {
-    redirect('/login');
-  }
-
+  const router = useRouter();
+  useEffect(() => {
+    if (!session) {
+      router.replace('/login');
+    }
+  }, [session, router]);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const titleRef = useRef<HTMLTextAreaElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
@@ -55,41 +56,12 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
   const [isDefaultLogo, setIsDefaultLogo] = useState<boolean>(false);
 
   const [blobResult, setBlobResult] = useState<string[]>(post.photos || []);
+  const baselinePhotosRef = useRef<string[]>(post.photos || []);
+  const uploadedNewRef = useRef<string[]>([]);
+  const hasSavedRef = useRef<boolean>(false);
+  const blobResultRef = useRef<string[]>(post.photos || []);
+  useEffect(() => { blobResultRef.current = blobResult; }, [blobResult]);
 
-  const handleUpdatePhotosInDB = async (updatedPhotos: string[]) => {
-    try {
-      const response = await fetch('/api/update/update-post', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: post.id,
-          title: title || post.title,
-          content: content || post.content,
-          photos: updatedPhotos,
-          tags: tags,
-          socialLinks: socialLinks,
-        }),
-      });
-
-      if (!response.ok) {
-        setStatus({
-          message: 'Failed to auto-save photos. Your changes may not be saved.',
-          type: 'error'
-        });
-        if (process.env.NODE_ENV === 'development') {
-          console.error('Failed to auto-save photos to database');
-        }
-      }
-    } catch (error) {
-      setStatus({
-        message: 'Error saving photos. Please try again or contact support.',
-        type: 'error'
-      });
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error auto-saving photos:', error);
-      }
-    }
-  };
 
   const platformIcons: Record<string, React.ReactNode> = {
     Email: <AtSign className="inline-block mr-1" size={30} />,
@@ -138,6 +110,77 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
     statusModalRef.current?.close();
   };
 
+  useEffect(() => {
+    const hasPendingNew = () => (uploadedNewRef.current || []).length > 0;
+    const photosChanged = () => JSON.stringify(baselinePhotosRef.current) !== JSON.stringify(blobResultRef.current);
+
+    const cleanupNewUploads = (keepalive = false) => {
+      if (hasSavedRef.current) return;
+      const urls = uploadedNewRef.current || [];
+      const deletions = urls
+        .filter((u) => !isYoutubeLink(u) && !isInstagramLink(u))
+        .map((u) => fetch(`/api/delete/delete-picture?url=${encodeURIComponent(u)}`, {
+          method: 'DELETE',
+          ...(keepalive ? { keepalive: true } : {}),
+        }).catch(() => { }));
+      void Promise.allSettled(deletions);
+    };
+
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasSavedRef.current) return;
+      if (!hasPendingNew() && !photosChanged()) return;
+      e.preventDefault();
+      e.returnValue = '';
+    };
+
+    const onPageHide = () => cleanupNewUploads(true);
+
+    const onPopState = () => {
+      if (hasSavedRef.current) return;
+      if (!hasPendingNew() && !photosChanged()) return;
+      const ok = window.confirm('You have unsaved changes. Newly uploaded images will be deleted if you leave. Continue?');
+      if (!ok) {
+        history.go(1);
+        return;
+      }
+      cleanupNewUploads(false);
+    };
+
+    const onDocumentClick = async (evt: Event) => {
+      if (hasSavedRef.current) return;
+      const target = evt.target as HTMLElement | null;
+      if (!target) return;
+      const anchor = target.closest('a') as HTMLAnchorElement | null;
+      if (!anchor || anchor.target === '_blank') return;
+      const href = anchor.getAttribute('href');
+      if (!href || href.startsWith('#')) return;
+      if (!hasPendingNew() && !photosChanged()) return;
+      evt.preventDefault();
+      evt.stopPropagation();
+      const ok = window.confirm('You have unsaved changes. Newly uploaded images will be deleted if you leave. Continue?');
+      if (!ok) return;
+      await Promise.resolve(cleanupNewUploads(false));
+      if (anchor.origin === window.location.origin) {
+        const nextPath = anchor.pathname + anchor.search + anchor.hash;
+        router.push(nextPath);
+      } else {
+        window.location.href = anchor.href;
+      }
+    };
+
+    window.addEventListener('beforeunload', onBeforeUnload);
+    window.addEventListener('pagehide', onPageHide);
+    window.addEventListener('popstate', onPopState);
+    document.addEventListener('click', onDocumentClick, true);
+    return () => {
+      window.removeEventListener('beforeunload', onBeforeUnload);
+      window.removeEventListener('pagehide', onPageHide);
+      window.removeEventListener('popstate', onPopState);
+      document.removeEventListener('click', onDocumentClick, true);
+      cleanupNewUploads(false);
+    };
+  }, [router]);
+
   const handleAddURL = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const form = e.currentTarget.closest('form');
@@ -162,7 +205,6 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
     const resetMediaInput = form.querySelector('input[name="media"]') as HTMLInputElement;
     resetMediaInput.value = '';
 
-    await handleUpdatePhotosInDB(newPhotos);
   };
 
   const handleImageUpload = async (file: File) => {
@@ -180,8 +222,14 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       }
 
       setIsDisabled(true);
+      const userId = session?.user.id;
+      if (!userId) {
+        setStatus({ message: 'Not authenticated', type: 'error' });
+        setIsDisabled(false);
+        return undefined;
+      }
       const response = await fetch(
-        `/api/upload/upload-picture/?userid=${session.user.id}&filename=${file.name}`,
+        `/api/upload/upload-picture/?userid=${userId}&filename=${file.name}`,
         {
           method: 'PUT',
           body: file,
@@ -195,6 +243,9 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       }
       const result = await response.json() as PutBlobResult;
       setIsDisabled(false);
+      if (!isYoutubeLink(result.url) && !isInstagramLink(result.url)) {
+        uploadedNewRef.current = Array.from(new Set([...uploadedNewRef.current, result.url]));
+      }
       return result.url;
     } catch (error) {
       let message = 'Error uploading files';
@@ -291,12 +342,29 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         setIsDisabled(false);
         return;
       }
+      try {
+        const removedExisting = (baselinePhotosRef.current || [])
+          .filter((u) => !blobResult.includes(u))
+          .filter((u) => !isYoutubeLink(u) && !isInstagramLink(u));
+        const unusedNew = (uploadedNewRef.current || [])
+          .filter((u) => !blobResult.includes(u))
+          .filter((u) => !isYoutubeLink(u) && !isInstagramLink(u));
+        const toDelete = [...new Set([...removedExisting, ...unusedNew])];
+        if (toDelete.length) {
+          await Promise.allSettled(
+            toDelete.map((u) => fetch(`/api/delete/delete-picture?url=${encodeURIComponent(u)}`, { method: 'DELETE' }))
+          );
+        }
+      } catch (e) {
+        if (process.env.NODE_ENV === 'development') { console.error('Error deleting unused images:', e); }
+      }
+      baselinePhotosRef.current = [...blobResult];
+      uploadedNewRef.current = [];
+      hasSavedRef.current = true;
+
       setStatus({ message: "Post updated successfully", type: 'success' });
       setIsDisabled(true);
-
-      setTimeout(() => {
-        redirect(`/news/${post.id}`);
-      }, 1500);
+      router.push(`/news/${post.id}`);
     } catch (error) {
       let message = 'Error uploading files';
       if (error instanceof Error) {
@@ -330,10 +398,8 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       }
 
       setStatus({ message: 'Post deleted successfully', type: 'success' });
-
-      setTimeout(() => {
-        redirect(`/profile/${session.user.id}/news`);
-      }, 1500);
+      const next = session?.user.id ? `/profile/${session.user.id}/news` : '/login';
+      router.push(next);
 
     } catch (error) {
       let message = 'Error deleting post';
@@ -616,8 +682,6 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                     const newPhotos = [...blobResult, ...uploadedImages.filter((url): url is string => typeof url === 'string')];
                     setBlobResult(newPhotos);
                     setStatus(null);
-
-                    await handleUpdatePhotosInDB(newPhotos);
                   }
                 }} />
             </div>
@@ -660,13 +724,6 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                     setBlobResultAction={setBlobResult}
                     showTop={idx > 0}
                     showBottom={idx < blobResult.length - 1}
-                    removeAddress={
-                      image.includes('youtube') || image.includes('youtu') || image.includes('instagram')
-                        ? undefined
-                        : `/api/delete/delete-picture?url=${encodeURIComponent(image)}`
-                    }
-                    onAfterDelete={handleUpdatePhotosInDB}
-                    onAfterMove={handleUpdatePhotosInDB}
                   />
                 </div>
               </div>
@@ -702,7 +759,20 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
 
         <button
           type="button"
-          onClick={() => redirect(`/news/${post.id}`)}
+          onClick={async () => {
+            const hasPendingNew = uploadedNewRef.current.length > 0;
+            const photosChanged = JSON.stringify(baselinePhotosRef.current) !== JSON.stringify(blobResult);
+            if (hasPendingNew || photosChanged) {
+              const ok = window.confirm('Discard changes? Newly uploaded images will be deleted.');
+              if (!ok) return;
+              const deletions = uploadedNewRef.current
+                .filter((u) => !isYoutubeLink(u) && !isInstagramLink(u))
+                .map((u) => fetch(`/api/delete/delete-picture?url=${encodeURIComponent(u)}`, { method: 'DELETE' }).catch(() => { }));
+              await Promise.allSettled(deletions);
+              uploadedNewRef.current = [];
+            }
+            router.push(`/news/${post.id}`);
+          }}
           className="btn btn-outline btn-primary p-2 rounded font-bold text-base hover:bg-primary/80 transition-colors">
           Cancel
         </button>
