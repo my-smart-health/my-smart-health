@@ -168,7 +168,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
   const handleImageUpload = async (file: File) => {
     try {
       if (!file) {
-        return;
+        return undefined;
       }
 
       if (file.size > MAX_IMAGE_SIZE_BYTES) {
@@ -176,7 +176,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
           message: `File "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`,
           type: 'error'
         });
-        return logo.src;
+        return undefined;
       }
 
       setIsDisabled(true);
@@ -188,13 +188,12 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         }
       );
 
-      const result = await response.json() as PutBlobResult;
-
       if (!response.ok) {
         setStatus({ message: 'Failed to upload image', type: 'error' });
         setIsDisabled(false);
-        throw new Error('Failed to upload image');
+        return undefined;
       }
+      const result = await response.json() as PutBlobResult;
       setIsDisabled(false);
       return result.url;
     } catch (error) {
@@ -204,7 +203,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       }
       setStatus({ message, type: 'error' });
       setIsDisabled(false);
-      return logo.src;
+      return undefined;
     }
   };
 
@@ -315,9 +314,11 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
     try {
       setIsDisabled(true);
       for (const photoUrl of blobResult) {
-        await fetch(`/api/delete/delete-picture?url=${encodeURIComponent(photoUrl)}`, {
-          method: 'DELETE',
-        });
+        if (!isYoutubeLink(photoUrl) && !isInstagramLink(photoUrl)) {
+          await fetch(`/api/delete/delete-picture?url=${encodeURIComponent(photoUrl)}`, {
+            method: 'DELETE',
+          });
+        }
       }
 
       const result = await fetch(`/api/delete/delete-post?id=${postId}`, {
@@ -596,6 +597,16 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                     e.target.value = "";
                   } else {
                     inputFileRef.current = e.target;
+                    if (e.target.files) {
+                      for (const file of Array.from(e.target.files)) {
+                        if (file.size > MAX_IMAGE_SIZE_BYTES) {
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                          setStatus({ message: `File "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`, type: 'error' });
+                          e.target.value = "";
+                          return;
+                        }
+                      }
+                    }
                     let uploadedImages: (string | undefined)[] = [];
                     if (e.target.files) {
                       uploadedImages = await Promise.all(
@@ -649,7 +660,11 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                     setBlobResultAction={setBlobResult}
                     showTop={idx > 0}
                     showBottom={idx < blobResult.length - 1}
-                    removeAddress={`/api/delete/delete-picture?url=${encodeURIComponent(image)}`}
+                    removeAddress={
+                      image.includes('youtube') || image.includes('youtu') || image.includes('instagram')
+                        ? undefined
+                        : `/api/delete/delete-picture?url=${encodeURIComponent(image)}`
+                    }
                     onAfterDelete={handleUpdatePhotosInDB}
                     onAfterMove={handleUpdatePhotosInDB}
                   />
