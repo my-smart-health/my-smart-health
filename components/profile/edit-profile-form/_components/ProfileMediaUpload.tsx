@@ -1,5 +1,5 @@
 import { RefObject } from "react";
-import { MAX_FILES_PER_USER, MAX_IMAGE_SIZE_MB } from "@/utils/constants";
+import { MAX_FILES_PER_USER, MAX_IMAGE_SIZE_MB, MAX_IMAGE_SIZE_BYTES } from "@/utils/constants";
 
 type Props = {
   blobResult: string[];
@@ -43,13 +43,22 @@ export function ProfileMediaUpload({
                 e.target.value = "";
                 return;
               }
+              for (const file of Array.from(files)) {
+                if (file.size > MAX_IMAGE_SIZE_BYTES) {
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  setError(`Image "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`);
+                  e.target.value = "";
+                  return;
+                }
+              }
               const uploadedImages = await handleUploadProfileImages(files);
-              const newImages = [...blobResult, ...uploadedImages];
-              setBlobResult(newImages);
-              setError(null);
-
-              if (onAfterUpload) {
-                await onAfterUpload(newImages);
+              if (uploadedImages && uploadedImages.length > 0) {
+                const newImages = [...blobResult, ...uploadedImages];
+                setBlobResult(newImages);
+                setError(null);
+                if (onAfterUpload) {
+                  await onAfterUpload(newImages);
+                }
               }
             }}
           />
