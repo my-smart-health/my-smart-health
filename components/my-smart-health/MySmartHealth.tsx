@@ -87,11 +87,11 @@ export default async function MySmartHealth() {
           }
 
           {generalTitle && (
-            <h2 className="text-2xl font-bold mb-4 text-primary">{generalTitle}</h2>
+            <h2 className="text-2xl font-bold my-2 text-primary">{generalTitle}</h2>
           )}
 
           {paragraph?.map((para, index) => (
-            <div key={para.id ?? index} className="card p-4 rounded-xl">
+            <div key={para.id ?? index} className="card p-4 rounded-xl gap-4">
               {para.title && (
                 <h3 className="badge badge-outline text-lg font-semibold text-primary h-full p-4">
                   {para.title}
@@ -101,7 +101,7 @@ export default async function MySmartHealth() {
               <SeeMoreLess text={para.content} lines={1} />
 
               {para.images && para.images.length > 0 && (
-                <div className="flex flex-wrap gap-3 justify-center my-4">
+                <div className="flex flex-wrap gap-3 justify-center">
                   {para.images.map((imgUrl, imgIndex) => {
                     if (isYoutubeLink(imgUrl)) {
                       return (
@@ -139,7 +139,7 @@ export default async function MySmartHealth() {
 
 
               {para.files && para.files.length > 0 && (
-                <div >
+                <div>
                   <Divider addClass="my-4" />
                   <h4 className="font-semibold mb-1">Dateien:</h4>
                   <ul className="list-none">
