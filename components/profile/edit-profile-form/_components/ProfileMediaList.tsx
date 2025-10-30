@@ -26,6 +26,7 @@ export function ProfileMediaList({
         {blobResult.map((mediaUrl, idx) => {
           const isYoutube = /youtu(be)?/.test(mediaUrl);
           const isInstagram = /instagram/.test(mediaUrl);
+          const isExternal = isYoutube || isInstagram;
 
           const media = (
             <div
@@ -69,7 +70,7 @@ export function ProfileMediaList({
                   setBlobResultAction={setBlobResult}
                   showTop={idx > 0}
                   showBottom={idx < blobResult.length - 1}
-                  removeAddress={`/api/delete/delete-picture?url=${encodeURIComponent(mediaUrl)}`}
+                  removeAddress={!isExternal ? `/api/delete/delete-picture?url=${encodeURIComponent(mediaUrl)}` : undefined}
                   onAfterDelete={onAfterDelete}
                   onAfterMove={onAfterMove}
                 />

@@ -11,7 +11,7 @@ type MoveImageVideoProps = {
   setBlobResultAction: (blobs: string[]) => void;
   showTop: boolean;
   showBottom: boolean;
-  removeAddress: string;
+  removeAddress?: string;
   horizontal?: boolean;
   onAfterDelete?: (updatedBlobs: string[]) => Promise<void> | void;
   onAfterMove?: (updatedBlobs: string[]) => Promise<void> | void;

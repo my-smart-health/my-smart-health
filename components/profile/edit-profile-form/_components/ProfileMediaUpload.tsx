@@ -23,7 +23,7 @@ export function ProfileMediaUpload({
   return (
     <section>
       <fieldset className={`fieldset mb-5 ${blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''}`}>
-        <legend className="fieldset-legend">Select File</legend>
+        <legend className="fieldset-legend">Select Images</legend>
         <div className="flex flex-wrap gap-4 w-full">
           <input
             type="file"
@@ -39,7 +39,7 @@ export function ProfileMediaUpload({
               if (!files) return;
               if (blobResult.length + files.length > MAX_FILES_PER_USER) {
                 window.scrollTo({ top: 0, behavior: "smooth" });
-                setError(`You can select up to ${MAX_FILES_PER_USER} files only.`);
+                setError(`You can select up to ${MAX_FILES_PER_USER} images only.`);
                 e.target.value = "";
                 return;
               }
@@ -63,7 +63,7 @@ export function ProfileMediaUpload({
             }}
           />
           <div className="label pt-1">
-            <span className="label-text-alt text-gray-500">Maximum file size: {MAX_IMAGE_SIZE_MB}MB per file</span>
+            <span className="label-text-alt text-gray-500">Maximum image size: {MAX_IMAGE_SIZE_MB}MB per image</span>
           </div>
         </div>
       </fieldset>
