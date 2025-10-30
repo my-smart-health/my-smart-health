@@ -21,7 +21,7 @@ type RichTextEditorProps = {
 export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const isSettingFromParent = useRef(false);
-  const [toolbarKey, setToolbarKey] = useState(0);
+  const [, forceUpdate] = useState(0);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -59,10 +59,10 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
       if (isSettingFromParent.current) return;
       const html = editor.getHTML();
       onChange(html);
-      setToolbarKey(k => k + 1);
+      forceUpdate(k => k + 1);
     },
     onSelectionUpdate: () => {
-      setToolbarKey(k => k + 1);
+      forceUpdate(k => k + 1);
     },
   });
 
@@ -141,14 +141,6 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     <div className="tiptap-editor border border-primary rounded bg-white">
       <div
         className="border-b border-primary p-2 flex flex-wrap gap-1 bg-base-200"
-        key={toolbarKey}
-        onMouseDown={(e) => {
-          const target = e.target as HTMLElement;
-          if (target.classList.contains('bg-base-200') || target.classList.contains('divider')) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        }}
       >
         <ToolbarButton
           onClick={() => editor.chain().focus().undo().run()}
@@ -362,7 +354,13 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         </ToolbarButton>
       </div>
 
-      <EditorContent editor={editor} />
+      <div onClick={() => {
+        if (!editor.isFocused) {
+          editor.commands.focus();
+        }
+      }}>
+        <EditorContent editor={editor} />
+      </div>
     </div>
   );
 }
