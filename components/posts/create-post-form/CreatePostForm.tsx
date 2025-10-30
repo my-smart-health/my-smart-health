@@ -7,7 +7,7 @@ import { redirect, useRouter } from "next/navigation";
 import { FormEvent, MouseEvent, useEffect, useRef, useState } from "react";
 
 import { ErrorState } from "@/utils/types";
-import { getModalColor } from "@/utils/common";
+import { getModalColor, isInstagramLink, isYoutubeLink } from "@/utils/common";
 import { MAX_FILES_PER_POST, MAX_IMAGE_SIZE_MB, MAX_IMAGE_SIZE_BYTES } from "@/utils/constants";
 
 import Divider from "@/components/divider/Divider";
@@ -46,12 +46,19 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<ErrorState>(null);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [hasSubmitted, setHasSubmitted] = useState<boolean>(false);
+  const hasSubmittedRef = useRef<boolean>(false);
+  useEffect(() => { hasSubmittedRef.current = hasSubmitted; }, [hasSubmitted]);
   const [isDefaultLogo, setIsDefaultLogo] = useState<boolean>(false);
 
   const [tags, setTags] = useState<string[]>([]);
   const [socialLinks, setSocialLinks] = useState<Social[]>([]);
 
   const [blobResult, setBlobResult] = useState<string[]>([]);
+  const uploadedImagesRef = useRef<string[]>([]);
+  useEffect(() => {
+    uploadedImagesRef.current = blobResult;
+  }, [blobResult]);
 
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
 
@@ -73,6 +80,82 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       errorModalRef.current?.showModal();
     }
   }, [error]);
+
+  useEffect(() => {
+    const cleanupUploads = (keepalive = false) => {
+      if (hasSubmittedRef.current) return;
+      const urls = uploadedImagesRef.current || [];
+      const deletions = urls
+        .filter((u) => !isYoutubeLink(u) && !isInstagramLink(u))
+        .map((u) =>
+          fetch(`/api/delete/delete-picture?url=${encodeURIComponent(u)}`, {
+            method: 'DELETE',
+            ...(keepalive ? { keepalive: true } : {}),
+          }).catch(() => { })
+        );
+      void Promise.allSettled(deletions);
+    };
+
+    const beforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasSubmittedRef.current) return;
+      const urls = uploadedImagesRef.current || [];
+      const hasPending = urls.some((u) => !isYoutubeLink(u) && !isInstagramLink(u));
+      if (!hasPending) return;
+      e.preventDefault();
+      e.returnValue = '';
+    };
+
+    const pageHide = () => cleanupUploads(true);
+
+    const onPopState = () => {
+      if (hasSubmittedRef.current) return;
+      const urls = uploadedImagesRef.current || [];
+      const hasPending = urls.some((u) => !isYoutubeLink(u) && !isInstagramLink(u));
+      if (!hasPending) return;
+      const ok = window.confirm('You have uploaded images that will be deleted if you leave this page. Continue?');
+      if (!ok) {
+        history.go(1);
+        return;
+      }
+      cleanupUploads(false);
+    };
+
+    const onDocumentClick = async (evt: Event) => {
+      if (hasSubmittedRef.current) return;
+      const target = evt.target as HTMLElement | null;
+      if (!target) return;
+      const anchor = target.closest('a') as HTMLAnchorElement | null;
+      if (!anchor || anchor.target === '_blank') return;
+      const href = anchor.getAttribute('href');
+      if (!href || href.startsWith('#')) return;
+      const urls = uploadedImagesRef.current || [];
+      const hasPending = urls.some((u) => !isYoutubeLink(u) && !isInstagramLink(u));
+      if (!hasPending) return;
+      evt.preventDefault();
+      evt.stopPropagation();
+      const ok = window.confirm('You have uploaded images that will be deleted if you leave this page. Continue?');
+      if (!ok) return;
+      await Promise.resolve(cleanupUploads(false));
+      if (anchor.origin === window.location.origin) {
+        const nextPath = anchor.pathname + anchor.search + anchor.hash;
+        router.push(nextPath);
+      } else {
+        window.location.href = anchor.href;
+      }
+    };
+
+    window.addEventListener('beforeunload', beforeUnload);
+    window.addEventListener('pagehide', pageHide);
+    window.addEventListener('popstate', onPopState);
+    document.addEventListener('click', onDocumentClick, true);
+    return () => {
+      window.removeEventListener('beforeunload', beforeUnload);
+      window.removeEventListener('pagehide', pageHide);
+      window.removeEventListener('popstate', onPopState);
+      document.removeEventListener('click', onDocumentClick, true);
+      cleanupUploads(false);
+    };
+  }, [router]);
 
   useEffect(() => {
     if (blobResult.length > 0) {
@@ -117,7 +200,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
     try {
       if (!file) {
         setIsDisabled(false);
-        return;
+        return undefined;
       }
 
       if (file.size > MAX_IMAGE_SIZE_BYTES) {
@@ -126,7 +209,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
           message: `File "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`
         });
         setIsDisabled(false);
-        return logo.src;
+        return undefined;
       }
 
       const response = await fetch(
@@ -137,13 +220,12 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         }
       );
 
-      const result = await response.json() as PutBlobResult;
-
       if (!response.ok) {
         setError({ type: "error", message: "Failed to upload image" });
         setIsDisabled(false);
-        throw new Error('Failed to upload image');
+        return undefined;
       }
+      const result = await response.json() as PutBlobResult;
 
       return result.url;
     } catch (error) {
@@ -153,7 +235,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       }
       setError({ type: "error", message });
       setIsDisabled(false);
-      return logo.src;
+      return undefined;
     }
   };
 
@@ -279,6 +361,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         setIsDisabled(false);
         return;
       }
+      setHasSubmitted(true);
       setIsDisabled(true);
       setError({ type: "success", message: "Post created successfully" });
     } catch (error) {
@@ -453,6 +536,13 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                     setError({ type: "warning", message: `You can select up to ${MAX_FILES_PER_POST} files only.` });
                     e.target.value = "";
                   } else {
+                    for (const file of Array.from(e.target.files)) {
+                      if (file.size > MAX_IMAGE_SIZE_BYTES) {
+                        setError({ type: "error", message: `File "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.` });
+                        e.target.value = "";
+                        return;
+                      }
+                    }
                     inputFileRef.current = e.target;
                     if (e.target.files) {
                       await handleUploadImages({
@@ -509,7 +599,11 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                     setBlobResultAction={setBlobResult}
                     showTop={idx > 0}
                     showBottom={idx < blobResult.length - 1}
-                    removeAddress={image}
+                    removeAddress={
+                      image.includes('youtube') || image.includes('youtu') || image.includes('instagram')
+                        ? undefined
+                        : `/api/delete/delete-picture?url=${encodeURIComponent(image)}`
+                    }
                   />
                 </div>
               </div>
@@ -526,6 +620,26 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
         <button type="submit" className={`p-2 rounded bg-primary text-white font-bold text-base hover:bg-primary/80 transition-colors ${isImageFirst ? '' : 'opacity-50 pointer-events-none'}`}>
           Create Post
+        </button>
+        <button
+          type="button"
+          className="btn btn-outline btn-error"
+          onClick={async () => {
+            if (isDisabled) return;
+            const ok = window.confirm('Cancel and delete uploaded images?');
+            if (!ok) return;
+            setIsDisabled(true);
+            const urls = uploadedImagesRef.current || [];
+            await Promise.allSettled(
+              urls
+                .filter((u) => !isYoutubeLink(u) && !isInstagramLink(u))
+                .map((u) => fetch(`/api/delete/delete-picture?url=${encodeURIComponent(u)}`, { method: 'DELETE' }))
+            );
+            setHasSubmitted(false);
+            router.push('/dashboard');
+          }}
+        >
+          Cancel
         </button>
       </form >
 
