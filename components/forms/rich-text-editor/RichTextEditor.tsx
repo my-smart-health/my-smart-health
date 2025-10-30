@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
@@ -11,6 +11,7 @@ import Color from '@tiptap/extension-color';
 import Blockquote from '@tiptap/extension-blockquote';
 import HardBreak from '@tiptap/extension-hard-break';
 import { TextStyle } from '@tiptap/extension-text-style';
+import { useState } from 'react';
 
 type RichTextEditorProps = {
   value: string;
@@ -21,7 +22,6 @@ type RichTextEditorProps = {
 export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const isSettingFromParent = useRef(false);
-  const [, forceUpdate] = useState(0);
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -59,10 +59,6 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
       if (isSettingFromParent.current) return;
       const html = editor.getHTML();
       onChange(html);
-      forceUpdate(k => k + 1);
-    },
-    onSelectionUpdate: () => {
-      forceUpdate(k => k + 1);
     },
   });
 
@@ -105,32 +101,22 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
     disabled?: boolean;
     title?: string;
     children: React.ReactNode;
-  }) => {
-    const handleMouseDown = (e: React.MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      if (disabled) return;
-
-      onClick();
-    };
-
-    return (
-      <button
-        type="button"
-        onMouseDown={handleMouseDown}
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-        disabled={disabled}
-        className={`btn btn-xs ${isActive ? 'btn-primary' : 'btn-ghost'} ${disabled ? 'btn-disabled' : ''}`}
-        title={title}
-      >
-        {children}
-      </button>
-    );
-  };
+  }) => (
+    <button
+      type="button"
+      onMouseDown={(e) => {
+        e.preventDefault();
+        if (!disabled) {
+          onClick();
+        }
+      }}
+      disabled={disabled}
+      className={`btn btn-xs ${isActive ? 'btn-primary' : 'btn-ghost'} ${disabled ? 'btn-disabled' : ''}`}
+      title={title}
+    >
+      {children}
+    </button>
+  );
 
   const commonColors = [
     '#000000', '#EF4444', '#10B981', '#3B82F6', '#F59E0B',
@@ -139,9 +125,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
 
   return (
     <div className="tiptap-editor border border-primary rounded bg-white">
-      <div
-        className="border-b border-primary p-2 flex flex-wrap gap-1 bg-base-200"
-      >
+      <div className="border-b border-primary p-2 flex flex-wrap gap-1 bg-base-200">
         <ToolbarButton
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().undo()}
@@ -226,12 +210,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
             type="button"
             onMouseDown={(e) => {
               e.preventDefault();
-              e.stopPropagation();
               setShowColorPicker(!showColorPicker);
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
             }}
             className="btn btn-xs btn-ghost"
             title="Text Color"
@@ -245,15 +224,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
             <>
               <div
                 className="fixed inset-0 z-40"
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setShowColorPicker(false);
-                }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
+                onClick={() => setShowColorPicker(false)}
               />
               <div className="absolute z-50 bg-white border border-primary rounded shadow-lg p-2 mt-1 flex flex-wrap gap-1 w-48 left-0">
                 {commonColors.map((color) => (
@@ -264,13 +235,8 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
                     style={{ backgroundColor: color }}
                     onMouseDown={(e) => {
                       e.preventDefault();
-                      e.stopPropagation();
                       editor.chain().focus().setColor(color).run();
                       setShowColorPicker(false);
-                    }}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
                     }}
                     title={color}
                   />
@@ -280,13 +246,8 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
                   className="btn btn-xs btn-ghost w-full mt-1"
                   onMouseDown={(e) => {
                     e.preventDefault();
-                    e.stopPropagation();
                     editor.chain().focus().unsetColor().run();
                     setShowColorPicker(false);
-                  }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
                   }}
                 >
                   Reset
@@ -354,13 +315,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         </ToolbarButton>
       </div>
 
-      <div onClick={() => {
-        if (!editor.isFocused) {
-          editor.commands.focus();
-        }
-      }}>
-        <EditorContent editor={editor} />
-      </div>
+      <EditorContent editor={editor} />
     </div>
   );
 }
