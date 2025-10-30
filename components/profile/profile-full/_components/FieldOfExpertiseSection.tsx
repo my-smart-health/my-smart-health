@@ -76,9 +76,9 @@ export default function FieldOfExpertiseSection({ fieldOfExpertise }: FieldOfExp
 
   return (
     <>
-      <section className="flex flex-wrap gap-2 ml-2 my-auto">
+      <section className="flex flex-wrap gap-2 ml-2 my-auto ">
         {fieldOfExpertise.map((expertise) => (
-          <span key={expertise.id} className="badge p-3 text-sm font-semibold">
+          <span key={expertise.id} className="badge p-3 text-lg font-semibold">
             <TooltipItem expertise={expertise} />
           </span>
         ))}
