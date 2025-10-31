@@ -326,11 +326,11 @@ export default function EditProfileForm({ user }: { user: User }) {
     }
   };
 
-  const handleRemoveCertificateImage = (
+  const handleRemoveCertificateImage = async (
     imageUrl: string,
     setCertificates: React.Dispatch<React.SetStateAction<CertificateForm[]>>
   ) => {
-    handleRemoveImage(imageUrl, setCertificates);
+    await handleRemoveImage(imageUrl, setCertificates);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
