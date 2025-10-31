@@ -7,7 +7,7 @@ import { Session } from "next-auth";
 import { NewsCardType } from "@/utils/types";
 
 import GoBack from "@/components/buttons/go-back/GoBack";
-import SeeMoreLess from "@/components/buttons/see-more-less/SeeMoreLess";
+import ParagraphContent from "@/components/common/ParagraphContent";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
 import Divider from "@/components/divider/Divider";
 import { AtSign, Pencil, Trash2, Globe, Facebook, Linkedin, Youtube, Instagram } from "lucide-react";
@@ -92,7 +92,11 @@ export default function PostCardDetails({ postData, session, onDeletePostAction 
             {photos &&
               <FadeCarousel photos={photos} />
             }
-            {content && <div className="text-base indent-4 break-before"><SeeMoreLess text={content} /></div>}
+            {content && (
+              <div className="text-base indent-4 break-before">
+                <ParagraphContent content={content} />
+              </div>
+            )}
           </div>
           <div className="card-actions justify-end m-4">
             {tags && tags.length > 0 && (
