@@ -23,6 +23,7 @@ import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
 import Divider from "@/components/divider/Divider";
+import RichTextEditor from "@/components/forms/rich-text-editor/RichTextEditor";
 
 type EditPostFormProps = {
   session: Session | null;
@@ -300,6 +301,13 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       setIsDisabled(true);
       const formData = new FormData(event.currentTarget);
 
+      const stripped = content.replace(/<[^>]*>/g, "").trim();
+      if (!stripped) {
+        setStatus({ message: "Content cannot be empty", type: 'error' });
+        setIsDisabled(false);
+        return;
+      }
+
 
       if (blobResult.length === 0) {
         setIsDefaultLogo(true);
@@ -329,7 +337,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         body: JSON.stringify({
           id: post.id,
           title: formData.get('title'),
-          content: formData.get('content'),
+          content: content,
           photos: blobResult,
           tags: tags.filter(tag => tag.trim() !== ''),
           socialLinks: socialLinks.filter(link => link.url.trim() !== '' && link.platform.trim() !== ''),
@@ -516,23 +524,8 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         <Divider />
 
         <fieldset className="fieldset">
-          <label htmlFor="content" className="block text-sm font-medium text-gray-700">
-            Content
-          </label>
-          <textarea
-            id="content"
-            name="content"
-            required
-            ref={contentRef}
-            value={content}
-            onChange={e => setContent(e.target.value)}
-            rows={content ? 1 : 3}
-            className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
-            style={{ overflow: "hidden" }}
-          />
-          <div className="label pt-1 text-xs flex flex-row justify-end">
-            You can pull the right corner to resize it <ArrowUpRight />
-          </div>
+          <span className="block text-sm font-medium text-gray-700 mb-1">Content</span>
+          <RichTextEditor value={content} onChange={setContent} placeholder="Write your post..." />
         </fieldset>
 
         <Divider />
