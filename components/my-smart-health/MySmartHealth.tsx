@@ -7,7 +7,7 @@ import Divider from '../divider/Divider';
 import { File } from 'lucide-react';
 import GoToButton from '../buttons/go-to/GoToButton';
 import { auth } from '@/auth';
-import SeeMoreLess from '../buttons/see-more-less/SeeMoreLess';
+import MSHParagraphContent from './_components/MSHParagraphContent';
 
 import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube } from "lucide-react";
 import Xlogo from '@/public/x-logo-black.png';
@@ -98,7 +98,7 @@ export default async function MySmartHealth() {
                 </h3>
               )}
 
-              <SeeMoreLess text={para.content} lines={1} />
+              <MSHParagraphContent content={para.content} />
 
               {para.images && para.images.length > 0 && (
                 <div className="flex flex-wrap gap-3 justify-center">
