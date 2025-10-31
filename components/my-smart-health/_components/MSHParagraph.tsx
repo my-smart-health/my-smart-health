@@ -4,6 +4,7 @@ import { MySmartHealthParagraph } from "@/utils/types";
 import Divider from "@/components/divider/Divider";
 import { PutBlobResult } from "@vercel/blob";
 import { useRef, useState } from "react";
+import Spinner from "@/components/common/Spinner";
 import RichTextEditor from '@/components/forms/rich-text-editor/RichTextEditor';
 import Image from "next/image";
 import Link from "next/link";
@@ -31,6 +32,9 @@ export default function MSHParagraph({
 
   const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [youtubeUrls, setYoutubeUrls] = useState<string[]>([]);
+  const [uploadingImages, setUploadingImages] = useState<Record<number, boolean>>({});
+  const [uploadingFiles, setUploadingFiles] = useState<Record<number, boolean>>({});
+  const [deletingFiles, setDeletingFiles] = useState<Record<string, boolean>>({});
 
   const platformIcons: Record<string, React.ReactNode> = {
     Email: <AtSign className="inline-block mr-1" size={30} />,
@@ -75,6 +79,7 @@ export default function MSHParagraph({
   }
 
   async function handleDeleteFile(fileUrl: string) {
+    setDeletingFiles(prev => ({ ...prev, [fileUrl]: true }));
     try {
       await fetch(`/api/delete/delete-picture?url=${encodeURIComponent(fileUrl)}`, {
         method: "DELETE",
@@ -89,6 +94,7 @@ export default function MSHParagraph({
       };
     });
     setParagraphsAction(updatedParagraphs);
+    setDeletingFiles(prev => ({ ...prev, [fileUrl]: false }));
   }
 
   function handleAddParagraph() {
@@ -157,6 +163,7 @@ export default function MSHParagraph({
     }
 
     try {
+      setUploadingImages(prev => ({ ...prev, [index]: true }));
       const uploadedUrls: string[] = [];
       for (const file of Array.from(files)) {
         const response = await fetch(
@@ -183,6 +190,8 @@ export default function MSHParagraph({
       }
     } catch (error) {
       setErrorAction({ message: `Error uploading images. ${error}`, type: "error" });
+    } finally {
+      setUploadingImages(prev => ({ ...prev, [index]: false }));
     }
   }
 
@@ -200,6 +209,7 @@ export default function MSHParagraph({
     }
 
     try {
+      setUploadingFiles(prev => ({ ...prev, [index]: true }));
       const uploadedUrls: string[] = [];
       for (const file of Array.from(files)) {
         const response = await fetch(
@@ -225,6 +235,8 @@ export default function MSHParagraph({
       }
     } catch (error) {
       setErrorAction({ message: `Error uploading files. ${error}`, type: "error" });
+    } finally {
+      setUploadingFiles(prev => ({ ...prev, [index]: false }));
     }
   }
 
@@ -299,19 +311,23 @@ export default function MSHParagraph({
 
           <Divider addClass="my-4" />
 
-          <label>
+          <label className="flex flex-col gap-1">
             Paragraph Images:
             <input
               ref={el => { fileInputRefs.current[index] = el; }}
               type="file"
               accept="image/*"
               multiple
-              className="file-input file-input-bordered file-input-primary w-full"
+              className="file-input file-input-bordered file-input-primary w-full disabled:opacity-50"
+              disabled={!!uploadingImages[index]}
               onChange={(e) => handleUploadImages(index, e.target.files)}
             />
             <div className="label pt-1">
               <span className="label-text-alt text-gray-500">Maximum file size: {MAX_IMAGE_SIZE_MB}MB per file</span>
             </div>
+            {uploadingImages[index] && (
+              <Spinner size="sm" label="Uploading images..." />
+            )}
           </label>
           {paragraph.images && paragraph.images.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2">
@@ -376,18 +392,22 @@ export default function MSHParagraph({
 
           <Divider addClass="my-4" />
 
-          <label>
+          <label className="flex flex-col gap-1">
             Paragraph Files:
             <input
               type="file"
               multiple
-              className="file-input file-input-bordered file-input-primary w-full"
+              className="file-input file-input-bordered file-input-primary w-full disabled:opacity-50"
+              disabled={!!uploadingFiles[index]}
               onChange={(e) => handleUploadFiles(index, e.target.files)}
               accept="*"
             />
             <div className="label pt-1">
               <span className="label-text-alt text-gray-500">Maximum file size: {MAX_IMAGE_SIZE_MB}MB per file</span>
             </div>
+            {uploadingFiles[index] && (
+              <Spinner size="sm" label="Uploading files..." />
+            )}
           </label>
           {(paragraph.files ?? []).length > 0 && (
             <ul className="mt-2 space-y-1">
@@ -416,14 +436,15 @@ export default function MSHParagraph({
                             </div>
                             <button
                               type="button"
-                              className="btn btn-circle btn-error text-white hover:bg-error/75 transition-colors duration-200 "
+                              className="btn btn-circle btn-error text-white hover:bg-error/75 transition-colors duration-200 disabled:opacity-50"
+                              disabled={!!deletingFiles[fileUrl]}
                               onClick={async () => {
                                 const confirmDelete = window.confirm(`Delete file "${fileName}"?`);
                                 if (!confirmDelete) return;
                                 await handleDeleteFile(fileUrl);
                               }}
                             >
-                              X
+                              {deletingFiles[fileUrl] ? <Spinner size="xs" colorClass="text-white" /> : 'X'}
                             </button>
                           </li>
                         )
