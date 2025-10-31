@@ -1,10 +1,7 @@
-import Divider from "@/components/divider/Divider";
-import dynamic from "next/dynamic";
+"use client";
 
-const ProfilePictureCarousel = dynamic(
-  () => import("@/components/carousels/profile-picture-carousel/ProfilePictureCarousel"),
-  { ssr: false }
-);
+import Divider from "@/components/divider/Divider";
+import ProfilePictureCarousel from "@/components/carousels/profile-picture-carousel/ProfilePictureCarousel";
 
 type Props = {
   images: string[];
