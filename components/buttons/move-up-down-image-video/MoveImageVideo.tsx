@@ -1,9 +1,10 @@
 'use client';
 
-import React from "react";
+import React, { useState } from "react";
 import { Triangle } from "lucide-react";
 
 import Divider from "@/components/divider/Divider";
+import Spinner from "@/components/common/Spinner";
 
 type MoveImageVideoProps = {
   index: number;
@@ -28,6 +29,7 @@ export default function MoveImageVideo({
   onAfterDelete,
   onAfterMove
 }: MoveImageVideoProps) {
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleOnePositionUp = async (e: React.MouseEvent<HTMLButtonElement>, index: number) => {
     e.preventDefault();
@@ -70,12 +72,14 @@ export default function MoveImageVideo({
 
     if (removeAddress) {
       try {
+        setIsDeleting(true);
         const response = await fetch(removeAddress, {
           method: 'DELETE'
         });
 
         if (!response.ok) {
           console.error('Failed to delete file from storage');
+          setIsDeleting(false);
           return;
         }
 
@@ -86,10 +90,17 @@ export default function MoveImageVideo({
         if (process.env.NODE_ENV === 'development') {
           console.error('Error removing media:', error);
         }
+      } finally {
+        setIsDeleting(false);
       }
     } else {
-      if (onAfterDelete) {
-        await onAfterDelete(newBlobResult);
+      try {
+        setIsDeleting(true);
+        if (onAfterDelete) {
+          await onAfterDelete(newBlobResult);
+        }
+      } finally {
+        setIsDeleting(false);
       }
     }
   };
@@ -100,8 +111,11 @@ export default function MoveImageVideo({
     return (
       <button
         type="button"
-        className="btn btn-outline btn-circle text-red-500 hover:text-red-700 transition-colors cursor-pointer"
-        onClick={(e) => handleRemove(e, index, removeAddress)}>x</button>
+        className="btn btn-outline btn-circle text-red-500 hover:text-red-700 transition-colors cursor-pointer disabled:opacity-50"
+        disabled={isDeleting}
+        onClick={(e) => handleRemove(e, index, removeAddress)}>
+        {isDeleting ? <Spinner size="sm" colorClass="text-red-500" /> : 'x'}
+      </button>
     )
   }
 
@@ -111,7 +125,8 @@ export default function MoveImageVideo({
         <>
           <button
             type="button"
-            className="btn btn-outline btn-circle text-primary hover:text-primary/80 transition-colors cursor-pointer"
+            className="btn btn-outline btn-circle text-primary hover:text-primary/80 transition-colors cursor-pointer disabled:opacity-50"
+            disabled={isDeleting}
             onClick={(e) => handleOnePositionUp(e, index)}><Triangle fill="currentColor" className={horizontal ? "rotate-270" : ""} />
           </button>
 
@@ -120,8 +135,11 @@ export default function MoveImageVideo({
       )}
       <button
         type="button"
-        className="btn btn-outline btn-circle text-red-500 hover:text-red-700 transition-colors cursor-pointer"
-        onClick={(e) => handleRemove(e, index, removeAddress)}>x</button>
+        className="btn btn-outline btn-circle text-red-500 hover:text-red-700 transition-colors cursor-pointer disabled:opacity-50"
+        disabled={isDeleting}
+        onClick={(e) => handleRemove(e, index, removeAddress)}>
+        {isDeleting ? <Spinner size="sm" colorClass="text-red-500" /> : 'x'}
+      </button>
 
       {showBottom && (
         <>
@@ -129,7 +147,8 @@ export default function MoveImageVideo({
 
           <button
             type="button"
-            className="btn btn-outline btn-circle text-primary hover:text-primary/80 transition-colors cursor-pointer"
+            className="btn btn-outline btn-circle text-primary hover:text-primary/80 transition-colors cursor-pointer disabled:opacity-50"
+            disabled={isDeleting}
             onClick={(e) => handleOnePositionDown(e, index)}><Triangle fill="currentColor" className={horizontal ? "rotate-90" : "rotate-180"} />
           </button>
         </>
