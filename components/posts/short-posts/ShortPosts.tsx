@@ -2,6 +2,7 @@ import { Session } from "next-auth";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
+import ParagraphContent from "@/components/common/ParagraphContent";
 
 type Posts = {
   id: string;
@@ -36,10 +37,9 @@ export default function ShortPosts({ posts, session = null }: { posts: Posts[]; 
               <FadeCarousel photos={post.photos} />
             </section>
 
-            <p
-              className="text-gray-600 line-clamp-3">
-              {post.content}
-            </p>
+            <div className="text-gray-600">
+              <ParagraphContent content={post.content} />
+            </div>
 
             <div
               className="flex flex-row-reverse gap-2 mt-4 mb-2">
