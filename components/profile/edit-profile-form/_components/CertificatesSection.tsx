@@ -2,6 +2,8 @@ import Image from "next/image";
 import Divider from "@/components/divider/Divider";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
 import { CertificateForm } from "@/utils/types";
+import Spinner from "@/components/common/Spinner";
+import { useState } from "react";
 
 type CertificatesSectionProps = {
   certificates: CertificateForm[];
@@ -9,7 +11,7 @@ type CertificatesSectionProps = {
   handleRemoveImage: (
     imageUrl: string,
     setCertificates: React.Dispatch<React.SetStateAction<CertificateForm[]>>
-  ) => void;
+  ) => Promise<void>;
   handleUploadCertificate: (e: React.ChangeEvent<HTMLInputElement>, files: File[]) => Promise<string[]>;
 };
 
@@ -19,6 +21,8 @@ export function CertificatesSection({
   handleRemoveImage,
   handleUploadCertificate,
 }: CertificatesSectionProps) {
+  const [uploadingIdx, setUploadingIdx] = useState<number | null>(null);
+  const [deletingIdx, setDeletingIdx] = useState<number | null>(null);
   return (
     <section>
       <fieldset className="fieldset">
@@ -28,18 +32,28 @@ export function CertificatesSection({
             <div key={cert.id || idx} className="flex flex-col gap-4 border border-primary rounded p-4 relative">
               <button
                 type="button"
-                onClick={() => {
+                disabled={deletingIdx === idx}
+                onClick={async () => {
                   const fileName = cert.name || `certificate ${idx + 1}`;
                   const confirmDelete = window.confirm(`Delete certificate "${fileName}" and its images?`);
                   if (!confirmDelete) return;
-                  cert.images.forEach(imageURL => handleRemoveImage(imageURL, setCertificates));
-                  setCertificates(certificates.filter((_, i) => i !== idx));
+                  try {
+                    setDeletingIdx(idx);
+                    if (cert.images && cert.images.length > 0) {
+                      await Promise.all(
+                        cert.images.map(imageURL => handleRemoveImage(imageURL, setCertificates))
+                      );
+                    }
+                    setCertificates(certificates.filter((_, i) => i !== idx));
+                  } finally {
+                    setDeletingIdx(null);
+                  }
                 }}
-                className="relative top-2 right-2 self-end btn btn-circle btn-error hover:bg-red-600/70 text-white font-bold text-lg"
+                className="relative top-2 right-2 self-end btn btn-circle btn-error hover:bg-red-600/70 text-white font-bold text-lg disabled:opacity-50"
                 aria-label="Remove certificate"
                 title="Remove certificate"
               >
-                &times;
+                {deletingIdx === idx ? <Spinner size="sm" colorClass="text-white" /> : '\u00d7'}
               </button>
               <div className="flex flex-col gap-2">
                 <label className="flex flex-col gap-2">
@@ -215,15 +229,20 @@ export function CertificatesSection({
                     className="file-input file-input-bordered file-input-primary w-full mt-2"
                     onChange={async e => {
                       if (!e.target.files) return;
+                      setUploadingIdx(idx);
                       const uploaded = await handleUploadCertificate(e, Array.from(e.target.files));
                       if (uploaded.length) {
                         const updated = [...certificates];
                         updated[idx].images = [...(updated[idx].images || []), ...uploaded];
                         setCertificates(updated);
                       }
+                      setUploadingIdx(null);
                       e.target.value = "";
                     }}
                   />
+                  {uploadingIdx === idx && (
+                    <div className="mt-2"><Spinner size="sm" label="Uploading certificate images..." /></div>
+                  )}
                 </div>
               </div>
             </div>
