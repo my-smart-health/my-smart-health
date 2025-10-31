@@ -4,6 +4,7 @@ import { MySmartHealthParagraph } from "@/utils/types";
 import Divider from "@/components/divider/Divider";
 import { PutBlobResult } from "@vercel/blob";
 import { useRef, useState } from "react";
+import RichTextEditor from '@/components/forms/rich-text-editor/RichTextEditor';
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, File } from "lucide-react";
@@ -243,17 +244,15 @@ export default function MSHParagraph({
 
           <Divider addClass="my-4" />
 
-          <label>
-            Paragraph Content:
-            <textarea
-              value={paragraph.content}
-              onChange={(e) => handleContentChange(index, e.target.value)}
-              className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
-              required
-              rows={7}
+          <div className="block w-full">
+            <label className="block mb-2">Paragraph Content:</label>
+            <RichTextEditor
+              value={paragraph.content || ''}
+              onChange={(val: string) => handleContentChange(index, val)}
+              placeholder="Write your paragraph content with rich formatting..."
             />
-          </label>
-          <span className="flex justify-end text-sm text-gray-500">You can resize images by dragging the corner. <ArrowUpRight /></span>
+          </div>
+          <span className="flex justify-end text-sm text-gray-500">You can resize the text area by dragging the corner. <ArrowUpRight /></span>
 
           <Divider addClass="my-4" />
 
