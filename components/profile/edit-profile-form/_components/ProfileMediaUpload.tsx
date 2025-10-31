@@ -1,5 +1,6 @@
 import { RefObject } from "react";
 import { MAX_FILES_PER_USER, MAX_IMAGE_SIZE_MB, MAX_IMAGE_SIZE_BYTES } from "@/utils/constants";
+import Spinner from "@/components/common/Spinner";
 
 type Props = {
   blobResult: string[];
@@ -65,6 +66,11 @@ export function ProfileMediaUpload({
           <div className="label pt-1">
             <span className="label-text-alt text-gray-500">Maximum image size: {MAX_IMAGE_SIZE_MB}MB per image</span>
           </div>
+          {isDisabled && (
+            <div className="mt-2">
+              <Spinner size="sm" label="Uploading images..." />
+            </div>
+          )}
         </div>
       </fieldset>
     </section>
