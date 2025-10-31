@@ -17,6 +17,7 @@ import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveIm
 
 import logo from '@/public/og-logo-blue.jpg';
 import { ArrowUpRight, XIcon, AtSign, Facebook, Globe, Instagram, Linkedin, Youtube } from "lucide-react";
+import Spinner from "@/components/common/Spinner";
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
 
@@ -61,6 +62,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
   }, [blobResult]);
 
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
+  const [uploadingImages, setUploadingImages] = useState<boolean>(false);
 
   const platformIcons: Record<string, React.ReactNode> = {
     Email: <AtSign className="inline-block mr-1" size={30} />,
@@ -247,6 +249,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
     setBlobResult
   }: HandleUploadImagesParams): Promise<void> => {
     setIsDisabled(true);
+    setUploadingImages(true);
     setError(null);
     const uploadedImages = await Promise.all(
       Array.from(e.target.files ?? []).map(file => handleImageUpload(file))
@@ -256,6 +259,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       ...uploadedImages.filter((url): url is string => typeof url === 'string'),
     ]);
     setIsDisabled(false);
+    setUploadingImages(false);
     e.target.value = "";
   };
 
@@ -530,7 +534,8 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                 name="image"
                 accept="image/*"
                 multiple
-                className={`${blobResult && blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full`}
+                className={`${blobResult && blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full disabled:opacity-50`}
+                disabled={uploadingImages}
                 onChange={async e => {
                   if (!e.target.files || e.target.files.length + blobResult.length > MAX_FILES_PER_POST) {
                     setError({ type: "warning", message: `You can select up to ${MAX_FILES_PER_POST} files only.` });
@@ -558,6 +563,9 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
               <div className="label pt-1">
                 <span className="label-text-alt text-gray-500">Maximum file size: {MAX_IMAGE_SIZE_MB}MB per file</span>
               </div>
+              {uploadingImages && (
+                <Spinner size="sm" label="Uploading images..." />
+              )}
             </div>
           </fieldset>
         </div>
