@@ -8,6 +8,7 @@ import { FormEvent, MouseEvent, useRef, useEffect, useState } from "react";
 
 import logo from "@/public/og-logo-blue.jpg";
 import { ArrowUpRight, XIcon, AtSign, Facebook, Globe, Instagram, Linkedin, Youtube } from "lucide-react";
+import Spinner from "@/components/common/Spinner";
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
 
@@ -75,6 +76,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
   };
 
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
+  const [uploadingImages, setUploadingImages] = useState<boolean>(false);
 
   useEffect(() => {
     if (blobResult.length > 0) {
@@ -655,7 +657,8 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                 name="image"
                 accept="image/*"
                 multiple
-                className={`${blobResult && blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full`}
+                className={`${blobResult && blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''} file-input file-input-bordered file-input-primary w-full disabled:opacity-50`}
+                disabled={uploadingImages}
                 onChange={async e => {
                   if (e.target.files && e.target.files.length + blobResult.length > MAX_FILES_PER_POST) {
                     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -664,11 +667,13 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                   } else {
                     inputFileRef.current = e.target;
                     if (e.target.files) {
+                      setUploadingImages(true);
                       for (const file of Array.from(e.target.files)) {
                         if (file.size > MAX_IMAGE_SIZE_BYTES) {
                           window.scrollTo({ top: 0, behavior: "smooth" });
                           setStatus({ message: `File "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`, type: 'error' });
                           e.target.value = "";
+                          setUploadingImages(false);
                           return;
                         }
                       }
@@ -682,8 +687,12 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                     const newPhotos = [...blobResult, ...uploadedImages.filter((url): url is string => typeof url === 'string')];
                     setBlobResult(newPhotos);
                     setStatus(null);
+                    setUploadingImages(false);
                   }
                 }} />
+              {uploadingImages && (
+                <div className="mt-2"><Spinner size="sm" label="Uploading images..." /></div>
+              )}
             </div>
           </fieldset>
 
