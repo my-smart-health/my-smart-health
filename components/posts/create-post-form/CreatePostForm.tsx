@@ -11,6 +11,7 @@ import { getModalColor, isInstagramLink, isYoutubeLink } from "@/utils/common";
 import { MAX_FILES_PER_POST, MAX_IMAGE_SIZE_MB, MAX_IMAGE_SIZE_BYTES } from "@/utils/constants";
 
 import Divider from "@/components/divider/Divider";
+import RichTextEditor from "@/components/forms/rich-text-editor/RichTextEditor";
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
@@ -51,6 +52,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
   const hasSubmittedRef = useRef<boolean>(false);
   useEffect(() => { hasSubmittedRef.current = hasSubmitted; }, [hasSubmitted]);
   const [isDefaultLogo, setIsDefaultLogo] = useState<boolean>(false);
+  const [content, setContent] = useState<string>("");
 
   const [tags, setTags] = useState<string[]>([]);
   const [socialLinks, setSocialLinks] = useState<Social[]>([]);
@@ -322,6 +324,13 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       setIsDisabled(true);
       const formData = new FormData(event.currentTarget);
 
+      const stripped = content.replace(/<[^>]*>/g, "").trim();
+      if (!stripped) {
+        setError({ type: "warning", message: "Content cannot be empty" });
+        setIsDisabled(false);
+        return;
+      }
+
       if (blobResult.length === 0) {
         setError(null);
         setIsDefaultLogo(true);
@@ -350,7 +359,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         body: JSON.stringify({
           authorId: session.user.id,
           title: formData.get('title'),
-          content: formData.get('content'),
+          content: content,
           photos: blobResult,
           tags: tags.filter(tag => tag.trim() !== ''),
           socialLinks: socialLinks.filter(link => link.url.trim() !== '' && link.platform.trim() !== ''),
@@ -402,17 +411,8 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         <Divider />
 
         <fieldset className="fieldset">
-          <label htmlFor="content" className="block text-sm font-medium text-gray-700">
-            Content
-          </label>
-          <textarea
-            id="content"
-            name="content"
-            rows={5}
-            required
-            className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
-          />
-          <div className="label pt-1 text-xs flex flex-row justify-end">You can pull the right corner to resize it <ArrowUpRight /></div>
+          <span className="block text-sm font-medium text-gray-700 mb-1">Content</span>
+          <RichTextEditor value={content} onChange={setContent} placeholder="Write your post..." />
         </fieldset>
 
         <Divider />
