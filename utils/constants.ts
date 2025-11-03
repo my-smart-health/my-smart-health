@@ -23,3 +23,22 @@ export const MAX_BIO_LENGTH_CLAMP = 100;
 export const PAGINATION_BULLET_QUANTITY = 4;
 
 export const CATEGORY_FACHARZTE = 'Fachärzte';
+
+export const CATEGORY_NAMES = {
+  news: {
+    name: 'News',
+    link: '/news',
+  },
+  smartHealth: {
+    name: 'Gut für meine Gesundheit',
+    link: '/smart-health',
+  },
+  medizinUndPflege: {
+    name: 'Medizin & Pflege',
+    link: '/medizin-und-pflege',
+  },
+  notfalle: {
+    name: 'Notfälle',
+    link: '/notfalle',
+  },
+};
