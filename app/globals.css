@@ -218,3 +218,9 @@ span.swiper-pagination-bullet-active {
 .bio-content [style*='text-align: left'] {
   text-align: left;
 }
+
+.multi-clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
