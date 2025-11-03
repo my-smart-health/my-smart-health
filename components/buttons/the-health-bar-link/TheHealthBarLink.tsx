@@ -9,7 +9,7 @@ export default function TheHealthBarLink() {
       title="The Health Bar"
     >
       <div className="w-full flex justify-center">
-        <div className="w-full max-w-full border border-primary rounded p-6 mt-6 text-center hover:shadow-lg transition-shadow">
+        <div className="w-full max-w-full border border-primary rounded-2xl p-6 mt-6 text-center hover:shadow-lg transition-shadow">
           <svg
             viewBox="0 0 800 150"
             width="100%"
