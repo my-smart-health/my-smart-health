@@ -31,7 +31,7 @@ export default async function Home() {
       .filter(item => item.author && item.author.name && item.id && item.photos && item.photos[0])
       .map(item => ({
         id: item.id,
-        name: item.author.name as string,
+        name: item.title,
         profileImage: item.photos[0]
       }))
     : undefined;
