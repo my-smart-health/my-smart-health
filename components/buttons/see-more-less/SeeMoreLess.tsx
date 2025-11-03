@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from 'react';
 
 type SeeMoreLessProps = {
   text?: string;
@@ -13,60 +13,71 @@ export default function SeeMoreLess({ text, lines, addClass, children }: SeeMore
   const [expanded, setExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
-
-  const getLineClampClass = () => {
-    const clampLines = Math.max(1, Math.min(lines || 3, 6));
-    const clampClasses: Record<number, string> = {
-      1: 'line-clamp-1',
-      2: 'line-clamp-2',
-      3: 'line-clamp-3',
-      4: 'line-clamp-4',
-      5: 'line-clamp-5',
-      6: 'line-clamp-6',
-    };
-    return clampClasses[clampLines] || 'line-clamp-3';
-  };
+  const clampLines = Math.max(1, Math.min(lines || 3, 10));
 
   useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
 
-    const checkClamp = () => {
-      const isClamping = el.scrollHeight > el.clientHeight + 1;
-      setIsClamped(isClamping);
+    const getLineHeightPx = () => {
+      const cs = getComputedStyle(el);
+      const lh = cs.lineHeight;
+      if (lh === 'normal') {
+        const fontSize = parseFloat(cs.fontSize) || 16;
+        return 1.6 * fontSize;
+      }
+      const px = parseFloat(lh);
+      return isNaN(px) ? 24 : px;
     };
 
-    const timeoutId = setTimeout(checkClamp, 100);
+    const recompute = () => {
+      const clampPx = getLineHeightPx() * clampLines;
+      const fullHeight = el.scrollHeight; // total content height
+      setIsClamped(fullHeight > clampPx + 1);
+    };
 
-    window.addEventListener("resize", checkClamp);
+    const rafId = requestAnimationFrame(recompute);
+    window.addEventListener('resize', recompute);
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => recompute());
+      resizeObserver.observe(el);
+    }
+
+    const mutationObserver = new MutationObserver(() => recompute());
+    mutationObserver.observe(el, { childList: true, subtree: true, characterData: true });
+
     return () => {
-      clearTimeout(timeoutId);
-      window.removeEventListener("resize", checkClamp);
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', recompute);
+      if (resizeObserver) resizeObserver.disconnect();
+      mutationObserver.disconnect();
     };
-  }, [text, children]);
+  }, [clampLines, text, children]);
+
+  const showToggle = isClamped || expanded;
 
   return (
     <div className="w-full">
       <div
         ref={sectionRef}
-        className={`w-full ${expanded ? "" : getLineClampClass()} ${addClass || ""}`}
+        className={`w-full ${expanded ? '' : 'multi-clamp'} ${addClass || ''}`}
         style={{
-          wordWrap: 'break-word',
           overflowWrap: 'break-word',
-          display: expanded ? 'block' : '-webkit-box',
-          WebkitBoxOrient: expanded ? undefined : 'vertical' as const,
-          overflow: expanded ? 'visible' : 'hidden',
+          wordBreak: 'break-word',
+          WebkitLineClamp: expanded ? 'unset' : clampLines,
         }}
       >
         {children || text}
       </div>
-      {(isClamped || expanded) && (
+      {showToggle && (
         <button
-          onClick={() => setExpanded(e => !e)}
+          onClick={() => setExpanded((e) => !e)}
           className="text-primary mt-2 cursor-pointer select-none italic hover:underline focus:outline-none"
           type="button"
         >
-          {expanded ? "Weniger anzeigen" : "Mehr erfahren"}
+          {expanded ? 'Weniger anzeigen' : 'Mehr erfahren'}
         </button>
       )}
     </div>
