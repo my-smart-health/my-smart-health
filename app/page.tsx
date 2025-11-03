@@ -22,9 +22,27 @@ async function getNews() {
   return { news };
 }
 
-export default async function Home() {
+async function getCubePosts(cubeId: string) {
+  const posts = await prisma.posts.findMany({
+    where: { cubeId },
+    orderBy: [
+      { cubeOrder: 'asc' },
+      { createdAt: 'desc' },
+    ],
+    select: { id: true, title: true, photos: true },
+  });
+  return posts;
+}
 
+export default async function Home() {
   const { news } = await getNews();
+
+  const cube = await prisma.cube.findFirst();
+
+  const cubePosts = cube && cube.onOff
+    ? await getCubePosts(cube.id)
+    : [];
+
 
   const newsTopCarousel = news.length > 0
     ? news
@@ -36,20 +54,23 @@ export default async function Home() {
       }))
     : undefined;
 
-  const safeNews = news.length > 0 ? news.map(item => ({
-    id: item.id,
-    info: item.title,
-    image: item.photos && item.photos.length > 0 ? item.photos[0] : '',
-  })) : null;
+  const cubeCarousel = (cubePosts || []).map(p => ({
+    id: p.id,
+    info: p.title,
+    image: p.photos && p.photos.length > 0 ? p.photos[0] : '',
+  }));
 
   return (
     <>
       <div className="w-full">
         <TopCarousel props={newsTopCarousel} />
       </div>
-      <div className="w-full">
-        {safeNews && <NewsCarousel props={safeNews} />}
-      </div>
+      {cube && cube.onOff && cubeCarousel.length > 0 && (
+        <div className="w-full mt-3">
+          <NewsCarousel props={cubeCarousel} />
+        </div>
+      )}
+
       <div className="flex flex-col mt-3 gap-3 w-full mx-auto max-w-[100%]">
         <MySmartHealth />
         <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.news.name} icon="/icon2.png" goTo={CATEGORY_NAMES.news.link} />
