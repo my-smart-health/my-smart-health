@@ -54,6 +54,11 @@ model Posts {
   photos      String[]
   tags        String[]
   socialLinks Json?
+  Cube        Cube?     @relation(fields: [cubeId], references: [id])
+  cubeId      String?
+  cubeOrder   Int?
+
+  @@index([cubeId, cubeOrder])
 }
 
 model Certificate {
@@ -117,4 +122,10 @@ model CategoryUser {
   @@unique([categoryId, userId])
   @@index([categoryId, order])
   @@index([userId])
+}
+
+model Cube {
+  id       String  @id @default(uuid())
+  onOff    Boolean @default(true)
+  postList Posts[]
 }
