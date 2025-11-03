@@ -8,6 +8,7 @@ import { NewsCardType, Social } from "@/utils/types";
 import { CirclePlus } from "lucide-react";
 import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealthBarLink";
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
+import { CATEGORY_NAMES } from "@/utils/constants";
 
 async function getData() {
   const posts = await prisma.posts.findMany({
@@ -49,14 +50,14 @@ export default async function NewsPage() {
     <div className="flex flex-col gap-3 w-full mb-auto max-w-[100%]">
       <MySmartHealth />
       <div className="space-y-4 mx-auto w-full">
-        <NewsSmartHealthMedizinButton name="News" icon="/icon2.png" goTo="/" active />
+        <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.news.name} icon="/icon2.png" goTo="/" active />
       </div>
       {posts && session
         ? <PostCard posts={posts} session={session} /> :
         <PostCard posts={posts} />}
-      <NewsSmartHealthMedizinButton name="Meine Gesundheit" icon="/icon3.png" goTo="/smart-health" />
-      <NewsSmartHealthMedizinButton name="Medizin & Pflege" icon="/icon4.png" goTo="/medizin-und-pflege" />
-      <NewsSmartHealthMedizinButton name="Notfälle" icon={<CirclePlus size={34} color="red" />} goTo="/notfalle" />
+      <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.smartHealth.name} icon="/icon3.png" goTo={CATEGORY_NAMES.smartHealth.link} />
+      <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.medizinUndPflege.name} icon="/icon4.png" goTo={CATEGORY_NAMES.medizinUndPflege.link} />
+      <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.notfalle.name} icon={<CirclePlus size={34} color="red" />} goTo={CATEGORY_NAMES.notfalle.link} />
       <TheHealthBarLink />
     </div>
   );
