@@ -70,7 +70,6 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
     }
   }, [editor, content]);
 
-  // Update editor props when expanded state changes
   useEffect(() => {
     if (!editor) return;
     editor.setOptions({
@@ -106,8 +105,6 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
       const prosemirror = el.querySelector('.ProseMirror') as HTMLElement;
       if (!prosemirror) return;
 
-      // When clamped, scrollHeight > clientHeight means there's hidden content
-      // This is the most reliable way to detect if clamp is active
       const hasOverflow = prosemirror.scrollHeight > prosemirror.clientHeight + 5; // +5px tolerance
       setIsClamped(hasOverflow);
     };
