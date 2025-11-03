@@ -88,19 +88,6 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
     const el = contentRef.current;
     if (!el || !editor) return;
 
-    const getLineHeightPx = () => {
-      const prosemirror = el.querySelector('.ProseMirror');
-      if (!prosemirror) return 24;
-      const cs = getComputedStyle(prosemirror);
-      const lh = cs.lineHeight;
-      if (lh === 'normal') {
-        const fontSize = parseFloat(cs.fontSize) || 16;
-        return 1.6 * fontSize;
-      }
-      const px = parseFloat(lh);
-      return isNaN(px) ? 24 : px;
-    };
-
     const recompute = () => {
       const prosemirror = el.querySelector('.ProseMirror') as HTMLElement;
       if (!prosemirror) return;
