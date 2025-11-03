@@ -19,8 +19,9 @@ type ParagraphContentProps = {
 
 export default function ParagraphContent({ content, maxLines = 3, className = "" }: ParagraphContentProps) {
   const [expanded, setExpanded] = useState(false);
-  const [needsExpand, setNeedsExpand] = useState(false);
+  const [isClamped, setIsClamped] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+  const clampLines = Math.max(1, Math.min(maxLines, 10));
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -53,7 +54,10 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
     editable: false,
     editorProps: {
       attributes: {
-        class: "bio-content max-w-none focus:outline-none",
+        class: `bio-content max-w-none focus:outline-none ${className}`,
+        style: expanded
+          ? ''
+          : `display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: ${clampLines}; overflow: hidden;`,
       },
     },
   });
@@ -66,56 +70,82 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
     }
   }, [editor, content]);
 
+  // Update editor props when expanded state changes
   useEffect(() => {
-    if (!editor || !contentRef.current) return;
+    if (!editor) return;
+    editor.setOptions({
+      editorProps: {
+        attributes: {
+          class: `bio-content max-w-none focus:outline-none ${className}`,
+          style: expanded
+            ? ''
+            : `display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: ${clampLines}; overflow: hidden;`,
+        },
+      },
+    });
+  }, [editor, expanded, clampLines, className]);
 
-    const checkHeight = () => {
-      if (contentRef.current) {
-        const lineHeight = parseFloat(getComputedStyle(contentRef.current).lineHeight || "24");
-        const maxHeight = lineHeight * maxLines;
-        const actualHeight = contentRef.current.scrollHeight;
-        setNeedsExpand(actualHeight > maxHeight + 5);
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el || !editor) return;
+
+    const getLineHeightPx = () => {
+      const prosemirror = el.querySelector('.ProseMirror');
+      if (!prosemirror) return 24;
+      const cs = getComputedStyle(prosemirror);
+      const lh = cs.lineHeight;
+      if (lh === 'normal') {
+        const fontSize = parseFloat(cs.fontSize) || 16;
+        return 1.6 * fontSize;
       }
+      const px = parseFloat(lh);
+      return isNaN(px) ? 24 : px;
     };
 
-    const handler: () => void = () => {
-      requestAnimationFrame(checkHeight);
+    const recompute = () => {
+      const prosemirror = el.querySelector('.ProseMirror') as HTMLElement;
+      if (!prosemirror) return;
+
+      // When clamped, scrollHeight > clientHeight means there's hidden content
+      // This is the most reliable way to detect if clamp is active
+      const hasOverflow = prosemirror.scrollHeight > prosemirror.clientHeight + 5; // +5px tolerance
+      setIsClamped(hasOverflow);
     };
-    editor.on("create", handler);
-    editor.on("update", handler);
-    requestAnimationFrame(checkHeight);
-    window.addEventListener("resize", checkHeight);
+
+    const rafId = requestAnimationFrame(recompute);
+    window.addEventListener('resize', recompute);
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => recompute());
+      resizeObserver.observe(el);
+    }
+
+    const mutationObserver = new MutationObserver(() => recompute());
+    mutationObserver.observe(el, { childList: true, subtree: true, characterData: true });
 
     return () => {
-      editor.off("create", handler);
-      editor.off("update", handler);
-      window.removeEventListener("resize", checkHeight);
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', recompute);
+      if (resizeObserver) resizeObserver.disconnect();
+      mutationObserver.disconnect();
     };
-  }, [editor, content, maxLines]);
+  }, [editor, clampLines, content]);
 
   if (!content) return null;
 
+  const showToggle = isClamped || expanded;
+
   return (
-    <div className={`w-full overflow-hidden ${className}`}>
-      <div
-        ref={contentRef}
-        className="bio-content"
-        style={{
-          maxHeight: expanded ? "none" : `${maxLines * 1.6 * 1}em`,
-          overflow: "hidden",
-          lineHeight: "1.6",
-          transition: "max-height 0.3s ease",
-        }}
-      >
-        <EditorContent editor={editor} />
-      </div>
-      {needsExpand && (
+    <div className="w-full" ref={contentRef}>
+      <EditorContent editor={editor} />
+      {showToggle && (
         <button
-          onClick={() => setExpanded(!expanded)}
+          onClick={() => setExpanded((e) => !e)}
           className="text-primary mt-2 cursor-pointer select-none italic hover:underline focus:outline-none"
           type="button"
         >
-          {expanded ? "Weniger anzeigen" : "Mehr erfahren"}
+          {expanded ? 'Weniger anzeigen' : 'Mehr erfahren'}
         </button>
       )}
     </div>
