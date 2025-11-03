@@ -91,6 +91,7 @@ export default async function DashboardPage() {
           <span className="font-bold self-center">Admin Only</span>
           <div className="flex flex-col sm:flex-row gap-2">
             <GoToButton src="/dashboard/all-users" name="All Users" className="btn btn-outline btn-info hover:text-white" />
+            <GoToButton src="/dashboard/edit-cube" name="Edit Cube" className="btn btn-outline btn-success hover:text-white shadow" />
             <GoToButton src="/dashboard/edit-my-smart-health" name="Edit My Smart Health" className="btn btn-outline btn-success hover:text-white shadow" />
             <GoToButton src="/register" name="Create new account" className="btn btn-outline btn-error hover:text-white" />
           </div>
