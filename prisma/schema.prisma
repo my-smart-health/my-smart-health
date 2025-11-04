@@ -36,6 +36,7 @@ model User {
   phones           String[]
   profileImages    String[]
   fieldOfExpertise Json?
+  reservationLinks Json?
   socials          String[]
   posts            Posts[]        @relation("UserPosts")
   locations        Location[]     @relation("UserLocations")
