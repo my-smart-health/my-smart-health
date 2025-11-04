@@ -77,8 +77,9 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
 
       <section className="flex flex-wrap gap-4 md:gap-0 w-full">
         <h2 className="font-bold text-primary text-2xl break-words">{name}</h2>
-
-        <FieldOfExpertiseSection fieldOfExpertise={fieldOfExpertise} />
+        <div className="my-auto">
+          <FieldOfExpertiseSection fieldOfExpertise={fieldOfExpertise} />
+        </div>
       </section>
 
       <ProfilePictureSection images={profileImages} />
