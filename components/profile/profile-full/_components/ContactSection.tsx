@@ -25,10 +25,10 @@ export default function ContactSection({
   return (
     <>
       {(phoneNumbers.length > 0 || displayEmail || website || locations.length > 0 || parsedSocials.length > 0 || !platformIcons) && (
-        <Divider addClass="my-4" />
+        <Divider addClass="mt-1" />
       )}
 
-      <section className="flex flex-col gap-3 w-full overflow-hidden">
+      <section className="flex flex-col gap-4 w-full overflow-hidden">
 
         {locations.length > 0 &&
           locations.map((location, idx) => {
@@ -36,25 +36,20 @@ export default function ContactSection({
             const phone = location.phone;
             const schedule = location.schedule as Schedule[] | null;
             return (
-              <div key={idx} className="flex flex-col gap-1 rounded p-4">
+              <div key={idx} className="flex flex-col rounded  px-4">
+                {idx > 0 && <Divider addClass="my-4" />}
                 {address && (
-                  <div className="flex flex-col w-full">
-                    <h2 className="font-bold text-primary text-lg mb-2 flex flex-wrap items-center gap-2">
-                      <span>Adresse</span>
-                      <span>|</span>
+                  <div className="flex flex-col items-start gap-1 break-words w-full">
+                    <span className="break-words flex-1">{address}</span>
+                    <div className="">
                       <Link
                         href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
                         target="_blank"
                         rel="noreferrer noopener"
-                        className="text-primary font-bold text-lg hover:text-primary/75 transition-colors duration-200 underline"
+                        className="flex flex-wrap font-bold text-primary text-lg hover:text-primary/75 transition-colors duration-200 underline"
                       >
-                        Route planen
+                        <MapPin className="flex-shrink-0 mt-1" size={20} /> Route planen
                       </Link>
-                    </h2>
-                    <Divider addClass="my-4" />
-                    <div className="flex items-start gap-1 break-words w-full">
-                      <MapPin className="flex-shrink-0 mt-1" size={20} />
-                      <span className="break-words flex-1">{address}</span>
                     </div>
                   </div>
                 )}
@@ -71,8 +66,7 @@ export default function ContactSection({
 
                 {phone.length > 0 && (
                   <>
-                    <Divider addClass="my-4" />
-                    <div className="flex flex-wrap mx-auto gap-2">
+                    <div className="flex flex-wrap mx-auto mt-4 gap-2">
                       {phone.map((phone, idx) => (
                         <Link
                           key={idx}
@@ -89,8 +83,7 @@ export default function ContactSection({
             );
           })}
 
-        {phoneNumbers.length > 0 && <Divider addClass="my-4" />}
-        <div className="flex flex-wrap mx-auto gap-2">
+        <div className="flex flex-wrap gap-2 mx-auto">
           {phoneNumbers.length > 0 && phoneNumbers.map((phone, idx) => (
             <div key={idx} className="flex items-center h-auto my-auto">
               <Link
@@ -102,42 +95,45 @@ export default function ContactSection({
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-2 mx-auto my-3 border border-primary rounded p-4">
+        {(displayEmail || website || parsedSocials.length > 0) && (
+          <div className="flex flex-wrap gap-2 mx-auto">
 
-          {displayEmail && (
-            <Link
-              href={`mailto:${displayEmail}`}
-              className="badge badge-primary p-5 text-white hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
-              <span className="mr-1">{platformIcons.Email}</span>
-              Email
-            </Link>
-          )}
-
-          {website && (
-            <Link
-              href={website}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="badge badge-primary p-5 text-white hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
-              <span className="mr-1">{platformIcons.Website}</span>
-              Website
-            </Link>
-          )}
-
-          {parsedSocials.length > 0 && parsedSocials.map((social, idx) => (
-            <div key={social.url + idx} className="flex items-center my-auto">
+            {displayEmail && (
               <Link
-                href={social.url}
+                href={`mailto:${displayEmail}`}
+                className="badge badge-primary p-5 text-white hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
+                <span className="mr-1">{platformIcons.Email}</span>
+                Email
+              </Link>
+            )}
+
+            {website && (
+              <Link
+                href={website}
                 target="_blank"
                 rel="noreferrer noopener"
                 className="badge badge-primary p-5 text-white hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
-                <span className="mr-1">{platformIcons[social.platform]}</span>
-                {social.platform}
+                <span className="mr-1">{platformIcons.Website}</span>
+                Website
               </Link>
-            </div>
-          ))}
+            )}
 
-        </div>
+            {parsedSocials.length > 0 && parsedSocials.map((social, idx) => (
+              <div key={social.url + idx} className="flex items-center my-auto">
+                <Link
+                  href={social.url}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="badge badge-primary p-5 text-white hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
+                  <span className="mr-1">{platformIcons[social.platform]}</span>
+                  {social.platform}
+                </Link>
+              </div>
+            ))}
+
+          </div>
+        )}
+
       </section >
     </>
   );
