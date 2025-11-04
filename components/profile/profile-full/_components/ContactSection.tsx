@@ -36,7 +36,7 @@ export default function ContactSection({
             const phone = location.phone;
             const schedule = location.schedule as Schedule[] | null;
             return (
-              <div key={idx} className="flex flex-col rounded  px-4">
+              <div key={idx} className="flex flex-col rounded px-4">
                 {idx > 0 && <Divider addClass="my-4" />}
                 {address && (
                   <div className="flex flex-col items-start gap-1 break-words w-full">
@@ -66,7 +66,7 @@ export default function ContactSection({
 
                 {phone.length > 0 && (
                   <>
-                    <div className="flex flex-wrap mx-auto mt-4 gap-2">
+                    <div className="flex flex-wrap mx-auto mt-6 gap-2">
                       {phone.map((phone, idx) => (
                         <Link
                           key={idx}
