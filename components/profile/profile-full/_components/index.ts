@@ -4,7 +4,5 @@ export { default as BioSection } from './BioSection';
 export { default as NewsSection } from './NewsSection';
 export { default as ContactSection } from './ContactSection';
 export { default as ScheduleSection } from './ScheduleSection';
-export { default as ReservationSection } from './ReservationSection';
-export { default as PrescriptionSection } from './PrescriptionSection';
 export { default as CertificatesSection } from './CertificatesSection';
 export { default as PrescriptionReservation } from './PrescriptionReservation';
