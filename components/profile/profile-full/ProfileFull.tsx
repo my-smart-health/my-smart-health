@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { parseSocials } from "@/utils/common";
-import { Certificate, FieldOfExpertise, ProfileNewsCarouselItem, Schedule } from "@/utils/types";
+import { Certificate, FieldOfExpertise, ProfileNewsCarouselItem, ReservationLink, Schedule } from "@/utils/types";
 
 import {
   ProfilePictureSection,
@@ -11,9 +11,8 @@ import {
   NewsSection,
   ContactSection,
   ScheduleSection,
-  ReservationSection,
-  PrescriptionSection,
   CertificatesSection,
+  PrescriptionReservation,
 } from "./_components";
 
 import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube } from "lucide-react";
@@ -47,6 +46,7 @@ type User = {
   locations: Location[];
   schedule: Schedule[];
   certificates: Certificate[];
+  reservationLinks?: ReservationLink[] | null;
 };
 
 export default function ProfileFull({ user, posts }: { user: User, posts: ProfileNewsCarouselItem[] }) {
@@ -66,6 +66,7 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
     locations,
     schedule = [],
     phones = [],
+    reservationLinks = [],
   } = user || {};
 
   const parsedSocials = parseSocials(socials || []);
@@ -97,9 +98,7 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
         platformIcons={platformIcons}
       />
 
-      <ReservationSection />
-
-      <PrescriptionSection />
+      <PrescriptionReservation reservationLinks={reservationLinks || undefined} />
 
       <CertificatesSection certificates={certificates} />
 

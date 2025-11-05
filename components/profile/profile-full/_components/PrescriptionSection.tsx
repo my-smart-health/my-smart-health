@@ -1,12 +1,15 @@
 import Divider from "@/components/divider/Divider";
 import { ClipboardPlus } from "lucide-react";
 import Link from "next/link";
+import { ReservationLink } from "@/utils/types";
 
 type Props = {
   src?: string;
+  reservationLinks?: ReservationLink[];
 };
-export default function PrescriptionSection({ src }: Props) {
-  if (!src) return null;
+export default function PrescriptionSection({ src, reservationLinks }: Props) {
+  const computedSrc = src ?? (reservationLinks || []).find((l) => l.type === "Rezeptbestellung")?.url;
+  if (!computedSrc) return null;
   return (
     <>
       <Divider addClass="my-4" />
@@ -16,7 +19,7 @@ export default function PrescriptionSection({ src }: Props) {
         </div>
         <div className="flex align-middle w-full mb-8">
           <Link
-            href={src}
+            href={computedSrc}
             target="_self"
             className="btn btn-primary text-lg mx-auto flex gap-2 rounded"
           >

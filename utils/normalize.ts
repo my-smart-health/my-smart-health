@@ -1,4 +1,10 @@
-import { FieldOfExpertise, Schedule, Location, Certificate } from './types';
+import {
+  FieldOfExpertise,
+  Schedule,
+  Location,
+  Certificate,
+  ReservationLink,
+} from './types';
 
 type RawUser = any;
 
@@ -116,5 +122,6 @@ export function normalizeUser(raw: RawUser) {
     locations,
     schedule: normalizeScheduleArray(raw.schedule ?? []),
     certificates: ensureArray<Certificate>(raw.certificates),
+    reservationLinks: ensureArray<ReservationLink>(raw.reservationLinks),
   };
 }

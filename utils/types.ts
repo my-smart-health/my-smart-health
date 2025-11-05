@@ -153,3 +153,19 @@ export type CategoryNodeSH = {
   children: Map<string, CategoryNodeSH>;
   users: UserProfileSH[];
 };
+
+export const RESERVATION_LINK_TYPES = {
+  OnlineTermine: 'Online Termine',
+  Rezeptbestellung: 'Rezeptbestellung',
+  OnlineReservierungen: 'Online Reservierungen',
+  OnlineShop: 'Online Shop',
+} as const;
+
+export type ReservationLinkType =
+  (typeof RESERVATION_LINK_TYPES)[keyof typeof RESERVATION_LINK_TYPES];
+
+export type ReservationLink = {
+  id: string;
+  type: ReservationLinkType;
+  url: string;
+};

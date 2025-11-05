@@ -4,7 +4,7 @@ import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 
 import EditProfileForm from "@/components/profile/edit-profile-form/EditProfileForm";
-import { FieldOfExpertise, Schedule } from "@/utils/types";
+import { FieldOfExpertise, ReservationLink, Schedule } from "@/utils/types";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -22,6 +22,7 @@ async function getData(sessionId: string) {
       schedule: true,
       certificates: true,
       locations: true,
+      reservationLinks: true,
     },
   });
 
@@ -43,31 +44,38 @@ export default async function EditProfile() {
   };
 
 
-  const fixedLocations = parsedUser.locations.map((loc) => {
+  const safeLocations = parsedUser.locations.map((location) => {
     let schedule: Schedule[] = [];
-    if (Array.isArray(loc.schedule)) {
-      schedule = loc.schedule.filter((s) => s !== null) as Schedule[];
-    } else if (typeof loc.schedule === "string") {
+    if (Array.isArray(location.schedule)) {
+      schedule = location.schedule.filter((scheduleItem) => scheduleItem !== null) as Schedule[];
+    } else if (typeof location.schedule === "string") {
       try {
-        const parsed = JSON.parse(loc.schedule);
-        schedule = Array.isArray(parsed) ? parsed.filter((s) => s !== null) as Schedule[] : [];
+        const parsed = JSON.parse(location.schedule);
+        schedule = Array.isArray(parsed) ? parsed.filter((scheduleItem) => scheduleItem !== null) as Schedule[] : [];
       } catch {
         schedule = [];
       }
-    } else if (loc.schedule !== null && typeof loc.schedule === "object") {
-      schedule = [loc.schedule as Schedule].filter((s) => s !== null) as Schedule[];
+    } else if (location.schedule !== null && typeof location.schedule === "object") {
+      schedule = [location.schedule as Schedule].filter((scheduleItem) => scheduleItem !== null) as Schedule[];
     }
     return {
-      ...loc,
+      ...location,
       schedule,
     };
   });
-
-  const fixedField = Array.isArray(parsedUser.fieldOfExpertise)
+  const safeFieldsOfExpertise = Array.isArray(parsedUser.fieldOfExpertise)
     ? (parsedUser.fieldOfExpertise as unknown as FieldOfExpertise[])
     : [];
+  const safeReservationLinks: ReservationLink[] = Array.isArray(user.reservationLinks)
+    ? (user.reservationLinks as ReservationLink[])
+    : [];
 
-  const safeUser = { ...parsedUser, locations: fixedLocations, fieldOfExpertise: fixedField };
+  const safeUser = {
+    ...parsedUser,
+    locations: safeLocations,
+    fieldOfExpertise: safeFieldsOfExpertise,
+    reservationLinks: safeReservationLinks,
+  };
 
   return (
     <>

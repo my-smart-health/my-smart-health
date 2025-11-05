@@ -2,7 +2,7 @@ import Link from "next/link";
 import prisma from "@/lib/db";
 import { auth } from "@/auth";
 
-import { Certificate, FieldOfExpertise, Schedule } from "@/utils/types";
+import { Certificate, FieldOfExpertise, ReservationLink, Schedule } from "@/utils/types";
 
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
 import GoBack from "@/components/buttons/go-back/GoBack";
@@ -33,6 +33,7 @@ async function getUser(id: string) {
       schedule: true,
       locations: true,
       certificates: true,
+      reservationLinks: true,
     },
   });
   return { user };
@@ -72,8 +73,17 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
   const safeSchedule = user.schedule ? user.schedule as Schedule[] : [];
   const safeCertificates = user.certificates ? user.certificates as unknown as Certificate[] : [];
   const safeFieldOfExpertise = user.fieldOfExpertise ? user.fieldOfExpertise as unknown as FieldOfExpertise[] : [];
+  const safeReservationLinks: ReservationLink[] = Array.isArray(user.reservationLinks)
+    ? (user.reservationLinks as ReservationLink[])
+    : [];
 
-  const safeUser = { ...user, fieldOfExpertise: safeFieldOfExpertise, schedule: safeSchedule, certificates: safeCertificates };
+  const safeUser = {
+    ...user,
+    fieldOfExpertise: safeFieldOfExpertise,
+    schedule: safeSchedule,
+    certificates: safeCertificates,
+    reservationLinks: safeReservationLinks,
+  };
 
   return (
     <>

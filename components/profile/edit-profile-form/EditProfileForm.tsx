@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { PutBlobResult } from "@vercel/blob";
 import { MouseEvent, useEffect, useRef, useState, ChangeEvent } from "react";
 
-import { Certificate, CertificateForm, FieldOfExpertise, Location, Schedule, Social } from "@/utils/types";
+import { Certificate, CertificateForm, FieldOfExpertise, Location, ReservationLink, Schedule, Social } from "@/utils/types";
 import { isInstagramLink, isYoutubeLink, parseSocials, serializeSocials } from "@/utils/common";
 
 import Xlogo from '@/public/x-logo-black.png';
@@ -30,6 +30,7 @@ import {
   PhoneNumbersSection,
   LocationSection
 } from "./_components";
+import ReservationLinksSection from "./_components/ReservationLinksSection";
 
 type User = {
   id: string;
@@ -41,6 +42,7 @@ type User = {
   fieldOfExpertise: FieldOfExpertise[] | null;
   displayEmail: string | null;
   phones: string[];
+  reservationLinks: ReservationLink[] | null;
   schedule: Schedule[] | null;
   certificates: Certificate[] | null;
   locations: Location[];
@@ -70,6 +72,7 @@ export default function EditProfileForm({ user }: { user: User }) {
   const [socials, setSocials] = useState<Social[]>(parseSocials(user.socials || []));
   const [fieldOfExpertise, setFieldOfExpertise] = useState<FieldOfExpertise[]>(user.fieldOfExpertise || []);
   const [certificates, setCertificates] = useState<CertificateForm[]>(user.certificates?.map(cert => ({ ...cert })) || []);
+  const [reservationLinks, setReservationLinks] = useState<ReservationLink[]>(user.reservationLinks || []);
 
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
@@ -365,6 +368,10 @@ export default function EditProfileForm({ user }: { user: User }) {
         schedule: Array.isArray(loc.schedule) ? loc.schedule : [],
       }));
 
+      const filteredReservationLinks = (reservationLinks || []).filter(
+        (link) => typeof link?.url === 'string' && link.url.trim().length > 0
+      );
+
       const payload = {
         name,
         bio,
@@ -375,6 +382,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         socials: serializeSocials(socials),
         phones,
         schedule,
+        reservationLinks: filteredReservationLinks,
         certificates: certificatesPayload,
         locations: locationsPayload,
       };
@@ -469,6 +477,7 @@ export default function EditProfileForm({ user }: { user: User }) {
             />
 
           </div>
+
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Bio" />
           <div className="tab-content border-primary p-10">
 
@@ -476,7 +485,17 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Address/Phone/Local Schedule" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Reservierungen/Termine" />
+          <div className="tab-content border-primary p-10">
+
+            <ReservationLinksSection
+              reservationLinks={reservationLinks}
+              onChange={setReservationLinks}
+            />
+
+          </div>
+
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Address" />
           <div className="tab-content border-primary p-10">
 
             <LocationSection locations={locations} setLocationsAction={setLocations} profileId={user.id} addressRef={addressRef} />

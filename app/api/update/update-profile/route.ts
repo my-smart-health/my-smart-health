@@ -21,36 +21,50 @@ export async function PUT(req: Request) {
       include: { certificates: true, locations: true },
     });
 
-    const dbCertIds = dbUser?.certificates.map((c) => c.id) || [];
-    const incomingCertIds = certificates.filter((c) => c.id).map((c) => c.id);
+    const dbCertIds =
+      dbUser?.certificates.map((certificate) => certificate.id) || [];
+    const incomingCertIds = certificates
+      .filter((certificate) => certificate.id)
+      .map((c) => c.id);
     const certsToDelete = dbCertIds.filter(
       (id) => !incomingCertIds.includes(id)
     );
     const newCertificates = certificates.filter(
-      (c) => !dbCertIds.includes(c.id)
+      (certificate) => !dbCertIds.includes(certificate.id)
     );
-    const existingCertificates = certificates.filter((c) =>
-      dbCertIds.includes(c.id)
+    const existingCertificates = certificates.filter((certificate) =>
+      dbCertIds.includes(certificate.id)
     );
 
-    const dbLocationIds = dbUser?.locations.map((l) => l.id) || [];
+    const dbLocationIds =
+      dbUser?.locations.map((location) => location.id) || [];
     const incomingLocationIds = locations
-      .filter((l: { id: string }) => l.id)
-      .map((l: { id: string }) => l.id);
+      .filter((location: { id: string }) => location.id)
+      .map((locationItem: { id: string }) => locationItem.id);
     const locationsToDelete = dbLocationIds.filter(
       (id) => !incomingLocationIds.includes(id)
     );
     const newLocations = locations.filter(
-      (l: { id: string }) => !dbLocationIds.includes(l.id)
+      (location: { id: string }) => !dbLocationIds.includes(location.id)
     );
-    const existingLocations = locations.filter((l: { id: string }) =>
-      dbLocationIds.includes(l.id)
+    const existingLocations = locations.filter((location: { id: string }) =>
+      dbLocationIds.includes(location.id)
     );
+
+    const sanitizedReservationLinks = Array.isArray(body.data.reservationLinks)
+      ? body.data.reservationLinks.filter(
+          (linkItem: { url?: string }) =>
+            typeof linkItem?.url === 'string' && linkItem.url.trim().length > 0
+        )
+      : undefined;
 
     const updateUser = await prisma.user.update({
       where: { id: body.id },
       data: {
         ...body.data,
+        ...(sanitizedReservationLinks !== undefined && {
+          reservationLinks: sanitizedReservationLinks,
+        }),
         certificates: {
           ...(certsToDelete.length > 0 && {
             deleteMany: certsToDelete.map((id) => ({ id })),

@@ -7,3 +7,4 @@ export { default as ScheduleSection } from './ScheduleSection';
 export { default as ReservationSection } from './ReservationSection';
 export { default as PrescriptionSection } from './PrescriptionSection';
 export { default as CertificatesSection } from './CertificatesSection';
+export { default as PrescriptionReservation } from './PrescriptionReservation';

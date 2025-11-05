@@ -1,14 +1,19 @@
 import Link from "next/link";
 import { CalendarPlus2 } from "lucide-react";
+import { ReservationLink } from "@/utils/types";
 
 import Divider from "@/components/divider/Divider";
 
 type Props = {
   src?: string;
+  reservationLinks?: ReservationLink[];
   isDoctor?: boolean;
 };
-export default function ReservationSection({ src, isDoctor }: Props) {
-  if (!src) return null;
+export default function ReservationSection({ src, reservationLinks, isDoctor }: Props) {
+  const computedSrc = src ?? (reservationLinks || []).find(
+    (l) => l.type === "Online Termine" || l.type === "Online Reservierungen"
+  )?.url;
+  if (!computedSrc) return null;
   return (
     <>
       <Divider addClass="my-4" />
@@ -18,7 +23,7 @@ export default function ReservationSection({ src, isDoctor }: Props) {
         </div>
         <div className="flex align-middle w-full mb-8">
           <Link
-            href={src}
+            href={computedSrc}
             target="_self"
             className="btn btn-primary text-lg mx-auto flex gap-2 rounded"
           >

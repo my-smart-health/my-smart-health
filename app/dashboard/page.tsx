@@ -2,7 +2,7 @@ import prisma from "@/lib/db";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
-import { Certificate, FieldOfExpertise, Schedule } from "@/utils/types";
+import { Certificate, FieldOfExpertise, ReservationLink, Schedule } from "@/utils/types";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
@@ -24,6 +24,7 @@ async function getUser(id: string) {
       schedule: true,
       locations: true,
       certificates: true,
+      reservationLinks: true,
     },
   });
   return user;
@@ -42,7 +43,6 @@ async function getAllPosts(userId: string) {
 
   return posts;
 }
-
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -63,19 +63,26 @@ export default async function DashboardPage() {
 
   const posts = await getAllPosts(user.id);
 
+  const safeSchedule: Schedule[] = Array.isArray(user.schedule)
+    ? (user.schedule as Schedule[])
+    : [];
+  const safeCertificates: Certificate[] = Array.isArray(user.certificates)
+    ? (user.certificates as unknown as Certificate[])
+    : [];
+  const safeFieldOfExpertise: FieldOfExpertise[] = Array.isArray(user.fieldOfExpertise)
+    ? (user.fieldOfExpertise as unknown as FieldOfExpertise[])
+    : [];
+  const safeReservationLinks: ReservationLink[] = Array.isArray(user.reservationLinks)
+    ? (user.reservationLinks as ReservationLink[])
+    : [];
+
   const safeUser = {
     ...user,
-    schedule: Array.isArray(user.schedule)
-      ? user.schedule as Schedule[]
-      : [],
-    certificates: Array.isArray(user.certificates)
-      ? user.certificates as unknown as Certificate[]
-      : [],
-    fieldOfExpertise: Array.isArray(user.fieldOfExpertise)
-      ? user.fieldOfExpertise as unknown as FieldOfExpertise[]
-      : [],
+    schedule: safeSchedule,
+    certificates: safeCertificates,
+    fieldOfExpertise: safeFieldOfExpertise,
+    reservationLinks: safeReservationLinks,
   };
-
 
   return (
     <>
