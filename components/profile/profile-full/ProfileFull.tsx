@@ -12,7 +12,6 @@ import {
   ContactSection,
   ScheduleSection,
   CertificatesSection,
-  PrescriptionReservation,
 } from "./_components";
 
 import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube } from "lucide-react";
@@ -96,9 +95,8 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
         parsedSocials={parsedSocials}
         locations={filteredLocations}
         platformIcons={platformIcons}
+        reservationLinks={reservationLinks || undefined}
       />
-
-      <PrescriptionReservation reservationLinks={reservationLinks || undefined} />
 
       <CertificatesSection certificates={certificates} />
 
