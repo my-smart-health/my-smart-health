@@ -90,6 +90,7 @@ export type Location = {
   phone: string[];
   userId: string;
   schedule: Schedule[];
+  reservationLinks?: ReservationLink[];
 };
 
 export type Social = { platform: string; url: string };
@@ -159,6 +160,7 @@ export const RESERVATION_LINK_TYPES = {
   Rezeptbestellung: 'Rezeptbestellung',
   OnlineReservierungen: 'Online Reservierungen',
   OnlineShop: 'Online Shop',
+  Email: 'Email',
 } as const;
 
 export type ReservationLinkType =
