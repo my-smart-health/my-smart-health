@@ -1,6 +1,6 @@
 import Divider from "@/components/divider/Divider";
 import React from "react";
-import { CalendarPlus2, ClipboardPlus, NotebookTabs, ShoppingCart } from "lucide-react";
+import { CalendarPlus2, ClipboardPlus, NotebookTabs, ShoppingCart, AtSign } from "lucide-react";
 import Link from "next/link";
 import { RESERVATION_LINK_TYPES, ReservationLink } from "@/utils/types";
 
@@ -20,6 +20,7 @@ export default function PrescriptionReservation({ reservationLinks }: Props) {
             type LucideIcon = typeof CalendarPlus2;
             let Icon: LucideIcon = CalendarPlus2;
             let label = "online Termine";
+            let href = item.url;
             switch (item.type) {
               case RESERVATION_LINK_TYPES.OnlineTermine:
                 Icon = CalendarPlus2;
@@ -37,10 +38,15 @@ export default function PrescriptionReservation({ reservationLinks }: Props) {
                 Icon = ShoppingCart;
                 label = "Online Shop";
                 break;
+              case RESERVATION_LINK_TYPES.Email:
+                Icon = AtSign;
+                label = "Email";
+                href = item.url?.toLowerCase().startsWith("mailto:") ? item.url : `mailto:${item.url}`;
+                break;
             }
             return (
               <div key={item.id ?? `${item.type}-${item.url}-${idx}`} className="flex align-middle w-full">
-                <Link href={item.url} target="_self" className="btn btn-primary text-lg mx-auto flex gap-2 rounded">
+                <Link href={href} target="_self" className="btn btn-primary text-lg mx-auto flex gap-2 rounded">
                   <Icon /> <span>{label}</span>
                 </Link>
               </div>

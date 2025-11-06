@@ -58,9 +58,17 @@ export default async function EditProfile() {
     } else if (location.schedule !== null && typeof location.schedule === "object") {
       schedule = [location.schedule as Schedule].filter((scheduleItem) => scheduleItem !== null) as Schedule[];
     }
+    const locLinksUnknown = (location as unknown as { reservationLinks?: unknown }).reservationLinks;
+    const reservationLinks: ReservationLink[] = Array.isArray(locLinksUnknown)
+      ? (locLinksUnknown as ReservationLink[]).filter(
+        (link) => link && typeof link.url === "string" && link.url.trim().length > 0
+      )
+      : [];
+
     return {
       ...location,
       schedule,
+      reservationLinks,
     };
   });
   const safeFieldsOfExpertise = Array.isArray(parsedUser.fieldOfExpertise)

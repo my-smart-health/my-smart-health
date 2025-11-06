@@ -57,13 +57,15 @@ export default function ReservationLinksSection({ reservationLinks, onChange }: 
 
             <label className="form-control w-full">
               <div className="label">
-                <span className="label-text">URL</span>
+                <span className="label-text">{link.type === RESERVATION_LINK_TYPES.Email ? "E-Mail" : "URL"}</span>
               </div>
               <input
-                type="url"
-                placeholder="https://..."
+                type={link.type === RESERVATION_LINK_TYPES.Email ? "email" : "url"}
+                placeholder={link.type === RESERVATION_LINK_TYPES.Email ? "name@example.com" : "https://..."}
                 className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
                 value={link.url}
+                autoComplete={link.type === RESERVATION_LINK_TYPES.Email ? "email" : "url"}
+                inputMode={link.type === RESERVATION_LINK_TYPES.Email ? "email" : "url"}
                 onChange={(e) => handleUpdate(link.id, { url: e.target.value })}
               />
             </label>
@@ -83,9 +85,9 @@ export default function ReservationLinksSection({ reservationLinks, onChange }: 
       <button
         type="button"
         onClick={handleAdd}
-        className="btn btn-outline btn-primary px-3 py-1 w-full"
+        className="btn btn-outline btn-primary px-3 py-1 h-auto w-full"
       >
-        Add Link
+        Add Link Reservierungen/Rezepte
       </button>
     </section>
   );

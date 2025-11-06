@@ -101,32 +101,68 @@ export async function PUT(req: Request) {
           }),
           ...(existingLocations.length > 0 && {
             update: existingLocations.map(
-              (loc: {
+              (location: {
                 id: string;
                 address: string;
-                phone: string;
+                phone: string | string[];
                 schedule: Schedule[];
-              }) => ({
-                where: { id: loc.id },
-                data: {
-                  address: loc.address,
-                  phone: loc.phone,
-                  schedule: Array.isArray(loc.schedule) ? loc.schedule : [],
-                },
-              })
+                reservationLinks?: unknown;
+              }) => {
+                const locLinks = Array.isArray(location.reservationLinks)
+                  ? (location.reservationLinks as Array<{ url?: string }>)
+                  : undefined;
+                return {
+                  where: { id: location.id },
+                  data: {
+                    address: location.address,
+                    phone: (Array.isArray(location.phone)
+                      ? location.phone
+                      : [location.phone]
+                    ).filter(Boolean),
+                    schedule: Array.isArray(location.schedule)
+                      ? location.schedule
+                      : [],
+                    ...(locLinks && {
+                      reservationLinks: locLinks.filter(
+                        (reservationLink) =>
+                          typeof reservationLink?.url === 'string' &&
+                          (reservationLink.url as string).trim().length > 0
+                      ),
+                    }),
+                  },
+                };
+              }
             ),
           }),
           ...(newLocations.length > 0 && {
             create: newLocations.map(
-              (loc: {
+              (location: {
                 address: string;
-                phone: string;
+                phone: string | string[];
                 schedule: Schedule[];
-              }) => ({
-                address: loc.address,
-                phone: loc.phone,
-                schedule: Array.isArray(loc.schedule) ? loc.schedule : [],
-              })
+                reservationLinks?: unknown;
+              }) => {
+                const locLinks = Array.isArray(location.reservationLinks)
+                  ? (location.reservationLinks as Array<{ url?: string }>)
+                  : undefined;
+                return {
+                  address: location.address,
+                  phone: (Array.isArray(location.phone)
+                    ? location.phone
+                    : [location.phone]
+                  ).filter(Boolean),
+                  schedule: Array.isArray(location.schedule)
+                    ? location.schedule
+                    : [],
+                  ...(locLinks && {
+                    reservationLinks: locLinks.filter(
+                      (reservationLink) =>
+                        typeof reservationLink?.url === 'string' &&
+                        (reservationLink.url as string).trim().length > 0
+                    ),
+                  }),
+                };
+              }
             ),
           }),
         },

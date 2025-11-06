@@ -103,10 +103,22 @@ export function normalizeUser(raw: RawUser) {
   const profileImages = ensureArray<string>(raw.profileImages);
   const socials = ensureArray<string>(raw.socials);
   const fieldOfExpertise = normalizeFieldOfExpertise(raw.fieldOfExpertise);
-  const locations = ensureArray<Location>(raw.locations).map((loc) => {
-    const schedule = normalizeScheduleArray((loc as any).schedule ?? []);
-    return { ...loc, schedule };
-  });
+  const locations = ensureArray<Location>(raw.locations).map(
+    (locationRecord) => {
+      const locationData = locationRecord as unknown as Record<string, unknown>;
+      const schedule = normalizeScheduleArray(locationData.schedule ?? []);
+      const reservationLinks: ReservationLink[] = Array.isArray(
+        locationData.reservationLinks
+      )
+        ? (locationData.reservationLinks as ReservationLink[])
+        : [];
+      return {
+        ...(locationRecord as object),
+        schedule,
+        reservationLinks,
+      } as Location;
+    }
+  );
 
   return {
     id: raw.id ?? '',

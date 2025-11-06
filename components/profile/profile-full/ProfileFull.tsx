@@ -12,13 +12,14 @@ import {
   ContactSection,
   ScheduleSection,
   CertificatesSection,
+  PrescriptionReservation,
 } from "./_components";
 
 import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube } from "lucide-react";
 import Image from "next/image";
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
-import { Location } from "@prisma/client";
+import { Location } from "@/utils/types";
 
 const platformIcons: Record<string, React.ReactNode> = {
   Email: <AtSign className="inline-block mr-1" size={30} />,
@@ -95,12 +96,13 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
         parsedSocials={parsedSocials}
         locations={filteredLocations}
         platformIcons={platformIcons}
-        reservationLinks={reservationLinks || undefined}
       />
 
       <CertificatesSection certificates={certificates} />
 
       {schedule.length > 0 && <ScheduleSection schedule={schedule} />}
+
+      <PrescriptionReservation reservationLinks={reservationLinks || undefined} />
 
     </div>
   );

@@ -186,7 +186,7 @@ export function WorkScheduleSection({
           <Divider addClass="my-4 col-span-2" />
 
           <div>
-            <fieldset className="fieldset bg-base-100 border-primary flex justify-center rounded-box w-full border p-2 md:p-4">
+            <fieldset className="fieldset border-primary flex justify-center rounded-box w-full border p-2 md:p-4">
               <legend className="fieldset-legend">Non-stop</legend>
               <label className="label">
                 <input

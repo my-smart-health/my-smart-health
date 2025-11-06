@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { MapPin } from "lucide-react";
-import { Location } from "@prisma/client";
+import { Location } from "@/utils/types";
 
 import Divider from "@/components/divider/Divider";
 import { ReservationLink, Schedule } from "@/utils/types";
@@ -15,7 +15,6 @@ export default function ContactSection({
   locations,
   parsedSocials,
   platformIcons,
-  reservationLinks,
 }: {
   phoneNumbers: string[];
   displayEmail: string | null;
@@ -23,7 +22,6 @@ export default function ContactSection({
   locations: Location[];
   parsedSocials: { platform: string; url: string }[];
   platformIcons: Record<string, React.ReactNode>;
-  reservationLinks?: ReservationLink[];
 }) {
 
   return (
@@ -39,6 +37,11 @@ export default function ContactSection({
             const address = location.address;
             const phone = location.phone;
             const schedule = location.schedule as Schedule[] | null;
+            const locReservationLinks: ReservationLink[] = Array.isArray(location.reservationLinks)
+              ? location.reservationLinks.filter(
+                (reservationLink) => reservationLink && typeof reservationLink.url === 'string' && reservationLink.url.trim().length > 0
+              )
+              : [];
             return (
               <div key={idx} className="flex flex-col p-4 border border-primary rounded">
                 {idx > 0 && <Divider addClass="my-4" />}
@@ -84,11 +87,13 @@ export default function ContactSection({
                   </div>
                 )}
 
+                {locReservationLinks.length > 0 && (
+                  <PrescriptionReservation reservationLinks={locReservationLinks} />
+                )}
+
               </div >
             );
           })}
-
-        <PrescriptionReservation reservationLinks={reservationLinks || undefined} />
 
         <div className="flex flex-wrap gap-2 mx-auto ">
           {phoneNumbers.length > 0 && phoneNumbers.map((phone, idx) => (

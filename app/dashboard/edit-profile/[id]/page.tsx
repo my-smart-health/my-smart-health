@@ -52,7 +52,7 @@ export default async function EditProfileId({ params }: { params: Promise<{ id: 
     schedule: typeof user.schedule === "string" ? JSON.parse(user.schedule) : user.schedule,
   };
 
-  const fixedLocations = parsedUser.locations.map((location) => {
+  const safeLocations = parsedUser.locations.map((location) => {
     let schedule: Schedule[] = [];
     if (Array.isArray(location.schedule)) {
       schedule = location.schedule.filter((scheduleItem) => scheduleItem !== null) as Schedule[];
@@ -66,22 +66,33 @@ export default async function EditProfileId({ params }: { params: Promise<{ id: 
     } else if (location.schedule !== null && typeof location.schedule === "object") {
       schedule = [location.schedule as Schedule].filter((scheduleItem) => scheduleItem !== null) as Schedule[];
     }
+    const reservationLinks: ReservationLink[] = Array.isArray(location.reservationLinks)
+      ? (location.reservationLinks as unknown[]).filter(
+        (link): link is ReservationLink => {
+          if (typeof link !== "object" || link === null) return false;
+          const url = (link as Record<string, unknown>).url;
+          return typeof url === "string" && url.trim().length > 0;
+        }
+      )
+      : [];
+
     return {
       ...location,
       schedule,
+      reservationLinks,
     };
   });
 
-  const fixedField = Array.isArray(parsedUser.fieldOfExpertise) ? (parsedUser.fieldOfExpertise as unknown as FieldOfExpertise[]) : [];
+  const safeField = Array.isArray(parsedUser.fieldOfExpertise) ? (parsedUser.fieldOfExpertise as unknown as FieldOfExpertise[]) : [];
   const safeReservationLinks: ReservationLink[] = Array.isArray(user.reservationLinks)
     ? (user.reservationLinks as ReservationLink[])
     : [];
-  const fixedUser = { ...parsedUser, locations: fixedLocations, fieldOfExpertise: fixedField, reservationLinks: safeReservationLinks };
+  const safeUser = { ...parsedUser, locations: safeLocations, fieldOfExpertise: safeField, reservationLinks: safeReservationLinks };
 
   return (
     <>
       <h1 className="text-4xl font-extrabold text-primary mb-6">Edit Profile</h1>
-      <EditProfileForm user={fixedUser} />
+      <EditProfileForm user={safeUser} />
     </>
   );
 }

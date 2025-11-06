@@ -3,7 +3,8 @@ import { AddressSection } from "./AddressSection";
 import { PhoneNumbersSection } from "./PhoneNumbersSection";
 import { Navigation, NavigationOff, Phone } from "lucide-react";
 import { WorkScheduleSection } from "./WorkScheduleSection";
-import type { Schedule, Location } from "@/utils/types";
+import type { Schedule, Location, ReservationLink } from "@/utils/types";
+import ReservationLinksSection from "./ReservationLinksSection";
 
 type LocationProps = {
   locations: Location[] | [];
@@ -23,11 +24,12 @@ export function LocationSection({ locations, setLocationsAction, profileId, addr
         phone: [],
         userId: profileId,
         schedule: [] as Schedule[],
+        reservationLinks: [] as ReservationLink[],
       } as Location
     ]);
   };
 
-  const updateLocation = (index: number, field: keyof Location, value: string | string[] | Schedule[]) => {
+  const updateLocation = (index: number, field: keyof Location, value: string | string[] | Schedule[] | ReservationLink[]) => {
     const newLocations = [...locations];
     newLocations[index] = { ...newLocations[index], [field]: value };
     setLocationsAction(newLocations);
@@ -54,8 +56,8 @@ export function LocationSection({ locations, setLocationsAction, profileId, addr
     const updatedSchedule = Array.isArray(location.schedule)
       ? location.schedule
         .filter(isSchedule)
-        .map(s =>
-          s.id === scheduleId ? { ...s, day: { ...s.day, [day]: !s.day[day] } } : s
+        .map(scheduleItem =>
+          scheduleItem.id === scheduleId ? { ...scheduleItem, day: { ...scheduleItem.day, [day]: !scheduleItem.day[day] } } : scheduleItem
         )
       : [];
     updateLocationSchedule(locationIdx, updatedSchedule);
@@ -66,8 +68,8 @@ export function LocationSection({ locations, setLocationsAction, profileId, addr
     const updatedSchedule = Array.isArray(location.schedule)
       ? location.schedule
         .filter(isSchedule)
-        .map(s =>
-          s.id === scheduleId ? { ...s, [openClose]: value } : s
+        .map(scheduleItem =>
+          scheduleItem.id === scheduleId ? { ...scheduleItem, [openClose]: value } : scheduleItem
         )
       : [];
     updateLocationSchedule(locationIdx, updatedSchedule);
@@ -77,7 +79,7 @@ export function LocationSection({ locations, setLocationsAction, profileId, addr
     <section className="mb-4">
 
       {locations.map((location, index) => (
-        <div key={location.id} className="border border-primary rounded p-4 mb-4">
+        <div key={location.id} className="border odd:border-primary odd:bg-primary/10 even:border-yellow-500 even:bg-yellow-50 rounded p-4 mb-4">
           <AddressSection address={location.address} setAddressAction={(value) => updateLocation(index, "address", value)} addressRef={addressRef} />
 
           <Divider addClass="my-4" />
@@ -95,6 +97,13 @@ export function LocationSection({ locations, setLocationsAction, profileId, addr
             setSchedule={(value) => updateLocation(index, "schedule", value)}
             toggleScheduleDay={(scheduleId, day) => toggleScheduleDay(index, scheduleId, day)}
             setScheduleTime={(scheduleId, openClose, value) => setScheduleTime(index, scheduleId, openClose, value)}
+          />
+
+          <Divider addClass="my-4" />
+
+          <ReservationLinksSection
+            reservationLinks={location.reservationLinks || []}
+            onChange={(links) => updateLocation(index, "reservationLinks", links)}
           />
 
           <Divider addClass="my-4" />

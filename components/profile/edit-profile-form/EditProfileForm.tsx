@@ -350,22 +350,25 @@ export default function EditProfileForm({ user }: { user: User }) {
         return;
       }
 
-      const certificatesPayload = certificates.map(cert => ({
-        id: cert.id,
-        name: cert.name,
-        issuer: cert.issuer,
-        images: cert.images,
-        issueDate: cert.issueDate ? new Date(cert.issueDate).toISOString() : null,
-        expiryDate: cert.expiryDate ? new Date(cert.expiryDate).toISOString() : null,
-        credentialId: cert.credentialId !== undefined && cert.credentialId !== null && cert.credentialId !== '' ? cert.credentialId : null,
-        credentialUrl: cert.credentialUrl || null,
+      const certificatesPayload = certificates.map(certificate => ({
+        id: certificate.id,
+        name: certificate.name,
+        issuer: certificate.issuer,
+        images: certificate.images,
+        issueDate: certificate.issueDate ? new Date(certificate.issueDate).toISOString() : null,
+        expiryDate: certificate.expiryDate ? new Date(certificate.expiryDate).toISOString() : null,
+        credentialId: certificate.credentialId !== undefined && certificate.credentialId !== null && certificate.credentialId !== '' ? certificate.credentialId : null,
+        credentialUrl: certificate.credentialUrl || null,
       }));
 
-      const locationsPayload = locations.map(loc => ({
-        address: Array.isArray(loc.address) ? loc.address.join(", ") : loc.address,
-        phone: loc.phone,
-        id: loc.id,
-        schedule: Array.isArray(loc.schedule) ? loc.schedule : [],
+      const locationsPayload = locations.map(location => ({
+        address: Array.isArray(location.address) ? location.address.join(", ") : location.address,
+        phone: location.phone,
+        id: location.id,
+        schedule: Array.isArray(location.schedule) ? location.schedule : [],
+        reservationLinks: Array.isArray(location.reservationLinks)
+          ? location.reservationLinks.filter((reservationLink) => typeof reservationLink?.url === 'string' && reservationLink.url.trim().length > 0)
+          : [],
       }));
 
       const filteredReservationLinks = (reservationLinks || []).filter(
@@ -485,16 +488,6 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Reservierungen/Termine" />
-          <div className="tab-content border-primary p-10">
-
-            <ReservationLinksSection
-              reservationLinks={reservationLinks}
-              onChange={setReservationLinks}
-            />
-
-          </div>
-
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Address" />
           <div className="tab-content border-primary p-10">
 
@@ -581,6 +574,16 @@ export default function EditProfileForm({ user }: { user: User }) {
               setCertificates={setCertificates}
               handleRemoveImage={handleRemoveCertificateImage}
               handleUploadCertificate={handleUploadCertificate}
+            />
+
+          </div>
+
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Reservierungen/Termine" />
+          <div className="tab-content border-primary p-10">
+
+            <ReservationLinksSection
+              reservationLinks={reservationLinks}
+              onChange={setReservationLinks}
             />
 
           </div>
