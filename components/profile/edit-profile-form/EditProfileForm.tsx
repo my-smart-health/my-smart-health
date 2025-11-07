@@ -464,10 +464,10 @@ export default function EditProfileForm({ user }: { user: User }) {
       >
         <Divider addClass="mb-4" />
 
-        <div className="tabs tabs-lift m-2 w-full max-w-full">
+        <div className="tabs tabs-lift m-2 w-full mx-auto max-w-[96%]">
 
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Name/Expertise" defaultChecked />
-          <div className="tab-content border-primary p-10">
+          <div className="tab-content border-primary p-3 md:p-10">
 
             <NameSection name={name} onChange={setName} />
 
@@ -482,21 +482,21 @@ export default function EditProfileForm({ user }: { user: User }) {
           </div>
 
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Bio" />
-          <div className="tab-content border-primary p-10">
+          <div className="tab-content border-primary p-3 md:p-10">
 
             <BioSection bio={bio} setBio={setBio} />
 
           </div>
 
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Address" />
-          <div className="tab-content border-primary p-10">
+          <div className="tab-content border-primary p-3 md:p-10">
 
             <LocationSection locations={locations} setLocationsAction={setLocations} profileId={user.id} addressRef={addressRef} />
 
           </div>
 
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Phone/Email" />
-          <div className="tab-content border-primary p-10">
+          <div className="tab-content border-primary p-3 md:p-10">
 
             <section about="links" className="space-y-4">
               <PhoneNumbersSection phoneNumbers={phones} setPhoneNumbers={setPhones} platformIcon={platformIcons['Phone']} />
@@ -516,7 +516,7 @@ export default function EditProfileForm({ user }: { user: User }) {
           </div>
 
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Additional Social Links" />
-          <div className="tab-content border-primary p-10">
+          <div className="tab-content border-primary p-3 md:p-10">
 
             <section about="links" className="space-y-4">
 
@@ -530,7 +530,7 @@ export default function EditProfileForm({ user }: { user: User }) {
 
 
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Image/Video" />
-          <div className="tab-content border-primary p-10">
+          <div className="tab-content border-primary p-3 md:p-10">
 
             <ProfileMediaCarousel blobResult={blobResult} />
 
@@ -567,7 +567,7 @@ export default function EditProfileForm({ user }: { user: User }) {
           </div>
 
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Certificates" />
-          <div className="tab-content border-primary p-10">
+          <div className="tab-content border-primary p-3 md:p-10">
 
             <CertificatesSection
               certificates={certificates}
@@ -579,7 +579,7 @@ export default function EditProfileForm({ user }: { user: User }) {
           </div>
 
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Reservierungen/Termine" />
-          <div className="tab-content border-primary p-10">
+          <div className="tab-content border-primary p-3 md:p-10">
 
             <ReservationLinksSection
               reservationLinks={reservationLinks}
@@ -589,7 +589,7 @@ export default function EditProfileForm({ user }: { user: User }) {
           </div>
 
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Global Schedule" />
-          <div className="tab-content border-primary p-10">
+          <div className="tab-content border-primary p-3 md:p-10">
 
             <WorkScheduleSection
               schedule={schedule}
