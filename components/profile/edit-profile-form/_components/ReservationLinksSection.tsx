@@ -2,6 +2,7 @@
 
 import { ReservationLink, RESERVATION_LINK_TYPES, ReservationLinkType } from "@/utils/types";
 import Divider from "@/components/divider/Divider";
+import { NotebookTabs } from "lucide-react";
 
 type Props = {
   reservationLinks: ReservationLink[];
@@ -43,7 +44,7 @@ export default function ReservationLinksSection({ reservationLinks, onChange }: 
                 <span className="label-text">Type</span>
               </div>
               <select
-                className="select select-bordered select-primary w-full max-w-xs border-primary"
+                className="select select-lg select-bordered select-primary w-full max-w-xs border-primary"
                 value={link.type}
                 onChange={(e) => handleUpdate(link.id, { type: e.target.value as ReservationLinkType })}
               >
@@ -87,7 +88,7 @@ export default function ReservationLinksSection({ reservationLinks, onChange }: 
         onClick={handleAdd}
         className="btn btn-outline btn-primary px-3 py-1 h-auto w-full"
       >
-        Add Link Reservierungen/Rezepte
+        <NotebookTabs /> Add Link Reservierungen/Rezepte
       </button>
     </section>
   );
