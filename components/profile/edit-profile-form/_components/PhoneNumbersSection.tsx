@@ -1,5 +1,6 @@
 import React from "react";
 import Divider from "@/components/divider/Divider";
+import { Phone } from "lucide-react";
 
 type PhoneNumbersSectionProps = {
   phoneNumbers: string[];
@@ -55,7 +56,7 @@ export function PhoneNumbersSection({ phoneNumbers, setPhoneNumbers, platformIco
         onClick={() => setPhoneNumbers([...phoneNumbers, ""])}
         className="btn btn-outline btn-primary px-3 py-1 w-full"
       >
-        Add Phone Number
+        <Phone />  Add Phone Number
       </button>
     </section>
   );
