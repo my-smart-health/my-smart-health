@@ -53,7 +53,7 @@ export default function ContactSection({
                         href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
                         target="_blank"
                         rel="noreferrer noopener"
-                        className="badge badge-primary badge-xl my-1 mr-10 py-5 text-white hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link"
+                        className="badge badge-primary badge-xl my-1 mr-10 py-5 w-full text-white hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link"
                       >
                         <MapPin className="flex-shrink-0 mt-0" size={20} /> Route
                       </Link>
