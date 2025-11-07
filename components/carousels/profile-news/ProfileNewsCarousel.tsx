@@ -19,6 +19,8 @@ export default function ProfileNewsCarousel({ carouselItems, disableOnInteractio
     return <div>No profiles found</div>;
   }
 
+  const isBulletsNeeded = carouselItems.length > 4;
+
   return (
     <Suspense fallback={<div className="text-center w-full">Loading...</div>}>
       <div draggable={false}>
@@ -34,7 +36,7 @@ export default function ProfileNewsCarousel({ carouselItems, disableOnInteractio
           {carouselItems.map((item) => (
             <SwiperSlide
               key={item.id}
-              className="cursor-pointer pb-6">
+              className={`cursor-pointer ${isBulletsNeeded ? 'pb-5' : ''}`}>
               <div
                 className="relative"
               >
