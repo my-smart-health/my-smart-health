@@ -12,6 +12,7 @@ import Navbar from "@/components/navbar/Navbar";
 import LogOut from "@/components/buttons/log-out/LogOut";
 import GoBackIndexCheck from "@/components/buttons/go-back-layout/GoBackIndexCheck";
 import Divider from "@/components/divider/Divider";
+import BackToTop from "@/components/buttons/back-to-top/BackToTop";
 
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -51,8 +52,14 @@ export default async function RootLayout({
   return (
     <html lang="de" data-scroll-behavior="smooth">
       <head>
-        <link rel="icon" href="/logo.png" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#ffffff" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="manifest" href="/site.webmanifest" />
       </head>
       <body
         className={`${ibmPlexSans.variable} antialiased flex flex-col justify-center items-center pt-4 min-h-[100dvh] w-auto lg:max-w-3xl mx-auto p-2 overscroll-x-none border bg-white text-black`}
@@ -64,6 +71,7 @@ export default async function RootLayout({
         <GoBackIndexCheck />
         <main className="flex flex-col gap-4 items-center min-h-[72dvh] py-8 pt-2 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
           {children}
+          <BackToTop />
         </main>
         <Analytics />
         <footer className="bg-primary w-full text-center text-white py-4 mt-8">
