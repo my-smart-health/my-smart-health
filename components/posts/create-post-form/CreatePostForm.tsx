@@ -270,9 +270,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       setIsDisabled(true);
       setError(null);
       errorModalRef.current?.close();
-      setTimeout(() => {
-        router.push('/dashboard');
-      }, 3000);
+      router.push('/dashboard');
       return;
     } else if (isDefaultLogo === true) {
       setIsDisabled(true);
