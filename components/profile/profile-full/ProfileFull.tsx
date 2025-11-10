@@ -89,6 +89,8 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
 
       <NewsSection posts={posts} />
 
+      <CertificatesSection certificates={certificates} />
+
       <ContactSection
         phoneNumbers={phones}
         displayEmail={displayEmail}
@@ -98,7 +100,6 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
         platformIcons={platformIcons}
       />
 
-      <CertificatesSection certificates={certificates} />
 
       {schedule.length > 0 && <ScheduleSection schedule={schedule} />}
 
