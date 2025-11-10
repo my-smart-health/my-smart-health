@@ -40,7 +40,7 @@ export default function BackToTop() {
       aria-label="Back to top"
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
       className={[
-        'btn btn-circle fixed bottom-6 right-6 p-2 bg-primary text-white rounded-full shadow-lg',
+        'btn btn-circle fixed bottom-25 right-6 p-2 bg-primary text-white rounded-full shadow-lg',
         'hover:bg-primary/75 focus:outline-none focus:ring-2 focus:ring-primary/50',
         'transition-all duration-300 ease-out z-50',
         visible ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-3 scale-95 pointer-events-none',
