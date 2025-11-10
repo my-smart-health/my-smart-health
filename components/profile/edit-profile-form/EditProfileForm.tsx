@@ -578,16 +578,6 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Reservierungen/Termine" />
-          <div className="tab-content border-primary p-3 md:p-10">
-
-            <ReservationLinksSection
-              reservationLinks={reservationLinks}
-              onChange={setReservationLinks}
-            />
-
-          </div>
-
           <input type="radio" name="my_tabs_2" className="tab" aria-label="Global Schedule" />
           <div className="tab-content border-primary p-3 md:p-10">
 
@@ -596,6 +586,16 @@ export default function EditProfileForm({ user }: { user: User }) {
               setSchedule={setSchedule}
               toggleScheduleDay={toggleScheduleDay}
               setScheduleTime={setScheduleTime}
+            />
+
+          </div>
+
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Reservierungen/Termine" />
+          <div className="tab-content border-primary p-3 md:p-10">
+
+            <ReservationLinksSection
+              reservationLinks={reservationLinks}
+              onChange={setReservationLinks}
             />
 
           </div>
