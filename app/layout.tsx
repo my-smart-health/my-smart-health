@@ -1,18 +1,17 @@
-import Link from "next/link";
 import { auth } from "@/auth";
 
 import type { Metadata } from "next";
 import { IBM_Plex_Sans } from "next/font/google";
 
-import { Analytics } from "@vercel/analytics/next";
-
 import "./globals.css";
 
-import Navbar from "@/components/navbar/Navbar";
-import LogOut from "@/components/buttons/log-out/LogOut";
 import GoBackIndexCheck from "@/components/buttons/go-back-layout/GoBackIndexCheck";
 import Divider from "@/components/divider/Divider";
 import BackToTop from "@/components/buttons/back-to-top/BackToTop";
+import CookieConsentModal from "@/components/modals/cookie-consent/CookieConsentModal";
+import Navbar from "@/components/navigation/navbar/Navbar";
+import AnalyticsConsent from "@/components/analytics/AnalyticsConsent";
+import Footer from "@/components/navigation/footer/Footer";
 
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -67,6 +66,7 @@ export default async function RootLayout({
         className={`${ibmPlexSans.variable} antialiased flex flex-col justify-center items-center pt-4 min-h-[100dvh] w-auto lg:max-w-3xl mx-auto p-2 overscroll-x-none border bg-white text-black`}
       >
         <Navbar />
+        <CookieConsentModal />
 
         <Divider addClass="my-4" />
 
@@ -75,28 +75,8 @@ export default async function RootLayout({
           {children}
           <BackToTop />
         </main>
-        <Analytics />
-        <footer className="bg-primary w-full text-center text-white py-4 mt-8">
-          <Link href="/impressum" className="hover:underline capitalize">
-            Impressum
-          </Link>
-          <span className="mx-1">|</span>
-          <Link href="/datenschutz" className="hover:underline capitalize">
-            Datenschutz
-          </Link>
-          <span className="mx-1">|</span>
-          <Link href="/kontakt" className="hover:underline capitalize">
-            Kontakt
-          </Link>
-          <span className="mx-1">|</span>
-          {!session?.user ? (
-            <Link href="/login" className="hover:underline capitalize">
-              Login
-            </Link>
-          ) : (
-            <LogOut addClasses="link link-error hover:text-white" />
-          )}
-        </footer>
+        <AnalyticsConsent />
+        <Footer session={session} />
       </body>
     </html>
   );

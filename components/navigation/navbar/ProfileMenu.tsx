@@ -1,7 +1,7 @@
-import LogOut from "../buttons/log-out/LogOut";
 import { Settings } from "lucide-react";
 import { auth } from "@/auth";
 import Link from "next/link";
+import LogOut from "@/components/buttons/log-out/LogOut";
 
 export default async function ProfileMenu() {
   const session = await auth();
