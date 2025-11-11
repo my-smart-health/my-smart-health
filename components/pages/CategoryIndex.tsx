@@ -7,6 +7,14 @@ type Props = {
   profileType: ProfileType;
 };
 
+type CategoryRecord = {
+  id: string;
+  name: string;
+  parentId: string | null;
+};
+
+type CategoryLookup = Map<string, CategoryRecord>;
+
 function buildCategoryTree(users: UserProfileSH[]): CategoryNodeSH {
   const root: CategoryNodeSH = { name: '', children: new Map(), users: [] };
   for (const user of users) {
@@ -26,37 +34,65 @@ function buildCategoryTree(users: UserProfileSH[]): CategoryNodeSH {
   return root;
 }
 
-async function getUsersByProfileType(profileType: ProfileType): Promise<UserProfileSH[]> {
-  const cats = await prisma.category.findMany({ where: { type: profileType }, select: { id: true } });
-  const catIds = cats.map(c => c.id);
+const resolveCategoryPath = (
+  categoryId: string,
+  lookup: CategoryLookup,
+  cache: Map<string, string[]>,
+): string[] => {
+  if (cache.has(categoryId)) return cache.get(categoryId)!;
 
-  if (catIds.length === 0) return [];
+  const visited = new Set<string>();
+  const path: string[] = [];
+  let current: string | null = categoryId;
 
-  const links = await prisma.categoryUser.findMany({
-    where: { categoryId: { in: catIds } },
-    orderBy: { order: 'asc' },
-    select: { categoryId: true, user: { select: { id: true, name: true, bio: true, profileImages: true } } },
-  });
-
-  async function buildPath(categoryId: string) {
-    const path: string[] = [];
-    let currentId: string | null = categoryId;
-    while (currentId) {
-      const c: { name: string | null; parentId: string | null } | null = await prisma.category.findUnique({ where: { id: currentId }, select: { name: true, parentId: true } });
-      if (!c) break;
-      path.unshift(c.name as string);
-      currentId = (c.parentId as string) ?? null;
-    }
-    return path;
+  while (current) {
+    if (visited.has(current)) break;
+    visited.add(current);
+    const record = lookup.get(current);
+    if (!record) break;
+    path.unshift(record.name);
+    current = record.parentId;
   }
 
-  const results: UserProfileSH[] = [];
+  cache.set(categoryId, path);
+  return path;
+};
+
+type LoadResult = {
+  tree: CategoryNodeSH;
+  pathToCategoryId: Record<string, string>;
+};
+
+async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
+  const categories = await prisma.category.findMany({
+    where: { type: profileType },
+    select: { id: true, name: true, parentId: true },
+  });
+
+  if (!categories.length) {
+    return { tree: buildCategoryTree([]), pathToCategoryId: {} };
+  }
+
+  const lookup: CategoryLookup = new Map(categories.map(category => [category.id, category]));
+  const pathCache = new Map<string, string[]>();
+
+  const links = await prisma.categoryUser.findMany({
+    where: { categoryId: { in: Array.from(lookup.keys()) } },
+    orderBy: { order: 'asc' },
+    select: {
+      categoryId: true,
+      user: { select: { id: true, name: true, bio: true, profileImages: true } },
+    },
+  });
+
+  const users: UserProfileSH[] = [];
   for (const link of links) {
     const user = link.user;
     if (!user || !Array.isArray(user.profileImages) || user.profileImages.length === 0) continue;
-    const path = await buildPath(link.categoryId);
+    const path = resolveCategoryPath(link.categoryId, lookup, pathCache);
     if (!path.length) continue;
-    results.push({
+
+    users.push({
       id: user.id,
       name: user.name || 'No Name',
       bio: user.bio || '',
@@ -65,63 +101,55 @@ async function getUsersByProfileType(profileType: ProfileType): Promise<UserProf
     });
   }
 
-  return results;
-}
-
-export default async function CategoryIndex({ profileType }: Props) {
-  const users = await getUsersByProfileType(profileType);
   const tree = buildCategoryTree(users);
 
-  const allCats = await prisma.category.findMany({ where: { type: profileType }, select: { id: true, name: true, parentId: true } });
-  const byId = new Map(allCats.map(c => [c.id, c] as const));
-  const pathToCategoryId: Record<string, string> = {};
-  for (const c of allCats) {
-    const path: string[] = [];
-    let current: string | null = c.id;
-    while (current) {
-      const cur = byId.get(current);
-      if (!cur) break;
-      path.unshift(cur.name);
-      current = cur.parentId as string | null;
-    }
-    if (path.length) pathToCategoryId[path.join(' > ')] = c.id;
-  }
-
   const ensurePath = (node: CategoryNodeSH, path: string[]) => {
-    let n = node;
-    for (const seg of path) {
-      if (!n.children.has(seg)) {
-        n.children.set(seg, { name: seg, children: new Map(), users: [] });
+    let cursor = node;
+    for (const segment of path) {
+      if (!cursor.children.has(segment)) {
+        cursor.children.set(segment, { name: segment, children: new Map(), users: [] });
       }
-      n = n.children.get(seg)!;
+      cursor = cursor.children.get(segment)!;
     }
   };
 
-  for (const c of allCats) {
-    const path: string[] = [];
-    let current: string | null = c.id;
-    while (current) {
-      const cur = byId.get(current);
-      if (!cur) break;
-      path.unshift(cur.name);
-      current = cur.parentId as string | null;
-    }
+  for (const category of categories) {
+    const path = resolveCategoryPath(category.id, lookup, pathCache);
     if (path.length) ensurePath(tree, path);
   }
 
+  const pathToCategoryId: Record<string, string> = {};
+  for (const category of categories) {
+    const path = resolveCategoryPath(category.id, lookup, pathCache);
+    if (path.length) {
+      pathToCategoryId[path.join(' > ')] = category.id;
+    }
+  }
+
   const sortTree = (node: CategoryNodeSH) => {
-    const entries = Array.from(node.children.entries()).sort((a, b) => a[0].localeCompare(b[0], 'de', { sensitivity: 'base' }));
-    node.children = new Map(entries);
+    const sorted = Array.from(node.children.entries()).sort((a, b) =>
+      a[0].localeCompare(b[0], 'de', { sensitivity: 'base' }),
+    );
+    node.children = new Map(sorted);
     for (const [, child] of node.children) sortTree(child);
   };
 
   sortTree(tree);
 
-  const session = await auth();
+  return { tree, pathToCategoryId };
+}
+
+export default async function CategoryIndex({ profileType }: Props) {
+  const [categoryData, session] = await Promise.all([loadCategoryTree(profileType), auth()]);
 
   return (
     <div className="grid grid-cols-1 gap-2">
-      <CategoryAccordion node={tree} type={profileType} isAdmin={session?.user?.role === 'ADMIN'} pathToCategoryId={pathToCategoryId} />
+      <CategoryAccordion
+        node={categoryData.tree}
+        type={profileType}
+        isAdmin={session?.user?.role === 'ADMIN'}
+        pathToCategoryId={categoryData.pathToCategoryId}
+      />
     </div>
   );
 }
