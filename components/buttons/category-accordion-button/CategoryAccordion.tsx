@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Triangle } from "lucide-react";
 
@@ -142,6 +142,22 @@ export default function CategoryAccordion({
     }
   };
 
+  const childEntries = useMemo(
+    () =>
+      Array.from(node.children.entries()).sort((a, b) =>
+        a[0].localeCompare(b[0], "de", { sensitivity: "base" })
+      ),
+    [node]
+  );
+
+  const sortedUsers = useMemo(
+    () =>
+      [...node.users].sort((a, b) =>
+        (a.name || "").localeCompare(b.name || "", "de", { sensitivity: "base" })
+      ),
+    [node.users]
+  );
+
   return (
     <>
       {isAdmin && level === 0 && (
@@ -154,7 +170,7 @@ export default function CategoryAccordion({
         </button>
       )}
 
-      {[...node.children.entries()].map(([catName, child]) => {
+      {childEntries.map(([catName, child]) => {
         const key = parentKey + catName;
         const isOpen = !!open[key];
         const currentPath = [...parentPath, catName];
@@ -267,7 +283,7 @@ export default function CategoryAccordion({
       })}
 
       {level === 0 &&
-        node.users.map((user) => (
+        sortedUsers.map((user) => (
           <ProfileShort
             key={user.id}
             id={user.id}
