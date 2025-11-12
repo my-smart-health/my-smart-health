@@ -15,6 +15,11 @@ type CategoryRecord = {
 
 type CategoryLookup = Map<string, CategoryRecord>;
 
+type LoadResult = {
+  tree: CategoryNodeSH;
+  pathToCategoryId: Record<string, string>;
+};
+
 function buildCategoryTree(users: UserProfileSH[]): CategoryNodeSH {
   const root: CategoryNodeSH = { name: '', children: new Map(), users: [] };
   for (const user of users) {
@@ -56,11 +61,6 @@ const resolveCategoryPath = (
 
   cache.set(categoryId, path);
   return path;
-};
-
-type LoadResult = {
-  tree: CategoryNodeSH;
-  pathToCategoryId: Record<string, string>;
 };
 
 async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
