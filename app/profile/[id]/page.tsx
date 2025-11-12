@@ -3,6 +3,7 @@ import prisma from "@/lib/db";
 import { auth } from "@/auth";
 
 import { Certificate, FieldOfExpertise, ReservationLink, Schedule } from "@/utils/types";
+import { CACHE_STRATEGY } from "@/utils/constants";
 
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
 import GoBack from "@/components/buttons/go-back/GoBack";
@@ -35,7 +36,7 @@ async function getUser(id: string) {
       certificates: true,
       reservationLinks: true,
     },
-    cacheStrategy: { ttl: 120, swr: 60 },
+    cacheStrategy: CACHE_STRATEGY.MEDIUM,
   });
   return { user };
 }
@@ -49,7 +50,7 @@ async function getAllPosts(userId: string) {
       photos: true,
       authorId: true,
     },
-    cacheStrategy: { ttl: 90, swr: 45 },
+    cacheStrategy: CACHE_STRATEGY.MEDIUM_SHORT,
   });
 
   return posts;

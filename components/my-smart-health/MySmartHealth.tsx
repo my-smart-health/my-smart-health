@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import { MySmartHealthInfo } from '@/utils/types';
+import { CACHE_STRATEGY } from '@/utils/constants';
 import Divider from '../divider/Divider';
 import { File } from 'lucide-react';
 import GoToButton from '../buttons/go-to/GoToButton';
@@ -19,7 +20,7 @@ import InstagramEmbed from '../embed/instagram/InstagramEmbed';
 
 const getMySmartHealthInfo = async () => {
   return prisma.mySmartHealth.findFirst({
-    cacheStrategy: { ttl: 300, swr: 150 },
+    cacheStrategy: CACHE_STRATEGY.LONG,
   });
 };
 
@@ -37,7 +38,7 @@ function getFileName(fileUrl: string) {
 
 function getLocations() {
   const locations = prisma.mySmartHealthLocation.findMany({
-    cacheStrategy: { ttl: 300, swr: 150 },
+    cacheStrategy: CACHE_STRATEGY.LONG,
   });
   return locations;
 }

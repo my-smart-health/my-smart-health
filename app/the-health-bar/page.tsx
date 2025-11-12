@@ -4,7 +4,7 @@ import ProfileFull from "@/components/profile/profile-full/ProfileFull";
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import { auth } from "@/auth";
 import CategoryIndex from "@/components/pages/CategoryIndex";
-import { PROFILE_TYPE_THE_HEALTH_BAR } from "@/utils/constants";
+import { PROFILE_TYPE_THE_HEALTH_BAR, CACHE_STRATEGY } from "@/utils/constants";
 
 async function getTheHealthBarProfile() {
   const theHealthBar = await prisma.user.findUnique({
@@ -13,7 +13,7 @@ async function getTheHealthBarProfile() {
       locations: true,
       certificates: true,
     },
-    cacheStrategy: { ttl: 180, swr: 90 },
+    cacheStrategy: CACHE_STRATEGY.MEDIUM_LONG,
   });
 
   return normalizeUser(theHealthBar);
@@ -22,7 +22,7 @@ async function getTheHealthBarProfile() {
 async function getTheHealthBarPosts() {
   const posts = await prisma.posts.findMany({
     where: { author: { email: 'health@future-health.de' } },
-    cacheStrategy: { ttl: 120, swr: 60 },
+    cacheStrategy: CACHE_STRATEGY.MEDIUM,
   });
 
   return posts;

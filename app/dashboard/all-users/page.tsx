@@ -2,6 +2,7 @@ import prisma from "@/lib/db";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import UserTable from "@/components/user/UserTable";
+import { CACHE_STRATEGY } from "@/utils/constants";
 
 async function getAllUsersWithCategories() {
   const users = await prisma.user.findMany({
@@ -13,7 +14,7 @@ async function getAllUsersWithCategories() {
       createdAt: true,
       profileImages: true
     },
-    cacheStrategy: { ttl: 30, swr: 15 },
+    cacheStrategy: CACHE_STRATEGY.ADMIN,
   });
 
   const links = await prisma.categoryUser.findMany({
@@ -28,12 +29,12 @@ async function getAllUsersWithCategories() {
       }
     },
     orderBy: { order: 'asc' },
-    cacheStrategy: { ttl: 30, swr: 15 },
+    cacheStrategy: CACHE_STRATEGY.ADMIN,
   });
 
   const allCategories = await prisma.category.findMany({
     select: { id: true, name: true, parentId: true },
-    cacheStrategy: { ttl: 300, swr: 150 },
+    cacheStrategy: CACHE_STRATEGY.LONG,
   });
 
   const categoryMap = new Map(allCategories.map(c => [c.id, c]));

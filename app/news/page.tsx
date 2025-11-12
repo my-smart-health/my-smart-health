@@ -8,7 +8,7 @@ import { NewsCardType, Social } from "@/utils/types";
 import { CirclePlus } from "lucide-react";
 import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealthBarLink";
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
-import { CATEGORY_NAMES } from "@/utils/constants";
+import { CATEGORY_NAMES, CACHE_STRATEGY } from "@/utils/constants";
 
 async function getData() {
   const posts = await prisma.posts.findMany({
@@ -33,7 +33,7 @@ async function getData() {
         }
       }
     },
-    cacheStrategy: { ttl: 60, swr: 30 },
+    cacheStrategy: CACHE_STRATEGY.SHORT,
   })
 
   return posts.map(post => ({

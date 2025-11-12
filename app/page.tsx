@@ -5,7 +5,7 @@ import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealth
 import prisma from "@/lib/db";
 import { CirclePlus } from "lucide-react";
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
-import { CATEGORY_NAMES } from "@/utils/constants";
+import { CATEGORY_NAMES, CACHE_STRATEGY } from "@/utils/constants";
 
 export const revalidate = 60;
 
@@ -21,10 +21,10 @@ async function getHomePageData() {
         createdAt: true,
         author: true,
       },
-      cacheStrategy: { ttl: 60, swr: 30 },
+      cacheStrategy: CACHE_STRATEGY.SHORT,
     }),
     prisma.cube.findFirst({
-      cacheStrategy: { ttl: 300, swr: 150 },
+      cacheStrategy: CACHE_STRATEGY.LONG,
     }),
   ]);
 
@@ -36,7 +36,7 @@ async function getHomePageData() {
         { createdAt: 'desc' },
       ],
       select: { id: true, title: true, photos: true },
-      cacheStrategy: { ttl: 120, swr: 60 },
+      cacheStrategy: CACHE_STRATEGY.MEDIUM,
     })
     : [];
 

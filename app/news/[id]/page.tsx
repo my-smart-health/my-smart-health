@@ -4,6 +4,7 @@ import prisma from "@/lib/db";
 import { Suspense } from "react";
 
 import { NewsCardType, Social } from "@/utils/types";
+import { CACHE_STRATEGY } from "@/utils/constants";
 
 import PostCard from "@/components/posts/post-card/PostCard";
 import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
@@ -32,7 +33,7 @@ async function getData(id: string): Promise<NewsCardType | null> {
         }
       }
     },
-    cacheStrategy: { ttl: 120, swr: 60 },
+    cacheStrategy: CACHE_STRATEGY.MEDIUM,
   });
 
   if (!post) return null;
