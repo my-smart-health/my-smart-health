@@ -13,6 +13,7 @@ async function getTheHealthBarProfile() {
       locations: true,
       certificates: true,
     },
+    cacheStrategy: { ttl: 180, swr: 90 },
   });
 
   return normalizeUser(theHealthBar);
@@ -21,6 +22,7 @@ async function getTheHealthBarProfile() {
 async function getTheHealthBarPosts() {
   const posts = await prisma.posts.findMany({
     where: { author: { email: 'health@future-health.de' } },
+    cacheStrategy: { ttl: 120, swr: 60 },
   });
 
   return posts;
