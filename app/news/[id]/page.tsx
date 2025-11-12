@@ -31,7 +31,8 @@ async function getData(id: string): Promise<NewsCardType | null> {
           fieldOfExpertise: true,
         }
       }
-    }
+    },
+    cacheStrategy: { ttl: 120, swr: 60 },
   });
 
   if (!post) return null;
