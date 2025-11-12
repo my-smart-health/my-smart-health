@@ -12,7 +12,8 @@ async function getAllUsersWithCategories() {
       role: true,
       createdAt: true,
       profileImages: true
-    }
+    },
+    cacheStrategy: { ttl: 30, swr: 15 },
   });
 
   const links = await prisma.categoryUser.findMany({
@@ -26,11 +27,13 @@ async function getAllUsersWithCategories() {
         }
       }
     },
-    orderBy: { order: 'asc' }
+    orderBy: { order: 'asc' },
+    cacheStrategy: { ttl: 30, swr: 15 },
   });
 
   const allCategories = await prisma.category.findMany({
-    select: { id: true, name: true, parentId: true }
+    select: { id: true, name: true, parentId: true },
+    cacheStrategy: { ttl: 300, swr: 150 },
   });
 
   const categoryMap = new Map(allCategories.map(c => [c.id, c]));
