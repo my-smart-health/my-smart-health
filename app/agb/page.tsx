@@ -3,6 +3,10 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "AGB - Allgemeine Geschäftsbedingungen | My Smart Health",
   description: "Allgemeine Geschäftsbedingungen von My Smart Health - Wir machen Düsseldorf gesünder.",
+  openGraph: {
+    title: "AGB - Allgemeine Geschäftsbedingungen | My Smart Health",
+    description: "Allgemeine Geschäftsbedingungen von My Smart Health - Wir machen Düsseldorf gesünder.",
+  },
 };
 
 export default function AGBPage() {
