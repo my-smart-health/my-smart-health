@@ -29,6 +29,10 @@ export async function POST(request: Request) {
         email: email,
         password: hashedPassword,
         role: isFirstUser ? 'ADMIN' : 'USER',
+        bio: '',
+        phones: [],
+        socials: [],
+        profileImages: [],
       },
     });
 
