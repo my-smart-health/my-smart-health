@@ -13,58 +13,46 @@ const defaultSwr = Number(
 const defaultCacheStrategy =
   defaultTtl > 0 ? { ttl: defaultTtl, swr: defaultSwr } : null;
 
+type CacheStrategy = { ttl: number; swr: number };
+type ArgsWithCache = { cacheStrategy?: CacheStrategy };
+
 const withDefaultCache = defaultCacheStrategy
   ? Prisma.defineExtension({
       name: 'with-default-cache',
       query: {
         $allModels: {
-          findUnique({ args, query }) {
-            if (defaultCacheStrategy) {
-              const nextArgs = args as typeof args & {
-                cacheStrategy?: { ttl?: number; swr?: number };
-              };
-              if (!nextArgs.cacheStrategy)
-                nextArgs.cacheStrategy = defaultCacheStrategy;
+          async findUnique({ args, query }) {
+            const argsWithCache = args as typeof args & ArgsWithCache;
+            if (!argsWithCache.cacheStrategy) {
+              argsWithCache.cacheStrategy = defaultCacheStrategy;
             }
             return query(args);
           },
-          findFirst({ args, query }) {
-            if (defaultCacheStrategy) {
-              const nextArgs = args as typeof args & {
-                cacheStrategy?: { ttl?: number; swr?: number };
-              };
-              if (!nextArgs.cacheStrategy)
-                nextArgs.cacheStrategy = defaultCacheStrategy;
+          async findFirst({ args, query }) {
+            const argsWithCache = args as typeof args & ArgsWithCache;
+            if (!argsWithCache.cacheStrategy) {
+              argsWithCache.cacheStrategy = defaultCacheStrategy;
             }
             return query(args);
           },
-          findMany({ args, query }) {
-            if (defaultCacheStrategy) {
-              const nextArgs = args as typeof args & {
-                cacheStrategy?: { ttl?: number; swr?: number };
-              };
-              if (!nextArgs.cacheStrategy)
-                nextArgs.cacheStrategy = defaultCacheStrategy;
+          async findMany({ args, query }) {
+            const argsWithCache = args as typeof args & ArgsWithCache;
+            if (!argsWithCache.cacheStrategy) {
+              argsWithCache.cacheStrategy = defaultCacheStrategy;
             }
             return query(args);
           },
-          findUniqueOrThrow({ args, query }) {
-            if (defaultCacheStrategy) {
-              const nextArgs = args as typeof args & {
-                cacheStrategy?: { ttl?: number; swr?: number };
-              };
-              if (!nextArgs.cacheStrategy)
-                nextArgs.cacheStrategy = defaultCacheStrategy;
+          async findUniqueOrThrow({ args, query }) {
+            const argsWithCache = args as typeof args & ArgsWithCache;
+            if (!argsWithCache.cacheStrategy) {
+              argsWithCache.cacheStrategy = defaultCacheStrategy;
             }
             return query(args);
           },
-          findFirstOrThrow({ args, query }) {
-            if (defaultCacheStrategy) {
-              const nextArgs = args as typeof args & {
-                cacheStrategy?: { ttl?: number; swr?: number };
-              };
-              if (!nextArgs.cacheStrategy)
-                nextArgs.cacheStrategy = defaultCacheStrategy;
+          async findFirstOrThrow({ args, query }) {
+            const argsWithCache = args as typeof args & ArgsWithCache;
+            if (!argsWithCache.cacheStrategy) {
+              argsWithCache.cacheStrategy = defaultCacheStrategy;
             }
             return query(args);
           },
