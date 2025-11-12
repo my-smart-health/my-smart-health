@@ -35,6 +35,7 @@ async function getUser(id: string) {
       certificates: true,
       reservationLinks: true,
     },
+    cacheStrategy: { ttl: 120, swr: 60 },
   });
   return { user };
 }
@@ -48,6 +49,7 @@ async function getAllPosts(userId: string) {
       photos: true,
       authorId: true,
     },
+    cacheStrategy: { ttl: 90, swr: 45 },
   });
 
   return posts;
