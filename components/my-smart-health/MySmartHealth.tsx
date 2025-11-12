@@ -18,7 +18,9 @@ import YoutubeEmbed from '../embed/youtube/YoutubeEmbed';
 import InstagramEmbed from '../embed/instagram/InstagramEmbed';
 
 const getMySmartHealthInfo = async () => {
-  return prisma.mySmartHealth.findFirst();
+  return prisma.mySmartHealth.findFirst({
+    cacheStrategy: { ttl: 300, swr: 150 },
+  });
 };
 
 function getFileName(fileUrl: string) {
@@ -34,7 +36,9 @@ function getFileName(fileUrl: string) {
 }
 
 function getLocations() {
-  const locations = prisma.mySmartHealthLocation.findMany();
+  const locations = prisma.mySmartHealthLocation.findMany({
+    cacheStrategy: { ttl: 300, swr: 150 },
+  });
   return locations;
 }
 
