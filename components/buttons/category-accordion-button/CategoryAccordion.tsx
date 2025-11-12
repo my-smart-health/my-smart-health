@@ -29,6 +29,7 @@ export default function CategoryAccordion({
   pathToCategoryId?: Record<string, string>;
 }) {
   const router = useRouter();
+  const collator = useMemo(() => new Intl.Collator('de', { sensitivity: 'base', ignorePunctuation: true }), []);
   const [open, setOpen] = useState<Record<string, boolean>>({});
   const [showAddRootModal, setShowAddRootModal] = useState(false);
   const [showAddSubModal, setShowAddSubModal] = useState(false);
@@ -145,17 +146,17 @@ export default function CategoryAccordion({
   const childEntries = useMemo(
     () =>
       Array.from(node.children.entries()).sort((a, b) =>
-        a[0].localeCompare(b[0], "de", { sensitivity: "base" })
+        collator.compare(a[0].trim(), b[0].trim())
       ),
-    [node]
+    [node, collator]
   );
 
   const sortedUsers = useMemo(
     () =>
       [...node.users].sort((a, b) =>
-        (a.name || "").localeCompare(b.name || "", "de", { sensitivity: "base" })
+        collator.compare((a.name || "").trim(), (b.name || "").trim())
       ),
-    [node.users]
+    [node.users, collator]
   );
 
   return (
@@ -191,34 +192,37 @@ export default function CategoryAccordion({
             </button>
             {isOpen && (
               <div className="border-l-2 border-gray-300 pl-2">
-                {child.users.map((user) => {
-                  const { id, name, bio, profileImages } = user;
-                  if (!profileImages || profileImages.length === 0 || !bio || !name || !id) return null;
-                  return (
-                    <div key={id} style={{ marginBottom: '10px' }} className="w-full">
-                      <ProfileShort
-                        id={id}
-                        name={name}
-                        bio={bio}
-                        image={profileImages[0]}
-                      />
-                      {isAdmin && (
-                        <div className="mt-2">
-                          <button
-                            type="button"
-                            className="btn btn-xs btn-outline"
-                            onClick={() => {
-                              if (!currentCategoryId) return alert('Missing category id for this path');
-                              handleRemoveUserFromCategory(currentCategoryId, id);
-                            }}
-                          >
-                            Remove from category
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )
-                })}
+                {child.users
+                  .slice()
+                  .sort((a, b) => collator.compare((a.name || '').trim(), (b.name || '').trim()))
+                  .map((user) => {
+                    const { id, name, bio, profileImages } = user;
+                    if (!profileImages || profileImages.length === 0 || !bio || !name || !id) return null;
+                    return (
+                      <div key={id} style={{ marginBottom: '10px' }} className="w-full">
+                        <ProfileShort
+                          id={id}
+                          name={name}
+                          bio={bio}
+                          image={profileImages[0]}
+                        />
+                        {isAdmin && (
+                          <div className="mt-2">
+                            <button
+                              type="button"
+                              className="btn btn-xs btn-outline"
+                              onClick={() => {
+                                if (!currentCategoryId) return alert('Missing category id for this path');
+                                handleRemoveUserFromCategory(currentCategoryId, id);
+                              }}
+                            >
+                              Remove from category
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
                 {isAdmin && (
                   <div className="flex flex-wrap gap-2 my-2">
                     <button

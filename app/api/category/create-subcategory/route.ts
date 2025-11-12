@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   try {
-    const { parentId, name, position } = await req.json();
+    const { parentId, name } = await req.json();
     if (!parentId || !name)
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
 
@@ -27,7 +27,6 @@ export async function POST(req: Request) {
       data: {
         name,
         parent: { connect: { id: parentId } },
-        position: typeof position === 'number' ? position : 0,
         type: parent.type,
       },
     });

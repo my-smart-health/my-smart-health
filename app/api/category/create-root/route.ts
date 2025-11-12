@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { name, type, position } = await req.json();
+    const { name, type } = await req.json();
     if (!name || !type) {
       return NextResponse.json(
         { error: 'Missing name or type' },
@@ -21,7 +21,6 @@ export async function POST(req: Request) {
       data: {
         name,
         type,
-        position: typeof position === 'number' ? position : 0,
       },
     });
 

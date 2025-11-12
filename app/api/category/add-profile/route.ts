@@ -8,12 +8,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   try {
-    const { categoryId, userId, order } = await req.json();
+    const { categoryId, userId } = await req.json();
     if (!categoryId || !userId)
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
 
     await prisma.categoryUser.createMany({
-      data: [{ categoryId, userId, order }],
+      data: [{ categoryId, userId }],
       skipDuplicates: true,
     });
 

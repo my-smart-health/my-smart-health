@@ -28,7 +28,9 @@ async function getAllUsersWithCategories() {
         }
       }
     },
-    orderBy: { order: 'asc' },
+    orderBy: {
+      category: { name: 'asc' }
+    },
     cacheStrategy: CACHE_STRATEGY.ADMIN,
   });
 
@@ -64,7 +66,7 @@ async function getAllUsersWithCategories() {
 
   return users.map(u => ({
     ...u,
-    category: userCategoryMap.get(u.id) || [],
+    category: (userCategoryMap.get(u.id) || []).sort((a, b) => a.localeCompare(b, 'de', { sensitivity: 'base' })),
   }));
 }
 

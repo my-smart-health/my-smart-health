@@ -12,17 +12,21 @@ export async function GET() {
       where: { parentId: null },
       include: {
         children: {
+          orderBy: { name: 'asc' },
           include: {
             children: true,
             categoryUsers: {
               include: { user: true },
-              orderBy: { order: 'asc' },
+              orderBy: { user: { name: 'asc' } },
             },
           },
         },
-        categoryUsers: { include: { user: true }, orderBy: { order: 'asc' } },
+        categoryUsers: {
+          include: { user: true },
+          orderBy: { user: { name: 'asc' } },
+        },
       },
-      orderBy: { position: 'asc' },
+      orderBy: { name: 'asc' },
     });
 
     return NextResponse.json(categories, { status: 200 });

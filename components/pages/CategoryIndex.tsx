@@ -22,6 +22,7 @@ type LoadResult = {
 
 function buildCategoryTree(users: UserProfileSH[]): CategoryNodeSH {
   const root: CategoryNodeSH = { name: '', children: new Map(), users: [] };
+  const collator = new Intl.Collator('de', { sensitivity: 'base', ignorePunctuation: true });
   for (const user of users) {
     let node = root;
     const cleanCategories = (user.category || []).map(c => c.trim()).filter(Boolean);
@@ -32,7 +33,11 @@ function buildCategoryTree(users: UserProfileSH[]): CategoryNodeSH {
       }
       node = node.children.get(cat)!;
       if (i === cleanCategories.length - 1) {
-        node.users.push(user);
+        node.users.push({
+          ...user,
+          name: user.name ? user.name.trim() : user.name,
+        });
+        node.users.sort((a, b) => collator.compare((a.name || '').trim(), (b.name || '').trim()));
       }
     }
   }
@@ -64,6 +69,7 @@ const resolveCategoryPath = (
 };
 
 async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
+  const collator = new Intl.Collator('de', { sensitivity: 'base', ignorePunctuation: true });
   const categories = await prisma.category.findMany({
     where: { type: profileType },
     select: { id: true, name: true, parentId: true },
@@ -78,7 +84,6 @@ async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
 
   const links = await prisma.categoryUser.findMany({
     where: { categoryId: { in: Array.from(lookup.keys()) } },
-    orderBy: { order: 'asc' },
     select: {
       categoryId: true,
       user: { select: { id: true, name: true, bio: true, profileImages: true } },
@@ -127,10 +132,20 @@ async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
   }
 
   const sortTree = (node: CategoryNodeSH) => {
+    // Sort categories alphabetically
     const sorted = Array.from(node.children.entries()).sort((a, b) =>
-      a[0].localeCompare(b[0], 'de', { sensitivity: 'base' }),
+      collator.compare(a[0].trim(), b[0].trim()),
     );
     node.children = new Map(sorted);
+
+    // Sort users alphabetically by name
+    if (node.users.length > 0) {
+      node.users.sort((a, b) =>
+        collator.compare((a.name || '').trim(), (b.name || '').trim())
+      );
+    }
+
+    // Recursively sort child nodes
     for (const [, child] of node.children) sortTree(child);
   };
 
