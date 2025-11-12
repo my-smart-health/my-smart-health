@@ -37,18 +37,20 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
 
           pagination={{ clickable: true, enabled: true, dynamicBullets: true, dynamicMainBullets: PAGINATION_BULLET_QUANTITY }}
         >
-          {props.map((news) => (
+          {props.map((news, index) => (
             <SwiperSlide
               key={news.id}
               className="cursor-pointer pb-6">
               <Link href={`/news/${news.id}`}>
                 <Image
-                  loading="lazy"
+                  priority={index < 4}
+                  loading={index < 4 ? "eager" : "lazy"}
                   placeholder="empty"
                   width={400}
                   height={400}
                   alt={news.name}
                   src={news.profileImage}
+                  sizes="(max-width: 640px) 25vw, (max-width: 1024px) 20vw, 15vw"
                   style={{ objectFit: 'contain' }}
                   className="rounded-box border-6 border-primary aspect-square"
                 />
