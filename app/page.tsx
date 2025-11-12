@@ -7,41 +7,44 @@ import { CirclePlus } from "lucide-react";
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
 import { CATEGORY_NAMES } from "@/utils/constants";
 
-async function getNews() {
-  const news = await prisma.posts.findMany({
-    orderBy: { createdAt: 'desc' },
-    take: 20,
-    select: {
-      id: true,
-      title: true,
-      photos: true,
-      createdAt: true,
-      author: true,
-    }
-  });
-  return { news };
-}
+export const revalidate = 60;
 
-async function getCubePosts(cubeId: string) {
-  const posts = await prisma.posts.findMany({
-    where: { cubeId },
-    orderBy: [
-      { cubeOrder: 'asc' },
-      { createdAt: 'desc' },
-    ],
-    select: { id: true, title: true, photos: true },
-  });
-  return posts;
+async function getHomePageData() {
+  const [news, cube] = await Promise.all([
+    prisma.posts.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 20,
+      select: {
+        id: true,
+        title: true,
+        photos: true,
+        createdAt: true,
+        author: true,
+      },
+      cacheStrategy: { ttl: 60, swr: 30 },
+    }),
+    prisma.cube.findFirst({
+      cacheStrategy: { ttl: 300, swr: 150 },
+    }),
+  ]);
+
+  const cubePosts = cube?.onOff
+    ? await prisma.posts.findMany({
+      where: { cubeId: cube.id },
+      orderBy: [
+        { cubeOrder: 'asc' },
+        { createdAt: 'desc' },
+      ],
+      select: { id: true, title: true, photos: true },
+      cacheStrategy: { ttl: 120, swr: 60 },
+    })
+    : [];
+
+  return { news, cube, cubePosts };
 }
 
 export default async function Home() {
-  const { news } = await getNews();
-
-  const cube = await prisma.cube.findFirst();
-
-  const cubePosts = cube && cube.onOff
-    ? await getCubePosts(cube.id)
-    : [];
+  const { news, cube, cubePosts } = await getHomePageData();
 
 
   const newsTopCarousel = news.length > 0
