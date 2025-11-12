@@ -45,16 +45,18 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
           autoplay={{ delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true }}
           speed={300}
         >
-          {props.map((item) => (
+          {props.map((item, index) => (
             <SwiperSlide key={item.id} className="mb-10">
               <Link href={`/news/${item.id}`}>
                 <div className="flex flex-col border-2 border-primary justify-center items-center rounded-box cursor-pointer">
                   <Image
-                    priority
+                    priority={index === 0}
+                    loading={index === 0 ? "eager" : "lazy"}
                     width={400}
                     height={400}
                     src={item.image}
                     alt={item.info}
+                    sizes="(max-width: 640px) 384px, 448px"
                     style={{ objectFit: "contain" }}
                     className="aspect-square rounded-t-lg"
                   />
