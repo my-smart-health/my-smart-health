@@ -8,9 +8,10 @@ export async function DELETE(request: Request) {
     const id = searchParams.get('id');
 
     if (!id) {
-      return NextResponse.json('ID of the user is required', {
-        status: 400,
-      });
+      return NextResponse.json(
+        { error: 'ID of the user is required' },
+        { status: 400 }
+      );
     }
 
     let cursor: string | undefined = undefined;
@@ -27,6 +28,10 @@ export async function DELETE(request: Request) {
       cursor = res.cursor;
     } while (cursor);
 
+    await prisma.categoryUser.deleteMany({
+      where: { userId: id },
+    });
+
     await prisma.posts.deleteMany({
       where: { authorId: id },
     });
@@ -39,19 +44,28 @@ export async function DELETE(request: Request) {
       where: { userId: id },
     });
 
-    await prisma.categoryUser.deleteMany({
-      where: { userId: id },
-    });
-
     const deletedUser = await prisma.user.delete({
       where: { id: id },
     });
 
-    return NextResponse.json(deletedUser, { status: 200 });
+    return NextResponse.json(
+      { message: 'User deleted successfully', data: deletedUser },
+      { status: 200 }
+    );
   } catch (error) {
     if (process.env.NODE_ENV === 'development') {
       console.error('Error removing user:', error);
     }
-    return NextResponse.json('Failed to remove user', { status: 500 });
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
+
+    return NextResponse.json(
+      {
+        error: 'Failed to remove user',
+        details:
+          process.env.NODE_ENV === 'development' ? errorMessage : undefined,
+      },
+      { status: 500 }
+    );
   }
 }
