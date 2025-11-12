@@ -36,7 +36,7 @@ async function getUser(id: string) {
       certificates: true,
       reservationLinks: true,
     },
-    cacheStrategy: CACHE_STRATEGY.MEDIUM,
+    cacheStrategy: CACHE_STRATEGY.NONE,
   });
   return { user };
 }
