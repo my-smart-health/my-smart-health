@@ -32,7 +32,8 @@ async function getData() {
           fieldOfExpertise: true,
         }
       }
-    }
+    },
+    cacheStrategy: { ttl: 60, swr: 30 },
   })
 
   return posts.map(post => ({
