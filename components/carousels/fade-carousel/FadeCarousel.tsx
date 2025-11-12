@@ -53,7 +53,8 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
                     onClick={() => setZoomedIdx(idx)}
                   >
                     <Image
-                      loading="lazy"
+                      priority={idx === 0}
+                      loading={idx === 0 ? "eager" : "lazy"}
                       placeholder="empty"
                       src={item}
                       alt={item}
