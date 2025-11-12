@@ -1,6 +1,7 @@
 import prisma from '@/lib/db';
 import { Certificate, Schedule } from '@/utils/types';
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 
 export async function PUT(req: Request) {
   try {
@@ -169,6 +170,9 @@ export async function PUT(req: Request) {
       },
       include: { certificates: true, locations: true },
     });
+
+    revalidatePath(`/profile/${body.id}`);
+    revalidatePath(`/dashboard/edit-profile/${body.id}`);
 
     return NextResponse.json({
       message: 'Profile updated successfully',
