@@ -33,7 +33,7 @@ export default function ProfileNewsCarousel({ carouselItems, disableOnInteractio
           speed={300}
           pagination={{ clickable: true, enabled: true, dynamicBullets: true, dynamicMainBullets: PAGINATION_BULLET_QUANTITY }}
         >
-          {carouselItems.map((item) => (
+          {carouselItems.map((item, index) => (
             <SwiperSlide
               key={item.id}
               className={`cursor-pointer ${isBulletsNeeded ? 'pb-5' : ''}`}>
@@ -42,12 +42,14 @@ export default function ProfileNewsCarousel({ carouselItems, disableOnInteractio
               >
                 <Link href={`/news/${item.id}`} className="link hover:text-primary">
                   <Image
-                    loading="lazy"
+                    priority={index < 4}
+                    loading={index < 4 ? "eager" : "lazy"}
                     placeholder="empty"
                     width={300}
                     height={300}
                     alt={item.title}
                     src={item.photos && item.photos.length > 0 ? item.photos[0] : ''}
+                    sizes="(max-width: 640px) 25vw, (max-width: 1024px) 20vw, 15vw"
                     style={{ objectFit: "contain", width: "auto", height: "auto" }}
                     className="rounded-box border-3 border-primary aspect-square"
                   />
