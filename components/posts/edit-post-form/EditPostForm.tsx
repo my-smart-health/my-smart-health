@@ -14,6 +14,7 @@ import TikTokLogo from '@/public/tik-tok-logo.png';
 
 import { MAX_FILES_PER_POST, MAX_IMAGE_SIZE_MB, MAX_IMAGE_SIZE_BYTES } from "@/utils/constants";
 import { isInstagramLink, isYoutubeLink } from "@/utils/common";
+import { buildUpdatePostPayload } from "@/components/posts/postFormSanitizers";
 
 type Social = {
   platform: string;
@@ -332,16 +333,18 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       }
       setStatus(null);
 
+      const payload = buildUpdatePostPayload({
+        id: post.id,
+        title: formData.get('title'),
+        content,
+        photos: blobResult,
+        tags,
+        socialLinks,
+      });
+
       const result = await fetch(`/api/update/update-post`, {
         method: 'PUT',
-        body: JSON.stringify({
-          id: post.id,
-          title: formData.get('title'),
-          content: content,
-          photos: blobResult,
-          tags: tags.filter(tag => tag.trim() !== ''),
-          socialLinks: socialLinks.filter(link => link.url.trim() !== '' && link.platform.trim() !== ''),
-        }),
+        body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json',
         },

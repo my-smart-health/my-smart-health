@@ -15,6 +15,7 @@ import RichTextEditor from "@/components/forms/rich-text-editor/RichTextEditor";
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
+import { buildCreatePostPayload } from "@/components/posts/postFormSanitizers";
 
 import logo from '@/public/og-logo-blue.jpg';
 import { ArrowUpRight, XIcon, AtSign, Facebook, Globe, Instagram, Linkedin, Youtube } from "lucide-react";
@@ -352,16 +353,18 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
         return;
       }
 
+      const payload = buildCreatePostPayload({
+        authorId: session.user.id,
+        title: formData.get('title'),
+        content,
+        photos: blobResult,
+        tags,
+        socialLinks,
+      });
+
       const result = await fetch(`/api/create/create-post`, {
         method: 'POST',
-        body: JSON.stringify({
-          authorId: session.user.id,
-          title: formData.get('title'),
-          content: content,
-          photos: blobResult,
-          tags: tags.filter(tag => tag.trim() !== ''),
-          socialLinks: socialLinks.filter(link => link.url.trim() !== '' && link.platform.trim() !== ''),
-        }),
+        body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json',
         },
