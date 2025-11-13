@@ -14,4 +14,3 @@ export { CertificatesSection } from './CertificatesSection';
 export { WorkScheduleSection } from './WorkScheduleSection';
 export { LocationSection } from './LocationSection';
 export { ReservationLinksSection } from './ReservationLinksSection';
-export { ServicesSection } from './ServicesSection';
