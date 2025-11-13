@@ -78,7 +78,7 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
 
       <section className="flex flex-wrap gap-4 md:gap-2 w-full">
         <h2 className="font-bold text-primary text-2xl break-words">{name}</h2>
-        <div className="my-auto">
+        <div className="my-auto w-full">
           <FieldOfExpertiseSection fieldOfExpertise={fieldOfExpertise} />
         </div>
       </section>

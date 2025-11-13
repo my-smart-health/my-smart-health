@@ -54,7 +54,7 @@ function TooltipItem({ expertise }: TooltipItemProps) {
   if (!hasDescription) {
     return (
       <div className="inline-flex w-full justify-center sm:w-auto sm:justify-start">
-        <span className="block w-full text-center sm:w-auto sm:text-left text-base font-semibold text-black">
+        <span className="block w-full text-center underline sm:w-auto sm:text-left text-base font-semibold text-black">
           {expertise.label}
         </span>
       </div>
