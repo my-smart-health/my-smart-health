@@ -15,6 +15,7 @@ function TooltipItem({ expertise }: TooltipItemProps) {
   const [isVisible, setIsVisible] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
+  const hasDescription = Boolean(expertise.description?.trim());
 
   useEffect(() => {
     if (!isVisible) return;
@@ -50,22 +51,24 @@ function TooltipItem({ expertise }: TooltipItemProps) {
     };
   }, [isVisible]);
 
-  if (!expertise.description) {
+  if (!hasDescription) {
     return (
-      <span className="badge text-lg font-semibold select-none">
-        {expertise.label}
-      </span>
+      <div className="inline-flex w-full justify-center sm:w-auto sm:justify-start">
+        <span className="block w-full text-center sm:w-auto sm:text-left text-base font-semibold text-black">
+          {expertise.label}
+        </span>
+      </div>
     );
   }
 
   const popoverId = `expertise-${expertise.id}`;
 
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-flex w-full justify-center sm:w-auto sm:justify-start">
       <button
         type="button"
         ref={triggerRef}
-        className="btn btn-link px-0 min-h-0 h-auto text-black text-base font-semibold normal-case cursor-pointer select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        className="btn btn-link px-0 min-h-0 h-auto w-full justify-center sm:w-auto sm:justify-start text-base font-semibold normal-case text-black underline decoration-primary decoration-2 underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
         aria-haspopup="dialog"
         aria-expanded={isVisible}
         aria-controls={popoverId}
@@ -85,7 +88,7 @@ function TooltipItem({ expertise }: TooltipItemProps) {
           id={popoverId}
           role="dialog"
           aria-modal="false"
-          className="absolute z-50 bg-primary text-primary-content px-3 py-2 rounded shadow-lg max-w-[min(90vw,400px)] max-h-[60vh] overflow-auto break-words left-1/2 -translate-x-1/2 mt-2"
+          className="absolute z-50 bg-primary text-primary-content px-3 py-2 rounded shadow-lg w-2xs max-w-[min(90vw,400px)] max-h-[60vh] overflow-auto break-words left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 mt-8"
         >
           <div className="font-black text-sm leading-relaxed whitespace-pre-wrap">
             {expertise.description}
@@ -100,7 +103,7 @@ export default function FieldOfExpertiseSection({ fieldOfExpertise }: FieldOfExp
   if (!fieldOfExpertise?.length) return null;
 
   return (
-    <section className="flex flex-wrap gap-2">
+    <section className="flex flex-col items-center gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-start">
       {fieldOfExpertise.map((expertise) => (
         <TooltipItem key={expertise.id} expertise={expertise} />
       ))}
