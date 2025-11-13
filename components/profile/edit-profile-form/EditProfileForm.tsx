@@ -30,8 +30,8 @@ import {
   WorkScheduleSection,
   PhoneNumbersSection,
   LocationSection,
-  ReservationLinksSection
 } from "./_components";
+import ReservationLinksSection from "./_components/ReservationLinksSection";
 
 type User = {
   id: string;

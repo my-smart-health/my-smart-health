@@ -9,7 +9,7 @@ type Props = {
   onChange: (links: ReservationLink[]) => void;
 };
 
-export function ReservationLinksSection({ reservationLinks, onChange }: Props) {
+export default function ReservationLinksSection({ reservationLinks, onChange }: Props) {
 
   const handleAdd = () => {
     const next: ReservationLink = {
