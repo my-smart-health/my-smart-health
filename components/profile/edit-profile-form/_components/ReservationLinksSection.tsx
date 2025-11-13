@@ -9,7 +9,8 @@ type Props = {
   onChange: (links: ReservationLink[]) => void;
 };
 
-export default function ReservationLinksSection({ reservationLinks, onChange }: Props) {
+export function ReservationLinksSection({ reservationLinks, onChange }: Props) {
+
   const handleAdd = () => {
     const next: ReservationLink = {
       id: crypto.randomUUID(),
