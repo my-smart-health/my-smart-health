@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "AGB - Allgemeine Geschäftsbedingungen | My Smart Health",
@@ -23,10 +24,12 @@ export default function AGBPage() {
         <section>
           <h3 className="text-lg font-bold text-primary mb-3">§ 1 Vertragsgegenstand</h3>
           <p className="mb-2">
-            Der Anbieter betreibt die digitale Plattform mysmart.health, die Unternehmen und
-            Organisationen eine Präsentation sowie digitale Gesundheitsleistungen zur Verfügung stellt.
-          </p>
-          <p className="mb-2">
+            Der Anbieter die <strong>„Future Health GmbH Wildenbruchstr. 13 ,40545 Düsseldorf -
+              Amtsgericht Düsseldorf, HRB / 72666 vertreten durch den Geschäftsführer Dr.
+              Ferdinand Jeute Email <Link href="mailto:jeute@future-health.de" className="link text-blue-600">jeute@future-health.de</Link>"</strong> betreibt die digitale Plattform
+            mysmart.health, die Unternehmen und Organisationen eine Präsentation sowie digitale
+            Gesundheitsleistungen zur Verfügung stellt.
+            <br />
             Gegenstand dieses Vertrages ist die zeitlich beschränkte Integration und Nutzung der
             Plattform durch den Partner für folgende Zwecke:
           </p>
@@ -39,26 +42,56 @@ export default function AGBPage() {
 
         <section>
           <h3 className="text-lg font-bold text-primary mb-3">§ 2 Vertragsbeginn und Laufzeit</h3>
-          <p className="mb-2">Der Vertrag tritt mit Unterzeichnung durch beide Parteien in Kraft.</p>
-          <p className="mb-2">Er wird auf unbestimmte Zeit geschlossen und ist monatlich kündbar.</p>
-          <p>
+          <p className="mb-2">
+            Der Vertrag tritt mit der Registrierung des Teilnehmers durch beide Parteien in Kraft.
+            Er wird auf unbestimmte Zeit geschlossen und ist monatlich kündbar.
+            <br />
             Die Kündigung muss schriftlich oder in Textform (E-Mail genügt) bis spätestens 14 Tage vor
             Monatsende erfolgen.
+            <br />
           </p>
+          <p className="mb-2">
+            Zur Einrichtung eines Administrator-Accounts werden folgende Angaben benötigt:
+          </p>
+          <ul className="list-disc pl-6 space-y-1">
+            <li>Name des Lizenznehmers</li>
+            <li>Anschrift des Lizenznehmers</li>
+            <li>E-Mail-Adresse</li>
+            <li>Einrichtung eines Zahlungsmittels</li>
+          </ul>
+          <p>
+            Durch Registrierung gelangt der Administrator des Teilnehmers in den
+            <br />
+            Administrationsbereich von Future Health bzw. eigener Future Health Seiten. Die Daten des
+            Administrator-Accounts können über die Account-Einstellung jederzeit geändert werden.
+            <br />
+            Bei darauffolgenden Anmeldevorgängen ist die Eingabe der hinterlegten E-Mail-Adresse
+            sowie des Passwortes erforderlich. Ein Ändern des Passwortes ist ausschließlich in den
+            Account-Einstellungen möglich.
+            <br />
+            (Der Inhaber bzw. Administrator des Teilnehmers ist für die sichere Aufbewahrung der
+            Account-Zugangsdaten verantwortlich. Durch einen etwaigen Verlust entstehenden Schaden
+            kommt der Lizenzgeber nicht auf.
+          </p>
+
         </section>
 
         <section>
           <h3 className="text-lg font-bold text-primary mb-3">§ 3 Vergütung</h3>
-          <p className="mb-2">Die Nutzung der Plattform ist ab Vertragsbeginn kostenpflichtig.</p>
           <p className="mb-2">
+            Die Nutzung der Plattform ist ab Vertragsbeginn kostenpflichtig.
+            <br />
             Die Vergütung richtet sich nach der jeweils gültigen Preisliste bzw. dem individuell
+            <br />
             vereinbarten monatlichen Nutzungsentgelt.
-          </p>
-          <p className="mb-2">Zahlungen sind monatlich im Voraus ohne Abzug fällig.</p>
-          <p>
+            <br />
+            Zahlungen sind monatlich im Voraus ohne Abzug fällig.
+            <br />
             Der Anbieter ist berechtigt, Preise mit einer Frist von 30 Tagen zum Monatsende
             anzupassen.
           </p>
+
+
         </section>
 
         <section>
@@ -66,12 +99,10 @@ export default function AGBPage() {
           <p className="mb-2">
             Der Anbieter stellt dem Partner Zugang zur Plattform mysmart.health bereit und ermöglicht
             die Nutzung der angebotenen Funktionen.
-          </p>
-          <p className="mb-2">
+            <br />
             Der Anbieter sorgt für eine technische Verfügbarkeit der Plattform von mindestens 95 % im
             Monatsmittel.
-          </p>
-          <p>
+            <br />
             Inhaltliche und technische Änderungen, die der Weiterentwicklung der Plattform dienen,
             bleiben vorbehalten.
           </p>
@@ -79,13 +110,14 @@ export default function AGBPage() {
 
         <section>
           <h3 className="text-lg font-bold text-primary mb-3">§ 5 Pflichten des Partners</h3>
-          <p className="mb-2">
+          <p>
             Der Partner verpflichtet sich, die Plattform ausschließlich im Rahmen des vertraglichen
             Zwecks zu nutzen.
-          </p>
-          <p className="mb-2">Der Partner ist für die von ihm veröffentlichten Inhalte selbst verantwortlich.</p>
-          <p className="mb-2">Der Partner darf keine rechtswidrigen oder diskriminierenden Inhalte veröffentlichen.</p>
-          <p>
+            <br />
+            Der Partner ist für die von ihm veröffentlichten Inhalte selbst verantwortlich.
+            <br />
+            Der Partner darf keine rechtswidrigen oder diskriminierenden Inhalte veröffentlichen.
+            <br />
             Marken, Logos und Materialien von mysmart.health dürfen nur im Rahmen dieser
             Kooperation genutzt werden.
           </p>
@@ -96,16 +128,22 @@ export default function AGBPage() {
           <p className="mb-2">
             Der Anbieter räumt dem Partner ein einfaches, nicht übertragbares Nutzungsrecht an der
             Plattform für die Vertragsdauer ein.
+            <br />
+            Eine Weitergabe von Zugängen oder Inhalten an Dritte ist untersagt.
+            <br />
+            Alle Rechte an der Plattform, den Inhalten und Designs verbleiben beim Anbieter.
           </p>
-          <p className="mb-2">Eine Weitergabe von Zugängen oder Inhalten an Dritte ist untersagt.</p>
-          <p>Alle Rechte an der Plattform, den Inhalten und Designs verbleiben beim Anbieter.</p>
         </section>
 
         <section>
           <h3 className="text-lg font-bold text-primary mb-3">§ 7 Haftung</h3>
-          <p className="mb-2">Der Anbieter haftet nur bei Vorsatz und grober Fahrlässigkeit.</p>
-          <p className="mb-2">Für Datenverluste oder indirekte Schäden wird keine Haftung übernommen.</p>
-          <p>Die Haftung nach dem Produkthaftungsgesetz bleibt unberührt.</p>
+          <p className="mb-2">
+            Der Anbieter haftet nur bei Vorsatz und grober Fahrlässigkeit.
+            <br />
+            Für Datenverluste oder indirekte Schäden wird keine Haftung übernommen.
+            <br />
+            Die Haftung nach dem Produkthaftungsgesetz bleibt unberührt.
+          </p>
         </section>
 
         <section>
@@ -113,17 +151,17 @@ export default function AGBPage() {
           <p className="mb-2">
             Beide Parteien verpflichten sich zur Einhaltung der Datenschutzbestimmungen gemäß
             DSGVO.
-          </p>
-          <p className="mb-2">
+            <br />
             Personenbezogene Daten werden ausschließlich zum Zwecke der Vertragserfüllung
             verarbeitet.
+            <br />
+            Näheres regelt eine gesonderte Datenschutzvereinbarung (AV-Vertrag), sofern erforderlich.
           </p>
-          <p>Näheres regelt eine gesonderte Datenschutzvereinbarung (AV-Vertrag), sofern erforderlich.</p>
         </section>
 
         <section>
           <h3 className="text-lg font-bold text-primary mb-3">§ 9 Vertraulichkeit</h3>
-          <p>
+          <p className="mb-2">
             Beide Parteien verpflichten sich, alle im Rahmen dieses Vertrages erlangten vertraulichen
             Informationen streng vertraulich zu behandeln und Dritten nicht zugänglich zu machen.
           </p>
@@ -131,13 +169,15 @@ export default function AGBPage() {
 
         <section>
           <h3 className="text-lg font-bold text-primary mb-3">§ 10 Schlussbestimmungen</h3>
-          <p className="mb-2">Änderungen und Ergänzungen dieses Vertrages bedürfen der Schriftform.</p>
           <p className="mb-2">
+            Änderungen und Ergänzungen dieses Vertrages bedürfen der Schriftform.
+            <br />
             Sollten einzelne Bestimmungen unwirksam sein, bleibt die Wirksamkeit der übrigen
             Bestimmungen unberührt.
+            <br />
+            Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts.
+            Gerichtsstand ist Düsseldorf.
           </p>
-          <p className="mb-2">Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts.</p>
-          <p>Gerichtsstand ist Düsseldorf.</p>
         </section>
 
         <section className="mt-8 text-xs text-gray-600 text-center border-t border-gray-200 pt-4">
