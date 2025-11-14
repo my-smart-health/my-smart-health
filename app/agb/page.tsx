@@ -70,7 +70,7 @@ export default function AGBPage() {
             sowie des Passwortes erforderlich. Ein Ändern des Passwortes ist ausschließlich in den
             Account-Einstellungen möglich.
             <br />
-            (Der Inhaber bzw. Administrator des Teilnehmers ist für die sichere Aufbewahrung der
+            Der Inhaber bzw. Administrator des Teilnehmers ist für die sichere Aufbewahrung der
             Account-Zugangsdaten verantwortlich. Durch einen etwaigen Verlust entstehenden Schaden
             kommt der Lizenzgeber nicht auf.
           </p>
