@@ -1,22 +1,22 @@
 import prisma from '@/lib/db';
 import Link from 'next/link';
 import Image from 'next/image';
+import type { ReactNode } from 'react';
 
 import { MySmartHealthInfo } from '@/utils/types';
 import { CACHE_STRATEGY } from '@/utils/constants';
-import Divider from '../divider/Divider';
-import { File } from 'lucide-react';
-import GoToButton from '../buttons/go-to/GoToButton';
+import Divider from '@/components/divider/Divider';
+import GoToButton from '@/components/buttons/go-to/GoToButton';
 import { auth } from '@/auth';
-import MSHParagraphContent from './_components/MSHParagraphContent';
+import MSHParagraphContent from '@/components/forms/msh-form/_components/MSHParagraphContent';
 
-import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube } from "lucide-react";
+import { AtSign, Facebook, File, Globe, Instagram, Linkedin, Phone, Youtube } from 'lucide-react';
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
-import MSHLocations from './_components/MSHLocations';
+import MSHLocations from '@/components/forms/msh-form/_components/MSHLocations';
 import { isYoutubeLink, isInstagramLink } from '@/utils/common';
-import YoutubeEmbed from '../embed/youtube/YoutubeEmbed';
-import InstagramEmbed from '../embed/instagram/InstagramEmbed';
+import YoutubeEmbed from '@/components/embed/youtube/YoutubeEmbed';
+import InstagramEmbed from '@/components/embed/instagram/InstagramEmbed';
 
 const getMySmartHealthInfo = async () => {
   return prisma.mySmartHealth.findFirst({
@@ -52,7 +52,7 @@ export default async function MySmartHealth() {
 
   const { generalTitle, paragraph } = mySmartHealthInfo;
 
-  const platformIcons: Record<string, React.ReactNode> = {
+  const platformIcons: Record<string, ReactNode> = {
     Email: <AtSign className="inline-block mr-1" size={30} />,
     Website: <Globe className="inline-block mr-1" size={30} />,
     Phone: <Phone className="inline-block mr-1" size={20} />,

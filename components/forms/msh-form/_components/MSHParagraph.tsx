@@ -4,6 +4,7 @@ import { MySmartHealthParagraph } from "@/utils/types";
 import Divider from "@/components/divider/Divider";
 import { PutBlobResult } from "@vercel/blob";
 import { useRef, useState } from "react";
+import type { ReactNode } from "react";
 import Spinner from "@/components/common/Spinner";
 import RichTextEditor from '@/components/forms/rich-text-editor/RichTextEditor';
 import Image from "next/image";
@@ -36,7 +37,7 @@ export default function MSHParagraph({
   const [uploadingFiles, setUploadingFiles] = useState<Record<number, boolean>>({});
   const [deletingFiles, setDeletingFiles] = useState<Record<string, boolean>>({});
 
-  const platformIcons: Record<string, React.ReactNode> = {
+  const platformIcons: Record<string, ReactNode> = {
     Email: <AtSign className="inline-block mr-1" size={30} />,
     Website: <Globe className="inline-block mr-1" size={30} />,
     Facebook: <Facebook className="inline-block mr-1" size={30} />,

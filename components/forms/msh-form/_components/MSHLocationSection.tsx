@@ -1,12 +1,15 @@
 'use client';
 
-import Divider from '@/components/divider/Divider';
 import { Navigation, NavigationOff, Phone } from 'lucide-react';
+
 import type { Schedule } from '@/utils/types';
+import type { MySmartHealthFormLocation } from './mshFormSanitizers';
+
+import Divider from '@/components/divider/Divider';
 import { AddressSection } from '@/components/profile/edit-profile-form/_components/AddressSection';
 import { PhoneNumbersSection } from '@/components/profile/edit-profile-form/_components/PhoneNumbersSection';
 import { WorkScheduleSection } from '@/components/profile/edit-profile-form/_components/WorkScheduleSection';
-import type { MySmartHealthFormLocation } from './mshFormSanitizers';
+
 
 type MSHLocationSectionProps = {
   locations: MySmartHealthFormLocation[];

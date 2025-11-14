@@ -3,9 +3,9 @@ import { useState } from "react";
 
 import { MySmartHealthInfo } from "@/utils/types";
 
-import MSHParagraph from "./MSHParagraph";
-import MSHGeneralTitle from "./MSHGeneralTitle";
-import { MSHLocationSection } from "./MSHLocationSection";
+import MSHParagraph from "./_components/MSHParagraph";
+import MSHGeneralTitle from "./_components/MSHGeneralTitle";
+import { MSHLocationSection } from "./_components/MSHLocationSection";
 import Divider from "@/components/divider/Divider";
 import StatusModal from "@/components/modals/status-modal/StatusModal";
 import { useRouter } from "next/navigation";
@@ -13,7 +13,7 @@ import {
   buildMySmartHealthPayload,
   sanitizeLocationsForPersistence,
   MySmartHealthFormLocation,
-} from "./mshFormSanitizers";
+} from "./_components/mshFormSanitizers";
 
 export default function MySmartHealthForm({ smartHealthData, initialLocations }: { smartHealthData: MySmartHealthInfo | null; initialLocations: MySmartHealthFormLocation[] }) {
 
@@ -67,11 +67,6 @@ export default function MySmartHealthForm({ smartHealthData, initialLocations }:
         generalTitle,
         paragraphs,
       });
-
-      if (!payload.generalTitle) {
-        setError({ message: 'General title is required.', type: 'error' });
-        return;
-      }
 
       const sanitizedLocations = sanitizeLocationsForPersistence(locations);
 

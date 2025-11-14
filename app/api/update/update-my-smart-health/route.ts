@@ -12,7 +12,7 @@ export async function PUT(req: NextRequest) {
 
     const { id, generalTitle, paragraph } = body as Partial<MySmartHealthInfo>;
 
-    if (!generalTitle || !paragraph) {
+    if (!paragraph) {
       return NextResponse.json(
         { error: 'All fields are required' },
         { status: 400 }
