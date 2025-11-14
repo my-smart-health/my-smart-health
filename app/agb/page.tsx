@@ -15,7 +15,8 @@ export default function AGBPage() {
     <div className="w-full max-w-4xl mx-auto px-4 py-8">
       <div className="text-center mb-8">
         <h2 className="text-xl font-semibold text-primary mb-6">
-          Nutzungsvertrag über die Plattform mysmart.health
+          Nutzungsvertrag - Allgemeine Geschäftsbedingungen (AGB) über die Plattform
+          mysmart.health
         </h2>
       </div>
 
