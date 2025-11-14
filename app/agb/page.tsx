@@ -27,7 +27,7 @@ export default function AGBPage() {
           <p className="mb-2">
             Der Anbieter die <strong>„Future Health GmbH Wildenbruchstr. 13 ,40545 Düsseldorf -
               Amtsgericht Düsseldorf, HRB / 72666 vertreten durch den Geschäftsführer Dr.
-              Ferdinand Jeute Email <Link href="mailto:jeute@future-health.de" className="link text-blue-600">jeute@future-health.de</Link>"</strong> betreibt die digitale Plattform
+              Ferdinand Jeute Email <Link href="mailto:jeute@future-health.de" className="link text-blue-600">jeute@future-health.de</Link>&quot;</strong> betreibt die digitale Plattform
             mysmart.health, die Unternehmen und Organisationen eine Präsentation sowie digitale
             Gesundheitsleistungen zur Verfügung stellt.
             <br />
