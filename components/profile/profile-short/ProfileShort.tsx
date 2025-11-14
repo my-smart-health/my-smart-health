@@ -28,7 +28,7 @@ export default function ProfileShort({ id, name, bio, image }: { id: string; nam
             href={`/profile/${id}`}
             className="btn btn-primary btn-sm rounded-full px-6 font-semibold shadow"
           >
-            View Profile
+            zum Profil
           </Link>
         </div>
       </div>
