@@ -6,18 +6,11 @@ import type { Schedule } from '@/utils/types';
 import { AddressSection } from '@/components/profile/edit-profile-form/_components/AddressSection';
 import { PhoneNumbersSection } from '@/components/profile/edit-profile-form/_components/PhoneNumbersSection';
 import { WorkScheduleSection } from '@/components/profile/edit-profile-form/_components/WorkScheduleSection';
-
-type MSHLocation = {
-  id: string;
-  address: string;
-  phone: string[];
-  schedule: Schedule[] | null;
-  mySmartHealthId?: string | null;
-};
+import type { MySmartHealthFormLocation } from './mshFormSanitizers';
 
 type MSHLocationSectionProps = {
-  locations: MSHLocation[];
-  setLocationsAction: (locations: MSHLocation[]) => void;
+  locations: MySmartHealthFormLocation[];
+  setLocationsAction: (locations: MySmartHealthFormLocation[]) => void;
   mySmartHealthId: string;
 };
 
@@ -41,7 +34,7 @@ export function MSHLocationSection({
 
   const updateLocation = (
     index: number,
-    field: keyof MSHLocation,
+    field: keyof MySmartHealthFormLocation,
     value: string | string[] | Schedule[]
   ) => {
     const newLocations = [...locations];

@@ -1,7 +1,7 @@
 'use client';
 import { useState } from "react";
 
-import { MySmartHealthInfo, Schedule } from "@/utils/types";
+import { MySmartHealthInfo } from "@/utils/types";
 
 import MSHParagraph from "./MSHParagraph";
 import MSHGeneralTitle from "./MSHGeneralTitle";
@@ -9,35 +9,38 @@ import { MSHLocationSection } from "./MSHLocationSection";
 import Divider from "@/components/divider/Divider";
 import StatusModal from "@/components/modals/status-modal/StatusModal";
 import { useRouter } from "next/navigation";
+import {
+  buildMySmartHealthPayload,
+  sanitizeLocationsForPersistence,
+  MySmartHealthFormLocation,
+} from "./mshFormSanitizers";
 
-type MSHLocation = {
-  id: string;
-  address: string;
-  phone: string[];
-  schedule: Schedule[] | null;
-  mySmartHealthId?: string | null;
-};
-
-export default function MySmartHealthForm({ smartHealthData, initialLocations }: { smartHealthData: MySmartHealthInfo | null; initialLocations: MSHLocation[] }) {
+export default function MySmartHealthForm({ smartHealthData, initialLocations }: { smartHealthData: MySmartHealthInfo | null; initialLocations: MySmartHealthFormLocation[] }) {
 
   const [generalTitle, setGeneralTitle] = useState(smartHealthData?.generalTitle || "");
   const [paragraphs, setParagraphs] = useState(smartHealthData?.paragraph || []);
-  const [locations, setLocations] = useState<MSHLocation[]>(initialLocations || []);
+  const [locations, setLocations] = useState<MySmartHealthFormLocation[]>(initialLocations || []);
   const router = useRouter();
   const [error, setError] = useState<{ message: string, type: 'success' | 'error' | 'warning' } | null>(null);
 
   const handleUpdateParagraphsInDB = async (updatedParagraphs: typeof paragraphs) => {
     try {
+      const payload = buildMySmartHealthPayload({
+        id: smartHealthData?.id,
+        generalTitle,
+        paragraphs: updatedParagraphs,
+      });
+
+      if (!payload.generalTitle) {
+        return;
+      }
+
       const response = await fetch("/api/update/update-my-smart-health", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          id: smartHealthData?.id,
-          generalTitle,
-          paragraph: updatedParagraphs,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -59,16 +62,31 @@ export default function MySmartHealthForm({ smartHealthData, initialLocations }:
     setError(null);
 
     try {
+      const payload = buildMySmartHealthPayload({
+        id: smartHealthData?.id,
+        generalTitle,
+        paragraphs,
+      });
+
+      if (!payload.generalTitle) {
+        setError({ message: 'General title is required.', type: 'error' });
+        return;
+      }
+
+      const sanitizedLocations = sanitizeLocationsForPersistence(locations);
+
+      const locationWithMissingAddress = sanitizedLocations.find((location) => !location.address);
+      if (locationWithMissingAddress) {
+        setError({ message: 'Each location must include an address.', type: 'error' });
+        return;
+      }
+
       const response = await fetch("/api/update/update-my-smart-health", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          id: smartHealthData?.id,
-          generalTitle,
-          paragraph: paragraphs,
-        }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -77,16 +95,34 @@ export default function MySmartHealthForm({ smartHealthData, initialLocations }:
         return;
       }
 
+      const updateResult = await response.json().catch(() => null);
+      const persistedRecordId =
+        (updateResult?.data?.id as string | undefined) ?? smartHealthData?.id ?? undefined;
+
+      const resolvedLocations = sanitizedLocations.map((location) => ({
+        ...location,
+        mySmartHealthId: location.mySmartHealthId || persistedRecordId,
+      }));
+
+      if (!persistedRecordId && resolvedLocations.some((location) => !location.mySmartHealthId)) {
+        setError({ message: 'Unable to resolve My Smart Health record. Please try again.', type: 'error' });
+        return;
+      }
+
       const existingIds = initialLocations.map(l => l.id);
-      const currentIds = locations.map(l => l.id);
+      const sanitizedIds = resolvedLocations.map(l => l.id);
 
       for (const id of existingIds) {
-        if (!currentIds.includes(id)) {
+        if (!sanitizedIds.includes(id)) {
           await fetch(`/api/msh/locations/${id}`, { method: 'DELETE' });
         }
       }
 
-      for (const location of locations) {
+      for (const location of resolvedLocations) {
+        const schedulePayload = Array.isArray(location.schedule) && location.schedule.length > 0
+          ? location.schedule
+          : null;
+
         if (existingIds.includes(location.id)) {
           await fetch(`/api/msh/locations/${location.id}`, {
             method: 'PUT',
@@ -94,18 +130,21 @@ export default function MySmartHealthForm({ smartHealthData, initialLocations }:
             body: JSON.stringify({
               address: location.address,
               phone: location.phone,
-              schedule: location.schedule,
+              schedule: schedulePayload,
             }),
           });
         } else {
+          if (!location.mySmartHealthId) {
+            continue;
+          }
           await fetch('/api/msh/locations', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               address: location.address,
               phone: location.phone,
-              schedule: location.schedule,
-              mySmartHealthId: smartHealthData?.id,
+              schedule: schedulePayload,
+              mySmartHealthId: location.mySmartHealthId,
             }),
           });
         }
