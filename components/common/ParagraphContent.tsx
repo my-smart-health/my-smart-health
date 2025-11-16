@@ -20,6 +20,7 @@ type ParagraphContentProps = {
 export default function ParagraphContent({ content, maxLines = 3, className = "" }: ParagraphContentProps) {
   const [expanded, setExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
+  const [clampHeight, setClampHeight] = useState<number | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const clampLines = Math.max(1, Math.min(maxLines, 10));
 
@@ -55,9 +56,6 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
     editorProps: {
       attributes: {
         class: `bio-content max-w-none focus:outline-none ${className}`,
-        style: expanded
-          ? ''
-          : `display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: ${clampLines}; overflow: hidden;`,
       },
     },
   });
@@ -76,13 +74,10 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
       editorProps: {
         attributes: {
           class: `bio-content max-w-none focus:outline-none ${className}`,
-          style: expanded
-            ? ''
-            : `display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: ${clampLines}; overflow: hidden;`,
         },
       },
     });
-  }, [editor, expanded, clampLines, className]);
+  }, [editor, className]);
 
   useEffect(() => {
     const el = contentRef.current;
@@ -104,41 +99,8 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
       if (!prosemirror) return;
 
       const clampPx = getLineHeightPx(prosemirror) * clampLines;
-      let previousClampValue: string | null = null;
-      let previousDisplayValue: string | null = null;
-      let previousOverflowValue: string | null = null;
-
-      if (!expanded) {
-        previousClampValue = prosemirror.style.getPropertyValue('-webkit-line-clamp');
-        previousDisplayValue = prosemirror.style.display;
-        previousOverflowValue = prosemirror.style.overflow;
-        prosemirror.style.setProperty('-webkit-line-clamp', 'unset');
-        prosemirror.style.display = 'block';
-        prosemirror.style.overflow = 'visible';
-      }
-
+      setClampHeight(clampPx);
       const fullHeight = prosemirror.scrollHeight;
-
-      if (!expanded) {
-        if (previousDisplayValue !== null) {
-          prosemirror.style.display = previousDisplayValue;
-        } else {
-          prosemirror.style.removeProperty('display');
-        }
-
-        if (previousOverflowValue !== null) {
-          prosemirror.style.overflow = previousOverflowValue;
-        } else {
-          prosemirror.style.removeProperty('overflow');
-        }
-
-        if (previousClampValue) {
-          prosemirror.style.setProperty('-webkit-line-clamp', previousClampValue);
-        } else {
-          prosemirror.style.removeProperty('-webkit-line-clamp');
-        }
-      }
-
       setIsClamped(fullHeight > clampPx + 1);
     };
 
@@ -166,9 +128,22 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
 
   const showToggle = isClamped || expanded;
 
+  const gradient = 'linear-gradient(180deg, rgba(255,255,255,1) 70%, rgba(255,255,255,0) 100%)';
+  const clamped = !expanded && clampHeight !== null;
+  const textContainerStyle = clamped
+    ? {
+      maxHeight: `${clampHeight}px`,
+      overflow: 'hidden',
+      maskImage: gradient,
+      WebkitMaskImage: gradient,
+    }
+    : undefined;
+
   return (
     <div className="w-full" ref={contentRef}>
-      <EditorContent editor={editor} />
+      <div style={textContainerStyle}>
+        <EditorContent editor={editor} />
+      </div>
       {showToggle && (
         <button
           onClick={() => setExpanded((e) => !e)}
