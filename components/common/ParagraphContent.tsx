@@ -20,7 +20,6 @@ type ParagraphContentProps = {
 export default function ParagraphContent({ content, maxLines = 3, className = "" }: ParagraphContentProps) {
   const [expanded, setExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
-  const [clampHeight, setClampHeight] = useState<number | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const clampLines = Math.max(1, Math.min(maxLines, 10));
 
@@ -86,7 +85,7 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
     const getLineHeightPx = (node: HTMLElement) => {
       const cs = getComputedStyle(node);
       const lh = cs.lineHeight;
-      if (lh === 'normal') {
+      if (lh === "normal") {
         const fontSize = parseFloat(cs.fontSize) || 16;
         return 1.6 * fontSize;
       }
@@ -99,7 +98,6 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
       if (!prosemirror) return;
 
       const clampPx = getLineHeightPx(prosemirror) * clampLines;
-      setClampHeight(clampPx);
       const fullHeight = prosemirror.scrollHeight;
       setIsClamped(fullHeight > clampPx + 1);
     };
@@ -122,28 +120,48 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
       if (resizeObserver) resizeObserver.disconnect();
       mutationObserver.disconnect();
     };
-  }, [editor, clampLines, content, expanded]);
+  }, [editor, clampLines, content]);
+
+  useEffect(() => {
+    const root = contentRef.current;
+    if (!root) return;
+    const prosemirror = root.querySelector('.ProseMirror') as HTMLElement | null;
+    if (!prosemirror) return;
+
+    const shouldClamp = isClamped && !expanded;
+    if (shouldClamp) {
+      prosemirror.style.display = '-webkit-box';
+      prosemirror.style.setProperty('-webkit-box-orient', 'vertical');
+      prosemirror.style.setProperty('-webkit-line-clamp', String(clampLines));
+      prosemirror.style.overflow = 'hidden';
+      prosemirror.style.textOverflow = 'ellipsis';
+      prosemirror.style.wordBreak = 'break-word';
+    } else {
+      prosemirror.style.removeProperty('display');
+      prosemirror.style.removeProperty('-webkit-box-orient');
+      prosemirror.style.removeProperty('-webkit-line-clamp');
+      prosemirror.style.removeProperty('overflow');
+      prosemirror.style.removeProperty('text-overflow');
+      prosemirror.style.removeProperty('word-break');
+    }
+
+    return () => {
+      prosemirror.style.removeProperty('display');
+      prosemirror.style.removeProperty('-webkit-box-orient');
+      prosemirror.style.removeProperty('-webkit-line-clamp');
+      prosemirror.style.removeProperty('overflow');
+      prosemirror.style.removeProperty('text-overflow');
+      prosemirror.style.removeProperty('word-break');
+    };
+  }, [isClamped, expanded, clampLines]);
 
   if (!content) return null;
 
   const showToggle = isClamped || expanded;
 
-  const gradient = 'linear-gradient(180deg, rgba(255,255,255,1) 70%, rgba(255,255,255,0) 100%)';
-  const clamped = !expanded && clampHeight !== null;
-  const textContainerStyle = clamped
-    ? {
-      maxHeight: `${clampHeight}px`,
-      overflow: 'hidden',
-      maskImage: gradient,
-      WebkitMaskImage: gradient,
-    }
-    : undefined;
-
   return (
     <div className="w-full" ref={contentRef}>
-      <div style={textContainerStyle}>
-        <EditorContent editor={editor} />
-      </div>
+      <EditorContent editor={editor} />
       {showToggle && (
         <button
           onClick={() => setExpanded((e) => !e)}
