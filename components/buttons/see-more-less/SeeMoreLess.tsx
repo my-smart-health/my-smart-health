@@ -32,7 +32,32 @@ export default function SeeMoreLess({ text, lines, addClass, children }: SeeMore
 
     const recompute = () => {
       const clampPx = getLineHeightPx() * clampLines;
-      const fullHeight = el.scrollHeight; // total content height
+      let previousClampValue: string | null = null;
+      let previousDisplayValue: string | null = null;
+
+      if (!expanded) {
+        previousClampValue = el.style.getPropertyValue('-webkit-line-clamp');
+        previousDisplayValue = el.style.display;
+        el.style.setProperty('-webkit-line-clamp', 'unset');
+        el.style.display = 'block';
+      }
+
+      const fullHeight = el.scrollHeight;
+
+      if (!expanded) {
+        if (previousDisplayValue !== null) {
+          el.style.display = previousDisplayValue;
+        } else {
+          el.style.removeProperty('display');
+        }
+
+        if (previousClampValue) {
+          el.style.setProperty('-webkit-line-clamp', previousClampValue);
+        } else {
+          el.style.removeProperty('-webkit-line-clamp');
+        }
+      }
+
       setIsClamped(fullHeight > clampPx + 1);
     };
 
@@ -54,7 +79,7 @@ export default function SeeMoreLess({ text, lines, addClass, children }: SeeMore
       if (resizeObserver) resizeObserver.disconnect();
       mutationObserver.disconnect();
     };
-  }, [clampLines, text, children]);
+  }, [clampLines, text, children, expanded]);
 
   const showToggle = isClamped || expanded;
 
