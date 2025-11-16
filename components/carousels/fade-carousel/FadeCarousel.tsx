@@ -81,7 +81,7 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
 
       {zoomedIdx !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 bg-opacity-80 transition-opacity cursor-zoom-out"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 z-50 flex items-center justify-center transition-opacity cursor-zoom-out"
           onClick={() => setZoomedIdx(null)}
         >
           <div
