@@ -88,12 +88,58 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
     const el = contentRef.current;
     if (!el || !editor) return;
 
+    const getLineHeightPx = (node: HTMLElement) => {
+      const cs = getComputedStyle(node);
+      const lh = cs.lineHeight;
+      if (lh === 'normal') {
+        const fontSize = parseFloat(cs.fontSize) || 16;
+        return 1.6 * fontSize;
+      }
+      const px = parseFloat(lh);
+      return Number.isNaN(px) ? 24 : px;
+    };
+
     const recompute = () => {
-      const prosemirror = el.querySelector('.ProseMirror') as HTMLElement;
+      const prosemirror = el.querySelector('.ProseMirror') as HTMLElement | null;
       if (!prosemirror) return;
 
-      const hasOverflow = prosemirror.scrollHeight > prosemirror.clientHeight + 5; // +5px tolerance
-      setIsClamped(hasOverflow);
+      const clampPx = getLineHeightPx(prosemirror) * clampLines;
+      let previousClampValue: string | null = null;
+      let previousDisplayValue: string | null = null;
+      let previousOverflowValue: string | null = null;
+
+      if (!expanded) {
+        previousClampValue = prosemirror.style.getPropertyValue('-webkit-line-clamp');
+        previousDisplayValue = prosemirror.style.display;
+        previousOverflowValue = prosemirror.style.overflow;
+        prosemirror.style.setProperty('-webkit-line-clamp', 'unset');
+        prosemirror.style.display = 'block';
+        prosemirror.style.overflow = 'visible';
+      }
+
+      const fullHeight = prosemirror.scrollHeight;
+
+      if (!expanded) {
+        if (previousDisplayValue !== null) {
+          prosemirror.style.display = previousDisplayValue;
+        } else {
+          prosemirror.style.removeProperty('display');
+        }
+
+        if (previousOverflowValue !== null) {
+          prosemirror.style.overflow = previousOverflowValue;
+        } else {
+          prosemirror.style.removeProperty('overflow');
+        }
+
+        if (previousClampValue) {
+          prosemirror.style.setProperty('-webkit-line-clamp', previousClampValue);
+        } else {
+          prosemirror.style.removeProperty('-webkit-line-clamp');
+        }
+      }
+
+      setIsClamped(fullHeight > clampPx + 1);
     };
 
     const rafId = requestAnimationFrame(recompute);
@@ -114,7 +160,7 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
       if (resizeObserver) resizeObserver.disconnect();
       mutationObserver.disconnect();
     };
-  }, [editor, clampLines, content]);
+  }, [editor, clampLines, content, expanded]);
 
   if (!content) return null;
 
