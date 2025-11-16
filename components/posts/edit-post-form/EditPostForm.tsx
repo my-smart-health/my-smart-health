@@ -432,7 +432,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         <dialog
           ref={statusModalRef}
           id="edit_post_status_modal"
-          className="modal modal-bottom backdrop-grayscale-100 transition-all ease-linear duration-500"
+          className="modal modal-bottom fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 z-50 backdrop-grayscale-100 transition-all ease-linear duration-500"
           style={{ backgroundColor: 'transparent' }}
           onClose={handleStatusClose}
         >
@@ -463,7 +463,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         </dialog>
       )}
 
-      <dialog id="delete_modal" className="modal modal-bottom sm:modal-middle">
+      <dialog id="delete_modal" className="modal modal-bottom sm:modal-middle fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 z-50">
         <div className="modal-box">
           <p className="py-4">Are you sure you want to delete this post? This action cannot be undone.</p>
           <div className="modal-action">

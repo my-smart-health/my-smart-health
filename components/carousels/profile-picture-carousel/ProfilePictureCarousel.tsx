@@ -107,7 +107,7 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
       </Swiper>
       {zoomedIdx !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 transition-opacity cursor-zoom-out"
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 z-50 flex items-center justify-center transition-opacity cursor-zoom-out"
           onClick={() => setZoomedIdx(null)}
         >
           <div
@@ -115,7 +115,7 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
             onClick={e => { e.stopPropagation(); setZoomedIdx(null); }}
           >
             <button
-              className="absolute top-4 right-4 text-white text-3xl font-bold z-10 cursor-pointer"
+              className="absolute top-4 right-4 text-white text-3xl font-bold cursor-pointer"
               onClick={() => setZoomedIdx(null)}
               aria-label="Close"
             >

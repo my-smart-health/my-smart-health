@@ -24,7 +24,7 @@ export default function StatusModal({
   }
 
   return (
-    <dialog open className="modal modal-bottom sm:modal-middle z-50">
+    <dialog open className="modal modal-bottom fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 sm:modal-middle z-50">
       <div className={`modal-box ${bgClass}`}>
         <h3 className="font-bold text-lg">{title}</h3>
         <p className="py-4">{message}</p>

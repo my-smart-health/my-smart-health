@@ -405,7 +405,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         <dialog
           ref={errorModalRef}
           id="edit_profile_error_modal"
-          className="modal modal-bottom backdrop-grayscale-100 transition-all ease-linear duration-500"
+          className="modal modal-bottom fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 z-50 backdrop-grayscale-100 transition-all ease-linear duration-500"
           style={{ backgroundColor: 'transparent' }}
           onClose={handleErrorClose}
         >
