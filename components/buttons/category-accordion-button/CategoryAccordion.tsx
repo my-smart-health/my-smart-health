@@ -197,14 +197,14 @@ export default function CategoryAccordion({
                   .sort((a, b) => collator.compare((a.name || '').trim(), (b.name || '').trim()))
                   .map((user) => {
                     const { id, name, bio, profileImages } = user;
-                    if (!profileImages || profileImages.length === 0 || !bio || !name || !id) return null;
+                    if (!bio || !name || !id) return null;
                     return (
                       <div key={id} style={{ marginBottom: '10px' }} className="w-full">
                         <ProfileShort
                           id={id}
                           name={name}
                           bio={bio}
-                          image={profileImages[0]}
+                          image={profileImages?.[0] ?? null}
                         />
                         {isAdmin && (
                           <div className="mt-2">
@@ -287,15 +287,17 @@ export default function CategoryAccordion({
       })}
 
       {level === 0 &&
-        sortedUsers.map((user) => (
-          <ProfileShort
-            key={user.id}
-            id={user.id}
-            name={user.name}
-            bio={user.bio ?? ""}
-            image={user.profileImages[0]}
-          />
-        ))}
+        sortedUsers
+          .filter((user) => Boolean(user.id && user.name && user.bio))
+          .map((user) => (
+            <ProfileShort
+              key={user.id}
+              id={user.id}
+              name={user.name}
+              bio={user.bio as string}
+              image={user.profileImages?.[0] ?? null}
+            />
+          ))}
 
       <AddCategoryModal
         isOpen={showAddRootModal}
