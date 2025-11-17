@@ -11,7 +11,7 @@ type ProfileSearchToggleProps = {
 };
 
 export default function ProfileSearchToggle({
-  label = 'Profile suchen',
+  label = 'Suche',
   className,
 }: ProfileSearchToggleProps) {
   const [open, setOpen] = useState(false);
