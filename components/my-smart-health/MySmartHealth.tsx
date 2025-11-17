@@ -38,7 +38,7 @@ function getFileName(fileUrl: string) {
 
 function getLocations() {
   const locations = prisma.mySmartHealthLocation.findMany({
-    cacheStrategy: CACHE_STRATEGY.LONG,
+    cacheStrategy: CACHE_STRATEGY.NONE,
   });
   return locations;
 }
