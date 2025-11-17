@@ -5,6 +5,8 @@ import ProfileSearchToggle from "@/components/profile/ProfileSearchToggle";
 import { CATEGORY_NAMES } from "@/utils/constants";
 import { CirclePlus } from "lucide-react";
 
+export const revalidate = 0;
+
 export default async function SmartHealthLayout({ children }: { children: React.ReactNode }) {
 
   return (

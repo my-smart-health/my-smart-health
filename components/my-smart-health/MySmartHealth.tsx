@@ -20,7 +20,7 @@ import InstagramEmbed from '@/components/embed/instagram/InstagramEmbed';
 
 const getMySmartHealthInfo = async () => {
   return prisma.mySmartHealth.findFirst({
-    cacheStrategy: CACHE_STRATEGY.LONG,
+    cacheStrategy: CACHE_STRATEGY.NONE,
   });
 };
 

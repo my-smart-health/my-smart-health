@@ -13,6 +13,8 @@ import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealth
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
 import { CATEGORY_NAMES } from "@/utils/constants";
 
+export const revalidate = 0;
+
 async function getData(id: string): Promise<NewsCardType | null> {
   const post = await prisma.posts.findUnique({
     where: { id },

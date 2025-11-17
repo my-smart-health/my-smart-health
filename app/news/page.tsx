@@ -10,6 +10,8 @@ import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealth
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
 import { CATEGORY_NAMES, CACHE_STRATEGY } from "@/utils/constants";
 
+export const revalidate = 0;
+
 async function getData() {
   const posts = await prisma.posts.findMany({
     take: 20,

@@ -8,7 +8,7 @@ import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
 import ProfileSearchToggle from "@/components/profile/ProfileSearchToggle";
 import { CATEGORY_NAMES, CACHE_STRATEGY } from "@/utils/constants";
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 async function getHomePageData() {
   const [news, cube] = await Promise.all([
