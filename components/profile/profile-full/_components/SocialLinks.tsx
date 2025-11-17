@@ -1,4 +1,3 @@
-import Divider from "@/components/divider/Divider";
 import Link from "next/link";
 
 type SocialLinksProps = {
