@@ -13,6 +13,8 @@ import {
   ScheduleSection,
   CertificatesSection,
   PrescriptionReservation,
+  PhoneNumbers,
+  SocialLinks,
 } from "./_components";
 
 import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube } from "lucide-react";
@@ -20,6 +22,7 @@ import Image from "next/image";
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
 import { Location } from "@/utils/types";
+import Divider from "@/components/divider/Divider";
 
 const platformIcons: Record<string, React.ReactNode> = {
   Email: <AtSign className="inline-block mr-1" size={30} />,
@@ -93,9 +96,6 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
 
       <ContactSection
         phoneNumbers={phones}
-        displayEmail={displayEmail}
-        website={website}
-        parsedSocials={parsedSocials}
         locations={filteredLocations}
         platformIcons={platformIcons}
       />
@@ -105,6 +105,18 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
 
       <PrescriptionReservation reservationLinks={reservationLinks || undefined} />
 
+      <PhoneNumbers phoneNumbers={phones} platformIcons={platformIcons} />
+
+      {((displayEmail || website || parsedSocials.length > 0) && phones.length === 0) && (
+        <Divider addClass="my-4" />
+      )}
+
+      <SocialLinks
+        displayEmail={displayEmail}
+        website={website}
+        parsedSocials={parsedSocials}
+        platformIcons={platformIcons}
+      />
     </div>
   );
 }

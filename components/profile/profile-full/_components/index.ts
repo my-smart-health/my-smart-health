@@ -6,3 +6,5 @@ export { default as ContactSection } from './ContactSection';
 export { default as ScheduleSection } from './ScheduleSection';
 export { default as CertificatesSection } from './CertificatesSection';
 export { default as PrescriptionReservation } from './PrescriptionReservation';
+export { default as PhoneNumbers } from './PhoneNumbers';
+export { default as SocialLinks } from './SocialLinks';
