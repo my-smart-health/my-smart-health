@@ -5,6 +5,7 @@ import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealth
 import prisma from "@/lib/db";
 import { CirclePlus } from "lucide-react";
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
+import ProfileSearchToggle from "@/components/profile/ProfileSearchToggle";
 import { CATEGORY_NAMES, CACHE_STRATEGY } from "@/utils/constants";
 
 export const revalidate = 60;
@@ -77,6 +78,7 @@ export default async function Home() {
       <div className="flex flex-col mt-3 gap-3 w-full mx-auto max-w-[100%]">
         <MySmartHealth />
         <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.news.name} icon="/icon2.png" goTo={CATEGORY_NAMES.news.link} />
+        <ProfileSearchToggle />
         <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.smartHealth.name} icon="/icon3.png" goTo={CATEGORY_NAMES.smartHealth.link} />
         <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.medizinUndPflege.name} icon="/icon4.png" goTo={CATEGORY_NAMES.medizinUndPflege.link} />
         <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.notfalle.name} icon={<CirclePlus size={34} color="red" />} goTo={CATEGORY_NAMES.notfalle.link} />

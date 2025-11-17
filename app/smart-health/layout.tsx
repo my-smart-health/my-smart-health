@@ -1,6 +1,7 @@
 import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
 import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealthBarLink";
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
+import ProfileSearchToggle from "@/components/profile/ProfileSearchToggle";
 import { CATEGORY_NAMES } from "@/utils/constants";
 import { CirclePlus } from "lucide-react";
 
@@ -10,6 +11,7 @@ export default async function SmartHealthLayout({ children }: { children: React.
     <>
       <MySmartHealth />
       <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.news.name} icon="/icon2.png" goTo={CATEGORY_NAMES.news.link} />
+      <ProfileSearchToggle className="max-w-5xl w-full" />
       <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.smartHealth.name} icon="/icon3.png" goTo='/' active />
       <div className="min-h-full w-full max-w-5xl flex flex-col gap-4">
         {children}
