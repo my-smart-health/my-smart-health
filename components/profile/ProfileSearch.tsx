@@ -22,7 +22,7 @@ type SearchMode = 'name' | 'bio' | 'field';
 const DEFAULT_MIN_QUERY = 2;
 const SEARCH_OPTIONS: { value: SearchMode; label: string }[] = [
   { value: 'name', label: 'Name' },
-  { value: 'bio', label: 'Bio' },
+  { value: 'bio', label: 'Text' },
   { value: 'field', label: 'Fachgebiet' },
 ];
 
@@ -100,7 +100,7 @@ export default function ProfileSearch({
                 setQuery(event.target.value);
                 setError(null);
               }}
-              placeholder="Name, Bio oder Fachgebiet suchen..."
+              placeholder="Suche..."
               className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full pl-12 pr-28"
               aria-label="Profile search"
             />

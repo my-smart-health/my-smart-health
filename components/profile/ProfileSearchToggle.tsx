@@ -17,7 +17,7 @@ export default function ProfileSearchToggle({
   const [open, setOpen] = useState(false);
 
   return (
-    <div className={`w-full ${className ?? ''}`}>
+    <div className={`w-full h-full ${className ?? ''}`}>
       <button
         type="button"
         onClick={() => setOpen((prev) => !prev)}
