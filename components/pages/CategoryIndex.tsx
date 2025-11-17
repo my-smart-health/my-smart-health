@@ -93,7 +93,7 @@ async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
   const users: UserProfileSH[] = [];
   for (const link of links) {
     const user = link.user;
-    if (!user || !Array.isArray(user.profileImages) || user.profileImages.length === 0) continue;
+    if (!user) continue;
     const path = resolveCategoryPath(link.categoryId, lookup, pathCache);
     if (!path.length) continue;
 
@@ -102,7 +102,7 @@ async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
       name: user.name || 'No Name',
       bio: user.bio || '',
       category: path,
-      profileImages: user.profileImages,
+      profileImages: Array.isArray(user.profileImages) ? user.profileImages : [],
     });
   }
 
