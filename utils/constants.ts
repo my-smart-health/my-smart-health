@@ -26,7 +26,7 @@ export const CATEGORY_FACHARZTE = 'Fachärzte';
 
 export const CATEGORY_NAMES = {
   news: {
-    name: 'News',
+    name: 'News für meine Gesundheit',
     link: '/news',
   },
   smartHealth: {
