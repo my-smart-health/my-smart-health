@@ -82,7 +82,7 @@ export default function ProfileSearch({
             <select
               value={mode}
               onChange={(event) => setMode(event.target.value as SearchMode)}
-              className="select select-bordered w-full h-full border-primary font-semibold"
+              className="select select-bordered w-full sm:h-full border-primary font-semibold"
             >
               {SEARCH_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -104,10 +104,13 @@ export default function ProfileSearch({
               className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full pl-12 pr-28"
               aria-label="Profile search"
             />
-            <button type="submit" className="btn btn-primary rounded h-full z-10 absolute top-1/2 right-0 -translate-y-1/2">
-              Suchen
-            </button>
           </div>
+          <button
+            type="submit"
+            className="btn btn-primary rounded my-auto "
+          >
+            Suchen
+          </button>
         </div>
       </form>
 
