@@ -75,23 +75,31 @@ export default function ProfileSearch({
 
   return (
     <section className={`w-full ${className ?? ''}`}>
-      <form onSubmit={handleSubmit} className="w-full">
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <label className="w-full sm:w-48">
-            <span className="sr-only">Suchfeld wählen</span>
-            <select
-              value={mode}
-              onChange={(event) => setMode(event.target.value as SearchMode)}
-              className="select select-bordered w-full sm:h-full border-primary font-semibold"
-            >
-              {SEARCH_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
+      <div className="w-full rounded-box border-2 border-primary bg-white/90 shadow-sm p-4">
+        <h2 className="text-sm font-semibold text-primary">Suche</h2>
+        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+          <fieldset className="fieldset rounded-box border border-primary/50">
+            <div className="flex flex-col sm:flex-row">
+              {SEARCH_OPTIONS.map((option, index) => (
+                <label
+                  key={option.value}
+                  className={`flex flex-1 items-center gap-3 px-4 py-3 cursor-pointer transition-colors border-t sm:border-t-0 ${index > 0 ? 'sm:border-l' : ''} ${mode === option.value ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-700'}`}
+                >
+                  <input
+                    type="radio"
+                    name="search-mode"
+                    value={option.value}
+                    checked={mode === option.value}
+                    onChange={(event) => setMode(event.target.value as SearchMode)}
+                    className="radio radio-primary"
+                  />
+                  <span>{option.label}</span>
+                </label>
               ))}
-            </select>
-          </label>
-          <div className="relative flex-1">
+            </div>
+          </fieldset>
+
+          <div className="relative w-full">
             <SearchIcon className="absolute z-10 left-4 top-1/2 -translate-y-1/2" size={20} />
             <input
               type="search"
@@ -100,19 +108,19 @@ export default function ProfileSearch({
                 setQuery(event.target.value);
                 setError(null);
               }}
-              placeholder="Suche..."
+              placeholder="Name, Bio oder Fachgebiet suchen..."
               className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full pl-12 pr-28"
               aria-label="Profile search"
             />
+            <button
+              type="submit"
+              className="btn btn-primary rounded h-full z-10 absolute top-1/2 right-0 -translate-y-1/2 focus:-translate-y-1/2 active:-translate-y-1/2"
+            >
+              Suchen
+            </button>
           </div>
-          <button
-            type="submit"
-            className="btn btn-primary rounded my-auto "
-          >
-            Suchen
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
 
       <div className="min-h-[1.5rem] mt-2 text-sm">
         {loading && <p className="text-gray-500">Suche läuft...</p>}
