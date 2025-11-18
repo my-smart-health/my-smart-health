@@ -25,6 +25,7 @@ async function getUser(id: string) {
       name: true,
       email: true,
       profileImages: true,
+      profileFiles: true,
       bio: true,
       socials: true,
       website: true,
@@ -102,9 +103,11 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
     return { ...location, schedule, reservationLinks };
   });
+  const safeProfileFiles = Array.isArray(user.profileFiles) ? user.profileFiles : [];
 
   const safeUser = {
     ...user,
+    profileFiles: safeProfileFiles,
     fieldOfExpertise: safeFieldOfExpertise,
     schedule: safeSchedule,
     certificates: safeCertificates,

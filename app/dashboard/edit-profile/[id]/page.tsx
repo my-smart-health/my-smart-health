@@ -13,6 +13,7 @@ async function getData(sessionId: string) {
       id: true,
       name: true,
       profileImages: true,
+      profileFiles: true,
       bio: true,
       displayEmail: true,
       website: true,
@@ -87,7 +88,15 @@ export default async function EditProfileId({ params }: { params: Promise<{ id: 
   const safeReservationLinks: ReservationLink[] = Array.isArray(user.reservationLinks)
     ? (user.reservationLinks as ReservationLink[])
     : [];
-  const safeUser = { ...parsedUser, locations: safeLocations, fieldOfExpertise: safeField, reservationLinks: safeReservationLinks };
+  const safeProfileFiles = Array.isArray(user.profileFiles) ? user.profileFiles : [];
+
+  const safeUser = {
+    ...parsedUser,
+    profileFiles: safeProfileFiles,
+    locations: safeLocations,
+    fieldOfExpertise: safeField,
+    reservationLinks: safeReservationLinks,
+  };
 
   return (
     <>

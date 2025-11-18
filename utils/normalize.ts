@@ -88,6 +88,7 @@ export function normalizeUser(raw: RawUser) {
       id: '',
       name: 'Unknown',
       profileImages: [] as string[],
+      profileFiles: [] as string[],
       bio: '',
       socials: [] as string[],
       fieldOfExpertise: [] as FieldOfExpertise[],
@@ -97,6 +98,7 @@ export function normalizeUser(raw: RawUser) {
       locations: [] as Location[],
       schedule: [] as Schedule[],
       certificates: [] as Certificate[],
+      reservationLinks: [] as ReservationLink[],
     };
   }
 
@@ -125,6 +127,7 @@ export function normalizeUser(raw: RawUser) {
     name: raw.name ?? null,
     email: raw.email ?? null,
     profileImages,
+    profileFiles: ensureArray<string>(raw.profileFiles),
     bio: raw.bio ?? '',
     socials,
     website: raw.website ?? null,

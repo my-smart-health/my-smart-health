@@ -99,6 +99,10 @@ export default async function DashboardPage() {
     return { ...location, schedule, reservationLinks };
   });
 
+  const safeProfileFiles = Array.isArray((user as unknown as { profileFiles?: unknown }).profileFiles)
+    ? ((user as unknown as { profileFiles: string[] }).profileFiles)
+    : [];
+
   const safeUser = {
     ...user,
     schedule: safeSchedule,
@@ -106,6 +110,7 @@ export default async function DashboardPage() {
     fieldOfExpertise: safeFieldOfExpertise,
     reservationLinks: safeReservationLinks,
     locations: safeLocations,
+    profileFiles: safeProfileFiles,
   };
 
   return (

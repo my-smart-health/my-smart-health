@@ -13,6 +13,7 @@ async function getData(sessionId: string) {
       id: true,
       name: true,
       profileImages: true,
+      profileFiles: true,
       bio: true,
       displayEmail: true,
       website: true,
@@ -77,9 +78,11 @@ export default async function EditProfile() {
   const safeReservationLinks: ReservationLink[] = Array.isArray(user.reservationLinks)
     ? (user.reservationLinks as ReservationLink[])
     : [];
+  const safeProfileFiles = Array.isArray(user.profileFiles) ? user.profileFiles : [];
 
   const safeUser = {
     ...parsedUser,
+    profileFiles: safeProfileFiles,
     locations: safeLocations,
     fieldOfExpertise: safeFieldsOfExpertise,
     reservationLinks: safeReservationLinks,

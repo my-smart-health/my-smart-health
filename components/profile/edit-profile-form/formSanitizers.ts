@@ -15,6 +15,7 @@ export type ProfileUpdatePayload = {
   displayEmail: string;
   website: string;
   profileImages: string[];
+  profileFiles: string[];
   socials: string[];
   phones: string[];
   schedule: Schedule[];
@@ -44,6 +45,7 @@ export type BuildSanitizedPayloadArgs = {
   displayEmail: string;
   website: string;
   profileImages: string[];
+  profileFiles: string[] | null;
   fieldOfExpertise: FieldOfExpertise[] | null;
   phones: string[] | null;
   socials: Social[] | null;
@@ -52,6 +54,7 @@ export type BuildSanitizedPayloadArgs = {
   reservationLinks: ReservationLink[] | null;
   locations: Location[] | null;
   profileImagesOverride?: string[];
+  profileFilesOverride?: string[];
 };
 
 export const sanitizePhoneList = (numbers?: string[] | null): string[] => {
@@ -204,6 +207,13 @@ export const sanitizeProfileImages = (images?: string[] | null): string[] => {
     .filter((url): url is string => url.length > 0);
 };
 
+export const sanitizeProfileFiles = (files?: string[] | null): string[] => {
+  if (!Array.isArray(files)) return [];
+  return files
+    .map((url) => (typeof url === 'string' ? url.trim() : ''))
+    .filter((url): url is string => url.length > 0);
+};
+
 export const sanitizeLocationsList = (
   locations?: Location[] | null
 ): Location[] => {
@@ -270,6 +280,9 @@ export const buildSanitizedPayload = (
   const sanitizedProfileImages = sanitizeProfileImages(
     args.profileImagesOverride ?? args.profileImages
   );
+  const sanitizedProfileFiles = sanitizeProfileFiles(
+    args.profileFilesOverride ?? args.profileFiles
+  );
 
   return {
     name: (args.name || '').trim(),
@@ -317,5 +330,6 @@ export const buildSanitizedPayload = (
         : [],
     })),
     profileImages: sanitizedProfileImages,
+    profileFiles: sanitizedProfileFiles,
   };
 };

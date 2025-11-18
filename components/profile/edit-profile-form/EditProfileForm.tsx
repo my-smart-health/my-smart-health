@@ -30,6 +30,7 @@ import {
   WorkScheduleSection,
   PhoneNumbersSection,
   LocationSection,
+  UploadFilesSection,
 } from "./_components";
 import ReservationLinksSection from "./_components/ReservationLinksSection";
 
@@ -39,6 +40,7 @@ type User = {
   bio: string | null;
   name: string | null;
   profileImages: string[] | null;
+  profileFiles: string[] | null;
   website: string | null;
   fieldOfExpertise: FieldOfExpertise[] | null;
   displayEmail: string | null;
@@ -70,6 +72,7 @@ export default function EditProfileForm({ user }: { user: User }) {
   const [displayEmail, setDisplayEmail] = useState(user.displayEmail || "");
   const [locations, setLocations] = useState<Location[]>(user.locations || []);
   const [blobResult, setBlobResult] = useState<string[]>(user.profileImages || []);
+  const [profileFiles, setProfileFiles] = useState<string[]>(user.profileFiles || []);
   const [socials, setSocials] = useState<Social[]>(parseSocials(user.socials || []));
   const [fieldOfExpertise, setFieldOfExpertise] = useState<FieldOfExpertise[]>(user.fieldOfExpertise || []);
   const [certificates, setCertificates] = useState<CertificateForm[]>(user.certificates?.map(cert => ({ ...cert })) || []);
@@ -86,6 +89,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         displayEmail,
         website,
         profileImages: blobResult,
+        profileFiles,
         fieldOfExpertise,
         phones,
         socials,
@@ -117,6 +121,54 @@ export default function EditProfileForm({ user }: { user: User }) {
         console.error('Error auto-saving profile images:', error);
       }
     }
+  };
+
+  const handleUpdateProfileFilesInDB = async (updatedFiles: string[]) => {
+    try {
+      const payload = buildSanitizedPayload({
+        name,
+        bio,
+        displayEmail,
+        website,
+        profileImages: blobResult,
+        profileFiles,
+        fieldOfExpertise,
+        phones,
+        socials,
+        schedule,
+        certificates,
+        reservationLinks,
+        locations,
+        profileFilesOverride: updatedFiles,
+      });
+
+      const response = await fetch('/api/update/update-profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: user.id,
+          data: payload,
+        }),
+      });
+
+      if (!response.ok) {
+        setError('Failed to auto-save profile files. Bitte erneut versuchen.');
+      } else {
+        setError(null);
+      }
+    } catch (error) {
+      setError('Error saving profile files. Bitte Support kontaktieren.');
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error auto-saving profile files:', error);
+      }
+    }
+  };
+
+  const handleFilesUploaded = async (uploadedUrls: string[]) => {
+    if (uploadedUrls.length === 0) return;
+    const updatedList = [...profileFiles, ...uploadedUrls];
+    setProfileFiles(updatedList);
+    await handleUpdateProfileFilesInDB(updatedList);
   };
 
   const platformIcons: Record<string, React.ReactNode> = {
@@ -361,6 +413,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         displayEmail,
         website,
         profileImages: blobResult,
+        profileFiles,
         fieldOfExpertise,
         phones,
         socials,
@@ -459,10 +512,26 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Bio" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Text" />
           <div className="tab-content border-primary p-3 md:p-10">
 
             <BioSection bio={bio} setBio={setBio} />
+
+          </div>
+
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="Upload Files" />
+          <div className="tab-content border-primary p-3 md:p-10">
+
+            <UploadFilesSection
+              userId={user.id}
+              profileFiles={profileFiles}
+              onFilesUploaded={handleFilesUploaded}
+              onFileDeleted={handleUpdateProfileFilesInDB}
+              setProfileFiles={setProfileFiles}
+              setError={setError}
+              isDisabled={isDisabled}
+              setIsDisabled={setIsDisabled}
+            />
 
           </div>
 

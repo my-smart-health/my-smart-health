@@ -15,6 +15,7 @@ import {
   PrescriptionReservation,
   PhoneNumbers,
   SocialLinks,
+  UploadedFilesSection,
 } from "./_components";
 
 import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, Youtube } from "lucide-react";
@@ -39,6 +40,7 @@ const platformIcons: Record<string, React.ReactNode> = {
 type User = {
   name: string | null;
   profileImages: string[];
+  profileFiles: string[];
   bio: string | null;
   socials: string[];
   website: string | null;
@@ -60,6 +62,7 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
   const {
     name,
     profileImages,
+    profileFiles = [],
     bio,
     socials,
     website,
@@ -89,6 +92,8 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
       <ProfilePictureSection images={profileImages} />
 
       <BioSection bio={bio ?? ""} />
+
+      <UploadedFilesSection profileFiles={profileFiles} />
 
       <NewsSection posts={posts} />
 
