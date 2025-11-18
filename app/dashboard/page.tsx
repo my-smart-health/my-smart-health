@@ -25,6 +25,7 @@ async function getUser(id: string) {
       locations: true,
       certificates: true,
       reservationLinks: true,
+      profileFiles: true,
     },
   });
   return user;
