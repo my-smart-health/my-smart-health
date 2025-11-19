@@ -69,22 +69,24 @@ export default function ProfileSearch({
   return (
     <section className={`w-full ${className ?? ''}`}>
       <form onSubmit={handleSubmit} className="mt-4">
-        <div className="relative w-full">
-          <SearchIcon className="absolute z-10 left-4 top-1/2 -translate-y-1/2" size={20} />
-          <input
-            type="search"
-            value={query}
-            onChange={(event) => {
-              setQuery(event.target.value);
-              setError(null);
-            }}
-            placeholder="Nach Namen, Bio oder Fachgebiet suchen..."
-            className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full pl-12 pr-28"
-            aria-label="Profile search"
-          />
+        <div className="flex gap-2 w-full">
+          <div className="relative flex-1">
+            <SearchIcon className="absolute z-10 left-4 top-1/2 -translate-y-1/2" size={20} />
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setError(null);
+              }}
+              placeholder="Nach Namen, Bio oder Fachgebiet suchen..."
+              className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full pl-12 pr-4"
+              aria-label="Profile search"
+            />
+          </div>
           <button
             type="submit"
-            className="btn btn-primary rounded h-full z-10 absolute top-1/2 right-0 -translate-y-1/2 focus:-translate-y-1/2 active:-translate-y-1/2"
+            className="btn btn-primary self-center rounded px-6"
           >
             Suchen
           </button>
