@@ -160,7 +160,7 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
                 });
             }
             return (
-              <div key={schBlock.id || idx} className="border border-gray-200 rounded-lg p-3 bg-white">
+              <div key={schBlock.id || idx} className="border border-gray-400 rounded-lg p-3 bg-white">
                 {schBlock.title && (
                   <>
                     <h3 className="font-semibold text-primary text-base mb-2">{schBlock.title}</h3>

@@ -13,9 +13,8 @@ export default function CertificatesSection({ certificates }: { certificates: Ce
 
   return (
     <>
-      <Divider addClass="my-1" />
       <section className="rounded-lg">
-        <h2 className="font-bold text-primary text-2xl mb-6 text-center">Zertifikate</h2>
+        <h2 className="font-bold text-primary text-2xl text-center">Zertifikate</h2>
         <Suspense fallback={<div className="skeleton animate-pulse h-[350px] w-full mb-6 bg-gray-200 rounded-lg"></div>}>
           <div className="grid grid-cols-1 gap-8">
             {certificates.map((cert) => {
@@ -65,7 +64,6 @@ export default function CertificatesSection({ certificates }: { certificates: Ce
           </div>
         </Suspense>
       </section>
-      <br />
       {zoomedSrc !== null && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 transition-opacity cursor-zoom-out"

@@ -71,7 +71,7 @@ export default function ContactSection({
                 )}
 
                 {schedule && schedule.length > 0 && (
-                  <div>
+                  <div >
                     <ScheduleSection schedule={schedule} />
                   </div>
                 )}
