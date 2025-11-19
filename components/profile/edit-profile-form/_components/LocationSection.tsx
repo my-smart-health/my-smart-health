@@ -82,7 +82,7 @@ export function LocationSection({ locations, setLocationsAction, profileId, addr
         <div key={location.id} className="border odd:border-primary odd:bg-primary/10 even:border-yellow-500 even:bg-yellow-50 rounded p-4 mb-4">
           <AddressSection address={location.address} setAddressAction={(value) => updateLocation(index, "address", value)} addressRef={addressRef} />
 
-          <Divider addClass="my-4" />
+          <Divider addClass="my-1" />
 
           <PhoneNumbersSection
             phoneNumbers={location.phone}
@@ -90,7 +90,7 @@ export function LocationSection({ locations, setLocationsAction, profileId, addr
             platformIcon={<Phone className="inline-block mr-1" size={20} />}
           />
 
-          <Divider addClass="my-4" />
+          <Divider addClass="my-1" />
 
           <WorkScheduleSection
             schedule={Array.isArray(location.schedule) ? location.schedule.filter(isSchedule) : []}
@@ -99,14 +99,14 @@ export function LocationSection({ locations, setLocationsAction, profileId, addr
             setScheduleTime={(scheduleId, openClose, value) => setScheduleTime(index, scheduleId, openClose, value)}
           />
 
-          <Divider addClass="my-4" />
+          <Divider addClass="my-1" />
 
           <ReservationLinksSection
             reservationLinks={location.reservationLinks || []}
             onChange={(links) => updateLocation(index, "reservationLinks", links)}
           />
 
-          <Divider addClass="my-4" />
+          <Divider addClass="my-1" />
 
           <button
             type="button"

@@ -9,7 +9,7 @@ export default function GoBackIndexCheck() {
   return (
     <>
       {!isIndex ? (
-        <div className="self-end my-4">
+        <div className="self-end my-2">
           <GoBack />
         </div>
       ) : null}

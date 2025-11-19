@@ -22,7 +22,7 @@ export default function MSHLocations({
   return (
     <>
       {(phoneNumbers.length > 0 || locations.length > 0 || parsedSocials.length > 0 || !platformIcons) && (
-        <Divider addClass="my-4" />
+        <Divider addClass="my-1" />
       )}
 
       <section className="grid grid-cols-1 gap-3">
@@ -44,7 +44,7 @@ export default function MSHLocations({
                     >
                       Route planen
                     </Link></h2>
-                    <Divider addClass="my-4" />
+                    <Divider addClass="my-1" />
                     <div><MapPin className="inline-block mr-1" size={20} />{address}</div>
                   </div>
                 )}
@@ -61,7 +61,7 @@ export default function MSHLocations({
 
                 {phone.length > 0 && (
                   <>
-                    <Divider addClass="my-4" />
+                    <Divider addClass="my-1" />
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                       {phone.map((phone, idx) => (
                         <Link

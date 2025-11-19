@@ -13,7 +13,7 @@ export default function PrescriptionReservation({ reservationLinks }: Props) {
   if (links.length === 0) return null;
   return (
     <>
-      <Divider addClass="my-4" />
+      <Divider addClass="my-1" />
       <section className="flex flex-col items-center space-y-4">
         <div className="flex flex-col gap-3 w-full mb-2">
           {links.map((item, idx) => {

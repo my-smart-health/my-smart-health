@@ -80,7 +80,7 @@ export default function ReservationLinksSection({ reservationLinks, onChange }: 
           >
             Remove
           </button>
-          <Divider addClass="my-2" />
+          <Divider addClass="my-1" />
         </div>
       ))}
 

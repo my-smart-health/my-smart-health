@@ -68,7 +68,7 @@ export function AreaOfExpertiseSection({
         </div>
       ))}
 
-      <Divider addClass="my-4" />
+      <Divider addClass="my-1" />
 
       <button
         type="button"

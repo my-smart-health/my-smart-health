@@ -100,7 +100,7 @@ export function MSHLocationSection({
             setAddressAction={(value) => updateLocation(index, 'address', value[0] || '')}
           />
 
-          <Divider addClass="my-4" />
+          <Divider addClass="my-1" />
 
           <PhoneNumbersSection
             phoneNumbers={location.phone}
@@ -108,7 +108,7 @@ export function MSHLocationSection({
             platformIcon={<Phone className="inline-block mr-1" size={20} />}
           />
 
-          <Divider addClass="my-4" />
+          <Divider addClass="my-1" />
 
           <WorkScheduleSection
             schedule={Array.isArray(location.schedule) ? location.schedule.filter(isSchedule) : []}
@@ -117,7 +117,7 @@ export function MSHLocationSection({
             setScheduleTime={(scheduleId, openClose, value) => setScheduleTime(index, scheduleId, openClose, value)}
           />
 
-          <Divider addClass="my-4" />
+          <Divider addClass="my-1" />
 
           <button
             type="button"

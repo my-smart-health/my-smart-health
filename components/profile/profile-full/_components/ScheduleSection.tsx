@@ -84,7 +84,7 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
 
   return (
     <>
-      <Divider addClass="my-4" />
+      <Divider addClass="my-1" />
       <h2 className="font-bold text-primary text-xl mb-4">Öffnungszeiten{displayIsOpen && (
         <>
           {" - "}
@@ -157,7 +157,7 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
 
               {schBlock.title && <h3 className="font-bold text-primary text-lg">{schBlock.title}</h3>}
 
-              {schBlock.title && <Divider addClass="my-4" />}
+              {schBlock.title && <Divider addClass="my-1" />}
 
               {renderDays}
             </section>

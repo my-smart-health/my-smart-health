@@ -50,7 +50,7 @@ export function PhoneNumbersSection({ phoneNumbers, setPhoneNumbers, platformIco
           </div>
         </div>
       ))}
-      <Divider addClass="my-4" />
+      <Divider addClass="my-1" />
       <button
         type="button"
         onClick={() => setPhoneNumbers([...phoneNumbers, ""])}

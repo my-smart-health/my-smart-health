@@ -80,10 +80,10 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
   const filteredLocations = (locations || []).filter(loc => loc.address && loc.address.trim() !== "");
 
   return (
-    <div className="flex flex-col gap-4 p-3 sm:p-4 w-full max-w-full overflow-hidden">
+    <div className="flex flex-col gap-3 p-2 sm:p-3 w-full max-w-full overflow-hidden">
 
-      <section className="flex flex-wrap gap-4 md:gap-2 w-full">
-        <h2 className="font-bold text-primary text-2xl break-words">{name}</h2>
+      <section className="flex flex-wrap gap-2 w-full">
+        <h2 className="font-bold text-primary text-xl break-words">{name}</h2>
         <div className="my-auto w-full">
           <FieldOfExpertiseSection fieldOfExpertise={fieldOfExpertise} />
         </div>
@@ -113,7 +113,7 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
       <PhoneNumbers phoneNumbers={phones} platformIcons={platformIcons} />
 
       {((displayEmail || website || parsedSocials.length > 0) && phones.length === 0) && (
-        <Divider addClass="my-4" />
+        <Divider addClass="my-1" />
       )}
 
       <SocialLinks

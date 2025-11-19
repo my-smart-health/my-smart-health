@@ -523,7 +523,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
             </div>
           </fieldset>
 
-          <Divider addClass="my-5" />
+          <Divider addClass="my-2" />
 
           <fieldset className="fieldset">
             <legend className="fieldset-legend">Select File</legend>

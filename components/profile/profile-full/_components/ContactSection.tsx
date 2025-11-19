@@ -37,7 +37,7 @@ export default function ContactSection({
               : [];
             return (
               <div key={idx} className="flex flex-col p-4 border border-primary rounded">
-                {idx > 0 && <Divider addClass="my-4" />}
+                {idx > 0 && <Divider addClass="my-1" />}
                 {address && (
                   <div className="flex flex-row items-start gap-1 break-words w-full justify-between">
                     <span className="break-words my-auto">{address}</span>
@@ -56,7 +56,7 @@ export default function ContactSection({
 
                 {phone.length > 0 && (
                   <>
-                    <Divider addClass="my-2" />
+                    <Divider addClass="my-1" />
                     <div className="flex flex-wrap mx-auto mt-2 gap-2">
                       {phone.map((phone, idx) => (
                         <Link

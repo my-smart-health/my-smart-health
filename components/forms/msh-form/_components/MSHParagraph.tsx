@@ -255,7 +255,7 @@ export default function MSHParagraph({
             />
           </label>
 
-          <Divider addClass="my-4" />
+          <Divider addClass="my-1" />
 
           <div className="block w-full">
             <label className="block mb-2">Paragraph Content:</label>
@@ -267,7 +267,7 @@ export default function MSHParagraph({
           </div>
           <span className="flex justify-end text-sm text-gray-500">You can resize the text area by dragging the corner. <ArrowUpRight /></span>
 
-          <Divider addClass="my-4" />
+          <Divider addClass="my-1" />
 
           <label>
             Add YouTube or Instagram Video:
@@ -310,7 +310,7 @@ export default function MSHParagraph({
             </div>
           </label>
 
-          <Divider addClass="my-4" />
+          <Divider addClass="my-1" />
 
           <label className="flex flex-col gap-1">
             Paragraph Images:
@@ -391,7 +391,7 @@ export default function MSHParagraph({
             </div>
           )}
 
-          <Divider addClass="my-4" />
+          <Divider addClass="my-1" />
 
           <label className="flex flex-col gap-1">
             Paragraph Files:
@@ -457,7 +457,7 @@ export default function MSHParagraph({
             </ul>
           )}
 
-          <Divider addClass="my-4" />
+          <Divider addClass="my-1" />
 
           <div className="mb-4">
             <h4 className="font-semibold mb-2">Social Links:</h4>
@@ -510,7 +510,7 @@ export default function MSHParagraph({
             </button>
           </div>
 
-          <Divider addClass="my-4" />
+          <Divider addClass="my-1" />
 
           <button
             type="button"
@@ -522,7 +522,7 @@ export default function MSHParagraph({
         </div>
       ))}
 
-      <Divider addClass="my-4" />
+      <Divider addClass="my-1" />
 
       <button
         type="button"

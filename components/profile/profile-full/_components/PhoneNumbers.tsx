@@ -16,7 +16,7 @@ export default function PhoneNumbers({ phoneNumbers, platformIcons }: PhoneNumbe
       <div className="flex flex-wrap gap-2 mx-auto ">
         {phoneNumbers.length > 0 && phoneNumbers.map((phone, idx) => (
           <React.Fragment key={`phone-${idx}`}>
-            {idx === 0 && <Divider addClass="my-4" />}
+            {idx === 0 && <Divider addClass="my-1" />}
             <div className="flex items-center h-auto my-auto">
               <Link
                 href={`tel:${phone}`}

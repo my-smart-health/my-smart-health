@@ -145,7 +145,7 @@ export default async function MySmartHealth() {
 
               {para.files && para.files.length > 0 && (
                 <div>
-                  <Divider addClass="my-4" />
+                  <Divider addClass="my-1" />
                   <h4 className="font-semibold mb-1">Dateien:</h4>
                   <ul className="list-none">
                     <section className="grid grid-cols-1 gap-3">

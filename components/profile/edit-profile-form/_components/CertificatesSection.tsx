@@ -248,7 +248,7 @@ export function CertificatesSection({
             </div>
           ))}
         </div>
-        <Divider addClass="my-4" />
+        <Divider addClass="my-1" />
         <button
           type="button"
           onClick={() => setCertificates([
@@ -267,7 +267,7 @@ export function CertificatesSection({
         >
           + Add Certificate
         </button>
-        <Divider addClass="my-4" />
+        <Divider addClass="my-1" />
       </fieldset>
     </section>
   );

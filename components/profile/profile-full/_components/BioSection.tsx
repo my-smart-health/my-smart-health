@@ -8,7 +8,7 @@ export default function BioSection({ bio }: { bio: string }) {
 
   return (
     <>
-      <Divider addClass="my-4" />
+      <Divider addClass="my-1" />
       <section className="w-full overflow-hidden">
         <article className="text-base w-full max-w-full">
           <ParagraphContent content={bio} maxLines={3} className="prose prose-sm" />

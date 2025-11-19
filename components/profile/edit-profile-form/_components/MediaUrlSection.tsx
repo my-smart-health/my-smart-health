@@ -36,7 +36,7 @@ export function MediaUrlSection({
             Upload Media URL
           </button>
 
-          <Divider addClass="my-2" />
+          <Divider addClass="my-1" />
 
           <div className="flex flex-wrap max-w-[50%] gap-4 text-wrap mx-auto">
             {blobResult && blobResult.length > 0 && (

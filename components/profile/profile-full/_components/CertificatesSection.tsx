@@ -13,7 +13,7 @@ export default function CertificatesSection({ certificates }: { certificates: Ce
 
   return (
     <>
-      <Divider addClass="my-4" />
+      <Divider addClass="my-1" />
       <section className="rounded-lg">
         <h2 className="font-bold text-primary text-2xl mb-6 text-center">Zertifikate</h2>
         <Suspense fallback={<div className="skeleton animate-pulse h-[350px] w-full mb-6 bg-gray-200 rounded-lg"></div>}>

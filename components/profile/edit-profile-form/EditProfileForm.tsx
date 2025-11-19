@@ -502,7 +502,7 @@ export default function EditProfileForm({ user }: { user: User }) {
 
             <NameSection name={name} onChange={setName} />
 
-            <Divider addClass="my-4" />
+            <Divider addClass="my-1" />
 
             <AreaOfExpertiseSection
               fieldOfExpertise={fieldOfExpertise}
@@ -548,11 +548,11 @@ export default function EditProfileForm({ user }: { user: User }) {
             <section about="links" className="space-y-4">
               <PhoneNumbersSection phoneNumbers={phones} setPhoneNumbers={setPhones} platformIcon={platformIcons['Phone']} />
 
-              <Divider addClass="my-4" />
+              <Divider addClass="my-1" />
 
               <EmailSection email={displayEmail} setEmail={setDisplayEmail} />
 
-              <Divider addClass="my-4" />
+              <Divider addClass="my-1" />
 
               <WebsiteSection
                 website={website}
@@ -591,7 +591,7 @@ export default function EditProfileForm({ user }: { user: User }) {
               onAfterUpload={handleUpdateProfileImagesInDB}
             />
 
-            <Divider addClass="my-4" />
+            <Divider addClass="my-1" />
 
             <MediaUrlSection
               blobResult={blobResult}
@@ -600,7 +600,7 @@ export default function EditProfileForm({ user }: { user: User }) {
               handleAddURL={handleAddURL}
             />
 
-            <Divider addClass="my-4" />
+            <Divider addClass="my-1" />
 
             <ProfileMediaList
               blobResult={blobResult}

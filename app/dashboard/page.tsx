@@ -116,15 +116,15 @@ export default async function DashboardPage() {
 
   return (
     <>
-      <h1 className="mx-3 text-4xl font-extrabold text-primary mb-6">Dashboard</h1>
-      <div className="flex flex-col sm:flex-row gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
+      <h1 className="mx-3 text-4xl font-extrabold text-primary">Dashboard</h1>
+      <div className="flex flex-col sm:flex-row gap-3 mb-2 border border-primary p-4 rounded-lg shadow-lg">
         <GoToButton src="/dashboard/all-posts" name="All Posts" className="btn btn-outline btn-info hover:text-white shadow" />
         <GoToButton src="/dashboard/edit-profile" name="Edit Profile" className="btn btn-outline btn-warning hover:text-white shadow" />
         <GoToButton src="/dashboard/create-post" name="New Post" className="btn btn-outline btn-success hover:text-white shadow" />
       </div>
 
       {session.user.role === "ADMIN" && (
-        <div className="flex flex-col gap-4 mb-8 border border-primary p-4 rounded-lg shadow-lg">
+        <div className="flex flex-col gap-3 mb-2 border border-primary p-4 rounded-lg shadow-lg">
           <span className="font-bold self-center">Admin Only</span>
           <div className="flex flex-col sm:flex-row gap-2">
             <GoToButton src="/dashboard/all-users" name="All Users" className="btn btn-outline btn-info hover:text-white" />

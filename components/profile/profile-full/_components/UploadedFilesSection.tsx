@@ -48,7 +48,7 @@ export default function UploadedFilesSection({
 
   return (
     <section className={sectionClassName}>
-      {!hideDivider && <Divider addClass="my-4" />}
+      {!hideDivider && <Divider addClass="my-1" />}
       {heading && (
         <h3 className="text-lg font-semibold text-primary mb-3">{heading}</h3>
       )}
