@@ -69,9 +69,9 @@ export default function ProfileSearch({
   return (
     <section className={`w-full ${className ?? ''}`}>
       <form onSubmit={handleSubmit} className="mt-4">
-        <div className="flex gap-2 w-full">
+        <div className="flex gap-0 w-full shadow-lg rounded-full overflow-hidden border border-gray-300">
           <div className="relative flex-1">
-            <SearchIcon className="absolute z-10 left-4 top-1/2 -translate-y-1/2" size={20} />
+            <SearchIcon className="absolute z-10 left-5 top-1/2 -translate-y-1/2 text-gray-400" size={22} />
             <input
               type="search"
               value={query}
@@ -80,13 +80,13 @@ export default function ProfileSearch({
                 setError(null);
               }}
               placeholder="Nach Namen, Bio oder Fachgebiet suchen..."
-              className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full pl-12 pr-4"
+              className="py-3 px-4 pl-14 text-base focus:outline-none w-full bg-white border-none"
               aria-label="Profile search"
             />
           </div>
           <button
             type="submit"
-            className="btn btn-primary self-center rounded px-6"
+            className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-3 transition-colors duration-200 border-none rounded-none"
           >
             Suchen
           </button>
