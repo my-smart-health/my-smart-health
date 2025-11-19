@@ -5,7 +5,6 @@ import { IBM_Plex_Sans } from "next/font/google";
 
 import "./globals.css";
 
-import GoBackIndexCheck from "@/components/buttons/go-back-layout/GoBackIndexCheck";
 import Divider from "@/components/divider/Divider";
 import BackToTop from "@/components/buttons/back-to-top/BackToTop";
 import CookieConsentModal from "@/components/modals/cookie-consent/CookieConsentModal";
@@ -70,7 +69,6 @@ export default async function RootLayout({
 
         <Divider addClass="my-1" />
 
-        <GoBackIndexCheck />
         <main className="flex flex-col gap-2 items-center min-h-[72dvh] py-8 pt-2 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
           {children}
           <BackToTop />

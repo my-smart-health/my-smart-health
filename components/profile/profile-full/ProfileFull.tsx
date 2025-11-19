@@ -24,6 +24,7 @@ import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
 import { Location } from "@/utils/types";
 import Divider from "@/components/divider/Divider";
+import GoBack from "@/components/buttons/go-back/GoBack";
 
 const platformIcons: Record<string, React.ReactNode> = {
   Email: <AtSign className="inline-block mr-1" size={30} />,
@@ -82,9 +83,12 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
   return (
     <div className="flex flex-col gap-3 p-2 sm:p-3 w-full max-w-full overflow-hidden">
 
-      <section className="flex flex-wrap gap-2 w-full">
-        <h2 className="font-bold text-primary text-xl break-words">{name}</h2>
-        <div className="my-auto w-full">
+      <section className="flex flex-col gap-2 w-full">
+        <div className="flex justify-between items-center w-full gap-2">
+          <h2 className="font-bold text-primary text-xl break-words">{name}</h2>
+          <GoBack />
+        </div>
+        <div className="w-full flex justify-center sm:justify-start">
           <FieldOfExpertiseSection fieldOfExpertise={fieldOfExpertise} />
         </div>
       </section>
