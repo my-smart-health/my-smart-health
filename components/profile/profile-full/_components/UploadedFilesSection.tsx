@@ -61,7 +61,7 @@ export default function UploadedFilesSection({
                 href={getDownloadUrl(fileUrl)}
                 prefetch={false}
                 download
-                className="badge badge-primary p-4 text-white w-full sm:w-auto hover:bg-primary/75 transition-colors duration-200 break-all text-left flex items-center gap-2"
+                className="btn btn-primary rounded-xl py-8 sm:py-6 text-white w-full sm:w-auto hover:bg-primary/75 transition-colors duration-200 break-all text-left flex items-center gap-2"
               >
                 <FileText size={18} />
                 <span className="break-all whitespace-normal">{fileName}</span>
