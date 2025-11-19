@@ -79,7 +79,7 @@ export default function ProfileSearch({
                 setQuery(event.target.value);
                 setError(null);
               }}
-              placeholder="Nach Namen, Bio oder Fachgebiet suchen..."
+              placeholder="Nach Namen, Text..."
               className="py-3 px-4 pl-14 text-base focus:outline-none w-full bg-white border-none"
               aria-label="Profile search"
             />
