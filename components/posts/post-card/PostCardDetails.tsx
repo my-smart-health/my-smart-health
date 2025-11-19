@@ -74,103 +74,110 @@ export default function PostCardDetails({ postData, session, onDeletePostAction 
     <>
       <div
         key={id}
-        className="card m-auto min-h-full w-96 border max-w-[99%] rounded-lg shadow-2xl"
+        className="card m-auto min-h-full w-full max-w-2xl border-2 border-gray-500 rounded-xl shadow-lg bg-white"
       >
-        <div className="flex flex-row gap-2 w-full ">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 pb-0">
           {title && (
-            <span className="text-xl w-full m-5 font-semibold line-clamp-1 break-all">
+            <h1 className="text-2xl font-bold text-primary line-clamp-2 break-words flex-1">
               {title}
-            </span>
+            </h1>
           )}
-          <span className="badge text-xl my-5 ml-2 font-semibold ">{createdDate}</span>
+          <span className="badge badge-outline badge-lg py-3 px-4 text-sm font-medium whitespace-nowrap">
+            {createdDate}
+          </span>
         </div>
 
-        <Divider />
+        <Divider addClass="my-3" />
 
-        <section>
-          <div className="card-body">
-            {photos &&
+        <section className="px-4">
+          {photos && photos.length > 0 && (
+            <div className="mb-4">
               <FadeCarousel photos={photos} />
-            }
-            {content && (
-              <div className="text-base indent-4 break-before">
-                <ParagraphContent content={content} />
+            </div>
+          )}
+
+          {content && (
+            <div className="prose prose-sm max-w-none mb-4">
+              <ParagraphContent content={content} />
+            </div>
+          )}
+
+          {tags && tags.length > 0 && (
+            <div className="mb-4">
+              <Divider addClass="mb-3" />
+              <div className="flex flex-wrap gap-2">
+                {tags.map((tag, index) => (
+                  <span key={index} className="badge badge-dash badge-sm py-2 px-3">
+                    {tag}
+                  </span>
+                ))}
               </div>
-            )}
-          </div>
-          <div className="card-actions justify-end m-4">
-            {tags && tags.length > 0 && (
-              <>
-                <Divider />
-                <div className="flex flex-wrap gap-2">
-                  {tags.map((tag, index) => (
-                    <span key={index} className="badge badge-dash">{tag}</span>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+            </div>
+          )}
+
           {socialLinks && socialLinks.length > 0 && (
-            <>
-              <Divider />
-              <div className="m-4">
-                <h3 className="text-lg font-semibold mb-3">Links</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-                  {socialLinks.map((link, index) => (
-                    <Link
-                      key={index}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="badge badge-lg badge-primary gap-2 p-3 hover:bg-primary/75 transition-colors"
-                    >
-                      {platformIcons[link.platform as keyof typeof platformIcons]}
-                      <span>{link.platform}</span>
-                    </Link>
-                  ))}
-                </div>
+            <div className="mb-4">
+              <Divider addClass="mb-3" />
+              <h3 className="text-base font-semibold text-primary mb-2">Links</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {socialLinks.map((link, index) => (
+                  <Link
+                    key={index}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="badge badge-primary gap-1 p-3 hover:bg-primary/80 transition-colors text-white text-xs"
+                  >
+                    {platformIcons[link.platform as keyof typeof platformIcons]}
+                    <span className="truncate">{link.platform}</span>
+                  </Link>
+                ))}
               </div>
-            </>
+            </div>
           )}
         </section>
 
-        <div className="flex flex-col items-center space-y-2 mb-4">
-          {author?.name &&
-            <div className="card-actions justify-center w-full">
+        <div className="flex flex-col gap-3 p-4 pt-0">
+          <Divider addClass="mb-2" />
+
+          <div className="flex items-center justify-between gap-3">
+            {author?.name && (
               <Link
                 href={`/profile/${author.id}`}
-                className="flex flex-col py-2 w-full max-w-[90%] btn bg-primary rounded-xl text-white text-lg h-fit"
+                className="btn btn-primary btn-sm rounded-full px-6 text-white flex-1 sm:flex-none"
               >
-                <div className="w-full">{author.name}</div>
+                {author.name}
               </Link>
-            </div>
-          }
+            )}
 
-          {session?.user.role === "ADMIN" || session?.user.id === author?.id
-            ? (<div className="space-x-4 self-end mr-5">
-              <Link href={`/dashboard/edit-post/${id}`} className="self-center text-lg btn btn-circle btn-warning rounded-xl">
-                <Pencil />
-              </Link>
-              <button
-                type="button"
-                onClick={() => {
-                  setIsDeleting(true);
-                }}
-                className="btn btn-circle bg-red-500/90 p-2 cursor-pointer"
-              >
-                <Trash2 />
-              </button>
-            </div>)
-            : null
-          }
+            {(session?.user.role === "ADMIN" || session?.user.id === author?.id) && (
+              <div className="flex gap-2">
+                <Link
+                  href={`/dashboard/edit-post/${id}`}
+                  className="btn btn-warning btn-sm btn-circle"
+                >
+                  <Pencil size={18} />
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setIsDeleting(true)}
+                  className="btn btn-error btn-sm btn-circle"
+                >
+                  <Trash2 size={18} />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
-      <div className="flex justify-end my-2">
+
+      <div className="flex justify-center my-4">
         <GoBack />
       </div>
+
       <DeletePostModal
         isOpen={isDeleting}
-        onCloseAction={() => { setIsDeleting(false); }}
+        onCloseAction={() => setIsDeleting(false)}
         onDeleteAction={handleDeletePost}
         message={deleteMessage}
       />
