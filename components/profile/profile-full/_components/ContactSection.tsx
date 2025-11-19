@@ -23,7 +23,7 @@ export default function ContactSection({
         <Divider addClass="mt-1" />
       )}
 
-      <section className="flex flex-col gap-4 w-full overflow-hidden">
+      <section className="flex flex-col gap-3 w-full overflow-hidden">
 
         {locations.length > 0 &&
           locations.map((location, idx) => {
@@ -36,47 +36,43 @@ export default function ContactSection({
               )
               : [];
             return (
-              <div key={idx} className="flex flex-col p-4 border border-primary rounded">
-                {idx > 0 && <Divider addClass="my-1" />}
+              <div key={idx} className="flex flex-col border border-primary rounded-lg shadow-sm bg-white/50">
                 {address && (
-                  <div className="flex flex-row items-start gap-1 break-words w-full justify-between">
-                    <span className="break-words my-auto">{address}</span>
-                    <div className="">
-                      <Link
-                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        className="badge badge-primary badge-xl my-1 mr-10 py-5 w-full text-white hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link"
-                      >
-                        <MapPin className="flex-shrink-0 mt-0" size={20} /> Route
-                      </Link>
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 gap-3 w-full">
+                    <div className="flex items-start gap-2 flex-1 min-w-0">
+                      <MapPin className="flex-shrink-0 text-primary mt-1" size={20} />
+                      <span className="break-words text-sm leading-relaxed">{address}</span>
                     </div>
+                    <Link
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      className="btn btn-primary btn-sm rounded-full px-5 text-white hover:bg-primary/75 transition-colors duration-200 whitespace-nowrap flex-shrink-0"
+                    >
+                      <MapPin size={16} /> Route
+                    </Link>
                   </div>
                 )}
 
                 {phone.length > 0 && (
                   <>
-                    <Divider addClass="my-1" />
-                    <div className="flex flex-wrap mx-auto mt-2 gap-2">
-                      {phone.map((phone, idx) => (
+                    <Divider addClass="my-0" />
+                    <div className="flex flex-wrap gap-2 p-3">
+                      {phone.map((phoneNum, idx) => (
                         <Link
                           key={idx}
-                          href={`tel:${phone}`}
-                          className="badge badge-primary py-5 text-white hover:bg-primary/75 transition-colors duration-200 break-all break-before-left link">
-                          <span className="mr-1">{platformIcons.Phone}</span>{phone}
+                          href={`tel:${phoneNum}`}
+                          className="badge badge-primary badge-lg py-3 px-4 text-white hover:bg-primary/75 transition-colors duration-200 break-all link">
+                          <span className="mr-1">{platformIcons.Phone}</span>{phoneNum}
                         </Link>
                       ))}
                     </div>
                   </>
                 )}
 
-                {schedule && (
+                {schedule && schedule.length > 0 && (
                   <div>
-                    {schedule.length > 0 && (
-                      <>
-                        <ScheduleSection schedule={schedule} />
-                      </>
-                    )}
+                    <ScheduleSection schedule={schedule} />
                   </div>
                 )}
 
