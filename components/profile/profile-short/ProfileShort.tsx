@@ -21,33 +21,33 @@ export default function ProfileShort({ id, name, bio, image }: ProfileShortProps
     .join("") || "?";
 
   return (
-    <section className="flex flex-col md:flex-row items-center gap-4 p-4 w-full border rounded-xl bg-white/90 shadow-lg hover:shadow-2xl transition-shadow">
-      <div className="flex-shrink-0 flex items-center justify-center w-full md:w-40 h-40 bg-gray-100 rounded-xl overflow-hidden border">
+    <section className="flex flex-row items-start gap-3 p-3 w-full border rounded-lg bg-white/90 shadow hover:shadow-md transition-shadow">
+      <div className="flex-shrink-0 flex items-center justify-center w-20 h-20 bg-gray-100 rounded-lg overflow-hidden border">
         {hasImage ? (
           <Image
             src={image as string}
             alt={name}
             loading="lazy"
-            width={160}
-            height={160}
+            width={80}
+            height={80}
             style={{ objectFit: "cover" }}
-            className="rounded-xl w-full h-full"
+            className="rounded-lg w-full h-full"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary to-secondary text-white text-3xl font-semibold">
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary to-secondary text-white text-xl font-semibold">
             {initials}
           </div>
         )}
       </div>
-      <div className="flex flex-col justify-between flex-1 w-full h-full gap-2">
-        <h2 className="font-bold text-xl text-primary mb-1">{name}</h2>
-        <div className="w-full flex-1">
-          <ParagraphContent content={bio} maxLines={3} className="prose prose-sm" />
-        </div>
-        <div className="flex justify-end mt-auto">
+      <div className="flex flex-col flex-1 min-w-0 gap-1">
+        <h2 className="font-bold text-lg text-primary leading-tight">{name}</h2>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div className="flex-1 min-w-0">
+            <ParagraphContent content={bio} maxLines={2} className="prose prose-sm text-sm leading-snug" />
+          </div>
           <Link
             href={`/profile/${id}`}
-            className="btn btn-primary btn-sm rounded-full px-6 font-semibold shadow"
+            className="btn btn-primary btn-xs rounded-full px-4 font-semibold text-xs flex-shrink-0"
           >
             zum Profil
           </Link>
