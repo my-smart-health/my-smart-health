@@ -1,7 +1,7 @@
 import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
 import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealthBarLink";
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
-import ProfileSearchToggle from "@/components/profile/ProfileSearchToggle";
+import ProfileSearchToggle from "@/components/search/ProfileSearchToggle";
 import { CATEGORY_NAMES } from "@/utils/constants";
 import { CirclePlus } from "lucide-react";
 

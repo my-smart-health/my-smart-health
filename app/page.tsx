@@ -5,7 +5,7 @@ import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealth
 import prisma from "@/lib/db";
 import { CirclePlus } from "lucide-react";
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
-import ProfileSearchToggle from "@/components/profile/ProfileSearchToggle";
+import ProfileSearchToggle from "@/components/search/ProfileSearchToggle";
 import { CATEGORY_NAMES, CACHE_STRATEGY } from "@/utils/constants";
 
 export const revalidate = 0;
