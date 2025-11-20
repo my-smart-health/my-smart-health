@@ -2,7 +2,6 @@ import Image from "next/image";
 import { Suspense, useState } from "react";
 
 import { Certificate } from "@/utils/types";
-import Divider from "@/components/divider/Divider";
 
 export default function CertificatesSection({ certificates }: { certificates: Certificate[] }) {
   const [zoomedSrc, setZoomedSrc] = useState<string | null>(null);
