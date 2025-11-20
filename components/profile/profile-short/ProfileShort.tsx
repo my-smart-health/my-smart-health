@@ -13,17 +13,11 @@ type ProfileShortProps = {
 
 export default function ProfileShort({ id, name, bio, image }: ProfileShortProps) {
   const hasImage = Boolean(image);
-  const initials = name
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("") || "?";
 
   return (
     <section className="flex flex-row items-start gap-3 p-3 w-full border rounded-lg bg-white/90 shadow hover:shadow-md transition-shadow">
-      <div className="flex-shrink-0 flex items-center justify-center w-20 h-20 bg-gray-100 rounded-lg overflow-hidden border">
-        {hasImage ? (
+      {hasImage && (
+        <div className="flex-shrink-0 flex items-center justify-center w-20 h-20 bg-gray-100 rounded-lg overflow-hidden border">
           <Image
             src={image as string}
             alt={name}
@@ -33,16 +27,12 @@ export default function ProfileShort({ id, name, bio, image }: ProfileShortProps
             style={{ objectFit: "cover" }}
             className="rounded-lg w-full h-full"
           />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary to-secondary text-white text-xl font-semibold">
-            {initials}
-          </div>
-        )}
-      </div>
+        </div>
+      )}
       <div className="flex flex-col flex-1 min-w-0 gap-1">
         <h2 className="font-bold text-lg text-primary leading-tight">{name}</h2>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 border rounded border-primary px-2 py-1">
             <ParagraphContent content={bio} maxLines={2} className="prose prose-sm text-sm leading-snug" />
           </div>
           <Link

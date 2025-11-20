@@ -177,100 +177,151 @@ export default function CategoryAccordion({
         const currentPath = [...parentPath, catName];
         const currentPathLabel = currentPath.join(' > ');
         const currentCategoryId = pathToCategoryId[currentPathLabel];
+
+        // Different styles based on level
+        const levelColors = [
+          'bg-primary/10 border-primary border-2',      // Level 0 - Primary with strong border
+          'bg-secondary border-primary border-2',  // Level 1 - Secondary
+          'bg-accent/10 border-accent border-2',        // Level 2 - Accent
+          'bg-info/10 border-info border-2',            // Level 3 - Info
+        ];
+        const categoryStyle = levelColors[Math.min(level, levelColors.length - 1)];
+
+        const countSubcategories = (node: CategoryNodeSH): number => {
+          let count = node.children.size;
+          node.children.forEach((childNode) => {
+            count += countSubcategories(childNode);
+          });
+          return count;
+        };
+        const subcategoryCount = countSubcategories(child);
+
         return (
-          <div key={key} style={{ paddingLeft: `${level * 1}px` }} className="w-full">
+          <div key={key} className="w-full mb-3">
             <button
               type="button"
-              className="flex items-center gap-2 p-4 font-bold text-xl border border-gray-400 rounded-2xl shadow-xl transition-all cursor-pointer bg-base-100 my-1 w-full text-left"
+              className={`flex items-center gap-3 p-4 font-bold text-lg rounded-xl shadow-md transition-all cursor-pointer w-full text-left hover:shadow-lg ${categoryStyle}`}
               onClick={() => toggle(key)}
               aria-expanded={isOpen}
             >
               <Triangle
-                className={`transition-transform ${isOpen ? "rotate-180" : "rotate-90"} text-primary stroke-3 fill-primary`}
+                className={`transition-transform flex-shrink-0 ${isOpen ? "rotate-180" : "rotate-90"} text-primary stroke-[3] fill-primary`}
+                size={20}
               />
-              <span>{catName}</span>
-            </button>
-            {isOpen && (
-              <div className="border-l-2 border-gray-300 pl-2">
-                {child.users
-                  .slice()
-                  .sort((a, b) => collator.compare((a.name || '').trim(), (b.name || '').trim()))
-                  .map((user) => {
-                    const { id, name, bio, profileImages } = user;
-                    if (!bio || !name || !id) return null;
-                    return (
-                      <div key={id} style={{ marginBottom: '10px' }} className="w-full">
-                        <ProfileShort
-                          id={id}
-                          name={name}
-                          bio={bio}
-                          image={profileImages?.[0] ?? null}
-                        />
-                        {isAdmin && (
-                          <div className="mt-2">
-                            <button
-                              type="button"
-                              className="btn btn-xs btn-outline"
-                              onClick={() => {
-                                if (!currentCategoryId) return alert('Missing category id for this path');
-                                handleRemoveUserFromCategory(currentCategoryId, id);
-                              }}
-                            >
-                              Remove from category
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    )
-                  })}
-                {isAdmin && (
-                  <div className="flex flex-wrap gap-2 my-2">
-                    <button
-                      type="button"
-                      className="btn btn-sm"
-                      onClick={() => {
-                        if (!currentCategoryId) return alert('Missing category id for this path');
-                        setActiveParentId(currentCategoryId);
-                        setShowAddSubModal(true);
-                      }}
-                    >
-                      Add subcategory
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-sm"
-                      onClick={() => {
-                        if (!currentCategoryId) return alert('Missing category id for this path');
-                        setActiveParentId(currentCategoryId);
-                        setShowAddUserModal(true);
-                      }}
-                    >
-                      Add user to category
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-sm"
-                      onClick={() => {
-                        if (!currentCategoryId) return alert('Missing category id for this path');
-                        setRenameCategoryId(currentCategoryId);
-                        setRenameInitial(catName);
-                        setShowRenameModal(true);
-                      }}
-                    >
-                      Rename
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-error"
-                      onClick={() => {
-                        if (!currentCategoryId) return alert('Missing category id for this path');
-                        handleDeleteCategory(currentCategoryId);
-                      }}
-                    >
-                      Delete category
-                    </button>
+              <div className="flex-1">
+                <span>{catName}</span>
+                {level > 0 && (
+                  <div className="text-xs text-gray-500 font-normal mt-1">
+                    {currentPathLabel}
                   </div>
                 )}
+              </div>
+              <div className="flex flex-col gap-2">
+                {subcategoryCount > 0 && (
+                  <span className="badge badge-primary">
+                    {subcategoryCount} {subcategoryCount === 1 ? 'Kategorie' : 'Kategorien'}
+                  </span>
+                )}
+
+                {child.users.length > 0 && (
+                  <span className="badge badge-primary">
+                    {child.users.length} {child.users.length === 1 ? 'Profil' : 'Profile'}
+                  </span>
+                )}
+              </div>
+            </button>
+
+            {isOpen && (
+              <div className={`mt-2 pl-4 border-l-4 ${level === 0 ? 'border-primary' : level === 1 ? 'border-accent' : level === 2 ? 'border-secondary' : 'border-info'}`}>
+                {child.users.length > 0 && (
+                  <div className="space-y-2 mb-3 mt-2">
+                    {child.users
+                      .slice()
+                      .sort((a, b) => collator.compare((a.name || '').trim(), (b.name || '').trim()))
+                      .map((user) => {
+                        const { id, name, bio, profileImages } = user;
+                        if (!bio || !name || !id) return null;
+                        return (
+                          <div key={id} className="relative">
+                            <ProfileShort
+                              id={id}
+                              name={name}
+                              bio={bio}
+                              image={profileImages?.[0] ?? null}
+                            />
+                            {isAdmin && (
+                              <div className="mt-1 ml-2">
+                                <button
+                                  type="button"
+                                  className="btn btn-xs btn-outline btn-error"
+                                  onClick={() => {
+                                    if (!currentCategoryId) return alert('Missing category id for this path');
+                                    handleRemoveUserFromCategory(currentCategoryId, id);
+                                  }}
+                                >
+                                  Remove from category
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        )
+                      })}
+                  </div>
+                )}
+
+                {isAdmin && (
+                  <div className="flex flex-wrap justify-between items-center gap-2 my-3 p-3 bg-primary/40 rounded-lg border border-gray-200">
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-primary border-black/60"
+                        onClick={() => {
+                          if (!currentCategoryId) return alert('Missing category id for this path');
+                          setActiveParentId(currentCategoryId);
+                          setShowAddSubModal(true);
+                        }}
+                      >
+                        Add Subcategory
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-primary border-black/60"
+                        onClick={() => {
+                          if (!currentCategoryId) return alert('Missing category id for this path');
+                          setActiveParentId(currentCategoryId);
+                          setShowAddUserModal(true);
+                        }}
+                      >
+                        Add User To Category
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-warning text-white border-black/60"
+                        onClick={() => {
+                          if (!currentCategoryId) return alert('Missing category id for this path');
+                          setRenameCategoryId(currentCategoryId);
+                          setRenameInitial(catName);
+                          setShowRenameModal(true);
+                        }}
+                      >
+                        Rename Category
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-sm btn-error text-white border-black/60"
+                        onClick={() => {
+                          if (!currentCategoryId) return alert('Missing category id for this path');
+                          handleDeleteCategory(currentCategoryId);
+                        }}
+                      >
+                        Delete Category
+                      </button>
+                    </div>
+                  </div>
+                )}
+
                 <CategoryAccordion
                   node={child}
                   level={level + 1}
