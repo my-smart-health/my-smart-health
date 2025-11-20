@@ -98,7 +98,7 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
 
   return (
     <>
-      <Divider addClass="my-0" />
+      <Divider addClass="my-1" />
       <div className="p-3">
         <h2 className="font-bold text-primary text-lg mb-3">
           Öffnungszeiten

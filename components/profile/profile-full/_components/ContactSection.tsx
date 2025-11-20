@@ -62,7 +62,7 @@ export default function ContactSection({
                         <Link
                           key={idx}
                           href={`tel:${phoneNum}`}
-                          className="badge badge-primary badge-lg py-3 px-4 text-white hover:bg-primary/75 transition-colors duration-200 break-all link">
+                          className="badge badge-primary py-5 px-4 text-white hover:bg-primary/75 transition-colors duration-200 break-all link">
                           <span className="mr-1">{platformIcons.Phone}</span>{phoneNum}
                         </Link>
                       ))}
