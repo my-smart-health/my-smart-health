@@ -17,7 +17,7 @@ export default function ProfileShort({ id, name, bio, image }: ProfileShortProps
   return (
     <section className="flex flex-row items-start gap-3 p-3 w-full border rounded-lg bg-white/90 shadow hover:shadow-md transition-shadow">
       {hasImage && (
-        <div className="flex-shrink-0 flex items-center justify-center w-20 h-20 bg-gray-100 rounded-lg overflow-hidden border">
+        <div className="flex-shrink-0 flex items-center justify-center w-20 h-20 bg-gray-100 rounded-lg overflow-hidden border" style={{ marginTop: '1.75rem' }}>
           <Image
             src={image as string}
             alt={name}
@@ -37,7 +37,7 @@ export default function ProfileShort({ id, name, bio, image }: ProfileShortProps
           </div>
           <Link
             href={`/profile/${id}`}
-            className="btn btn-primary btn-xs rounded-full px-4 font-semibold text-xs flex-shrink-0"
+            className="btn btn-primary rounded-full px-4 font-semibold text-xs flex-shrink-0"
           >
             zum Profil
           </Link>

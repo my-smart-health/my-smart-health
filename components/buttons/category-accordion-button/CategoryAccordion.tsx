@@ -210,25 +210,25 @@ export default function CategoryAccordion({
               />
               <div className="flex-1">
                 <span>{catName}</span>
-                {level > 0 && (
+                {/* {level > 0 && (
                   <div className="text-xs text-gray-500 font-normal mt-1">
                     {currentPathLabel}
                   </div>
-                )}
+                )} */}
               </div>
-              <div className="flex flex-col gap-2">
-                {subcategoryCount > 0 && (
+              {/* <div className="flex flex-col gap-2"> 
+              {subcategoryCount > 0 && (
                   <span className="badge badge-primary">
                     {subcategoryCount} {subcategoryCount === 1 ? 'Kategorie' : 'Kategorien'}
                   </span>
-                )}
-
-                {child.users.length > 0 && (
+                )} 
+                
+              {child.users.length > 0 && (
                   <span className="badge badge-primary">
                     {child.users.length} {child.users.length === 1 ? 'Profil' : 'Profile'}
                   </span>
-                )}
-              </div>
+                )} 
+              </div> */}
             </button>
 
             {isOpen && (

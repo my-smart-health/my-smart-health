@@ -10,7 +10,7 @@ import GoToButton from '@/components/buttons/go-to/GoToButton';
 import { auth } from '@/auth';
 import MSHParagraphContent from '@/components/forms/msh-form/_components/MSHParagraphContent';
 
-import { AtSign, Facebook, File, Globe, Instagram, Linkedin, Phone, Youtube } from 'lucide-react';
+import { AtSign, Facebook, File, Globe, Info, Instagram, Linkedin, Phone, Youtube } from 'lucide-react';
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
 import MSHLocations from '@/components/forms/msh-form/_components/MSHLocations';
@@ -80,6 +80,7 @@ export default async function MySmartHealth() {
             style={{ objectFit: 'contain', width: 'auto', height: 'auto' }}
             className='mx-auto'
           />
+          <span className='absolute top-3 right-3'><Info className='text-primary' size={40} /></span>
         </div>
 
         <div className="collapse-content">
