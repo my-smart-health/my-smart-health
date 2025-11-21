@@ -194,7 +194,7 @@ export default function CategoryAccordion({
           });
           return count;
         };
-        const subcategoryCount = countSubcategories(child);
+        // const subcategoryCount = countSubcategories(child);
 
         return (
           <div key={key} className="w-full mb-3">
@@ -222,7 +222,7 @@ export default function CategoryAccordion({
                     {subcategoryCount} {subcategoryCount === 1 ? 'Kategorie' : 'Kategorien'}
                   </span>
                 )} 
-                
+
               {child.users.length > 0 && (
                   <span className="badge badge-primary">
                     {child.users.length} {child.users.length === 1 ? 'Profil' : 'Profile'}
