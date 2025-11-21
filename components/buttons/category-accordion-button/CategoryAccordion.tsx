@@ -187,13 +187,13 @@ export default function CategoryAccordion({
         ];
         const categoryStyle = levelColors[Math.min(level, levelColors.length - 1)];
 
-        const countSubcategories = (node: CategoryNodeSH): number => {
-          let count = node.children.size;
-          node.children.forEach((childNode) => {
-            count += countSubcategories(childNode);
-          });
-          return count;
-        };
+        // const countSubcategories = (node: CategoryNodeSH): number => {
+        //   let count = node.children.size;
+        //   node.children.forEach((childNode) => {
+        //     count += countSubcategories(childNode);
+        //   });
+        //   return count;
+        // };
         // const subcategoryCount = countSubcategories(child);
 
         return (
