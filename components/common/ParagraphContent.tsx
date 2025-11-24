@@ -2,14 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import Link from "@tiptap/extension-link";
-import TextAlign from "@tiptap/extension-text-align";
-import Color from "@tiptap/extension-color";
-import Blockquote from "@tiptap/extension-blockquote";
-import HardBreak from "@tiptap/extension-hard-break";
-import { TextStyle } from "@tiptap/extension-text-style";
+import { getReadOnlyExtensions } from "@/utils/tiptap-extensions";
 
 type ParagraphContentProps = {
   content: string;
@@ -25,31 +18,7 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
 
   const editor = useEditor({
     immediatelyRender: false,
-    extensions: [
-      StarterKit.configure({
-        heading: { levels: [1, 2, 3] },
-        blockquote: false,
-        hardBreak: false,
-        codeBlock: false,
-        horizontalRule: false,
-      }),
-      Blockquote,
-      HardBreak,
-      Underline,
-      Link.configure({
-        openOnClick: true,
-        HTMLAttributes: {
-          class: "text-primary underline",
-          target: "_blank",
-          rel: "noopener noreferrer",
-        },
-      }),
-      TextAlign.configure({
-        types: ["heading", "paragraph"],
-      }),
-      TextStyle,
-      Color,
-    ],
+    extensions: getReadOnlyExtensions(),
     content: content || "",
     editable: false,
     editorProps: {

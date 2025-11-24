@@ -2,15 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import Link from '@tiptap/extension-link';
-import TextAlign from '@tiptap/extension-text-align';
-import Placeholder from '@tiptap/extension-placeholder';
-import Color from '@tiptap/extension-color';
-import Blockquote from '@tiptap/extension-blockquote';
-import HardBreak from '@tiptap/extension-hard-break';
-import { TextStyle } from '@tiptap/extension-text-style';
+import { getEditorExtensions } from '@/utils/tiptap-extensions';
 import { useState } from 'react';
 
 type RichTextEditorProps = {
@@ -25,30 +17,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
 
   const editor = useEditor({
     immediatelyRender: false,
-    extensions: [
-      StarterKit.configure({
-        heading: { levels: [1, 2, 3] },
-        blockquote: false,
-        hardBreak: false,
-        codeBlock: false,
-        horizontalRule: false,
-      }),
-      Blockquote,
-      HardBreak,
-      Underline,
-      Link.configure({
-        openOnClick: false,
-        HTMLAttributes: { class: 'text-primary underline' },
-      }),
-      TextAlign.configure({
-        types: ['heading', 'paragraph'],
-      }),
-      Placeholder.configure({
-        placeholder: placeholder || 'Write your bio...',
-      }),
-      TextStyle,
-      Color,
-    ],
+    extensions: getEditorExtensions(placeholder),
     content: value || '',
     editorProps: {
       attributes: {
