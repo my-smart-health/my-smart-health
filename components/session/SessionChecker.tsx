@@ -20,7 +20,9 @@ export default function SessionChecker() {
           router.refresh();
         }
       } catch (error) {
-        console.error('Session check failed:', error);
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Session check failed:', error);
+        }
       }
     };
 
