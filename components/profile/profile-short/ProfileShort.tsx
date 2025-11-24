@@ -17,7 +17,7 @@ export default function ProfileShort({ id, name, bio, image }: ProfileShortProps
   return (
     <section className="flex flex-row items-start gap-3 p-3 w-full border rounded-lg bg-white/90 shadow hover:shadow-md transition-shadow">
       {hasImage && (
-        <div className="flex-shrink-0 flex items-center justify-center w-20 h-20 bg-gray-100 rounded-lg overflow-hidden border" style={{ marginTop: '1.75rem' }}>
+        <div className="flex-shrink-0 mt-1 flex items-center justify-center w-20 h-20 bg-gray-100 rounded-lg overflow-hidden border">
           <Image
             src={image as string}
             alt={name}
