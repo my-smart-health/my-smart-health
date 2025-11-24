@@ -68,7 +68,7 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
               }
 
               return (
-                <SwiperSlide key={item + idx} className="pb-10 md:pb-13 text-white">
+                <SwiperSlide key={item + idx} className={`${photos.length > 1 ? 'pb-10 md:pb-13' : ''} text-white`}>
                   <div className="w-full h-full flex justify-center items-center aspect-video">
                     {content}
                   </div>
