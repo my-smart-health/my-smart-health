@@ -1,9 +1,3 @@
-export const NOTRUF_NUMBERS = {
-  emergency: '112',
-  onCallDoctor: '116117',
-  patientTransport: '19222',
-};
-
 export const BORDER_COLOR = '#2db9bc';
 export const SHADOW_COLOR = '#2a2a2ad9';
 
@@ -17,17 +11,22 @@ export const MAX_PROFILE_FILE_SIZE_MB = 9;
 export const MAX_PROFILE_FILE_SIZE_BYTES =
   MAX_PROFILE_FILE_SIZE_MB * 1024 * 1024;
 
+export const MAX_BIO_LENGTH_CLAMP = 100;
+
+export const PAGINATION_BULLET_QUANTITY = 4;
+
 export const PROFILE_TYPE_SMART_HEALTH = 'SMART_HEALTH';
 export const PROFILE_TYPE_MEDIZIN_UND_PFLEGE = 'MEDIZIN_UND_PFLEGE';
 export const PROFILE_TYPE_NOTFALLE = 'NOTFALLE';
 export const PROFILE_TYPE_THE_HEALTH_BAR = 'THE_HEALTH_BAR';
 
-export const MAX_BIO_LENGTH_CLAMP = 100;
-
-export const PAGINATION_BULLET_QUANTITY = 4;
-
-export const CATEGORY_FACHARZTE = 'Fachärzte';
-
+/**
+ * Category names and links used throughout the app
+ *
+ * Easily extendable for future categories
+ *
+ * Helps avoid hardcoding strings in multiple places
+ */
 export const CATEGORY_NAMES = {
   news: {
     name: 'News für meine Gesundheit',
@@ -89,3 +88,9 @@ export const CACHE_STRATEGY = {
  */
 export type CacheStrategyType =
   (typeof CACHE_STRATEGY)[keyof typeof CACHE_STRATEGY];
+
+/**
+ * Client-side session checking configuration
+ * Controls how often the SessionChecker component polls for session validity
+ */
+export const SESSION_CHECK_INTERVAL_MS = 60 * 1000;

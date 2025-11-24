@@ -6,6 +6,8 @@ import LogOut from "@/components/buttons/log-out/LogOut";
 export default async function ProfileMenu() {
   const session = await auth();
 
+  if (!session) return null;
+
   return (
     <>
       {session &&

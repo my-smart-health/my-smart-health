@@ -2,8 +2,12 @@ import NextAuth, { Session, User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { compare } from 'bcrypt';
 import prisma from './lib/db';
-import { PrismaAdapter } from '@auth/prisma-adapter';
 import { JWT } from 'next-auth/jwt';
+
+const SESSION_TIMEOUT_MINUTES = 10;
+const SESSION_TIMEOUT_SECONDS = SESSION_TIMEOUT_MINUTES * 60;
+const SESSION_TIMEOUT_MS = SESSION_TIMEOUT_SECONDS * 1000;
+const TOKEN_UPDATE_INTERVAL_SECONDS = 60;
 
 declare module 'next-auth' {
   interface User {
@@ -24,8 +28,9 @@ declare module 'next-auth' {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: 'jwt',
+    maxAge: SESSION_TIMEOUT_SECONDS,
+    updateAge: TOKEN_UPDATE_INTERVAL_SECONDS,
   },
-  adapter: PrismaAdapter(prisma),
   pages: {
     signIn: '/login',
   },
@@ -45,11 +50,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
       return session;
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.lastActivity = Date.now();
       }
+
+      if (trigger === 'update') {
+        token.lastActivity = Date.now();
+      }
+
+      const lastActivity = token.lastActivity as number;
+      if (lastActivity && Date.now() - lastActivity > SESSION_TIMEOUT_MS) {
+        return null;
+      }
+
       return token;
     },
   },
