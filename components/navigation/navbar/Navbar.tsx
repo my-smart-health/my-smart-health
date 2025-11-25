@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Suspense } from "react";
 import ProfileMenu from "./ProfileMenu";
 
 export default function Navbar() {
@@ -30,13 +29,7 @@ export default function Navbar() {
           </Link>
         </div>
       </nav>
-      <Suspense fallback={
-        <div className="skeleton flex justify-evenly items-center h-12 w-full bg-primary text-white p-2 mb-4">
-          Loading...
-        </div>
-      }>
-        <ProfileMenu />
-      </Suspense>
+      <ProfileMenu />
     </>
   );
 }

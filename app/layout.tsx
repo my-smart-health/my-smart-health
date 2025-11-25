@@ -1,5 +1,3 @@
-import { auth } from "@/auth";
-
 import type { Metadata } from "next";
 import { IBM_Plex_Sans } from "next/font/google";
 
@@ -47,8 +45,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
-
   return (
     <html lang="de" data-scroll-behavior="smooth">
       <head>
@@ -67,8 +63,8 @@ export default async function RootLayout({
       <body
         className={`${ibmPlexSans.variable} antialiased flex flex-col justify-center items-center pt-2 min-h-[100dvh] w-auto lg:max-w-3xl mx-auto p-2 overscroll-x-none border bg-white text-black`}
       >
-        <SessionProvider session={session}>
-          {session && <SessionChecker />}
+        <SessionProvider session={null}>
+          <SessionChecker />
           <Navbar />
           <CookieConsentModal />
 
@@ -79,7 +75,7 @@ export default async function RootLayout({
             <BackToTop />
           </main>
           <AnalyticsConsent />
-          <Footer session={session} />
+          <Footer />
         </SessionProvider>
       </body>
     </html>

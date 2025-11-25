@@ -1,65 +1,71 @@
+'use client';
+
 import { Settings } from "lucide-react";
-import { auth } from "@/auth";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import LogOut from "@/components/buttons/log-out/LogOut";
 
-export default async function ProfileMenu() {
-  const session = await auth();
+export default function ProfileMenu() {
+  const { data: session, status } = useSession();
 
-  if (!session) return null;
+  if (status === 'loading' && !session) {
+    return (
+      <div className="flex justify-evenly items-center h-12 w-full bg-primary text-white p-2 mb-4">
+        <div className="loading loading-spinner loading-sm"></div>
+      </div>
+    );
+  }
+
+  if (status === 'unauthenticated' || !session) return null;
 
   return (
-    <>
-      {session &&
-        <div className="flex flex-row justify-evenly align-baseline h-full max-h-fit w-full max-w-[100%] gap-2 bg-primary text-white p-2 mb-4">
-          <div className="flex text-wrap m-auto">
-            <span>Welcome, </span>
-            <Link
-              href={`/dashboard`}
-              className="font-semibold hover:underline ml-1">
-              {session.user?.email}
+    <div className="flex flex-row justify-evenly align-baseline h-full max-h-fit w-full max-w-[100%] gap-2 bg-primary text-white p-2 mb-4">
+      <div className="flex text-wrap m-auto">
+        <span>Welcome, </span>
+        <Link
+          href={`/dashboard`}
+          className="font-semibold hover:underline ml-1">
+          {session.user?.email}
+        </Link>
+      </div>
+
+      <div className="border border-white h-full w-0 my-4 text-transparent">.</div>
+
+      <div className="dropdown dropdown-end">
+        <div tabIndex={0} role="button" className="btn btn-circle m-2 max-sm:ml-0 border-2 border-white bg-primary"><Settings className="text-white spin-slow" /></div>
+        <ul tabIndex={0} className="dropdown-content menu bg-primary border rounded-box z-1 w-52 p-2 shadow-sm transition-opacity ease-in-out">
+          <li><Link href="/" className="flex gap-1">Home</Link></li>
+          <li><Link href="/dashboard" className="flex gap-1">Dashboard</Link></li>
+          <li className="tab-disabled"></li>
+          <li><Link href="/dashboard/all-posts" className="flex gap-1">All Posts</Link></li>
+          <li><Link href="/dashboard/create-post" className="flex gap-1">Create Post</Link></li>
+          <li className="tab-disabled"></li>
+          <li><Link href="/dashboard/edit-profile" className="flex gap-1">Edit profile</Link></li>
+          <li>
+            <Link href="/dashboard/change-email" className="flex gap-1">
+              Change Email
             </Link>
-          </div>
-
-          <div className="border border-white h-full w-0 my-4 text-transparent">.</div>
-
-          <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn btn-circle m-2 max-sm:ml-0 border-2 border-white bg-primary"><Settings className="text-white spin-slow" /></div>
-            <ul tabIndex={0} className="dropdown-content menu bg-primary border rounded-box z-1 w-52 p-2 shadow-sm transition-opacity ease-in-out">
-              <li><Link href="/" className="flex gap-1">Home</Link></li>
-              <li><Link href="/dashboard" className="flex gap-1">Dashboard</Link></li>
+          </li>
+          <li>
+            <Link href="/dashboard/change-password" className="flex gap-1">
+              Change Password
+            </Link>
+          </li>
+          <li className="tab-disabled"></li>
+          {session.user.role === "ADMIN" && (
+            <>
+              <span className="font-bold self-center">Admin Only</span>
+              <li><Link href="/dashboard/all-users" className="flex gap-1">All Users</Link></li>
+              <li><Link href="/dashboard/edit-cube" className="flex gap-1">Edit Cube</Link></li>
+              <li><Link href="/dashboard/edit-my-smart-health" className="flex gap-1">Edit My Smart Health</Link></li>
+              <li><Link href="/register" className="flex gap-1">Create new user</Link></li>
               <li className="tab-disabled"></li>
-              <li><Link href="/dashboard/all-posts" className="flex gap-1">All Posts</Link></li>
-              <li><Link href="/dashboard/create-post" className="flex gap-1">Create Post</Link></li>
-              <li className="tab-disabled"></li>
-              <li><Link href="/dashboard/edit-profile" className="flex gap-1">Edit profile</Link></li>
-              <li>
-                <Link href="/dashboard/change-email" className="flex gap-1">
-                  Change Email
-                </Link>
-              </li>
-              <li>
-                <Link href="/dashboard/change-password" className="flex gap-1">
-                  Change Password
-                </Link>
-              </li>
-              <li className="tab-disabled"></li>
-              {session.user.role === "ADMIN" && (
-                <>
-                  <span className="font-bold self-center">Admin Only</span>
-                  <li><Link href="/dashboard/all-users" className="flex gap-1">All Users</Link></li>
-                  <li><Link href="/dashboard/edit-cube" className="flex gap-1">Edit Cube</Link></li>
-                  <li><Link href="/dashboard/edit-my-smart-health" className="flex gap-1">Edit My Smart Health</Link></li>
-                  <li><Link href="/register" className="flex gap-1">Create new user</Link></li>
-                  <li className="tab-disabled"></li>
-                </>
-              )
-              }
-              <li className="my-2"><LogOut /></li>
-            </ul>
-          </div>
-        </div >
-      }
-    </>
+            </>
+          )
+          }
+          <li className="my-2"><LogOut /></li>
+        </ul>
+      </div>
+    </div>
   );
 }

@@ -1,12 +1,12 @@
+'use client';
+
 import LogOut from "@/components/buttons/log-out/LogOut";
 import CookieSettingsButton from "@/components/modals/cookie-consent/CookieSettingsButton";
-import { Session } from "next-auth";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-type FooterProps = {
-  session?: Session | null;
-};
-export default function Footer({ session }: FooterProps) {
+export default function Footer() {
+  const { data: session } = useSession();
 
   return (
     <footer className="bg-primary w-full text-center text-white py-4 mt-8">

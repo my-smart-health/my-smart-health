@@ -1,39 +1,48 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useEffect, useCallback, useRef } from 'react';
+import { useSession, signOut } from 'next-auth/react';
 import { SESSION_CHECK_INTERVAL_MS } from '@/utils/constants';
 
 export default function SessionChecker() {
-  const router = useRouter();
-  const { data: session, update } = useSession();
+  const { data: session, status, update } = useSession();
+  const lastActivityRef = useRef(Date.now());
+  const updateInProgressRef = useRef(false);
+  const ACTIVITY_THROTTLE = 60 * 1000;
 
-  // Function to update session activity
   const updateActivity = useCallback(async () => {
-    if (session) {
-      await update();
-    }
-  }, [session, update]);
+    const now = Date.now();
+    const timeSinceLastUpdate = now - lastActivityRef.current;
 
-  useEffect(() => {
-    // Activity tracking
-    let lastActivityTime = Date.now();
-    const ACTIVITY_THROTTLE = 60 * 1000; // Update at most once per minute
+    if (
+      timeSinceLastUpdate > ACTIVITY_THROTTLE &&
+      session &&
+      !updateInProgressRef.current
+    ) {
+      updateInProgressRef.current = true;
+      try {
+        await update({ lastActivity: Date.now() });
+        lastActivityRef.current = now;
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Failed to update activity:', error);
+        }
+      } finally {
+        updateInProgressRef.current = false;
+      }
+    }
+  }, [session, update]); useEffect(() => {
+    if (status !== 'authenticated' || !session) return;
 
     const handleActivity = () => {
-      const now = Date.now();
-      if (now - lastActivityTime > ACTIVITY_THROTTLE) {
-        lastActivityTime = now;
-        updateActivity();
-      }
+      updateActivity();
     };
 
-    window.addEventListener('mousemove', handleActivity);
+    window.addEventListener('mousemove', handleActivity, { passive: true });
     window.addEventListener('click', handleActivity);
     window.addEventListener('keydown', handleActivity);
-    window.addEventListener('scroll', handleActivity);
-    window.addEventListener('touchstart', handleActivity);
+    window.addEventListener('scroll', handleActivity, { passive: true });
+    window.addEventListener('touchstart', handleActivity, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', handleActivity);
@@ -42,9 +51,11 @@ export default function SessionChecker() {
       window.removeEventListener('scroll', handleActivity);
       window.removeEventListener('touchstart', handleActivity);
     };
-  }, [updateActivity]);
+  }, [status, session, updateActivity]);
 
   useEffect(() => {
+    if (status !== 'authenticated' || !session) return;
+
     let interval: NodeJS.Timeout;
 
     const checkSession = async () => {
@@ -53,13 +64,11 @@ export default function SessionChecker() {
         const sessionData = await response.json();
 
         if (!sessionData || !sessionData.user) {
-          router.push('/');
-          router.refresh();
+          clearInterval(interval);
+          await signOut({ callbackUrl: '/' });
         }
       } catch (error) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('Session check failed:', error);
-        }
+        console.error('Session check failed:', error);
       }
     };
 
@@ -82,7 +91,7 @@ export default function SessionChecker() {
       clearInterval(interval);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [router]);
+  }, [status, session]);
 
   return null;
 }

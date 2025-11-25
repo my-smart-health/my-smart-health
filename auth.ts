@@ -4,10 +4,10 @@ import { compare } from 'bcrypt';
 import prisma from './lib/db';
 import { JWT } from 'next-auth/jwt';
 
-const SESSION_TIMEOUT_MINUTES = 10;
+const SESSION_TIMEOUT_MINUTES = 10; // 10 minutes
 const SESSION_TIMEOUT_SECONDS = SESSION_TIMEOUT_MINUTES * 60;
 const SESSION_TIMEOUT_MS = SESSION_TIMEOUT_SECONDS * 1000;
-const TOKEN_UPDATE_INTERVAL_SECONDS = 60;
+const TOKEN_UPDATE_INTERVAL_SECONDS = 60; // 1 minute
 
 declare module 'next-auth' {
   interface User {
@@ -62,7 +62,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       }
 
       const lastActivity = token.lastActivity as number;
-      if (lastActivity && Date.now() - lastActivity > SESSION_TIMEOUT_MS) {
+      const timeSinceLastActivity = Date.now() - lastActivity;
+
+      if (lastActivity && timeSinceLastActivity > SESSION_TIMEOUT_MS) {
         return null;
       }
 
