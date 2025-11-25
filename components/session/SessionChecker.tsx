@@ -8,9 +8,9 @@ export default function SessionChecker() {
   const { data: session, status, update } = useSession();
   const lastActivityRef = useRef(Date.now());
   const updateInProgressRef = useRef(false);
-  const ACTIVITY_THROTTLE = 60 * 1000;
 
   const updateActivity = useCallback(async () => {
+    const ACTIVITY_THROTTLE = 60 * 1000;
     const now = Date.now();
     const timeSinceLastUpdate = now - lastActivityRef.current;
 
