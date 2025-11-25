@@ -12,6 +12,7 @@ import Navbar from "@/components/navigation/navbar/Navbar";
 import AnalyticsConsent from "@/components/analytics/AnalyticsConsent";
 import Footer from "@/components/navigation/footer/Footer";
 import SessionChecker from "@/components/session/SessionChecker";
+import SessionProvider from "@/components/session/SessionProvider";
 
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -66,18 +67,20 @@ export default async function RootLayout({
       <body
         className={`${ibmPlexSans.variable} antialiased flex flex-col justify-center items-center pt-2 min-h-[100dvh] w-auto lg:max-w-3xl mx-auto p-2 overscroll-x-none border bg-white text-black`}
       >
-        {session && <SessionChecker />}
-        <Navbar />
-        <CookieConsentModal />
+        <SessionProvider session={session}>
+          {session && <SessionChecker />}
+          <Navbar />
+          <CookieConsentModal />
 
-        <Divider addClass="my-1" />
+          <Divider addClass="my-1" />
 
-        <main className="flex flex-col gap-2 items-center min-h-[72dvh] py-8 pt-2 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
-          {children}
-          <BackToTop />
-        </main>
-        <AnalyticsConsent />
-        <Footer session={session} />
+          <main className="flex flex-col gap-2 items-center min-h-[72dvh] py-8 pt-2 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
+            {children}
+            <BackToTop />
+          </main>
+          <AnalyticsConsent />
+          <Footer session={session} />
+        </SessionProvider>
       </body>
     </html>
   );
