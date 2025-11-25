@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import TopCarouselSkeleton from "./TopCarouselSkeleton";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Mousewheel, Pagination } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -28,10 +28,9 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
     <Suspense fallback={<TopCarouselSkeleton times={7} />}>
       <div draggable={false} className="min-h-36 max-h-fit max-w-full">
         <Swiper
-          modules={[Pagination, Mousewheel, Autoplay]}
+          modules={[Pagination, Autoplay]}
           spaceBetween={4}
           slidesPerView={4}
-          mousewheel={true}
           autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction, pauseOnMouseEnter: true, waitForTransition: true }}
           speed={300}
 
@@ -41,20 +40,20 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
             <SwiperSlide
               key={news.id}
               className="cursor-pointer pb-6">
-              <Link href={`/news/${news.id}`}>
+              <Link href={`/news/${news.id}`} className="block">
                 <Image
                   priority={index < 4}
                   loading={index < 4 ? "eager" : "lazy"}
                   placeholder="empty"
-                  width={400}
-                  height={400}
+                  width={182}
+                  height={182}
                   alt={news.name}
                   src={news.profileImage}
-                  sizes="(max-width: 640px) 25vw, (max-width: 1024px) 20vw, 15vw"
-                  style={{ objectFit: 'contain' }}
-                  className="rounded-box border-6 border-primary aspect-square"
+                  sizes="25vw"
+                  style={{ objectFit: 'contain', maxWidth: '182px', width: '100%', height: 'auto' }}
+                  className="rounded-box border-6 border-primary aspect-square w-full h-auto"
                 />
-                <p className="text-center break-words line-clamp-1 text-[#2c2e35] mb-4">{news.name}</p>
+                <p className="text-center break-words line-clamp-1 text-[#2c2e35] mb-4 mt-2">{news.name}</p>
               </Link>
             </SwiperSlide>
           ))}

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Suspense } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectCube, Mousewheel, Navigation, Pagination, Scrollbar } from "swiper/modules";
+import { Autoplay, EffectCube, Navigation, Pagination, Scrollbar } from "swiper/modules";
 
 import NewsCarouselSkeleton from "./NewsCarouselSkeleton";
 import { PAGINATION_BULLET_QUANTITY } from "@/utils/constants";
@@ -27,7 +27,7 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
     <Suspense fallback={<NewsCarouselSkeleton />}>
       <div className="mx-auto max-w-2xs md:max-w-sm min-h-[300px]">
         <Swiper
-          modules={[Scrollbar, Navigation, Pagination, Mousewheel, Autoplay, EffectCube]}
+          modules={[Scrollbar, Navigation, Pagination, Autoplay, EffectCube]}
           spaceBetween={0}
           slidesPerView={1}
           effect="cube"
@@ -41,7 +41,6 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
             shadowScale: 0.94
           }}
 
-          mousewheel={true}
           autoplay={{ delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true }}
           speed={300}
         >
