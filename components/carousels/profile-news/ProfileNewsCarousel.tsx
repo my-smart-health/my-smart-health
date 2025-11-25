@@ -1,7 +1,7 @@
 'use client'
 import { Suspense } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Mousewheel, Pagination } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -25,10 +25,9 @@ export default function ProfileNewsCarousel({ carouselItems, disableOnInteractio
     <Suspense fallback={<div className="text-center w-full">Loading...</div>}>
       <div draggable={false}>
         <Swiper
-          modules={[Pagination, Mousewheel, Autoplay]}
+          modules={[Pagination, Autoplay]}
           spaceBetween={4}
           slidesPerView={4}
-          mousewheel={true}
           autoplay={{ delay: 3000, disableOnInteraction: disableOnInteraction, pauseOnMouseEnter: true, waitForTransition: true }}
           speed={300}
           pagination={{ clickable: true, enabled: true, dynamicBullets: true, dynamicMainBullets: PAGINATION_BULLET_QUANTITY }}
@@ -50,7 +49,7 @@ export default function ProfileNewsCarousel({ carouselItems, disableOnInteractio
                     alt={item.title}
                     src={item.photos && item.photos.length > 0 ? item.photos[0] : ''}
                     sizes="(max-width: 640px) 25vw, (max-width: 1024px) 20vw, 15vw"
-                    style={{ objectFit: "contain", width: "auto", height: "auto" }}
+                    style={{ objectFit: "contain", width: "100%", height: "auto", maxWidth: "300px" }}
                     className="rounded-box border-3 border-primary aspect-square"
                   />
                   <span className="text-center space-x-0.5 line-clamp-1 break-all max-w-[80%] mx-auto text-lg mb-4">{item.title}</span>
