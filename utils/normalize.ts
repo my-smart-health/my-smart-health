@@ -4,6 +4,7 @@ import {
   Location,
   Certificate,
   ReservationLink,
+  Membership,
 } from './types';
 
 type RawUser = any;
@@ -99,6 +100,7 @@ export function normalizeUser(raw: RawUser) {
       schedule: [] as Schedule[],
       certificates: [] as Certificate[],
       reservationLinks: [] as ReservationLink[],
+      membership: null as Membership | null,
     };
   }
 
@@ -138,5 +140,12 @@ export function normalizeUser(raw: RawUser) {
     schedule: normalizeScheduleArray(raw.schedule ?? []),
     certificates: ensureArray<Certificate>(raw.certificates),
     reservationLinks: ensureArray<ReservationLink>(raw.reservationLinks),
+    membership:
+      raw.membership &&
+      typeof raw.membership === 'object' &&
+      'status' in raw.membership &&
+      'link' in raw.membership
+        ? (raw.membership as Membership)
+        : null,
   };
 }
