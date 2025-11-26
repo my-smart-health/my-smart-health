@@ -4,7 +4,7 @@ import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 
 import EditProfileForm from "@/components/profile/edit-profile-form/EditProfileForm";
-import { FieldOfExpertise, ReservationLink, Schedule } from "@/utils/types";
+import { FieldOfExpertise, Membership, ReservationLink, Schedule } from "@/utils/types";
 
 async function getData(sessionId: string) {
   const user = await prisma.user.findUnique({
@@ -24,6 +24,7 @@ async function getData(sessionId: string) {
       certificates: true,
       locations: true,
       reservationLinks: true,
+      membership: true,
     },
   });
 
@@ -79,6 +80,9 @@ export default async function EditProfile() {
     ? (user.reservationLinks as ReservationLink[])
     : [];
   const safeProfileFiles = Array.isArray(user.profileFiles) ? user.profileFiles : [];
+  const safeMembership: Membership | null = user.membership && typeof user.membership === 'object' && 'status' in user.membership && 'link' in user.membership
+    ? user.membership as Membership
+    : null;
 
   const safeUser = {
     ...parsedUser,
@@ -86,6 +90,7 @@ export default async function EditProfile() {
     locations: safeLocations,
     fieldOfExpertise: safeFieldsOfExpertise,
     reservationLinks: safeReservationLinks,
+    membership: safeMembership,
   };
 
   return (

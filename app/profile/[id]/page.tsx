@@ -2,7 +2,7 @@ import Link from "next/link";
 import prisma from "@/lib/db";
 import { auth } from "@/auth";
 
-import { Certificate, FieldOfExpertise, ReservationLink, Schedule } from "@/utils/types";
+import { Certificate, FieldOfExpertise, Membership, ReservationLink, Schedule } from "@/utils/types";
 import { CACHE_STRATEGY } from "@/utils/constants";
 
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
@@ -36,6 +36,7 @@ async function getUser(id: string) {
       locations: true,
       certificates: true,
       reservationLinks: true,
+      membership: true,
     },
     cacheStrategy: CACHE_STRATEGY.NONE,
   });
@@ -104,6 +105,9 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     return { ...location, schedule, reservationLinks };
   });
   const safeProfileFiles = Array.isArray(user.profileFiles) ? user.profileFiles : [];
+  const safeMembership: Membership | null = user.membership && typeof user.membership === 'object' && 'status' in user.membership && 'link' in user.membership
+    ? user.membership as Membership
+    : null;
 
   const safeUser = {
     ...user,
@@ -113,6 +117,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     certificates: safeCertificates,
     reservationLinks: safeReservationLinks,
     locations: safeLocations,
+    membership: safeMembership,
   };
 
   return (

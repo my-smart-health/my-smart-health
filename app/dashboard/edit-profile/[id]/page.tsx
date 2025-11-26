@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 
-import { FieldOfExpertise, ReservationLink, Schedule } from "@/utils/types";
+import { FieldOfExpertise, Membership, ReservationLink, Schedule } from "@/utils/types";
 import EditProfileForm from "@/components/profile/edit-profile-form/EditProfileForm";
 
 async function getData(sessionId: string) {
@@ -24,6 +24,7 @@ async function getData(sessionId: string) {
       certificates: true,
       locations: true,
       reservationLinks: true,
+      membership: true,
     },
   });
 
@@ -89,6 +90,9 @@ export default async function EditProfileId({ params }: { params: Promise<{ id: 
     ? (user.reservationLinks as ReservationLink[])
     : [];
   const safeProfileFiles = Array.isArray(user.profileFiles) ? user.profileFiles : [];
+  const safeMembership: Membership | null = user.membership && typeof user.membership === 'object' && 'status' in user.membership && 'link' in user.membership
+    ? user.membership as Membership
+    : null;
 
   const safeUser = {
     ...parsedUser,
@@ -96,6 +100,7 @@ export default async function EditProfileId({ params }: { params: Promise<{ id: 
     locations: safeLocations,
     fieldOfExpertise: safeField,
     reservationLinks: safeReservationLinks,
+    membership: safeMembership,
   };
 
   return (

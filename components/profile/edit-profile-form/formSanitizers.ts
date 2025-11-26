@@ -3,6 +3,7 @@ import {
   CertificateForm,
   FieldOfExpertise,
   Location,
+  Membership,
   ReservationLink,
   Schedule,
   Social,
@@ -37,6 +38,7 @@ export type ProfileUpdatePayload = {
     schedule: Schedule[];
     reservationLinks: ReservationLink[];
   }>;
+  membership: Membership | null;
 };
 
 export type BuildSanitizedPayloadArgs = {
@@ -55,6 +57,7 @@ export type BuildSanitizedPayloadArgs = {
   locations: Location[] | null;
   profileImagesOverride?: string[];
   profileFilesOverride?: string[];
+  membership?: Membership | null;
 };
 
 export const sanitizePhoneList = (numbers?: string[] | null): string[] => {
@@ -214,6 +217,23 @@ export const sanitizeProfileFiles = (files?: string[] | null): string[] => {
     .filter((url): url is string => url.length > 0);
 };
 
+export const sanitizeMembership = (
+  membership?: Membership | null
+): Membership | null => {
+  if (!membership || typeof membership !== 'object') {
+    return null;
+  }
+
+  const status = Boolean(membership.status);
+  const link =
+    typeof membership.link === 'string' ? membership.link.trim() : '';
+
+  return {
+    status,
+    link,
+  };
+};
+
 export const sanitizeLocationsList = (
   locations?: Location[] | null
 ): Location[] => {
@@ -283,6 +303,7 @@ export const buildSanitizedPayload = (
   const sanitizedProfileFiles = sanitizeProfileFiles(
     args.profileFilesOverride ?? args.profileFiles
   );
+  const sanitizedMembership = sanitizeMembership(args.membership);
 
   return {
     name: (args.name || '').trim(),
@@ -331,5 +352,6 @@ export const buildSanitizedPayload = (
     })),
     profileImages: sanitizedProfileImages,
     profileFiles: sanitizedProfileFiles,
+    membership: sanitizedMembership,
   };
 };

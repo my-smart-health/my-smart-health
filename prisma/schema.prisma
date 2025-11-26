@@ -38,6 +38,7 @@ model User {
   profileFiles     String[]
   fieldOfExpertise Json?
   reservationLinks Json?
+  membership       Json?
   socials          String[]
   posts            Posts[]        @relation("UserPosts")
   locations        Location[]     @relation("UserLocations")

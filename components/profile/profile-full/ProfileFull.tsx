@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { parseSocials } from "@/utils/common";
-import { Certificate, FieldOfExpertise, ProfileNewsCarouselItem, ReservationLink, Schedule } from "@/utils/types";
+import { Certificate, FieldOfExpertise, Membership, ProfileNewsCarouselItem, ReservationLink, Schedule } from "@/utils/types";
 
 import {
   ProfilePictureSection,
@@ -52,6 +52,7 @@ type User = {
   locations: Location[];
   schedule: Schedule[];
   certificates: Certificate[];
+  membership: Membership | null;
   reservationLinks?: ReservationLink[] | null;
 };
 
@@ -74,6 +75,7 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
     schedule = [],
     phones = [],
     reservationLinks = [],
+    membership,
   } = user || {};
 
   const parsedSocials = parseSocials(socials || []);
@@ -109,10 +111,9 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
         platformIcons={platformIcons}
       />
 
-
       {schedule.length > 0 && <ScheduleSection schedule={schedule} />}
 
-      <PrescriptionReservation reservationLinks={reservationLinks || undefined} />
+      <PrescriptionReservation reservationLinks={reservationLinks || undefined} membership={membership} />
 
       <PhoneNumbers phoneNumbers={phones} platformIcons={platformIcons} />
 

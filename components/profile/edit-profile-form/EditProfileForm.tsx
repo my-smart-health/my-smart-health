@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { PutBlobResult } from "@vercel/blob";
 import { MouseEvent, useEffect, useRef, useState, ChangeEvent } from "react";
 
-import { Certificate, CertificateForm, FieldOfExpertise, Location, ReservationLink, Schedule, Social } from "@/utils/types";
+import { Certificate, CertificateForm, FieldOfExpertise, Location, Membership, ReservationLink, Schedule, Social } from "@/utils/types";
 import { isInstagramLink, isYoutubeLink, parseSocials } from "@/utils/common";
 import { buildSanitizedPayload, ProfileUpdatePayload } from "./formSanitizers";
 
@@ -31,8 +31,10 @@ import {
   PhoneNumbersSection,
   LocationSection,
   UploadFilesSection,
+  MembershipSection,
 } from "./_components";
 import ReservationLinksSection from "./_components/ReservationLinksSection";
+import { useSession } from "next-auth/react";
 
 type User = {
   id: string;
@@ -49,6 +51,7 @@ type User = {
   schedule: Schedule[] | null;
   certificates: Certificate[] | null;
   locations: Location[];
+  membership: Membership | null;
 };
 
 export default function EditProfileForm({ user }: { user: User }) {
@@ -57,6 +60,8 @@ export default function EditProfileForm({ user }: { user: User }) {
   const MEDIA_HEIGHT = 200;
 
   const redirect = useRouter();
+
+  const session = useSession();
 
   const bioRef = useRef<HTMLTextAreaElement>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -68,6 +73,7 @@ export default function EditProfileForm({ user }: { user: User }) {
   const [error, setError] = useState<string | null>(null);
   const [phones, setPhones] = useState(user.phones || []);
   const [website, setWebsite] = useState(user.website || "");
+  const [membership, setMembership] = useState<Membership>(user.membership ?? { status: false, link: "" });
   const [schedule, setSchedule] = useState<Schedule[]>(user.schedule || []);
   const [displayEmail, setDisplayEmail] = useState(user.displayEmail || "");
   const [locations, setLocations] = useState<Location[]>(user.locations || []);
@@ -77,7 +83,6 @@ export default function EditProfileForm({ user }: { user: User }) {
   const [fieldOfExpertise, setFieldOfExpertise] = useState<FieldOfExpertise[]>(user.fieldOfExpertise || []);
   const [certificates, setCertificates] = useState<CertificateForm[]>(user.certificates?.map(cert => ({ ...cert })) || []);
   const [reservationLinks, setReservationLinks] = useState<ReservationLink[]>(user.reservationLinks || []);
-
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
   const [isImageFirst, setIsImageFirst] = useState<boolean>(true);
 
@@ -98,6 +103,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         reservationLinks,
         locations,
         profileImagesOverride: updatedImages,
+        membership,
       });
 
       const response = await fetch('/api/update/update-profile', {
@@ -140,6 +146,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         reservationLinks,
         locations,
         profileFilesOverride: updatedFiles,
+        membership,
       });
 
       const response = await fetch('/api/update/update-profile', {
@@ -421,6 +428,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         certificates,
         reservationLinks,
         locations,
+        membership,
       });
 
       const res = await fetch('/api/update/update-profile', {
@@ -646,6 +654,18 @@ export default function EditProfileForm({ user }: { user: User }) {
             />
 
           </div>
+
+          {session.data?.user?.role === 'ADMIN' && (
+            <>
+              <input type="radio" name="my_tabs_2" className="tab" aria-label="Member Status" />
+              <div className="tab-content border-primary p-3 md:p-10">
+
+                <MembershipSection membership={membership} setMembership={setMembership} />
+
+              </div>
+            </>
+          )}
+
         </div >
 
         <div className="flex-1 flex flex-col w-full mt-4 p-4 border border-primary gap-4">

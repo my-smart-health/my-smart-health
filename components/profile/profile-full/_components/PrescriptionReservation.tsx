@@ -2,19 +2,22 @@ import Divider from "@/components/divider/Divider";
 import React from "react";
 import { CalendarPlus2, ClipboardPlus, NotebookTabs, ShoppingCart, AtSign } from "lucide-react";
 import Link from "next/link";
-import { RESERVATION_LINK_TYPES, ReservationLink } from "@/utils/types";
+import { RESERVATION_LINK_TYPES, ReservationLink, Membership } from "@/utils/types";
+import { MembershipSection } from ".";
 
 type Props = {
   reservationLinks?: ReservationLink[];
+  membership?: Membership | null;
 };
 
-export default function PrescriptionReservation({ reservationLinks }: Props) {
+export default function PrescriptionReservation({ reservationLinks, membership = null }: Props) {
   const links = (reservationLinks || []).filter((linkItem) => typeof linkItem.url === "string" && linkItem.url.trim().length > 0);
   if (links.length === 0) return null;
   return (
     <>
       <Divider addClass="my-1" />
       <section className="flex flex-col items-center m-2 space-y-4">
+
         <div className="flex flex-col gap-3 w-full mb-2">
           {links.map((item, idx) => {
             type LucideIcon = typeof CalendarPlus2;
@@ -38,19 +41,41 @@ export default function PrescriptionReservation({ reservationLinks }: Props) {
                 Icon = ShoppingCart;
                 label = "Online Shop";
                 break;
-              case RESERVATION_LINK_TYPES.Email:
-                Icon = AtSign;
-                label = "Email";
-                href = item.url?.toLowerCase().startsWith("mailto:") ? item.url : `mailto:${item.url}`;
-                break;
             }
             return (
-              <div key={item.id ?? `${item.type}-${item.url}-${idx}`} className="flex align-middle w-full">
-                <Link href={href} target="_self" className="btn btn-primary text-lg mx-auto flex gap-2 rounded">
-                  <Icon /> <span>{label}</span>
-                </Link>
-              </div>
+              <React.Fragment key={item.id ?? `${item.type}-${item.url}-${idx}`}>
+                {membership?.status && label === "online Termine" && (
+                  <>
+                    <div className="place-self-center">
+                      <MembershipSection membership={membership} />
+                    </div>
+                    <Divider addClass="my-1" />
+                  </>
+                )}
+                <div className="flex align-middle justify-center place-items-center w-full">
+                  <Link href={href} target="_self" className="btn btn-primary text-lg flex gap-2 rounded">
+                    <Icon /> <span>{label}</span>
+                  </Link>
+                </div>
+              </ React.Fragment>
             );
+          })}
+        </div>
+
+        <div className="flex flex-col gap-3 w-full mb-2">
+          {links.map((item, idx) => {
+            if (item.type !== RESERVATION_LINK_TYPES.Email) return null;
+            return (
+              <React.Fragment key={item.id ?? `${item.type}-${item.url}-${idx}`}>
+                <Divider addClass="my-1" />
+                <div
+                  className="flex align-middle justify-center place-items-center w-full">
+                  <Link href={item.url} target="_self" className="btn btn-primary text-lg flex gap-2 rounded">
+                    <AtSign /> <span>Email</span>
+                  </Link>
+                </div>
+              </ React.Fragment>
+            )
           })}
         </div>
       </section>

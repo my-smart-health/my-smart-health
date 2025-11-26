@@ -171,3 +171,8 @@ export type ReservationLink = {
   type: ReservationLinkType;
   url: string;
 };
+
+export type Membership = {
+  status: boolean;
+  link: string;
+};

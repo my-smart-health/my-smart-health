@@ -2,7 +2,7 @@ import prisma from "@/lib/db";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
-import { Certificate, FieldOfExpertise, ReservationLink, Schedule } from "@/utils/types";
+import { Certificate, FieldOfExpertise, Membership, ReservationLink, Schedule } from "@/utils/types";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
@@ -26,6 +26,7 @@ async function getUser(id: string) {
       certificates: true,
       reservationLinks: true,
       profileFiles: true,
+      membership: true,
     },
   });
   return user;
@@ -104,6 +105,10 @@ export default async function DashboardPage() {
     ? ((user as unknown as { profileFiles: string[] }).profileFiles)
     : [];
 
+  const safeMembership: Membership | null = user.membership && typeof user.membership === 'object' && 'status' in user.membership && 'link' in user.membership
+    ? user.membership as Membership
+    : null;
+
   const safeUser = {
     ...user,
     schedule: safeSchedule,
@@ -112,6 +117,7 @@ export default async function DashboardPage() {
     reservationLinks: safeReservationLinks,
     locations: safeLocations,
     profileFiles: safeProfileFiles,
+    membership: safeMembership,
   };
 
   return (
