@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { MapPin } from "lucide-react";
-import { Location } from "@/utils/types";
+import { Location, Membership } from "@/utils/types";
 
 import Divider from "@/components/divider/Divider";
 import { ReservationLink, Schedule } from "@/utils/types";
@@ -11,10 +11,12 @@ import PrescriptionReservation from "./PrescriptionReservation";
 export default function ContactSection({
   locations,
   platformIcons,
+  membership,
 }: {
   phoneNumbers: string[];
   locations: Location[];
   platformIcons: Record<string, React.ReactNode>;
+  membership?: Membership | null;
 }) {
 
   return (
@@ -77,7 +79,7 @@ export default function ContactSection({
                 )}
 
                 {locReservationLinks.length > 0 && (
-                  <PrescriptionReservation reservationLinks={locReservationLinks} />
+                  <PrescriptionReservation reservationLinks={locReservationLinks} membership={membership} />
                 )}
 
               </div >

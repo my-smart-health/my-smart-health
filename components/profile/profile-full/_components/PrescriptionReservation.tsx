@@ -13,13 +13,19 @@ type Props = {
 export default function PrescriptionReservation({ reservationLinks, membership = null }: Props) {
   const links = (reservationLinks || []).filter((linkItem) => typeof linkItem.url === "string" && linkItem.url.trim().length > 0);
   if (links.length === 0) return null;
+
+  const emailLinks = links.filter(item => item.type === RESERVATION_LINK_TYPES.Email);
+  const nonEmailLinks = links.filter(item => item.type !== RESERVATION_LINK_TYPES.Email);
+
+  const hasOnlineTermine = nonEmailLinks.some(item => item.type === RESERVATION_LINK_TYPES.OnlineTermine);
+
   return (
     <>
       <Divider addClass="my-1" />
       <section className="flex flex-col items-center m-2 space-y-4">
 
         <div className="flex flex-col gap-3 w-full mb-2">
-          {links.map((item, idx) => {
+          {nonEmailLinks.map((item, idx) => {
             type LucideIcon = typeof CalendarPlus2;
             let Icon: LucideIcon = CalendarPlus2;
             let label = "online Termine";
@@ -42,9 +48,12 @@ export default function PrescriptionReservation({ reservationLinks, membership =
                 label = "Online Shop";
                 break;
             }
+
+            const isFirstOnlineTermine = idx === 0 && item.type === RESERVATION_LINK_TYPES.OnlineTermine;
+
             return (
               <React.Fragment key={item.id ?? `${item.type}-${item.url}-${idx}`}>
-                {membership?.status && label === "online Termine" && (
+                {membership?.status && hasOnlineTermine && isFirstOnlineTermine && (
                   <>
                     <div className="place-self-center">
                       <MembershipSection membership={membership} />
@@ -62,22 +71,20 @@ export default function PrescriptionReservation({ reservationLinks, membership =
           })}
         </div>
 
-        <div className="flex flex-col gap-3 w-full mb-2">
-          {links.map((item, idx) => {
-            if (item.type !== RESERVATION_LINK_TYPES.Email) return null;
-            return (
+        {emailLinks.length > 0 && (
+          <div className="flex flex-col gap-3 w-full mb-2">
+            {emailLinks.map((item, idx) => (
               <React.Fragment key={item.id ?? `${item.type}-${item.url}-${idx}`}>
                 <Divider addClass="my-1" />
-                <div
-                  className="flex align-middle justify-center place-items-center w-full">
+                <div className="flex align-middle justify-center place-items-center w-full">
                   <Link href={item.url} target="_self" className="btn btn-primary text-lg flex gap-2 rounded">
                     <AtSign /> <span>Email</span>
                   </Link>
                 </div>
               </ React.Fragment>
-            )
-          })}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
     </>
   );

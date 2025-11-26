@@ -147,6 +147,7 @@ export type UserProfileSH = {
   bio?: string;
   profileImages: string[];
   category: string[];
+  membership?: Membership | null;
 };
 
 export type CategoryNodeSH = {

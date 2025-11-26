@@ -86,7 +86,7 @@ async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
     where: { categoryId: { in: Array.from(lookup.keys()) } },
     select: {
       categoryId: true,
-      user: { select: { id: true, name: true, bio: true, profileImages: true } },
+      user: { select: { id: true, name: true, bio: true, profileImages: true, membership: true } },
     },
   });
 
@@ -103,6 +103,9 @@ async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
       bio: user.bio || '',
       category: path,
       profileImages: Array.isArray(user.profileImages) ? user.profileImages : [],
+      membership: user.membership && typeof user.membership === 'object' && 'status' in user.membership && 'link' in user.membership
+        ? user.membership as any
+        : null,
     });
   }
 

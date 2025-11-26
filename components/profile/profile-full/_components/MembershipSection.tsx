@@ -10,7 +10,7 @@ export default function MembershipSection({ membership }: MembershipSectionProps
   const { link } = membership;
 
   return (
-    <Link href={link} target="_self" className=" text-lg mx-auto flex gap-2 rounded">
+    <Link href={link} target="_self" className="mx-auto flex gap-2 rounded">
       <Image
         src="/termine-kurzfristig-neutral.png"
         alt="Termine Kurzfristig Icon"
