@@ -77,8 +77,10 @@ function timeLeftCalc(schedules: Schedule[], now: Date) {
 
 export default function ScheduleSection({ schedule, displayIsOpen = true }: { schedule: Schedule[]; displayIsOpen?: boolean }) {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     const timer = setInterval(() => setCurrentTime(new Date()), 1000 * 30);
     return () => clearInterval(timer);
   }, []);
@@ -94,7 +96,7 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
     return is247 || isScheduleOpen(sch, currentTime);
   });
 
-  const timeLeft = anyBlockOpen ? timeLeftCalc(schedule, currentTime) : null;
+  const timeLeft = isMounted && anyBlockOpen ? timeLeftCalc(schedule, currentTime) : null;
 
   return (
     <>
