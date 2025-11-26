@@ -1,7 +1,7 @@
 import prisma from '@/lib/db';
 import CategoryAccordion from '@/components/buttons/category-accordion-button/CategoryAccordion';
 import { auth } from '@/auth';
-import { CategoryNodeSH, UserProfileSH, ProfileType } from '@/utils/types';
+import { CategoryNodeSH, Membership, UserProfileSH, ProfileType } from '@/utils/types';
 
 type Props = {
   profileType: ProfileType;
@@ -104,7 +104,7 @@ async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
       category: path,
       profileImages: Array.isArray(user.profileImages) ? user.profileImages : [],
       membership: user.membership && typeof user.membership === 'object' && 'status' in user.membership && 'link' in user.membership
-        ? user.membership as any
+        ? user.membership as Membership
         : null,
     });
   }

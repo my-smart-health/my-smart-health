@@ -29,7 +29,7 @@ export default function PrescriptionReservation({ reservationLinks, membership =
             type LucideIcon = typeof CalendarPlus2;
             let Icon: LucideIcon = CalendarPlus2;
             let label = "online Termine";
-            let href = item.url;
+            const href = item.url;
             switch (item.type) {
               case RESERVATION_LINK_TYPES.OnlineTermine:
                 Icon = CalendarPlus2;
