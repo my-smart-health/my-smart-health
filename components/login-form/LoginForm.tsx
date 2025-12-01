@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import StatusModal from "../modals/status-modal/StatusModal";
 import { ErrorState } from "@/utils/types";
+import Link from "next/link";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -77,6 +78,12 @@ export default function LoginForm() {
         >
           Login
         </button>
+        <Link
+          href="/forgot-password"
+          className="text-sm text-blue-600 hover:underline"
+        >
+          Forgot Password?
+        </Link>
       </form>
     </>
   );
