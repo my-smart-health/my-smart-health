@@ -11,6 +11,7 @@ import AnalyticsConsent from "@/components/analytics/AnalyticsConsent";
 import Footer from "@/components/navigation/footer/Footer";
 import SessionChecker from "@/components/session/SessionChecker";
 import SessionProvider from "@/components/session/SessionProvider";
+import { auth } from "@/auth";
 
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -45,6 +46,8 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="de" data-scroll-behavior="smooth">
       <head>
@@ -63,7 +66,7 @@ export default async function RootLayout({
       <body
         className={`${ibmPlexSans.variable} antialiased flex flex-col justify-center items-center pt-2 min-h-[100dvh] w-auto lg:max-w-3xl mx-auto p-2 overscroll-x-none border bg-white text-black`}
       >
-        <SessionProvider session={null}>
+        <SessionProvider session={session}>
           <SessionChecker />
           <Navbar />
           <CookieConsentModal />

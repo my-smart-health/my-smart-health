@@ -1,97 +1,129 @@
 'use client';
 
 import { useEffect, useCallback, useRef } from 'react';
-import { useSession, signOut } from 'next-auth/react';
-import { SESSION_CHECK_INTERVAL_MS } from '@/utils/constants';
+import { useSession } from 'next-auth/react';
+import { useRouter, usePathname } from 'next/navigation';
+
+const SESSION_TIMEOUT_MS = 10 * 60 * 1000;
+const ACTIVITY_STORAGE_KEY = 'lastActivity';
+const CHECKSUM_KEY = 'activityChecksum';
+const PUBLIC_PATHS = ['/', '/login', '/register', '/forgot-password', '/kontakt', '/impressum', '/datenschutz', '/agb'];
+
+const createChecksum = (timestamp: number): string => {
+  const hash = (timestamp * 31337 + 42069).toString(36);
+  return hash;
+};
+
+const validateChecksum = (timestamp: number, checksum: string): boolean => {
+  return createChecksum(timestamp) === checksum;
+};
 
 export default function SessionChecker() {
   const { data: session, status, update } = useSession();
-  const lastActivityRef = useRef(Date.now());
-  const updateInProgressRef = useRef(false);
+  const router = useRouter();
+  const pathname = usePathname();
+  const lastUpdateRef = useRef<number>(0);
 
-  const updateActivity = useCallback(async () => {
-    const ACTIVITY_THROTTLE = 60 * 1000;
+  const isPublicPath = useCallback(() => {
+    return PUBLIC_PATHS.some(path =>
+      pathname === path ||
+      pathname?.startsWith('/news/') ||
+      pathname?.startsWith('/profile/') ||
+      pathname?.startsWith('/smart-health') ||
+      pathname?.startsWith('/medizin-und-pflege') ||
+      pathname?.startsWith('/notfalle') ||
+      pathname?.startsWith('/the-health-bar')
+    );
+  }, [pathname]);
+
+  const updateLocalActivity = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      const timestamp = Date.now();
+      localStorage.setItem(ACTIVITY_STORAGE_KEY, timestamp.toString());
+      localStorage.setItem(CHECKSUM_KEY, createChecksum(timestamp));
+    }
+  }, []);
+
+  const updateServerSession = useCallback(async () => {
     const now = Date.now();
-    const timeSinceLastUpdate = now - lastActivityRef.current;
-
-    if (
-      timeSinceLastUpdate > ACTIVITY_THROTTLE &&
-      session &&
-      !updateInProgressRef.current
-    ) {
-      updateInProgressRef.current = true;
+    if (now - lastUpdateRef.current > 5 * 60 * 1000) {
+      lastUpdateRef.current = now;
       try {
-        await update({ lastActivity: Date.now() });
-        lastActivityRef.current = now;
+        await update();
       } catch (error) {
-        if (process.env.NODE_ENV === 'development') {
-          console.error('Failed to update activity:', error);
-        }
-      } finally {
-        updateInProgressRef.current = false;
+        console.error('Failed to update session:', error);
       }
     }
-  }, [session, update]); useEffect(() => {
-    if (status !== 'authenticated' || !session) return;
-
-    const handleActivity = () => {
-      updateActivity();
-    };
-
-    window.addEventListener('mousemove', handleActivity, { passive: true });
-    window.addEventListener('click', handleActivity);
-    window.addEventListener('keydown', handleActivity);
-    window.addEventListener('scroll', handleActivity, { passive: true });
-    window.addEventListener('touchstart', handleActivity, { passive: true });
-
-    return () => {
-      window.removeEventListener('mousemove', handleActivity);
-      window.removeEventListener('click', handleActivity);
-      window.removeEventListener('keydown', handleActivity);
-      window.removeEventListener('scroll', handleActivity);
-      window.removeEventListener('touchstart', handleActivity);
-    };
-  }, [status, session, updateActivity]);
+  }, [update]);
 
   useEffect(() => {
-    if (status !== 'authenticated' || !session) return;
+    if (!session || status !== 'authenticated') return;
 
-    let interval: NodeJS.Timeout;
+    const events = ['mousedown', 'keydown', 'scroll', 'touchstart'];
 
-    const checkSession = async () => {
-      try {
-        const response = await fetch('/api/auth/session');
-        const sessionData = await response.json();
-
-        if (!sessionData || !sessionData.user) {
-          clearInterval(interval);
-          await signOut({ callbackUrl: '/' });
-        }
-      } catch (error) {
-        console.error('Session check failed:', error);
-      }
+    const handleActivity = () => {
+      updateLocalActivity();
     };
 
-    checkSession();
+    events.forEach(event => {
+      window.addEventListener(event, handleActivity, { passive: true });
+    });
 
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
-        checkSession();
-        interval = setInterval(checkSession, SESSION_CHECK_INTERVAL_MS);
-      } else {
-        clearInterval(interval);
-      }
-    };
-
-    interval = setInterval(checkSession, SESSION_CHECK_INTERVAL_MS);
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+    updateLocalActivity();
 
     return () => {
-      clearInterval(interval);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      events.forEach(event => {
+        window.removeEventListener(event, handleActivity);
+      });
     };
-  }, [status, session]);
+  }, [session, status, updateLocalActivity]);
+
+  useEffect(() => {
+    if (!session || status !== 'authenticated') return;
+
+    const timeoutChecker = setInterval(() => {
+      if (typeof window !== 'undefined') {
+        const lastActivity = localStorage.getItem(ACTIVITY_STORAGE_KEY);
+        const checksum = localStorage.getItem(CHECKSUM_KEY);
+
+        if (lastActivity && checksum) {
+          const timestamp = parseInt(lastActivity, 10);
+
+          if (!validateChecksum(timestamp, checksum)) {
+            console.warn('Activity timestamp tampered with - logging out');
+            localStorage.removeItem(ACTIVITY_STORAGE_KEY);
+            localStorage.removeItem(CHECKSUM_KEY);
+            router.push('/');
+            return;
+          }
+
+          const timeSinceActivity = Date.now() - timestamp;
+
+          if (timeSinceActivity > SESSION_TIMEOUT_MS) {
+            localStorage.removeItem(ACTIVITY_STORAGE_KEY);
+            localStorage.removeItem(CHECKSUM_KEY);
+            router.push('/');
+          }
+        }
+      }
+    }, 60000);
+
+    return () => clearInterval(timeoutChecker);
+  }, [session, status, router]);
+
+  useEffect(() => {
+    if (session && status === 'authenticated' && !isPublicPath()) {
+      updateServerSession();
+    }
+  }, [pathname, session, status, isPublicPath, updateServerSession]);
+
+  useEffect(() => {
+    if (status === 'unauthenticated' && !isPublicPath()) {
+      localStorage.removeItem(ACTIVITY_STORAGE_KEY);
+      localStorage.removeItem(CHECKSUM_KEY);
+      router.push('/');
+    }
+  }, [status, router, isPublicPath]);
 
   return null;
 }
