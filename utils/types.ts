@@ -177,3 +177,12 @@ export type Membership = {
   status: boolean;
   link: string;
 };
+
+export type AdminNotification = {
+  id: string;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+  resetReadAt: string | null;
+  archivedAt: string | null;
+};
