@@ -1,8 +1,29 @@
+import { auth } from "@/auth";
+import prisma from "@/lib/db";
 import Image from "next/image";
 import Link from "next/link";
 import ProfileMenu from "./ProfileMenu";
 
-export default function Navbar() {
+async function getUnreadNotifications() {
+  const session = await auth();
+
+  if (!session || session.user.role !== "ADMIN") {
+    return 0;
+  }
+
+  const count = await prisma.adminNotification.count({
+    where: {
+      isRead: false,
+      archivedAt: null,
+    },
+  });
+
+  return count;
+}
+
+export default async function Navbar() {
+  const unreadCount = await getUnreadNotifications();
+
   return (
     <>
       <nav
@@ -29,7 +50,7 @@ export default function Navbar() {
           </Link>
         </div>
       </nav>
-      <ProfileMenu />
+      <ProfileMenu unreadNotifications={unreadCount} />
     </>
   );
 }

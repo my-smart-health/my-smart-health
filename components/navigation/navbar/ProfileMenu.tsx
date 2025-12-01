@@ -1,22 +1,18 @@
 'use client';
 
-import { Settings } from "lucide-react";
+import { Settings, Bell, BellRing } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import LogOut from "@/components/buttons/log-out/LogOut";
 
-export default function ProfileMenu() {
-  const { data: session, status } = useSession();
+interface ProfileMenuProps {
+  unreadNotifications?: number;
+}
 
-  if (status === 'loading' && !session) {
-    return (
-      <div className="flex justify-evenly items-center h-12 w-full bg-primary text-white p-2 mb-4">
-        <div className="loading loading-spinner loading-sm"></div>
-      </div>
-    );
-  }
+export default function ProfileMenu({ unreadNotifications = 0 }: ProfileMenuProps) {
+  const { data: session } = useSession();
 
-  if (status === 'unauthenticated' || !session) return null;
+  if (!session) return null;
 
   return (
     <div className="flex flex-row justify-evenly align-baseline h-full max-h-fit w-full max-w-[100%] gap-2 bg-primary text-white p-2 mb-4">
@@ -28,6 +24,21 @@ export default function ProfileMenu() {
           {session.user?.email}
         </Link>
       </div>
+
+      {session.user.role === "ADMIN" && (
+        <Link href="/dashboard/password-requests" className="relative p-4 rounded-lg transition-colors">
+          {unreadNotifications > 0 ? (
+            <>
+              <BellRing className="text-white animate-[swing_1s_ease-in-out_infinite]" />
+              <span className="absolute top-2 right-2 bg-error text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                {unreadNotifications > 9 ? '9+' : unreadNotifications}
+              </span>
+            </>
+          ) : (
+            <Bell className="text-white" />
+          )}
+        </Link>
+      )}
 
       <div className="border border-white h-full w-0 my-4 text-transparent">.</div>
 
