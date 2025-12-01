@@ -2,12 +2,14 @@ import { NextResponse } from 'next/server';
 import { Prisma } from '@prisma/client';
 
 import prisma from '@/lib/db';
+import { Membership } from '@/utils/types';
 
 type RawUser = {
   id: string;
   name: string | null;
   bio: string | null;
   profileImages: string[] | null;
+  membership?: Membership | null;
 };
 
 type SearchResult = {
@@ -15,6 +17,7 @@ type SearchResult = {
   name: string;
   bio: string;
   image: string | null;
+  membership?: Membership | null;
 };
 
 const MAX_RESULTS = 20;
@@ -43,13 +46,13 @@ export async function GET(req: Request) {
         name: (row.name ?? '').trim(),
         bio: row.bio ?? '',
         image: row.profileImages?.[0] ?? null,
+        membership: row.membership ?? null,
       }))
       .filter((user) => user.id && user.name);
 
   try {
-    // Single query across name, bio, and fieldOfExpertise (JSONB)
     const rows = await prisma.$queryRaw<RawUser[]>(Prisma.sql`
-      SELECT "id", "name", "bio", "profileImages"
+      SELECT "id", "name", "bio", "profileImages", "membership"
       FROM "User"
       WHERE (
         COALESCE("name", '') ILIKE ${likePattern}

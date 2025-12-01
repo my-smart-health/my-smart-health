@@ -5,12 +5,14 @@ import { Search as SearchIcon } from 'lucide-react';
 
 import ProfileShort from '@/components/profile/profile-short/ProfileShort';
 import Spinner from '../common/Spinner';
+import { Membership } from '@/utils/types';
 
 type SearchResult = {
   id: string;
   name: string;
   bio: string;
   image: string | null;
+  membership?: Membership | null;
 };
 
 type ProfileSearchProps = {
@@ -103,7 +105,7 @@ export default function ProfileSearch({
 
       <div className="mt-6 space-y-4">
         {results.map((user) => (
-          <ProfileShort key={user.id} id={user.id} name={user.name} bio={user.bio} image={user.image} />
+          <ProfileShort key={user.id} id={user.id} name={user.name} bio={user.bio} image={user.image} membership={user.membership} />
         ))}
       </div>
     </section>
