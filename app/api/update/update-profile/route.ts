@@ -1,10 +1,16 @@
 import prisma from '@/lib/db';
+import { auth } from '@/auth';
 import { Certificate, Schedule } from '@/utils/types';
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 
 export async function PUT(req: Request) {
   try {
+    const session = await auth();
+    if (!session || !session.user) {
+      return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await req.json();
 
     if (!body.id || !body.data) {
@@ -12,6 +18,10 @@ export async function PUT(req: Request) {
         { message: 'User ID and data are required' },
         { status: 400 }
       );
+    }
+
+    if (body.id !== session.user.id && session.user.role !== 'ADMIN') {
+      return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
     }
 
     const certificates: Certificate[] = body.data.certificates || [];

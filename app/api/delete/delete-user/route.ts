@@ -1,9 +1,15 @@
 import prisma from '@/lib/db';
+import { auth } from '@/auth';
 import { del, list, type ListBlobResult } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 
 export async function DELETE(request: Request) {
   try {
+    const session = await auth();
+    if (!session || !session.user || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
 

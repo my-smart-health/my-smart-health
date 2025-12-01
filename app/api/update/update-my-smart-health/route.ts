@@ -1,9 +1,15 @@
 import prisma from '@/lib/db';
+import { auth } from '@/auth';
 import { NextRequest, NextResponse } from 'next/server';
 import type { MySmartHealthInfo } from '@/utils/types';
 
 export async function PUT(req: NextRequest) {
   try {
+    const session = await auth();
+    if (!session || !session.user || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await req.json();
 
     if (!body) {

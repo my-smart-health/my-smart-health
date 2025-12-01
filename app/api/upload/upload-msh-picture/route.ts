@@ -1,9 +1,15 @@
+import { auth } from '@/auth';
 import { put } from '@vercel/blob';
 import { NextRequest, NextResponse } from 'next/server';
 import { MAX_IMAGE_SIZE_BYTES, MAX_IMAGE_SIZE_MB } from '@/utils/constants';
 
 export async function PUT(request: NextRequest) {
   try {
+    const session = await auth();
+    if (!session || !session.user || session.user.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { searchParams } = new URL(request.url);
     const filename = searchParams.get('filename');
 

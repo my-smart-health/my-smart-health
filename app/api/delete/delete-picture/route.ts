@@ -1,8 +1,16 @@
+import { auth } from '@/auth';
 import { del } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 
 export async function DELETE(request: Request) {
   try {
+    const session = await auth();
+    if (!session || !session.user) {
+      return NextResponse.json('Unauthorized', {
+        status: 401,
+      });
+    }
+
     const { searchParams } = new URL(request.url);
     const url = searchParams.get('url');
 
@@ -25,11 +33,12 @@ export async function DELETE(request: Request) {
       return NextResponse.json('Invalid URL provided', { status: 400 });
     }
 
-    const result = await del(target);
-
-    if (process.env.NODE_ENV === 'development') {
-      console.log('delete-picture: requested', { url, target, result });
+    const userId = target.split('/')[0];
+    if (userId !== session.user.id && session.user.role !== 'ADMIN') {
+      return NextResponse.json('Forbidden', { status: 403 });
     }
+
+    const result = await del(target);
 
     return NextResponse.json(
       { message: 'Image removed', url, target, result },
