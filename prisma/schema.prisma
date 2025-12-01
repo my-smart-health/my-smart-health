@@ -131,3 +131,12 @@ model Cube {
   onOff    Boolean @default(true)
   postList Posts[]
 }
+
+model AdminNotification {
+  id          String    @id @default(uuid())
+  message     String
+  isRead      Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  resetReadAt DateTime?
+  archivedAt  DateTime?
+}
