@@ -32,7 +32,7 @@ declare global {
 }
 
 export default function SessionChecker() {
-  const { data: session, status, update } = useSession();
+  const { status, update } = useSession();
   const router = useRouter();
   const pathname = usePathname();
   const lastUpdateRef = useRef<number>(0);
