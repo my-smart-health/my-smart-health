@@ -12,6 +12,7 @@ import Footer from "@/components/navigation/footer/Footer";
 import SessionChecker from "@/components/session/SessionChecker";
 import SessionProvider from "@/components/session/SessionProvider";
 import { auth } from "@/auth";
+import TimeoutModal from "@/components/modals/timeout/TimeoutModal";
 
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -68,6 +69,7 @@ export default async function RootLayout({
       >
         <SessionProvider session={session}>
           <SessionChecker />
+          <TimeoutModal />
           <Navbar />
           <CookieConsentModal />
 

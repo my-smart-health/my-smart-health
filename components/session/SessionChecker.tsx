@@ -26,13 +26,17 @@ const validateChecksum = (timestamp: number, checksum: string): boolean => {
   return createChecksum(timestamp) === checksum;
 };
 
+declare global {
+  var inactivityTimer: ReturnType<typeof setTimeout> | null;
+  var inactivityInterval: NodeJS.Timeout | null;
+}
+
 export default function SessionChecker() {
   const { data: session, status, update } = useSession();
   const router = useRouter();
   const pathname = usePathname();
   const lastUpdateRef = useRef<number>(0);
-  const checkIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const initializedRef = useRef(false);
 
   const isPublicPath = useCallback(() => {
     return PUBLIC_PATHS.some(
@@ -53,6 +57,9 @@ export default function SessionChecker() {
     const timestamp = Date.now();
     localStorage.setItem(ACTIVITY_STORAGE_KEY, timestamp.toString());
     localStorage.setItem(CHECKSUM_KEY, createChecksum(timestamp));
+    try {
+      document.cookie = `lastActivity=${timestamp}; path=/; SameSite=Lax`;
+    } catch { }
   }, []);
 
   const updateServerSession = useCallback(async () => {
@@ -72,19 +79,22 @@ export default function SessionChecker() {
 
     localStorage.removeItem(ACTIVITY_STORAGE_KEY);
     localStorage.removeItem(CHECKSUM_KEY);
+    try {
+      document.cookie = `lastActivity=; Max-Age=0; path=/; SameSite=Lax`;
+    } catch { }
 
     try {
-      await signOut({ callbackUrl: '/', redirect: true });
+      await signOut({ callbackUrl: '/?timeout=1', redirect: true });
     } catch (error) {
       console.error('Logout error:', error);
-      window.location.href = '/';
+      window.location.href = '/?timeout=1';
     }
   }, []);
 
   const clearInactivityTimer = useCallback(() => {
-    if (inactivityTimerRef.current) {
-      clearTimeout(inactivityTimerRef.current);
-      inactivityTimerRef.current = null;
+    if (globalThis.inactivityTimer) {
+      clearTimeout(globalThis.inactivityTimer);
+      globalThis.inactivityTimer = null;
     }
   }, []);
 
@@ -95,6 +105,7 @@ export default function SessionChecker() {
     const checksum = localStorage.getItem(CHECKSUM_KEY);
 
     if (!lastActivity || !checksum) {
+      console.log('No activity data found');
       return false;
     }
 
@@ -107,6 +118,7 @@ export default function SessionChecker() {
     }
 
     const timeSinceActivity = Date.now() - timestamp;
+    console.log(`Checking inactivity: time since last activity ${Math.floor(timeSinceActivity / 1000 / 60)} minutes`);
 
     if (timeSinceActivity > SESSION_TIMEOUT_MS) {
       console.log(`Session timeout: ${Math.floor(timeSinceActivity / 1000 / 60)} minutes of inactivity`);
@@ -132,7 +144,7 @@ export default function SessionChecker() {
     }
 
     clearInactivityTimer();
-    inactivityTimerRef.current = setTimeout(() => {
+    globalThis.inactivityTimer = setTimeout(() => {
       const timedOut = checkInactivity();
       if (!timedOut) {
         scheduleInactivityTimer();
@@ -142,6 +154,19 @@ export default function SessionChecker() {
 
   useEffect(() => {
     if (status !== 'authenticated') return;
+
+    const lastActivity = localStorage.getItem(ACTIVITY_STORAGE_KEY);
+    const checksum = localStorage.getItem(CHECKSUM_KEY);
+    if (lastActivity && checksum) {
+      const ts = parseInt(lastActivity, 10);
+      if (isNaN(ts) || !validateChecksum(ts, checksum) || Date.now() - ts > SESSION_TIMEOUT_MS) {
+        localStorage.removeItem(ACTIVITY_STORAGE_KEY);
+        localStorage.removeItem(CHECKSUM_KEY);
+        try {
+          document.cookie = `lastActivity=; Max-Age=0; path=/; SameSite=Lax`;
+        } catch { }
+      }
+    }
 
     const events = [
       'mousedown',
@@ -166,7 +191,10 @@ export default function SessionChecker() {
       window.addEventListener(event, handleActivity, { passive: true });
     });
 
-    updateActivity();
+    if (!initializedRef.current) {
+      updateActivity();
+      initializedRef.current = true;
+    }
     scheduleInactivityTimer();
 
     return () => {
@@ -187,6 +215,8 @@ export default function SessionChecker() {
           updateActivity();
           scheduleInactivityTimer();
         }
+      } else if (document.visibilityState === 'hidden') {
+        scheduleInactivityTimer();
       }
     };
 
@@ -198,27 +228,33 @@ export default function SessionChecker() {
       }
     };
 
+    const handleBlur = () => {
+      scheduleInactivityTimer();
+    };
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('focus', handleFocus);
+    window.addEventListener('blur', handleBlur);
+    window.addEventListener('pagehide', scheduleInactivityTimer as EventListener);
 
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('blur', handleBlur);
+      window.removeEventListener('pagehide', scheduleInactivityTimer as EventListener);
     };
   }, [status, checkInactivity, updateActivity, scheduleInactivityTimer]);
 
   useEffect(() => {
     if (status !== 'authenticated') return;
 
-    checkIntervalRef.current = setInterval(() => {
-      checkInactivity();
-    }, 30000);
+    if (!globalThis.inactivityInterval) {
+      globalThis.inactivityInterval = setInterval(() => {
+        checkInactivity();
+      }, 30000);
+    }
 
     return () => {
-      if (checkIntervalRef.current) {
-        clearInterval(checkIntervalRef.current);
-        checkIntervalRef.current = null;
-      }
     };
   }, [status, checkInactivity]);
 
@@ -235,6 +271,25 @@ export default function SessionChecker() {
       router.push('/');
     }
   }, [status, router, isPublicPath]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (globalThis.inactivityTimer) {
+        clearTimeout(globalThis.inactivityTimer);
+        globalThis.inactivityTimer = null;
+      }
+      if (globalThis.inactivityInterval) {
+        clearInterval(globalThis.inactivityInterval);
+        globalThis.inactivityInterval = null;
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   return null;
 }
