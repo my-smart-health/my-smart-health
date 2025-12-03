@@ -77,8 +77,22 @@ export default function SessionChecker() {
   const performLogout = useCallback(async () => {
     if (typeof window === 'undefined') return;
 
-    localStorage.removeItem(ACTIVITY_STORAGE_KEY);
-    localStorage.removeItem(CHECKSUM_KEY);
+    if (globalThis.inactivityTimer) {
+      clearTimeout(globalThis.inactivityTimer);
+      globalThis.inactivityTimer = null;
+    }
+    if (globalThis.inactivityInterval) {
+      clearInterval(globalThis.inactivityInterval);
+      globalThis.inactivityInterval = null;
+    }
+
+    try {
+      localStorage.removeItem(ACTIVITY_STORAGE_KEY);
+      localStorage.removeItem(CHECKSUM_KEY);
+      localStorage.removeItem('nextauth.message');
+      sessionStorage.clear();
+    } catch { }
+
     try {
       document.cookie = `lastActivity=; Max-Age=0; path=/; SameSite=Lax`;
     } catch { }

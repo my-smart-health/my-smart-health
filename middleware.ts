@@ -14,26 +14,29 @@ export async function middleware(req: NextRequest) {
   }
 
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  const lastActivityCookie = req.cookies.get('lastActivity')?.value;
-  let isInactive = false;
-
-  if (token && (token as any).lastActivity) {
-    const ts = parseInt(String((token as any).lastActivity), 10);
-    if (!Number.isNaN(ts)) {
-      const INACTIVITY_MS = 10 * 60 * 1000; // 10 minutes
-      isInactive = Date.now() - ts > INACTIVITY_MS;
-    }
-  } else if (lastActivityCookie) {
-    const ts = parseInt(lastActivityCookie, 10);
-    if (!Number.isNaN(ts)) {
-      const INACTIVITY_MS = 10 * 60 * 1000; // 10 minutes
-      isInactive = Date.now() - ts > INACTIVITY_MS;
-    }
-  }
 
   if (!token) {
     const loginUrl = new URL('/login', req.url);
     return NextResponse.redirect(loginUrl);
+  }
+
+  const lastActivityCookie = req.cookies.get('lastActivity')?.value;
+  let isInactive = false;
+
+  if (lastActivityCookie) {
+    const ts = parseInt(lastActivityCookie, 10);
+    if (!Number.isNaN(ts)) {
+      const INACTIVITY_MS = 10 * 60 * 1000; // 10 minutes
+      const elapsed = Date.now() - ts;
+      isInactive = elapsed > INACTIVITY_MS;
+    }
+  } else if (token && (token as any).lastActivity) {
+    const ts = parseInt(String((token as any).lastActivity), 10);
+    if (!Number.isNaN(ts)) {
+      const INACTIVITY_MS = 10 * 60 * 1000;
+      const elapsed = Date.now() - ts;
+      isInactive = elapsed > INACTIVITY_MS;
+    }
   }
 
   if (isInactive) {
