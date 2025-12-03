@@ -4,25 +4,26 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
 export default function SplashScreen() {
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
 
   useEffect(() => {
     const hasShownSplash = sessionStorage.getItem('splashShown');
 
     if (hasShownSplash) {
-      setIsVisible(false);
       return;
     }
+
+    setIsVisible(true);
 
     const hideTimer = setTimeout(() => {
       setIsAnimatingOut(true);
       sessionStorage.setItem('splashShown', 'true');
-    }, 1500);
+    }, 1000);
 
     const removeTimer = setTimeout(() => {
       setIsVisible(false);
-    }, 2000);
+    }, 1400);
 
     return () => {
       clearTimeout(hideTimer);

@@ -43,6 +43,7 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
               <Link href={`/news/${news.id}`} className="block" prefetch={false}>
                 <Image
                   priority={index === 0}
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
                   placeholder="empty"
                   width={182}
                   height={182}

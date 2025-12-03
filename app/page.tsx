@@ -7,6 +7,9 @@ import { CirclePlus } from "lucide-react";
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
 import ProfileSearchToggle from "@/components/search/ProfileSearchToggle";
 import { CATEGORY_NAMES, CACHE_STRATEGY } from "@/utils/constants";
+import { Suspense } from "react";
+import TopCarouselSkeleton from "@/components/carousels/topCarousel/TopCarouselSkeleton";
+import NewsCarouselSkeleton from "@/components/carousels/newsCarousel/NewsCarouselSkeleton";
 
 export const revalidate = 0;
 
@@ -22,10 +25,10 @@ async function getHomePageData() {
         createdAt: true,
         author: true,
       },
-      cacheStrategy: CACHE_STRATEGY.SHORT,
+      cacheStrategy: CACHE_STRATEGY.MEDIUM,
     }),
     prisma.cube.findFirst({
-      cacheStrategy: CACHE_STRATEGY.LONG,
+      cacheStrategy: CACHE_STRATEGY.VERY_LONG,
     }),
   ]);
 
@@ -37,7 +40,7 @@ async function getHomePageData() {
         { createdAt: 'desc' },
       ],
       select: { id: true, title: true, photos: true },
-      cacheStrategy: CACHE_STRATEGY.MEDIUM,
+      cacheStrategy: CACHE_STRATEGY.MEDIUM_LONG,
     })
     : [];
 
@@ -67,11 +70,15 @@ export default async function Home() {
   return (
     <>
       <div className="w-full">
-        <TopCarousel props={newsTopCarousel} />
+        <Suspense fallback={<TopCarouselSkeleton times={7} />}>
+          <TopCarousel props={newsTopCarousel} />
+        </Suspense>
       </div>
       {cube && cube.onOff && cubeCarousel.length > 0 && (
         <div className="w-full mt-3">
-          <NewsCarousel props={cubeCarousel} />
+          <Suspense fallback={<NewsCarouselSkeleton />}>
+            <NewsCarousel props={cubeCarousel} />
+          </Suspense>
         </div>
       )}
 
