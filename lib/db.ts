@@ -21,35 +21,65 @@ const withDefaultCache = defaultCacheStrategy
       name: 'with-default-cache',
       query: {
         $allModels: {
-          async findUnique({ args, query }) {
+          async findUnique({
+            args,
+            query,
+          }: {
+            args: Record<string, unknown>;
+            query: (args: Record<string, unknown>) => Promise<unknown>;
+          }) {
             const argsWithCache = args as typeof args & ArgsWithCache;
             if (!argsWithCache.cacheStrategy) {
               argsWithCache.cacheStrategy = defaultCacheStrategy;
             }
             return query(args);
           },
-          async findFirst({ args, query }) {
+          async findFirst({
+            args,
+            query,
+          }: {
+            args: Record<string, unknown>;
+            query: (args: Record<string, unknown>) => Promise<unknown>;
+          }) {
             const argsWithCache = args as typeof args & ArgsWithCache;
             if (!argsWithCache.cacheStrategy) {
               argsWithCache.cacheStrategy = defaultCacheStrategy;
             }
             return query(args);
           },
-          async findMany({ args, query }) {
+          async findMany({
+            args,
+            query,
+          }: {
+            args: Record<string, unknown>;
+            query: (args: Record<string, unknown>) => Promise<unknown>;
+          }) {
             const argsWithCache = args as typeof args & ArgsWithCache;
             if (!argsWithCache.cacheStrategy) {
               argsWithCache.cacheStrategy = defaultCacheStrategy;
             }
             return query(args);
           },
-          async findUniqueOrThrow({ args, query }) {
+          async findUniqueOrThrow({
+            args,
+            query,
+          }: {
+            args: Record<string, unknown>;
+            query: (args: Record<string, unknown>) => Promise<unknown>;
+          }) {
             const argsWithCache = args as typeof args & ArgsWithCache;
             if (!argsWithCache.cacheStrategy) {
               argsWithCache.cacheStrategy = defaultCacheStrategy;
             }
             return query(args);
           },
-          async findFirstOrThrow({ args, query }) {
+          async findFirstOrThrow({
+            args,
+            query,
+          }: {
+            args: Record<string, unknown>;
+            query: (args: Record<string, unknown>) => Promise<unknown>;
+          }) {
             const argsWithCache = args as typeof args & ArgsWithCache;
             if (!argsWithCache.cacheStrategy) {
               argsWithCache.cacheStrategy = defaultCacheStrategy;

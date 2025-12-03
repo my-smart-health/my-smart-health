@@ -28,7 +28,7 @@ async function getAllPostsByUserId(userId: string) {
     }
   });
 
-  return posts.map(post => ({
+  return posts.map((post) => ({
     ...post,
     socialLinks: Array.isArray(post.socialLinks) ? (post.socialLinks as unknown as Social[]) : []
   })) as NewsCardType[];

@@ -13,7 +13,7 @@ async function getMySmartHealthInfo() {
 
 async function getMySmartHealthLocations(): Promise<MySmartHealthFormLocation[]> {
   const locations = await prisma.mySmartHealthLocation.findMany();
-  return locations.map(loc => ({
+  return locations.map((loc) => ({
     ...loc,
     schedule: (loc.schedule as unknown) as Schedule[] | null,
   }));
