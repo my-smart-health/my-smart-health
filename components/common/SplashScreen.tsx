@@ -18,11 +18,11 @@ export default function SplashScreen() {
     const hideTimer = setTimeout(() => {
       setIsAnimatingOut(true);
       sessionStorage.setItem('splashShown', 'true');
-    }, 3000);
+    }, 1500);
 
     const removeTimer = setTimeout(() => {
       setIsVisible(false);
-    }, 3800);
+    }, 2000);
 
     return () => {
       clearTimeout(hideTimer);
@@ -34,8 +34,8 @@ export default function SplashScreen() {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] bg-white flex items-center justify-center transition-all duration-800 ${isAnimatingOut
-        ? 'opacity-0 scale-95'
+      className={`fixed inset-0 z-[9999] bg-white flex items-center justify-center transition-all duration-500 ${isAnimatingOut
+        ? 'opacity-0 scale-95 pointer-events-none'
         : 'opacity-100 scale-100'
         }`}
       style={{
@@ -43,7 +43,7 @@ export default function SplashScreen() {
       }}
     >
       <div
-        className={`transition-all duration-800 ${isAnimatingOut
+        className={`transition-all duration-500 ${isAnimatingOut
           ? 'translate-y-[-45vh] scale-50'
           : 'translate-y-0 scale-100'
           }`}
@@ -57,9 +57,9 @@ export default function SplashScreen() {
           alt="My Smart Health"
           width={350}
           height={112}
-          className="w-96 h-auto animate-pulse"
+          className="w-96 h-auto"
           style={{
-            animation: isAnimatingOut ? 'none' : 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            animation: isAnimatingOut ? 'none' : 'pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
           }}
         />
       </div>
