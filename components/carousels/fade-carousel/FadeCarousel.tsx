@@ -21,7 +21,7 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
             key={photos.join(',')}
             modules={[Scrollbar, Mousewheel, Navigation, Pagination, Autoplay]}
             spaceBetween={10}
-            lazyPreloadPrevNext={3}
+            lazyPreloadPrevNext={1}
             slidesPerView={1}
             effect="slide"
             grabCursor={true}

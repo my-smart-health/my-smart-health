@@ -3,7 +3,7 @@ import prisma from "@/lib/db";
 
 import { CACHE_STRATEGY } from "@/utils/constants";
 import { NewsCardType, Social } from "@/utils/types";
-import PostCard from "@/components/posts/post-card/PostCard";
+import NewsList from "@/components/posts/news-list/NewsList";
 
 export const revalidate = 0;
 
@@ -41,14 +41,7 @@ async function getData() {
 
 export default async function NewsPage() {
   const session = await auth();
-
   const posts = await getData() as NewsCardType[];
 
-  return (
-    <>
-      {posts && session
-        ? <PostCard posts={posts} session={session} /> :
-        <PostCard posts={posts} />}
-    </>
-  );
+  return <NewsList posts={posts} session={session} />;
 }

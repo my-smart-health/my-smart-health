@@ -23,7 +23,7 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
       <Swiper
         modules={[Scrollbar, Navigation, Pagination, Mousewheel, Autoplay, EffectCards]}
         spaceBetween={1}
-        lazyPreloadPrevNext={3}
+        lazyPreloadPrevNext={1}
         slidesPerView={1}
         effect="cards"
         cardsEffect={{

@@ -15,6 +15,13 @@ const PUBLIC_PATHS = [
   '/impressum',
   '/datenschutz',
   '/agb',
+  '/the-health-bar',
+  '/medizin-und-pflege',
+  '/smart-health',
+  '/notfalle',
+  '/news',
+  '/profile',
+  '/not-found',
 ];
 
 const createChecksum = (timestamp: number): string => {
