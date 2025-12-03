@@ -16,7 +16,14 @@ export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
   const lastActivityCookie = req.cookies.get('lastActivity')?.value;
   let isInactive = false;
-  if (lastActivityCookie) {
+
+  if (token && (token as any).lastActivity) {
+    const ts = parseInt(String((token as any).lastActivity), 10);
+    if (!Number.isNaN(ts)) {
+      const INACTIVITY_MS = 10 * 60 * 1000; // 10 minutes
+      isInactive = Date.now() - ts > INACTIVITY_MS;
+    }
+  } else if (lastActivityCookie) {
     const ts = parseInt(lastActivityCookie, 10);
     if (!Number.isNaN(ts)) {
       const INACTIVITY_MS = 10 * 60 * 1000; // 10 minutes
