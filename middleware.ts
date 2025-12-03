@@ -24,7 +24,12 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  if (!token || isInactive) {
+  if (!token) {
+    const loginUrl = new URL('/login', req.url);
+    return NextResponse.redirect(loginUrl);
+  }
+
+  if (isInactive) {
     const redirectUrl = new URL('/?timeout=1', req.url);
     return NextResponse.redirect(redirectUrl);
   }
