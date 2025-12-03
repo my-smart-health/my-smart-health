@@ -13,6 +13,7 @@ import SessionChecker from "@/components/session/SessionChecker";
 import SessionProvider from "@/components/session/SessionProvider";
 import { auth } from "@/auth";
 import TimeoutModal from "@/components/modals/timeout/TimeoutModal";
+import SplashScreen from "@/components/common/SplashScreen";
 
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -67,6 +68,7 @@ export default async function RootLayout({
       <body
         className={`${ibmPlexSans.variable} antialiased flex flex-col justify-center items-center pt-2 min-h-[100dvh] w-auto lg:max-w-3xl mx-auto p-2 overscroll-x-none border bg-white text-black`}
       >
+        <SplashScreen />
         <SessionProvider session={session}>
           <SessionChecker />
           <TimeoutModal />
