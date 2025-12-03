@@ -37,6 +37,7 @@ export default function SessionChecker() {
   const pathname = usePathname();
   const lastUpdateRef = useRef<number>(0);
   const initializedRef = useRef(false);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const isPublicPath = useCallback(() => {
     return PUBLIC_PATHS.some(
@@ -183,7 +184,14 @@ export default function SessionChecker() {
       if (!e.isTrusted) return;
 
       updateActivity();
-      updateServerSession();
+
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+      debounceTimerRef.current = setTimeout(() => {
+        updateServerSession();
+      }, 2000);
+
       scheduleInactivityTimer();
     };
 
@@ -202,6 +210,9 @@ export default function SessionChecker() {
         window.removeEventListener(event, handleActivity);
       });
       clearInactivityTimer();
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
     };
   }, [status, updateActivity, updateServerSession, scheduleInactivityTimer, clearInactivityTimer]);
 

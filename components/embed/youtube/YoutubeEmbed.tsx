@@ -87,6 +87,7 @@ export default function YoutubeEmbed({
           title="YouTube Embed"
           allowFullScreen
           frameBorder="0"
+          loading="lazy"
           className="rounded-lg aspect-video object-cover bg-white"
           style={{ border: "none" }}
         ></iframe>

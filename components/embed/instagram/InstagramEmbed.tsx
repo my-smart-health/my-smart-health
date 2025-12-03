@@ -76,6 +76,7 @@ export default function InstagramEmbed({
           allow="autoplay; encrypted-media"
           title="Instagram Embed"
           frameBorder="0"
+          loading="lazy"
           className="rounded-lg bg-white"
           style={{ border: "none" }}
         ></iframe>
