@@ -53,8 +53,6 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
                     onClick={() => setZoomedIdx(idx)}
                   >
                     <Image
-                      priority={idx === 0}
-                      loading={idx === 0 ? "eager" : "lazy"}
                       placeholder="empty"
                       src={item}
                       alt={item}
@@ -99,7 +97,6 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
               <Image
                 src={photos[zoomedIdx!]}
                 alt={`Zoomed photo ${zoomedIdx! + 1}`}
-                loading="lazy"
                 placeholder="empty"
                 fill
                 sizes="(max-width: 1024px) 100vw, 1024px"

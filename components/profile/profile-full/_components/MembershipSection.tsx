@@ -16,6 +16,7 @@ export default function MembershipSection({ membership }: MembershipSectionProps
         alt="Termine Kurzfristig Icon"
         width={120}
         height={120}
+        style={{ width: "auto", height: "auto" }}
         className="inline-block mr-2"
       />
     </Link>

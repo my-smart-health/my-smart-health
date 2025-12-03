@@ -39,10 +39,9 @@ export default function ProfileNewsCarousel({ carouselItems, disableOnInteractio
               <div
                 className="relative"
               >
-                <Link href={`/news/${item.id}`} className="link hover:text-primary">
+                <Link href={`/news/${item.id}`} className="link hover:text-primary" prefetch={false}>
                   <Image
-                    priority={index < 4}
-                    loading={index < 4 ? "eager" : "lazy"}
+                    priority={index === 0}
                     placeholder="empty"
                     width={300}
                     height={300}

@@ -40,10 +40,9 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
             <SwiperSlide
               key={news.id}
               className="cursor-pointer pb-6">
-              <Link href={`/news/${news.id}`} className="block">
+              <Link href={`/news/${news.id}`} className="block" prefetch={false}>
                 <Image
-                  priority={index < 4}
-                  loading={index < 4 ? "eager" : "lazy"}
+                  priority={index === 0}
                   placeholder="empty"
                   width={182}
                   height={182}

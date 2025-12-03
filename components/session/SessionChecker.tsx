@@ -190,7 +190,7 @@ export default function SessionChecker() {
       }
       debounceTimerRef.current = setTimeout(() => {
         updateServerSession();
-      }, 2000);
+      }, 15000);
 
       scheduleInactivityTimer();
     };

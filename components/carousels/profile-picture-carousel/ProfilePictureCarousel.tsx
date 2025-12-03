@@ -73,8 +73,6 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
               <SwiperSlide key={idx} className="my-4">
                 <div className="relative rounded-box cursor-zoom-in">
                   <Image
-                    priority
-                    loading="eager"
                     placeholder="empty"
                     width={350}
                     height={350}
@@ -123,7 +121,6 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
             </button>
             <div className="relative w-full h-[60vh] md:h-[80vh]">
               <Image
-                loading="eager"
                 placeholder="empty"
                 src={imageSrcArray[zoomedIdx!]}
                 alt={`Zoomed photo ${zoomedIdx! + 1}`}
