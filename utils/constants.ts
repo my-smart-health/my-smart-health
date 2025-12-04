@@ -19,6 +19,7 @@ export const PROFILE_TYPE_SMART_HEALTH = 'SMART_HEALTH';
 export const PROFILE_TYPE_MEDIZIN_UND_PFLEGE = 'MEDIZIN_UND_PFLEGE';
 export const PROFILE_TYPE_NOTFALLE = 'NOTFALLE';
 export const PROFILE_TYPE_THE_HEALTH_BAR = 'THE_HEALTH_BAR';
+export const PROFILE_TYPE_THE_LEADING_DOCTORS = 'THE_LEADING_DOCTORS';
 
 /**
  * Category names and links used throughout the app
@@ -31,6 +32,10 @@ export const CATEGORY_NAMES = {
   news: {
     name: 'News für meine Gesundheit',
     link: '/news',
+  },
+  theLeadingDoctors: {
+    name: 'The Leading Doctors',
+    link: '/the-leading-doctors',
   },
   smartHealth: {
     name: 'Gut für meine Gesundheit',

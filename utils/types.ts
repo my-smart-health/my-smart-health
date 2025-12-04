@@ -13,7 +13,8 @@ export type ProfileType =
   | 'SMART_HEALTH'
   | 'MEDIZIN_UND_PFLEGE'
   | 'NOTFALLE'
-  | 'THE_HEALTH_BAR';
+  | 'THE_HEALTH_BAR'
+  | 'THE_LEADING_DOCTORS';
 
 export type ErrorType = 'error' | 'warning' | 'success';
 

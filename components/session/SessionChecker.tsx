@@ -15,13 +15,15 @@ const PUBLIC_PATHS = [
   '/impressum',
   '/datenschutz',
   '/agb',
-  '/the-health-bar',
-  '/medizin-und-pflege',
-  '/smart-health',
-  '/notfalle',
-  '/news',
   '/profile',
   '/not-found',
+  '/error',
+  '/news',
+  '/smart-health',
+  '/medizin-und-pflege',
+  '/notfalle',
+  '/the-leading-doctors',
+  '/the-health-bar',
 ];
 
 const createChecksum = (timestamp: number): string => {
@@ -55,6 +57,7 @@ export default function SessionChecker() {
         pathname?.startsWith('/smart-health') ||
         pathname?.startsWith('/medizin-und-pflege') ||
         pathname?.startsWith('/notfalle') ||
+        pathname?.startsWith('/the-leading-doctors') ||
         pathname?.startsWith('/the-health-bar')
     );
   }, [pathname]);
