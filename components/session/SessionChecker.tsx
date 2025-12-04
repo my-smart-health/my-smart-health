@@ -24,6 +24,7 @@ const PUBLIC_PATHS = [
   '/notfalle',
   '/the-leading-doctors',
   '/the-health-bar',
+  '/register',
 ];
 
 const createChecksum = (timestamp: number): string => {
@@ -58,7 +59,17 @@ export default function SessionChecker() {
         pathname?.startsWith('/medizin-und-pflege') ||
         pathname?.startsWith('/notfalle') ||
         pathname?.startsWith('/the-leading-doctors') ||
-        pathname?.startsWith('/the-health-bar')
+        pathname?.startsWith('/the-health-bar') ||
+        pathname?.startsWith('/kontakt') ||
+        pathname?.startsWith('/impressum') ||
+        pathname?.startsWith('/datenschutz') ||
+        pathname?.startsWith('/agb') ||
+        pathname?.startsWith('/error') ||
+        pathname?.startsWith('/not-found') ||
+        pathname?.startsWith('/forgot-password') ||
+        pathname?.startsWith('/login') ||
+        pathname?.startsWith('/register') ||
+        pathname?.startsWith('/'),
     );
   }, [pathname]);
 
