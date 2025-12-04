@@ -12,17 +12,25 @@ type Props = {
 
 export default function PrescriptionReservation({ reservationLinks, membership = null }: Props) {
   const links = (reservationLinks || []).filter((linkItem) => typeof linkItem.url === "string" && linkItem.url.trim().length > 0);
-  if (links.length === 0) return null;
+
+  if (links.length === 0 && !membership?.status) return null;
 
   const emailLinks = links.filter(item => item.type === RESERVATION_LINK_TYPES.Email);
   const nonEmailLinks = links.filter(item => item.type !== RESERVATION_LINK_TYPES.Email);
-
-  const hasOnlineTermine = nonEmailLinks.some(item => item.type === RESERVATION_LINK_TYPES.OnlineTermine);
 
   return (
     <>
       <Divider addClass="my-1" />
       <section className="flex flex-col items-center m-2 space-y-4">
+
+        {membership?.status && (
+          <>
+            <div className="place-self-center">
+              <MembershipSection membership={membership} />
+            </div>
+            <Divider addClass="my-1" />
+          </>
+        )}
 
         <div className="flex flex-col gap-3 w-full mb-2">
           {nonEmailLinks.map((item, idx) => {
@@ -49,18 +57,8 @@ export default function PrescriptionReservation({ reservationLinks, membership =
                 break;
             }
 
-            const isFirstOnlineTermine = idx === 0 && item.type === RESERVATION_LINK_TYPES.OnlineTermine;
-
             return (
               <React.Fragment key={item.id ?? `${item.type}-${item.url}-${idx}`}>
-                {membership?.status && hasOnlineTermine && isFirstOnlineTermine && (
-                  <>
-                    <div className="place-self-center">
-                      <MembershipSection membership={membership} />
-                    </div>
-                    <Divider addClass="my-1" />
-                  </>
-                )}
                 <div className="flex align-middle justify-center place-items-center w-full">
                   <Link href={href} target="_self" className="btn btn-primary text-lg flex gap-2 rounded">
                     <Icon /> <span>{label}</span>
