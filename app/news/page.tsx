@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
+import { withRetry } from "@/lib/prisma-retry";
 
 import { CACHE_STRATEGY } from "@/utils/constants";
 import { NewsCardType, Social } from "@/utils/types";
@@ -8,7 +9,7 @@ import NewsList from "@/components/posts/news-list/NewsList";
 export const revalidate = 0;
 
 async function getData() {
-  const posts = await prisma.posts.findMany({
+  const posts = await withRetry(() => prisma.posts.findMany({
     take: 20,
     orderBy: {
       createdAt: "desc",
@@ -31,7 +32,10 @@ async function getData() {
       }
     },
     cacheStrategy: CACHE_STRATEGY.SHORT,
-  })
+  })).catch((error) => {
+    console.error('Error fetching news posts:', error);
+    return [];
+  });
 
   return posts.map((post) => ({
     ...post,

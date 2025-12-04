@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
 import { notFound } from "next/navigation";
+import { withRetry } from "@/lib/prisma-retry";
 
 import { CACHE_STRATEGY } from "@/utils/constants";
 import { NewsCardType, Social } from "@/utils/types";
@@ -9,7 +10,7 @@ import NewsList from "@/components/posts/news-list/NewsList";
 export const revalidate = 0;
 
 async function getData(id: string): Promise<NewsCardType | null> {
-  const post = await prisma.posts.findUnique({
+  const post = await withRetry(() => prisma.posts.findUnique({
     where: { id },
     select: {
       id: true,
@@ -29,6 +30,9 @@ async function getData(id: string): Promise<NewsCardType | null> {
       }
     },
     cacheStrategy: CACHE_STRATEGY.MEDIUM,
+  })).catch((error) => {
+    console.error('Error fetching news post:', error);
+    return null;
   });
 
   if (!post) return null;

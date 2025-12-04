@@ -10,41 +10,62 @@ import { CATEGORY_NAMES, CACHE_STRATEGY } from "@/utils/constants";
 import { Suspense } from "react";
 import TopCarouselSkeleton from "@/components/carousels/topCarousel/TopCarouselSkeleton";
 import NewsCarouselSkeleton from "@/components/carousels/newsCarousel/NewsCarouselSkeleton";
+import { withRetry } from "@/lib/prisma-retry";
 
 export const revalidate = 0;
 
 async function getHomePageData() {
-  const [news, cube] = await Promise.all([
-    prisma.posts.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: 20,
-      select: {
-        id: true,
-        title: true,
-        photos: true,
-        createdAt: true,
-        author: true,
-      },
-      cacheStrategy: CACHE_STRATEGY.MEDIUM,
-    }),
-    prisma.cube.findFirst({
-      cacheStrategy: CACHE_STRATEGY.VERY_LONG,
-    }),
-  ]);
+  try {
+    const [news, cube] = await Promise.all([
+      withRetry(() =>
+        prisma.posts.findMany({
+          orderBy: { createdAt: 'desc' },
+          take: 20,
+          select: {
+            id: true,
+            title: true,
+            photos: true,
+            createdAt: true,
+            author: true,
+          },
+          cacheStrategy: CACHE_STRATEGY.SHORT,
+        })
+      ).catch((error) => {
+        console.error('Error fetching news posts:', error);
+        return [];
+      }),
+      withRetry(() =>
+        prisma.cube.findFirst({
+          cacheStrategy: CACHE_STRATEGY.MEDIUM,
+        })
+      ).catch((error) => {
+        console.error('Error fetching cube:', error);
+        return null;
+      }),
+    ]);
 
-  const cubePosts = cube?.onOff
-    ? await prisma.posts.findMany({
-      where: { cubeId: cube.id },
-      orderBy: [
-        { cubeOrder: 'asc' },
-        { createdAt: 'desc' },
-      ],
-      select: { id: true, title: true, photos: true },
-      cacheStrategy: CACHE_STRATEGY.MEDIUM_LONG,
-    })
-    : [];
+    const cubePosts = cube?.onOff
+      ? await withRetry(() =>
+        prisma.posts.findMany({
+          where: { cubeId: cube.id },
+          orderBy: [
+            { cubeOrder: 'asc' },
+            { createdAt: 'desc' },
+          ],
+          select: { id: true, title: true, photos: true },
+          cacheStrategy: CACHE_STRATEGY.MEDIUM,
+        })
+      ).catch((error) => {
+        console.error('Error fetching cube posts:', error);
+        return [];
+      })
+      : [];
 
-  return { news, cube, cubePosts };
+    return { news, cube, cubePosts };
+  } catch (error) {
+    console.error('Critical error in getHomePageData:', error);
+    return { news: [], cube: null, cubePosts: [] };
+  }
 }
 
 export default async function Home() {
