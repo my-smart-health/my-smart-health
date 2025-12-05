@@ -11,12 +11,10 @@ import PrescriptionReservation from "./PrescriptionReservation";
 export default function ContactSection({
   locations,
   platformIcons,
-  membership,
 }: {
   phoneNumbers: string[];
   locations: Location[];
   platformIcons: Record<string, React.ReactNode>;
-  membership?: Membership | null;
 }) {
 
   return (
@@ -79,7 +77,7 @@ export default function ContactSection({
                 )}
 
                 {locReservationLinks.length > 0 && (
-                  <PrescriptionReservation reservationLinks={locReservationLinks} membership={membership} />
+                  <PrescriptionReservation reservationLinks={locReservationLinks} />
                 )}
 
               </div >

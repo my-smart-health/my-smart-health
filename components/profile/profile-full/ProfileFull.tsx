@@ -109,7 +109,6 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
         phoneNumbers={phones}
         locations={filteredLocations}
         platformIcons={platformIcons}
-        membership={membership}
       />
 
       {schedule.length > 0 && <ScheduleSection schedule={schedule} />}
