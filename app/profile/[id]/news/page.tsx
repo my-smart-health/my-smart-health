@@ -7,7 +7,9 @@ import PostCard from "@/components/posts/post-card/PostCard";
 
 import { CACHE_STRATEGY } from "@/utils/constants";
 
-async function getAllPostsByUserId(userId: string) {
+async function getAllPostsByUserId(userId: string, isOwnProfile: boolean, isAdmin: boolean) {
+  const cacheStrategy = (isOwnProfile || isAdmin) ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.SHORT;
+
   const posts = await prisma.posts.findMany({
     where: { authorId: userId },
     orderBy: { createdAt: "desc" },
@@ -28,7 +30,7 @@ async function getAllPostsByUserId(userId: string) {
         }
       }
     },
-    cacheStrategy: CACHE_STRATEGY.SHORT,
+    cacheStrategy,
   });
 
   return posts.map((post) => ({
@@ -54,7 +56,10 @@ export default async function ProfileNewsPage({ params }: { params: Promise<{ id
 
   const profileId = (await params).id;
 
-  const posts = await getAllPostsByUserId(profileId);
+  const isOwnProfile = session?.user?.id === profileId;
+  const isAdmin = session?.user?.role === 'ADMIN';
+
+  const posts = await getAllPostsByUserId(profileId, isOwnProfile, isAdmin);
   const authorName = await getAuthorNameById(profileId);
 
   if (posts) {

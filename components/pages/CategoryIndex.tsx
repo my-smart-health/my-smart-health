@@ -69,12 +69,13 @@ const resolveCategoryPath = (
   return path;
 };
 
-async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
+async function loadCategoryTree(profileType: ProfileType, isAdmin: boolean): Promise<LoadResult> {
+  const cacheStrategy = isAdmin ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.SHORT;
   const collator = new Intl.Collator('de', { sensitivity: 'base', ignorePunctuation: true });
   const categories = await prisma.category.findMany({
     where: { type: profileType },
     select: { id: true, name: true, parentId: true },
-    cacheStrategy: CACHE_STRATEGY.SHORT,
+    cacheStrategy,
   });
 
   if (!categories.length) {
@@ -90,7 +91,7 @@ async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
       categoryId: true,
       user: { select: { id: true, name: true, bio: true, profileImages: true, membership: true } },
     },
-    cacheStrategy: CACHE_STRATEGY.SHORT,
+    cacheStrategy,
   });
 
   const users: UserProfileSH[] = [];
@@ -161,14 +162,16 @@ async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
 }
 
 export default async function CategoryIndex({ profileType }: Props) {
-  const [categoryData, session] = await Promise.all([loadCategoryTree(profileType), auth()]);
+  const session = await auth();
+  const isAdmin = session?.user?.role === 'ADMIN';
+  const categoryData = await loadCategoryTree(profileType, isAdmin);
 
   return (
     <div className="grid grid-cols-1 gap-2">
       <CategoryAccordion
         node={categoryData.tree}
         type={profileType}
-        isAdmin={session?.user?.role === 'ADMIN'}
+        isAdmin={isAdmin}
         pathToCategoryId={categoryData.pathToCategoryId}
       />
     </div>

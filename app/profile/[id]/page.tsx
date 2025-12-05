@@ -43,7 +43,9 @@ async function getUser(id: string) {
   return { user };
 }
 
-async function getAllPosts(userId: string) {
+async function getAllPosts(userId: string, isOwnProfile: boolean, isAdmin: boolean) {
+  const cacheStrategy = (isOwnProfile || isAdmin) ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.MEDIUM_SHORT;
+
   const posts = await prisma.posts.findMany({
     where: { authorId: userId },
     select: {
@@ -52,7 +54,7 @@ async function getAllPosts(userId: string) {
       photos: true,
       authorId: true,
     },
-    cacheStrategy: CACHE_STRATEGY.MEDIUM_SHORT,
+    cacheStrategy,
   });
 
   return posts;
@@ -68,7 +70,10 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     return <UserNotFound />;
   }
 
-  const posts = await getAllPosts(user.id);
+  const isOwnProfile = session?.user?.id === id;
+  const isAdmin = session?.user?.role === 'ADMIN';
+
+  const posts = await getAllPosts(id, isOwnProfile, isAdmin);
 
   if (!user || user === null) {
     return (

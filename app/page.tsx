@@ -11,8 +11,12 @@ import { Suspense } from "react";
 import TopCarouselSkeleton from "@/components/carousels/topCarousel/TopCarouselSkeleton";
 import NewsCarouselSkeleton from "@/components/carousels/newsCarousel/NewsCarouselSkeleton";
 import { withRetry } from "@/lib/prisma-retry";
+import { auth } from "@/auth";
 
-async function getHomePageData() {
+async function getHomePageData(isAdmin: boolean) {
+  const cacheStrategy = isAdmin ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.SHORT;
+  const cubeCacheStrategy = isAdmin ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.MEDIUM;
+
   try {
     const [news, cube] = await Promise.all([
       withRetry(() =>
@@ -26,7 +30,7 @@ async function getHomePageData() {
             createdAt: true,
             author: true,
           },
-          cacheStrategy: CACHE_STRATEGY.SHORT,
+          cacheStrategy,
         })
       ).catch((error) => {
         console.error('Error fetching news posts:', error);
@@ -34,7 +38,7 @@ async function getHomePageData() {
       }),
       withRetry(() =>
         prisma.cube.findFirst({
-          cacheStrategy: CACHE_STRATEGY.MEDIUM,
+          cacheStrategy: cubeCacheStrategy,
         })
       ).catch((error) => {
         console.error('Error fetching cube:', error);
@@ -51,7 +55,7 @@ async function getHomePageData() {
             { createdAt: 'desc' },
           ],
           select: { id: true, title: true, photos: true },
-          cacheStrategy: CACHE_STRATEGY.MEDIUM,
+          cacheStrategy: cubeCacheStrategy,
         })
       ).catch((error) => {
         console.error('Error fetching cube posts:', error);
@@ -67,7 +71,9 @@ async function getHomePageData() {
 }
 
 export default async function Home() {
-  const { news, cube, cubePosts } = await getHomePageData();
+  const session = await auth();
+  const isAdmin = session?.user?.role === 'ADMIN';
+  const { news, cube, cubePosts } = await getHomePageData(isAdmin);
 
 
   const newsTopCarousel = news.length > 0
