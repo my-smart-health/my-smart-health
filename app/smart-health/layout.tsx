@@ -11,7 +11,6 @@ export default async function SmartHealthLayout({ children }: { children: React.
     <>
       <MySmartHealth />
       <ProfileSearchToggle className="max-w-5xl w-full" />
-      <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.news.name} icon="/icon2.png" goTo={CATEGORY_NAMES.news.link} />
       <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.theLeadingDoctors.name} goTo={CATEGORY_NAMES.theLeadingDoctors.link} imageAsTitle="/the-leading-doctors.png" />
       <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.smartHealth.name} icon="/icon3.png" goTo='/' active />
       <div className="min-h-full w-full max-w-5xl flex flex-col gap-4">

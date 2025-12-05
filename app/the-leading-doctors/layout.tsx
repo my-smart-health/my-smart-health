@@ -11,7 +11,6 @@ export default async function TheLeadingDoctorsLayout({ children }: { children: 
     <>
       <MySmartHealth />
       <ProfileSearchToggle className="max-w-5xl w-full" />
-      <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.news.name} icon="/icon2.png" goTo={CATEGORY_NAMES.news.link} />
       <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.theLeadingDoctors.name} icon="/icon2.png" goTo='/' active imageAsTitle="/the-leading-doctors.png" />
       <div className="min-h-full w-full max-w-5xl flex flex-col gap-4">
         {children}
