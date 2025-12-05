@@ -17,7 +17,7 @@ export default function MembershipSection({ membership }: MembershipSectionProps
         width={120}
         height={120}
         style={{ width: "auto", height: "auto" }}
-        className="inline-block mr-2"
+        className="inline-block"
       />
     </Link>
   );
