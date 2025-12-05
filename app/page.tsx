@@ -90,11 +90,13 @@ export default async function Home() {
 
   return (
     <>
-      <div className="w-full">
-        <Suspense fallback={<TopCarouselSkeleton times={7} />}>
-          <TopCarousel props={newsTopCarousel} />
-        </Suspense>
-      </div>
+      {newsTopCarousel && newsTopCarousel.length > 0 && (
+        <div className="w-full">
+          <Suspense fallback={<TopCarouselSkeleton times={7} />}>
+            <TopCarousel props={newsTopCarousel} />
+          </Suspense>
+        </div>
+      )}
       {cube && cube.onOff && cubeCarousel.length > 0 && (
         <div className="w-full mt-3">
           <Suspense fallback={<NewsCarouselSkeleton />}>
