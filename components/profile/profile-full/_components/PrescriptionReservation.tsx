@@ -28,7 +28,6 @@ export default function PrescriptionReservation({ reservationLinks, membership =
             <div className="place-self-center">
               <MembershipSection membership={membership} />
             </div>
-            <Divider addClass="my-1" />
           </>
         )}
 
