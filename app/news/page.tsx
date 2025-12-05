@@ -6,8 +6,6 @@ import { CACHE_STRATEGY } from "@/utils/constants";
 import { NewsCardType, Social } from "@/utils/types";
 import NewsList from "@/components/posts/news-list/NewsList";
 
-export const revalidate = 0;
-
 async function getData() {
   const posts = await withRetry(() => prisma.posts.findMany({
     take: 20,

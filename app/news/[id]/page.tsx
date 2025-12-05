@@ -7,8 +7,6 @@ import { CACHE_STRATEGY } from "@/utils/constants";
 import { NewsCardType, Social } from "@/utils/types";
 import NewsList from "@/components/posts/news-list/NewsList";
 
-export const revalidate = 0;
-
 async function getData(id: string): Promise<NewsCardType | null> {
   const post = await withRetry(() => prisma.posts.findUnique({
     where: { id },

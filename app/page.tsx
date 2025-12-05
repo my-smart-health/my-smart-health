@@ -12,8 +12,6 @@ import TopCarouselSkeleton from "@/components/carousels/topCarousel/TopCarouselS
 import NewsCarouselSkeleton from "@/components/carousels/newsCarousel/NewsCarouselSkeleton";
 import { withRetry } from "@/lib/prisma-retry";
 
-export const revalidate = 0;
-
 async function getHomePageData() {
   try {
     const [news, cube] = await Promise.all([
