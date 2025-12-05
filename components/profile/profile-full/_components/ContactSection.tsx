@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { MapPin } from "lucide-react";
-import { Location, Membership } from "@/utils/types";
+import { Location } from "@/utils/types";
 
 import Divider from "@/components/divider/Divider";
 import { ReservationLink, Schedule } from "@/utils/types";
