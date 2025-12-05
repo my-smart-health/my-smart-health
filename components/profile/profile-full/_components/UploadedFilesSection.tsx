@@ -61,9 +61,9 @@ export default function UploadedFilesSection({
                 href={getDownloadUrl(fileUrl)}
                 prefetch={false}
                 download
-                className="btn btn-primary rounded-xl py-8 sm:py-6 text-white w-full sm:w-auto hover:bg-primary/75 transition-colors duration-200 break-all text-left flex items-center gap-2"
+                className="btn btn-primary gap-2 sm:gap-3 rounded-xl py-2 text-white w-full h-fit sm:w-auto hover:bg-primary/75 transition-colors duration-200 break-all text-left"
               >
-                <FileText size={18} />
+                <FileText size={30} className='sm:size-[30px] flex-shrink-0' />
                 <span className="break-all whitespace-normal">{fileName}</span>
               </Link>
               {showUrl && (
