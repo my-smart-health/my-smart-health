@@ -63,29 +63,29 @@ export const CACHE_STRATEGY = {
   /** No caching - always fetch from database (for real-time or sensitive data) */
   NONE: { ttl: 0 },
 
-  /** 15s fresh + 10s stale = 25s total (for rapidly changing admin data) */
-  REAL_TIME: { ttl: 15, swr: 10 },
+  /** 15s fresh + 30s stale = 45s total (for rapidly changing admin data) */
+  REAL_TIME: { ttl: 15, swr: 30 },
 
-  /** 30s fresh + 15s stale = 45s total (for admin dashboards) */
-  ADMIN: { ttl: 30, swr: 15 },
+  /** 30s fresh + 60s stale = 90s total (for admin dashboards) */
+  ADMIN: { ttl: 30, swr: 60 },
 
-  /** 60s fresh + 30s stale = 90s total (for frequently updated content like news) */
-  SHORT: { ttl: 60, swr: 30 },
+  /** 60s fresh + 120s stale = 3min total (for frequently updated content like news) */
+  SHORT: { ttl: 60, swr: 120 },
 
-  /** 90s fresh + 45s stale = 135s total (for user-generated content) */
-  MEDIUM_SHORT: { ttl: 90, swr: 45 },
+  /** 90s fresh + 90s stale = 3min total (for user-generated content) */
+  MEDIUM_SHORT: { ttl: 90, swr: 90 },
 
-  /** 2min fresh + 1min stale = 3min total (for user profiles and settings) */
-  MEDIUM: { ttl: 120, swr: 60 },
+  /** 2min fresh + 2min stale = 4min total (for user profiles and settings) */
+  MEDIUM: { ttl: 120, swr: 120 },
 
-  /** 3min fresh + 90s stale = 4.5min total (for stable profiles) */
-  MEDIUM_LONG: { ttl: 180, swr: 90 },
+  /** 3min fresh + 3min stale = 6min total (for stable profiles) */
+  MEDIUM_LONG: { ttl: 180, swr: 180 },
 
-  /** 5min fresh + 2.5min stale = 7.5min total (for static/rarely changing content) */
-  LONG: { ttl: 300, swr: 150 },
+  /** 5min fresh + 5min stale = 10min total (for static/rarely changing content) */
+  LONG: { ttl: 300, swr: 300 },
 
-  /** 10min fresh + 5min stale = 15min total (for very static content) */
-  VERY_LONG: { ttl: 600, swr: 300 },
+  /** 10min fresh + 10min stale = 20min total (for very static content) */
+  VERY_LONG: { ttl: 600, swr: 600 },
 } as const;
 
 /**
