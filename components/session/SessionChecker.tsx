@@ -7,23 +7,10 @@ import { useRouter, usePathname } from 'next/navigation';
 const SESSION_TIMEOUT_MS = 10 * 60 * 1000;
 const ACTIVITY_STORAGE_KEY = 'lastActivity';
 const CHECKSUM_KEY = 'activityChecksum';
-const PUBLIC_PATHS = [
-  '/',
-  '/login',
-  '/forgot-password',
-  '/kontakt',
-  '/impressum',
-  '/datenschutz',
-  '/agb',
-  '/profile',
-  '/not-found',
-  '/error',
-  '/news',
-  '/smart-health',
-  '/medizin-und-pflege',
-  '/notfalle',
-  '/the-leading-doctors',
-  '/the-health-bar',
+
+const RESTRICTED_PATHS = [
+  '/dashboard',
+  '/register',
 ];
 
 const createChecksum = (timestamp: number): string => {
@@ -48,26 +35,9 @@ export default function SessionChecker() {
   const initializedRef = useRef(false);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const isPublicPath = useCallback(() => {
-    return PUBLIC_PATHS.some(
-      (path) =>
-        pathname === path ||
-        pathname?.startsWith('/news/') ||
-        pathname?.startsWith('/profile/') ||
-        pathname?.startsWith('/smart-health') ||
-        pathname?.startsWith('/medizin-und-pflege') ||
-        pathname?.startsWith('/notfalle') ||
-        pathname?.startsWith('/the-leading-doctors') ||
-        pathname?.startsWith('/the-health-bar') ||
-        pathname?.startsWith('/kontakt') ||
-        pathname?.startsWith('/impressum') ||
-        pathname?.startsWith('/datenschutz') ||
-        pathname?.startsWith('/agb') ||
-        pathname?.startsWith('/error') ||
-        pathname?.startsWith('/not-found') ||
-        pathname?.startsWith('/forgot-password') ||
-        pathname?.startsWith('/login') ||
-        pathname?.startsWith('/'),
+  const isRestrictedPath = useCallback(() => {
+    return RESTRICTED_PATHS.some(
+      (path) => pathname === path || pathname?.startsWith(path + '/')
     );
   }, [pathname]);
 
@@ -289,18 +259,18 @@ export default function SessionChecker() {
   }, [status, checkInactivity]);
 
   useEffect(() => {
-    if (status === 'authenticated' && !isPublicPath()) {
+    if (status === 'authenticated') {
       updateServerSession();
     }
-  }, [pathname, status, isPublicPath, updateServerSession]);
+  }, [pathname, status, updateServerSession]);
 
   useEffect(() => {
-    if (status === 'unauthenticated' && !isPublicPath()) {
+    if (status === 'unauthenticated' && isRestrictedPath()) {
       localStorage.removeItem(ACTIVITY_STORAGE_KEY);
       localStorage.removeItem(CHECKSUM_KEY);
       router.push('/');
     }
-  }, [status, router, isPublicPath]);
+  }, [status, router, isRestrictedPath]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
