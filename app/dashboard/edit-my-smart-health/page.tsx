@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/db";
+import { CACHE_STRATEGY } from "@/utils/constants";
 
 import { redirect } from "next/navigation";
 import MySmartHealthForm from "@/components/forms/msh-form/MySmartHealthForm";
@@ -7,12 +8,16 @@ import type { MySmartHealthFormLocation } from "@/components/forms/msh-form/_com
 import { MySmartHealthInfo, Schedule } from "@/utils/types";
 
 async function getMySmartHealthInfo() {
-  const mySmartHealthData = await prisma.mySmartHealth.findFirst();
+  const mySmartHealthData = await prisma.mySmartHealth.findFirst({
+    cacheStrategy: CACHE_STRATEGY.NONE,
+  });
   return mySmartHealthData as MySmartHealthInfo | null;
 }
 
 async function getMySmartHealthLocations(): Promise<MySmartHealthFormLocation[]> {
-  const locations = await prisma.mySmartHealthLocation.findMany();
+  const locations = await prisma.mySmartHealthLocation.findMany({
+    cacheStrategy: CACHE_STRATEGY.NONE,
+  });
   return locations.map((loc) => ({
     ...loc,
     schedule: (loc.schedule as unknown) as Schedule[] | null,

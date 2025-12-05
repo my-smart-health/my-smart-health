@@ -4,11 +4,13 @@ import { redirect } from "next/navigation";
 import EditPostForm from "../../../../components/posts/edit-post-form/EditPostForm";
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import { Social } from "@/utils/types";
+import { CACHE_STRATEGY } from "@/utils/constants";
 
 
 async function getPostdata(id: string) {
   const post = await prisma.posts.findUnique({
     where: { id },
+    cacheStrategy: CACHE_STRATEGY.NONE,
   });
 
   if (!post) return { post: null };

@@ -2,11 +2,13 @@ import { auth } from "@/auth";
 import ChangeEmailForm from "@/components/forms/change-email/ChangeEmailForm";
 import prisma from "@/lib/db";
 import { redirect } from "next/navigation";
+import { CACHE_STRATEGY } from "@/utils/constants";
 
 async function getUserEmail(id: string) {
   const user = await prisma.user.findUnique({
     where: { id },
     select: { email: true },
+    cacheStrategy: CACHE_STRATEGY.NONE,
   });
   return user;
 }

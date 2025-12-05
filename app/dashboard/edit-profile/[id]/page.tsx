@@ -2,6 +2,7 @@ import prisma from "@/lib/db";
 import { auth } from "@/auth";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
+import { CACHE_STRATEGY } from "@/utils/constants";
 
 import { FieldOfExpertise, Membership, ReservationLink, Schedule } from "@/utils/types";
 import EditProfileForm from "@/components/profile/edit-profile-form/EditProfileForm";
@@ -26,6 +27,7 @@ async function getData(sessionId: string) {
       reservationLinks: true,
       membership: true,
     },
+    cacheStrategy: CACHE_STRATEGY.NONE,
   });
 
   return { user } as { user: NonNullable<typeof user> };

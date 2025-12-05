@@ -5,6 +5,8 @@ import { NewsCardType, Social } from "@/utils/types";
 
 import PostCard from "@/components/posts/post-card/PostCard";
 
+import { CACHE_STRATEGY } from "@/utils/constants";
+
 async function getAllPostsByUserId(userId: string) {
   const posts = await prisma.posts.findMany({
     where: { authorId: userId },
@@ -25,7 +27,8 @@ async function getAllPostsByUserId(userId: string) {
           fieldOfExpertise: true,
         }
       }
-    }
+    },
+    cacheStrategy: CACHE_STRATEGY.SHORT,
   });
 
   return posts.map((post) => ({
@@ -39,7 +42,8 @@ async function getAuthorNameById(authorId: string) {
     where: { id: authorId },
     select: {
       name: true,
-    }
+    },
+    cacheStrategy: CACHE_STRATEGY.NONE,
   });
   return author?.name || "Unknown Author";
 }

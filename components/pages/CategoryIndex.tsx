@@ -2,6 +2,7 @@ import prisma from '@/lib/db';
 import CategoryAccordion from '@/components/buttons/category-accordion-button/CategoryAccordion';
 import { auth } from '@/auth';
 import { CategoryNodeSH, Membership, UserProfileSH, ProfileType } from '@/utils/types';
+import { CACHE_STRATEGY } from '@/utils/constants';
 
 type Props = {
   profileType: ProfileType;
@@ -73,6 +74,7 @@ async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
   const categories = await prisma.category.findMany({
     where: { type: profileType },
     select: { id: true, name: true, parentId: true },
+    cacheStrategy: CACHE_STRATEGY.SHORT,
   });
 
   if (!categories.length) {
@@ -88,6 +90,7 @@ async function loadCategoryTree(profileType: ProfileType): Promise<LoadResult> {
       categoryId: true,
       user: { select: { id: true, name: true, bio: true, profileImages: true, membership: true } },
     },
+    cacheStrategy: CACHE_STRATEGY.SHORT,
   });
 
   const users: UserProfileSH[] = [];

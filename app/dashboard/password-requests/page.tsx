@@ -4,6 +4,7 @@ import PasswordRequestsList from "./_components/PasswordRequestsList";
 import RefreshNotifications from "./_components/RefreshNotifications";
 import prisma from "@/lib/db";
 import { AdminNotification } from "@/utils/types";
+import { CACHE_STRATEGY } from "@/utils/constants";
 
 export default async function PasswordRequestsPage() {
   const session = await auth();
@@ -16,6 +17,7 @@ export default async function PasswordRequestsPage() {
     orderBy: {
       createdAt: 'desc',
     },
+    cacheStrategy: CACHE_STRATEGY.REAL_TIME,
   });
 
   const notifications: AdminNotification[] = notificationsData.map((n) => ({

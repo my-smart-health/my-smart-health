@@ -1,27 +1,13 @@
 import { auth } from "@/auth";
 import RegisterForm from "../../components/register-form/RegisterForm";
 import { redirect } from "next/navigation";
-import prisma from "@/lib/db";
-
-async function hasUsers() {
-  const userCount = await prisma.user.count();
-  return userCount > 0;
-}
 
 export default async function RegisterPage() {
 
   const session = await auth();
-  const usersExist = await hasUsers();
 
-  if (usersExist) {
-    if (!session) {
-      redirect("/login");
-    }
-
-    const role = session.user?.role;
-    if (role !== "ADMIN") {
-      redirect("/");
-    }
+  if (!session || session.user?.role !== "ADMIN") {
+    redirect("/");
   }
 
   return (

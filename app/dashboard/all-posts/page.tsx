@@ -2,6 +2,7 @@ import prisma from "@/lib/db";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { FieldOfExpertise, Social } from '@/utils/types';
+import { CACHE_STRATEGY } from '@/utils/constants';
 
 import PostCard from "@/components/posts/post-card/PostCard";
 
@@ -18,7 +19,8 @@ async function getAllPosts(userId: string) {
           fieldOfExpertise: true
         }
       }
-    }
+    },
+    cacheStrategy: CACHE_STRATEGY.NONE,
   });
   return allPosts;
 }
