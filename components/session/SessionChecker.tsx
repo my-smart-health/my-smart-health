@@ -259,7 +259,7 @@ export default function SessionChecker() {
   }, [status, checkInactivity]);
 
   useEffect(() => {
-    if (status === 'authenticated') {
+    if (status === 'authenticated' && initializedRef.current) {
       updateServerSession();
     }
   }, [pathname, status, updateServerSession]);

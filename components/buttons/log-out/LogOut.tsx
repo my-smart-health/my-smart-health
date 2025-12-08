@@ -1,27 +1,45 @@
 'use client'
 
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 export default function LogOut({ addClasses }: { addClasses?: string }) {
-  const router = useRouter();
 
   const handleLogout = async () => {
-    await signOut({ redirect: false });
+    try {
+      if (typeof window !== 'undefined') {
 
-    if (typeof window !== 'undefined') {
-      console.log('Clearing localStorage and cookies on logout');
-      sessionStorage.clear();
-      cookieStore.delete("__Secure-YEC");
-      cookieStore.delete("lastActivity");
-      localStorage.removeItem('lastActivity');
-      localStorage.removeItem('activityChecksum');
-      localStorage.removeItem('nextauth.message');
-      document.cookie = `lastActivity=; Max-Age=0; path=/; SameSite=Lax`;
-      console.log('localStorage after clear:', localStorage.getItem('lastActivity'), localStorage.getItem('activityChecksum'));
+        localStorage.removeItem('lastActivity');
+        localStorage.removeItem('activityChecksum');
+        localStorage.removeItem('nextauth.message');
+
+        sessionStorage.clear();
+
+        const cookies = [
+          'lastActivity',
+          'authjs.session-token',
+          'authjs.callback-url',
+          'authjs.csrf-token',
+          '__Secure-authjs.session-token',
+          '__Host-authjs.csrf-token',
+          'next-auth.session-token',
+          '__Secure-next-auth.session-token',
+        ];
+
+        cookies.forEach(cookieName => {
+          document.cookie = `${cookieName}=; Max-Age=0; path=/; SameSite=Lax`;
+          document.cookie = `${cookieName}=; Max-Age=0; path=/; domain=${window.location.hostname}; SameSite=Lax`;
+          document.cookie = `${cookieName}=; Max-Age=0; path=/; SameSite=Lax; Secure`;
+        });
+
+        console.log('Storage and cookies cleared');
+      }
+
+      await signOut({ callbackUrl: '/', redirect: true });
+
+    } catch (error) {
+      console.error('Logout error:', error);
+      window.location.href = '/';
     }
-
-    router.push('/');
   };
 
   return (

@@ -23,17 +23,7 @@ export default function LoginForm() {
     });
 
     if (!response?.error) {
-      if (typeof window !== 'undefined') {
-        try {
-          localStorage.removeItem('lastActivity');
-          localStorage.removeItem('activityChecksum');
-          document.cookie = `lastActivity=; Max-Age=0; path=/; SameSite=Lax`;
-        } catch (err) {
-          console.warn('Failed to clear stale activity data:', err);
-        }
-      }
-      router.push("/dashboard");
-      router.refresh();
+      window.location.href = '/dashboard';
       return response;
     }
 
