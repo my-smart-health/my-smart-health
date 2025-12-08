@@ -90,6 +90,7 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
           <h2 className="font-bold text-primary text-xl break-words">{name}</h2>
           <GoBack />
         </div>
+        {fieldOfExpertise && <Divider />}
         <div className="w-full flex justify-center sm:justify-start">
           <FieldOfExpertiseSection fieldOfExpertise={fieldOfExpertise} />
         </div>

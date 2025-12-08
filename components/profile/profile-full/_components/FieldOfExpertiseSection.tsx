@@ -103,7 +103,7 @@ export default function FieldOfExpertiseSection({ fieldOfExpertise }: FieldOfExp
   if (!fieldOfExpertise?.length) return null;
 
   return (
-    <section className="flex flex-col items-center gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-start">
+    <section className="flex flex-col items-center gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:justify-start">
       {fieldOfExpertise.map((expertise) => (
         <TooltipItem key={expertise.id} expertise={expertise} />
       ))}
