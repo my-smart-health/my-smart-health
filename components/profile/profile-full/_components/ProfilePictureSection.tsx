@@ -1,6 +1,5 @@
 "use client";
 
-import Divider from "@/components/divider/Divider";
 import ProfilePictureCarousel from "@/components/carousels/profile-picture-carousel/ProfilePictureCarousel";
 
 type Props = {

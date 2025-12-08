@@ -1,14 +1,12 @@
 'use client'
 
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import StatusModal from "../modals/status-modal/StatusModal";
 import { ErrorState } from "@/utils/types";
 import Link from "next/link";
 
 export default function LoginForm() {
-  const router = useRouter();
   const [error, setError] = useState<ErrorState>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
