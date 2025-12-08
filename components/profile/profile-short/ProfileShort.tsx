@@ -19,7 +19,7 @@ export default function ProfileShort({ id, name, bio, image, membership }: Profi
 
   return (
     <div className="card bg-primary/10 border border-primary/40 shadow-sm hover:shadow-md transition-shadow">
-      <figure className="w-full h-52 bg-gray-100 flex-shrink-0">
+      <figure className="w-full h-52 bg-gray-100 flex-shrink-0 mt-3">
         {hasImage ? (
           <Image
             src={image as string}
