@@ -78,7 +78,7 @@ export default function YoutubeEmbed({
         ></div>
       }
     >
-      <div className="w-full flex justify-center my-4">
+      <div className="w-full h-full flex justify-center">
         <iframe
           src={embedUrl}
           width={width}
@@ -88,7 +88,7 @@ export default function YoutubeEmbed({
           allowFullScreen
           frameBorder="0"
           loading="lazy"
-          className="rounded-lg aspect-video object-cover bg-white"
+          className="rounded-lg aspect-video object-cover bg-black"
           style={{ border: "none" }}
         ></iframe>
       </div>

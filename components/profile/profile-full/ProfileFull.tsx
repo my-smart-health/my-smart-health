@@ -90,11 +90,13 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
           <h2 className="font-bold text-primary text-xl break-words">{name}</h2>
           <GoBack />
         </div>
-        {fieldOfExpertise && <Divider />}
+        {fieldOfExpertise && <Divider addClass="my-1" />}
         <div className="w-full flex justify-center sm:justify-start">
           <FieldOfExpertiseSection fieldOfExpertise={fieldOfExpertise} />
         </div>
       </section>
+      {fieldOfExpertise && fieldOfExpertise.length > 0 && <Divider addClass="my-1" />}
+
 
       <ProfilePictureSection images={profileImages} />
 

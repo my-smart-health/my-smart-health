@@ -68,7 +68,7 @@ export default function InstagramEmbed({
         ></div>
       }
     >
-      <div className="w-full flex justify-center my-4">
+      <div className="w-full h-full flex justify-center">
         <iframe
           src={embedUrl}
           width={width}

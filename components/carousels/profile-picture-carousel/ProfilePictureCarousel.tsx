@@ -15,27 +15,38 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
   const [zoomedIdx, setZoomedIdx] = useState<number | null>(null);
 
   if (!imageSrcArray || imageSrcArray.length === 0) {
-    return <div className="skeleton animate-pulse h-[350px] w-[350px] bg-gray-200 rounded-lg"></div>;
+    return <div className="skeleton animate-pulse h-[220px] sm:h-[280px] w-full max-w-[350px] rounded-lg"></div>;
   }
 
+  const isSingleItem = imageSrcArray.length === 1;
+  const slideHeight = 'h-[220px] sm:h-[280px]';
+
   return (
-    <Suspense fallback={<div className="skeleton animate-pulse h-[350px] w-[350px] bg-gray-200 rounded-lg"></div>}>
+    <Suspense fallback={<div className="skeleton animate-pulse h-[220px] sm:h-[280px] w-full max-w-[350px] rounded-lg"></div>}>
       <Swiper
-        modules={[Scrollbar, Navigation, Pagination, Mousewheel, Autoplay, EffectCards]}
-        spaceBetween={1}
+        modules={isSingleItem ? [] : [Scrollbar, Navigation, Pagination, Mousewheel, Autoplay, EffectCards]}
+        spaceBetween={10}
         lazyPreloadPrevNext={1}
         slidesPerView={1}
-        effect="cards"
-        cardsEffect={{
+        effect={isSingleItem ? undefined : "cards"}
+        cardsEffect={isSingleItem ? undefined : {
           slideShadows: false,
+          perSlideOffset: 8,
+          perSlideRotate: 2,
         }}
-        grabCursor={true}
-        mousewheel={true}
-        navigation={true}
-        pagination={{ clickable: true, enabled: true, dynamicBullets: true, dynamicMainBullets: PAGINATION_BULLET_QUANTITY }}
-        autoplay={{ delay: 3000, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true }}
-        speed={300}
-        className="max-w-full mx-auto"
+        grabCursor={!isSingleItem}
+        mousewheel={!isSingleItem}
+        navigation={!isSingleItem}
+        pagination={isSingleItem ? false : {
+          clickable: true,
+          enabled: true,
+          dynamicBullets: true,
+          dynamicMainBullets: PAGINATION_BULLET_QUANTITY,
+        }}
+        autoplay={isSingleItem ? false : { delay: 4000, disableOnInteraction: true, pauseOnMouseEnter: true, waitForTransition: true }}
+        speed={400}
+        className={`max-w-full mx-auto ${isSingleItem ? '' : '!pb-8'}`}
+        style={{ width: '100%', maxWidth: isSingleItem ? '350px' : '450px' }}
       >
         {imageSrcArray && imageSrcArray.map((image, idx) => {
 
@@ -51,53 +62,48 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
           }
           if (isValidYoutubeUrl(image)) {
             return (
-              <SwiperSlide key={idx}>
-                <div className={`flex flex-col justify-center items-center aspect-video rounded-box cursor-pointer max-w-full md:max-w-full`}>
-                  <YoutubeEmbed embedHtml={image} width={"100%"} height={"100%"} />
+              <SwiperSlide key={idx} className={slideHeight}>
+                <div className={`w-full ${slideHeight} rounded-lg overflow-hidden bg-black`}>
+                  <YoutubeEmbed embedHtml={image} width="100%" height="100%" />
                 </div>
-                <br />
               </SwiperSlide>
             )
           }
           if (isValidInstagramUrl(image)) {
             return (
-              <SwiperSlide key={idx}>
-                <div className={`flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full md:max-w-full`}>
-                  <InstagramEmbed embedHtml={image} width={"100%"} height={"280px"} />
+              <SwiperSlide key={idx} className={slideHeight}>
+                <div className={`w-full ${slideHeight} rounded-lg overflow-hidden`}>
+                  <InstagramEmbed embedHtml={image} width="100%" height="100%" />
                 </div>
-                <br />
               </SwiperSlide>
             )
           } else if (isValidImageUrl(image)) {
             return (
-              <SwiperSlide key={idx} className="my-4">
-                <div className="relative rounded-box cursor-zoom-in">
+              <SwiperSlide key={idx} className={slideHeight}>
+                <div className={`flex justify-center items-center w-full ${slideHeight} rounded-lg`}>
                   <Image
                     placeholder="empty"
                     width={350}
-                    height={350}
+                    height={280}
                     src={image}
                     alt={image}
-                    style={{ objectFit: "contain", width: "420px", height: "300px" }}
-                    className="aspect-square rounded-lg"
+                    className="w-auto h-full max-h-[220px] sm:max-h-[280px] object-contain rounded-lg cursor-zoom-in"
                     onClick={e => {
                       e.preventDefault();
                       setZoomedIdx(idx);
                     }}
                   />
                 </div>
-                <br />
               </SwiperSlide>
             );
           }
           return (
-            <SwiperSlide key={idx}>
-              <div className="flex flex-col justify-center items-center rounded-box cursor-pointer max-w-full">
-                <div className="skeleton animate-pulse h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-                  <span className="text-gray-500">Invalid image URL</span>
+            <SwiperSlide key={idx} className={slideHeight}>
+              <div className={`flex justify-center items-center w-full ${slideHeight}`}>
+                <div className="skeleton animate-pulse h-40 sm:h-64 w-40 sm:w-64 bg-gray-200 rounded-lg flex items-center justify-center">
+                  <span className="text-gray-500 text-sm">Invalid URL</span>
                 </div>
               </div>
-              <br />
             </SwiperSlide>
           );
         })}
