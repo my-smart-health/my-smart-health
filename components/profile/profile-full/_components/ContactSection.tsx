@@ -3,7 +3,6 @@ import React from "react";
 import { MapPin } from "lucide-react";
 import { Location } from "@/utils/types";
 
-import Divider from "@/components/divider/Divider";
 import { ReservationLink, Schedule } from "@/utils/types";
 import ScheduleSection from "./ScheduleSection";
 import PrescriptionReservation from "./PrescriptionReservation";
@@ -19,10 +18,6 @@ export default function ContactSection({
 
   return (
     <>
-      {(locations.length > 0 || !platformIcons) && (
-        <Divider addClass="mt-1" />
-      )}
-
       <section className="flex flex-col gap-3 w-full overflow-hidden">
 
         {locations.length > 0 &&
@@ -56,7 +51,7 @@ export default function ContactSection({
 
                 {phone.length > 0 && (
                   <>
-                    <Divider addClass="my-0" />
+
                     <div className="flex flex-wrap gap-2 p-3">
                       {phone.map((phoneNum, idx) => (
                         <Link
@@ -71,7 +66,7 @@ export default function ContactSection({
                 )}
 
                 {schedule && schedule.length > 0 && (
-                  <div >
+                  <div>
                     <ScheduleSection schedule={schedule} />
                   </div>
                 )}

@@ -1,18 +1,16 @@
 import { ProfileNewsCarouselItem } from "@/utils/types";
 
-import Divider from "@/components/divider/Divider";
 import ProfileNewsCarousel from "@/components/carousels/profile-news/ProfileNewsCarousel";
 
 export default function NewsSection({ posts }: { posts: ProfileNewsCarouselItem[] }) {
   if (!posts?.length) return null;
 
   return (
-    <>
-      <Divider addClass="my-1" />
-      <h2 className="font-bold text-primary text-xl">News</h2>
-      <section className="w-full h-fit border border-primary rounded-lg p-2 shadow-sm">
+    <section className="w-full">
+      <h2 className="font-bold text-primary text-xl mb-2">News</h2>
+      <div className="w-full h-fit border border-primary rounded-lg p-2 shadow-sm">
         <ProfileNewsCarousel carouselItems={posts} />
-      </section>
-    </>
+      </div>
+    </section>
   );
 }

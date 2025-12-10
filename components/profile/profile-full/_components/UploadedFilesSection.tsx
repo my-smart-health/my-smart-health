@@ -1,12 +1,9 @@
 import Link from 'next/link';
 import { FileText } from 'lucide-react';
 
-import Divider from '@/components/divider/Divider';
-
 type UploadedFilesSectionProps = {
   profileFiles: string[];
   heading?: string | null;
-  hideDivider?: boolean;
   showUrl?: boolean;
   className?: string;
 };
@@ -26,7 +23,6 @@ const getFileNameFromUrl = (fileUrl: string) => {
 export default function UploadedFilesSection({
   profileFiles,
   heading = 'Documents & Files',
-  hideDivider = false,
   showUrl = false,
   className = '',
 }: UploadedFilesSectionProps) {
@@ -48,7 +44,6 @@ export default function UploadedFilesSection({
 
   return (
     <section className={sectionClassName}>
-      {!hideDivider && <Divider addClass="my-1" />}
       {heading && (
         <h3 className="text-lg font-semibold text-primary mb-3">{heading}</h3>
       )}
