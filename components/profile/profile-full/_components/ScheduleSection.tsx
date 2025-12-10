@@ -76,10 +76,11 @@ function timeLeftCalc(schedules: Schedule[], now: Date) {
 }
 
 export default function ScheduleSection({ schedule, displayIsOpen = true }: { schedule: Schedule[]; displayIsOpen?: boolean }) {
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [currentTime, setCurrentTime] = useState<Date | null>(null);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setCurrentTime(new Date());
     setIsMounted(true);
     const timer = setInterval(() => setCurrentTime(new Date()), 1000 * 30);
     return () => clearInterval(timer);
@@ -88,19 +89,20 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
   if (!schedule || schedule.length === 0) return null;
 
   const orderedDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-  const currentDayIndex = currentTime.getDay();
+
+  const now = currentTime || new Date(0);
+  const currentDayIndex = isMounted ? now.getDay() : 0;
   const currentDayEn = enWeek[currentDayIndex];
 
-  const anyBlockOpen = schedule.some(sch => {
+  const anyBlockOpen = isMounted ? schedule.some(sch => {
     const is247 = sch.open === "00:00" && sch.close === "00:00";
-    return is247 || isScheduleOpen(sch, currentTime);
-  });
+    return is247 || isScheduleOpen(sch, now);
+  }) : false;
 
-  const timeLeft = isMounted && anyBlockOpen ? timeLeftCalc(schedule, currentTime) : null;
+  const timeLeft = isMounted && anyBlockOpen ? timeLeftCalc(schedule, now) : null;
 
   return (
     <>
-      <Divider addClass="my-1" />
       <div className="p-3">
         <h2 className="font-bold text-primary text-lg mb-3">
           Öffnungszeiten
