@@ -224,7 +224,7 @@ export function UploadFilesSection({
                     aria-label="Delete file"
                     disabled={isDisabled || deleting === fileUrl}
                     onClick={() => handleDeleteFile(fileUrl)}
-                    className="btn btn-circle btn-outline btn-error btn-sm sm:btn-md shrink-0 self-center"
+                    className="btn btn-circle btn-outline btn-error btn-sm sm:btn-md shrink-0 self-center hover:text-white"
                   >
                     <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
                   </button>
