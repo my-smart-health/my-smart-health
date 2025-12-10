@@ -14,6 +14,7 @@ import SessionProvider from "@/components/session/SessionProvider";
 import { auth } from "@/auth";
 import TimeoutModal from "@/components/modals/timeout/TimeoutModal";
 import SplashScreen from "@/components/common/SplashScreen";
+import { UploadProgressProvider, UploadProgressModal } from "@/components/modals/upload-progress";
 
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -69,21 +70,24 @@ export default async function RootLayout({
         className={`${ibmPlexSans.variable} antialiased flex flex-col justify-center items-center pt-2 min-h-[100dvh] w-auto lg:max-w-3xl mx-auto p-2 overscroll-x-none border bg-white text-black`}
       >
         <SplashScreen />
-        <SessionProvider session={session}>
-          <SessionChecker />
-          <TimeoutModal />
-          <Navbar />
-          <CookieConsentModal />
+        <UploadProgressProvider>
+          <SessionProvider session={session}>
+            <SessionChecker />
+            <TimeoutModal />
+            <UploadProgressModal />
+            <Navbar />
+            <CookieConsentModal />
 
-          <Divider addClass="my-1" />
+            <Divider addClass="my-1" />
 
-          <main className="flex flex-col gap-2 items-center min-h-[72dvh] py-8 pt-2 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
-            {children}
-            <BackToTop />
-          </main>
-          <AnalyticsConsent />
-          <Footer />
-        </SessionProvider>
+            <main className="flex flex-col gap-2 items-center min-h-[72dvh] py-8 pt-2 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
+              {children}
+              <BackToTop />
+            </main>
+            <AnalyticsConsent />
+            <Footer />
+          </SessionProvider>
+        </UploadProgressProvider>
       </body>
     </html>
   );

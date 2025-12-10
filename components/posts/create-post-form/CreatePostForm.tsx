@@ -16,6 +16,7 @@ import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
 import { buildCreatePostPayload } from "@/components/posts/postFormSanitizers";
+import { useUploadProgress } from "@/components/modals/upload-progress";
 
 import logo from '@/public/og-logo-blue.jpg';
 import { ArrowUpRight, XIcon, AtSign, Facebook, Globe, Instagram, Linkedin, Youtube } from "lucide-react";
@@ -46,6 +47,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
     redirect('/login');
   }
   const router = useRouter();
+  const { startUpload, updateProgress, finishUpload } = useUploadProgress();
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<ErrorState>(null);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
@@ -254,9 +256,22 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
     setIsDisabled(true);
     setUploadingImages(true);
     setError(null);
-    const uploadedImages = await Promise.all(
-      Array.from(e.target.files ?? []).map(file => handleImageUpload(file))
-    );
+
+    const files = Array.from(e.target.files ?? []);
+    if (files.length > 0) {
+      startUpload(files.length);
+    }
+
+    const uploadedImages: (string | undefined)[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      updateProgress(i, file.name);
+      const url = await handleImageUpload(file);
+      uploadedImages.push(url);
+      updateProgress(i + 1, file.name);
+    }
+    finishUpload();
+
     setBlobResult(prev => [
       ...prev,
       ...uploadedImages.filter((url): url is string => typeof url === 'string'),

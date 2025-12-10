@@ -15,6 +15,7 @@ import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, SaveAll, Youtube }
 
 import Divider from "@/components/divider/Divider";
 import { MAX_IMAGE_SIZE_MB, MAX_IMAGE_SIZE_BYTES } from "@/utils/constants";
+import { useUploadProgress } from "@/components/modals/upload-progress";
 import {
   NameSection,
   BioSection,
@@ -62,6 +63,7 @@ export default function EditProfileForm({ user }: { user: User }) {
   const redirect = useRouter();
 
   const session = useSession();
+  const { startUpload, updateProgress, finishUpload } = useUploadProgress();
 
   const bioRef = useRef<HTMLTextAreaElement>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
@@ -264,7 +266,13 @@ export default function EditProfileForm({ user }: { user: User }) {
         }
       }
 
-      for (const file of files) {
+      const filesArray = Array.from(files);
+      startUpload(filesArray.length);
+
+      for (let i = 0; i < filesArray.length; i++) {
+        const file = filesArray[i];
+        updateProgress(i, file.name);
+
         const response = await fetch(
           `/api/upload/upload-profile-picture/?userid=${user.id}&filename=${file.name}`,
           {
@@ -274,19 +282,22 @@ export default function EditProfileForm({ user }: { user: User }) {
         );
 
         if (!response.ok) {
+          finishUpload();
           setError('Failed to upload image');
           throw new Error('Failed to upload image');
         }
 
         const result = await response.json() as PutBlobResult;
-
         uploadedUrls.push(result.url);
+        updateProgress(i + 1, file.name);
       }
 
+      finishUpload();
       setError(null);
       setIsDisabled(false);
       return uploadedUrls;
     } catch (error) {
+      finishUpload();
       window.scrollTo({ top: 0, behavior: "smooth" });
       let message = 'Error uploading files';
       if (error instanceof Error) {
@@ -321,7 +332,12 @@ export default function EditProfileForm({ user }: { user: User }) {
         }
       }
 
-      for (const cert of certificateFiles) {
+      startUpload(certificateFiles.length);
+
+      for (let i = 0; i < certificateFiles.length; i++) {
+        const cert = certificateFiles[i];
+        updateProgress(i, cert.name);
+
         const response = await fetch(
           `/api/upload/upload-certificate-images/?userid=${user.id}&filename=${cert.name}`,
           {
@@ -331,18 +347,22 @@ export default function EditProfileForm({ user }: { user: User }) {
         );
 
         if (!response.ok) {
+          finishUpload();
           setError('Failed to upload certificate');
           throw new Error('Failed to upload certificate');
         }
 
         const result = await response.json() as PutBlobResult;
         uploadedUrls.push(result.url);
+        updateProgress(i + 1, cert.name);
       }
 
+      finishUpload();
       setError(null);
       setIsDisabled(false);
       return uploadedUrls;
     } catch (error) {
+      finishUpload();
       window.scrollTo({ top: 0, behavior: "smooth" });
       let message = 'Error uploading files';
       if (error instanceof Error) {

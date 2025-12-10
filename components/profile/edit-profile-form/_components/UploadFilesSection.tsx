@@ -4,6 +4,7 @@ import { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 import { PutBlobResult } from '@vercel/blob';
 
 import Spinner from '@/components/common/Spinner';
+import { useUploadProgress } from '@/components/modals/upload-progress';
 import {
   MAX_PROFILE_FILE_SIZE_BYTES,
   MAX_PROFILE_FILE_SIZE_MB,
@@ -34,6 +35,7 @@ export function UploadFilesSection({
 }: UploadFilesSectionProps) {
   const [uploading, setUploading] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const { startUpload, updateProgress, finishUpload } = useUploadProgress();
 
   const getFileNameFromUrl = (fileUrl: string) => {
     try {
@@ -89,8 +91,13 @@ export function UploadFilesSection({
       setIsDisabled(true);
 
       const uploadedUrls: string[] = [];
+      const filesArray = Array.from(files);
+      startUpload(filesArray.length);
 
-      for (const file of Array.from(files)) {
+      for (let i = 0; i < filesArray.length; i++) {
+        const file = filesArray[i];
+        updateProgress(i, file.name);
+
         const response = await fetch(
           `/api/upload/upload-profile-file?userid=${encodeURIComponent(
             userId
@@ -109,6 +116,7 @@ export function UploadFilesSection({
         }
 
         if (!response.ok) {
+          finishUpload();
           const errorMessage =
             payload &&
               typeof payload === 'object' &&
@@ -121,13 +129,16 @@ export function UploadFilesSection({
 
         const blob = payload as PutBlobResult;
         uploadedUrls.push(blob.url);
+        updateProgress(i + 1, file.name);
       }
 
+      finishUpload();
       if (uploadedUrls.length > 0) {
         await onFilesUploaded(uploadedUrls);
       }
       setError(null);
     } catch (error) {
+      finishUpload();
       window.scrollTo({ top: 0, behavior: 'smooth' });
       const message =
         error instanceof Error

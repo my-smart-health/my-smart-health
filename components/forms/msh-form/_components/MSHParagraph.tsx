@@ -18,6 +18,7 @@ import { MAX_IMAGE_SIZE_MB, MAX_IMAGE_SIZE_BYTES } from "@/utils/constants";
 import { isYoutubeLink, isInstagramLink } from "@/utils/common";
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
+import { useUploadProgress } from "@/components/modals/upload-progress";
 
 export default function MSHParagraph({
   paragraphs,
@@ -36,6 +37,7 @@ export default function MSHParagraph({
   const [uploadingImages, setUploadingImages] = useState<Record<number, boolean>>({});
   const [uploadingFiles, setUploadingFiles] = useState<Record<number, boolean>>({});
   const [deletingFiles, setDeletingFiles] = useState<Record<string, boolean>>({});
+  const { startUpload, updateProgress, finishUpload } = useUploadProgress();
 
   const platformIcons: Record<string, ReactNode> = {
     Email: <AtSign className="inline-block mr-1" size={30} />,
@@ -166,7 +168,13 @@ export default function MSHParagraph({
     try {
       setUploadingImages(prev => ({ ...prev, [index]: true }));
       const uploadedUrls: string[] = [];
-      for (const file of Array.from(files)) {
+      const filesArray = Array.from(files);
+      startUpload(filesArray.length);
+
+      for (let i = 0; i < filesArray.length; i++) {
+        const file = filesArray[i];
+        updateProgress(i, file.name);
+
         const response = await fetch(
           `/api/upload/upload-msh-picture/?filename=${file.name}`,
           {
@@ -174,10 +182,16 @@ export default function MSHParagraph({
             body: file,
           }
         );
-        if (!response.ok) throw new Error("Failed to upload image");
+        if (!response.ok) {
+          finishUpload();
+          throw new Error("Failed to upload image");
+        }
         const result = (await response.json()) as PutBlobResult;
         uploadedUrls.push(result.url);
+        updateProgress(i + 1, file.name);
       }
+      finishUpload();
+
       const updatedParagraphs = paragraphs.map((paragraph, i) =>
         i === index
           ? { ...paragraph, images: [...(paragraph.images ?? []), ...uploadedUrls] }
@@ -190,6 +204,7 @@ export default function MSHParagraph({
         await onAfterChange(updatedParagraphs);
       }
     } catch (error) {
+      finishUpload();
       setErrorAction({ message: `Error uploading images. ${error}`, type: "error" });
     } finally {
       setUploadingImages(prev => ({ ...prev, [index]: false }));
@@ -212,7 +227,13 @@ export default function MSHParagraph({
     try {
       setUploadingFiles(prev => ({ ...prev, [index]: true }));
       const uploadedUrls: string[] = [];
-      for (const file of Array.from(files)) {
+      const filesArray = Array.from(files);
+      startUpload(filesArray.length);
+
+      for (let i = 0; i < filesArray.length; i++) {
+        const file = filesArray[i];
+        updateProgress(i, file.name);
+
         const response = await fetch(
           `/api/upload/upload-msh-file/?filename=${encodeURIComponent(file.name)}`,
           {
@@ -220,10 +241,16 @@ export default function MSHParagraph({
             body: file,
           }
         );
-        if (!response.ok) throw new Error("Failed to upload file");
+        if (!response.ok) {
+          finishUpload();
+          throw new Error("Failed to upload file");
+        }
         const result = (await response.json()) as { url: string };
         uploadedUrls.push(result.url);
+        updateProgress(i + 1, file.name);
       }
+      finishUpload();
+
       const updatedParagraphs = paragraphs.map((paragraph, i) =>
         i === index
           ? { ...paragraph, files: [...(paragraph.files ?? []), ...uploadedUrls] }
@@ -235,6 +262,7 @@ export default function MSHParagraph({
         await onAfterChange(updatedParagraphs);
       }
     } catch (error) {
+      finishUpload();
       setErrorAction({ message: `Error uploading files. ${error}`, type: "error" });
     } finally {
       setUploadingFiles(prev => ({ ...prev, [index]: false }));
