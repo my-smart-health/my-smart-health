@@ -4,6 +4,7 @@ import { Trash2, UserSearch } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useDeletionProgress } from "@/components/modals/deletion-progress";
 
 type User = {
   id: string;
@@ -21,6 +22,7 @@ export default function UserTable({ users }: { users: User[] }) {
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortAsc, setSortAsc] = useState(true);
   const [allUsers, setAllUsers] = useState(users);
+  const { startDeletion, updateMessage, finishDeletion } = useDeletionProgress();
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -51,18 +53,30 @@ export default function UserTable({ users }: { users: User[] }) {
   const sortArrow = (key: SortKey) =>
     sortKey === key ? (sortAsc ? "▲" : "▼") : "";
 
-  const handleDeleteUser = async (id: string) => {
+  const handleDeleteUser = async (id: string, userName: string) => {
     if (!confirm("Are you sure you want to delete this user?")) return;
+
+    startDeletion(userName || 'Unbekannter Benutzer');
+
     try {
+      updateMessage('Benutzerdaten werden gelöscht...');
       const res = await fetch(`/api/delete/delete-user?id=${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Failed to delete user");
+
+      updateMessage('Benutzer erfolgreich gelöscht!');
       setAllUsers(allUsers.filter(user => user.id !== id));
+
+      await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
       if (process.env.NODE_ENV === "development") {
         console.error("Error deleting user:", error);
       }
+      updateMessage('Fehler beim Löschen des Benutzers');
+      await new Promise(resolve => setTimeout(resolve, 1500));
+    } finally {
+      finishDeletion();
     }
   };
 
@@ -163,7 +177,7 @@ export default function UserTable({ users }: { users: User[] }) {
                 </td>
                 <td>
                   <button
-                    onClick={() => handleDeleteUser(user.id)}
+                    onClick={() => handleDeleteUser(user.id, user.name || user.email)}
                     className="font-semibold text-red-500 hover:underline flex flex-col justify-center items-center gap-1"
                   >
                     <Trash2 className="inline-block mb-1" /> Delete User

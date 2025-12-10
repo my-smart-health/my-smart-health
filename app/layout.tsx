@@ -15,6 +15,7 @@ import { auth } from "@/auth";
 import TimeoutModal from "@/components/modals/timeout/TimeoutModal";
 import SplashScreen from "@/components/common/SplashScreen";
 import { UploadProgressProvider, UploadProgressModal } from "@/components/modals/upload-progress";
+import { DeletionProgressProvider, DeletionProgressModal } from "@/components/modals/deletion-progress";
 
 
 const ibmPlexSans = IBM_Plex_Sans({
@@ -71,22 +72,25 @@ export default async function RootLayout({
       >
         <SplashScreen />
         <UploadProgressProvider>
-          <SessionProvider session={session}>
-            <SessionChecker />
-            <TimeoutModal />
-            <UploadProgressModal />
-            <Navbar />
-            <CookieConsentModal />
+          <DeletionProgressProvider>
+            <SessionProvider session={session}>
+              <SessionChecker />
+              <TimeoutModal />
+              <UploadProgressModal />
+              <DeletionProgressModal />
+              <Navbar />
+              <CookieConsentModal />
 
-            <Divider addClass="my-1" />
+              <Divider addClass="my-1" />
 
-            <main className="flex flex-col gap-2 items-center min-h-[72dvh] py-8 pt-2 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
-              {children}
-              <BackToTop />
-            </main>
-            <AnalyticsConsent />
-            <Footer />
-          </SessionProvider>
+              <main className="flex flex-col gap-2 items-center min-h-[72dvh] py-8 pt-2 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
+                {children}
+                <BackToTop />
+              </main>
+              <AnalyticsConsent />
+              <Footer />
+            </SessionProvider>
+          </DeletionProgressProvider>
         </UploadProgressProvider>
       </body>
     </html>
