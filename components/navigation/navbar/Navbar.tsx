@@ -40,7 +40,7 @@ export default async function Navbar() {
               priority
               loading="eager"
               draggable={false}
-              src="/navbar1.png"
+              src="/navbar3.png"
               alt="My Smart Health"
               width={256}
               height={112}
