@@ -6,8 +6,8 @@ import { auth } from "@/auth";
 import CategoryIndex from "@/components/pages/CategoryIndex";
 import { PROFILE_TYPE_THE_HEALTH_BAR, CACHE_STRATEGY } from "@/utils/constants";
 
-async function getTheHealthBarProfile(isAdmin: boolean) {
-  const cacheStrategy = isAdmin ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.MEDIUM_LONG;
+async function getTheHealthBarProfile(isLogged: boolean) {
+  const cacheStrategy = isLogged ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.MEDIUM_LONG;
 
   const theHealthBar = await prisma.user.findUnique({
     where: { email: 'health@future-health.de' },
@@ -21,8 +21,8 @@ async function getTheHealthBarProfile(isAdmin: boolean) {
   return normalizeUser(theHealthBar);
 }
 
-async function getTheHealthBarPosts(isAdmin: boolean) {
-  const cacheStrategy = isAdmin ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.MEDIUM;
+async function getTheHealthBarPosts(isLogged: boolean) {
+  const cacheStrategy = isLogged ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.MEDIUM;
 
   const posts = await prisma.posts.findMany({
     where: { author: { email: 'health@future-health.de' } },
@@ -34,10 +34,10 @@ async function getTheHealthBarPosts(isAdmin: boolean) {
 
 export default async function TheHealthBarPage() {
   const session = await auth();
-  const isAdmin = session?.user?.role === 'ADMIN';
+  const isLogged = !!session?.user;
 
-  const theHealthBar = await getTheHealthBarProfile(isAdmin);
-  const posts = await getTheHealthBarPosts(isAdmin);
+  const theHealthBar = await getTheHealthBarProfile(isLogged);
+  const posts = await getTheHealthBarPosts(isLogged);
   return (
     <>
       {session?.user.role === "ADMIN" && (

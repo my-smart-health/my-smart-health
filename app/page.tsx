@@ -13,9 +13,9 @@ import NewsCarouselSkeleton from "@/components/carousels/newsCarousel/NewsCarous
 import { withRetry } from "@/lib/prisma-retry";
 import { auth } from "@/auth";
 
-async function getHomePageData(isAdmin: boolean) {
-  const cacheStrategy = isAdmin ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.SHORT;
-  const cubeCacheStrategy = isAdmin ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.MEDIUM;
+async function getHomePageData(isLogged: boolean) {
+  const cacheStrategy = isLogged ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.SHORT;
+  const cubeCacheStrategy = isLogged ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.MEDIUM;
 
   try {
     const [news, cube] = await Promise.all([
@@ -72,8 +72,8 @@ async function getHomePageData(isAdmin: boolean) {
 
 export default async function Home() {
   const session = await auth();
-  const isAdmin = session?.user?.role === 'ADMIN';
-  const { news, cube, cubePosts } = await getHomePageData(isAdmin);
+  const isLogged = !!session?.user;
+  const { news, cube, cubePosts } = await getHomePageData(isLogged);
 
 
   const newsTopCarousel = news.length > 0

@@ -7,8 +7,8 @@ import { CACHE_STRATEGY } from "@/utils/constants";
 import { NewsCardType, Social } from "@/utils/types";
 import NewsList from "@/components/posts/news-list/NewsList";
 
-async function getData(id: string, isAdmin: boolean): Promise<NewsCardType | null> {
-  const cacheStrategy = isAdmin ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.MEDIUM;
+async function getData(id: string, isLogged: boolean): Promise<NewsCardType | null> {
+  const cacheStrategy = isLogged ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.MEDIUM;
 
   const post = await withRetry(() => prisma.posts.findUnique({
     where: { id },
@@ -45,9 +45,9 @@ async function getData(id: string, isAdmin: boolean): Promise<NewsCardType | nul
 
 export default async function NewsDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth();
-  const isAdmin = session?.user?.role === 'ADMIN';
+  const isLogged = !!session?.user;
   const { id } = await params;
-  const post = await getData(id, isAdmin);
+  const post = await getData(id, isLogged);
 
   if (!post) {
     notFound();

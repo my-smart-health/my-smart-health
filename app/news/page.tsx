@@ -6,8 +6,8 @@ import { CACHE_STRATEGY } from "@/utils/constants";
 import { NewsCardType, Social } from "@/utils/types";
 import NewsList from "@/components/posts/news-list/NewsList";
 
-async function getData(isAdmin: boolean) {
-  const cacheStrategy = isAdmin ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.SHORT;
+async function getData(isLogged: boolean) {
+  const cacheStrategy = isLogged ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.SHORT;
 
   const posts = await withRetry(() => prisma.posts.findMany({
     take: 20,
@@ -45,8 +45,8 @@ async function getData(isAdmin: boolean) {
 
 export default async function NewsPage() {
   const session = await auth();
-  const isAdmin = session?.user?.role === 'ADMIN';
-  const posts = await getData(isAdmin) as NewsCardType[];
+  const isLogged = !!session?.user;
+  const posts = await getData(isLogged) as NewsCardType[];
 
   return <NewsList posts={posts} session={session} />;
 }
