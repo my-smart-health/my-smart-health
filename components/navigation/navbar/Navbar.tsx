@@ -40,11 +40,11 @@ export default async function Navbar() {
               priority
               loading="eager"
               draggable={false}
-              src="/navbar3.png"
+              src="/navbar_v4.png"
               alt="My Smart Health"
-              width={256}
+              width={356}
               height={112}
-              className="w-64 h-auto my-3 mx-auto"
+              className="w-auto h-auto my-3 mx-auto"
             />
             <span className="ml-2 text-xl font-bold uppercase sr-only">My Smart Health</span>
           </Link>
