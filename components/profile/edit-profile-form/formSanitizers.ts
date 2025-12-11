@@ -39,6 +39,7 @@ export type ProfileUpdatePayload = {
     reservationLinks: ReservationLink[];
   }>;
   membership: Membership | null;
+  ratingStars: number | null;
 };
 
 export type BuildSanitizedPayloadArgs = {
@@ -58,6 +59,7 @@ export type BuildSanitizedPayloadArgs = {
   profileImagesOverride?: string[];
   profileFilesOverride?: string[];
   membership?: Membership | null;
+  ratingStars?: number | null;
 };
 
 export const sanitizePhoneList = (numbers?: string[] | null): string[] => {
@@ -353,5 +355,6 @@ export const buildSanitizedPayload = (
     profileImages: sanitizedProfileImages,
     profileFiles: sanitizedProfileFiles,
     membership: sanitizedMembership,
+    ratingStars: args.ratingStars ?? null,
   };
 };

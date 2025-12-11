@@ -5,6 +5,7 @@ import Image from "next/image";
 import ParagraphContent from "@/components/common/ParagraphContent";
 import { Membership } from "@/utils/types";
 import { MembershipSection } from "../profile-full/_components";
+import RatingStars from "@/components/common/RatingStars";
 
 type ProfileShortProps = {
   id: string;
@@ -12,9 +13,10 @@ type ProfileShortProps = {
   bio: string;
   image?: string | null;
   membership?: Membership | null;
+  ratingStars?: number | null;
 };
 
-export default function ProfileShort({ id, name, bio, image, membership }: ProfileShortProps) {
+export default function ProfileShort({ id, name, bio, image, membership, ratingStars }: ProfileShortProps) {
   const hasImage = Boolean(image);
 
   return (
@@ -46,6 +48,11 @@ export default function ProfileShort({ id, name, bio, image, membership }: Profi
               <MembershipSection membership={membership} />
             </div>
           )}
+
+          {ratingStars !== null && ratingStars !== undefined && (
+            <RatingStars id={id} stars={ratingStars} />
+          )}
+
           <Link
             href={`/profile/${id}`}
             className="btn btn-primary my-auto"
@@ -54,6 +61,6 @@ export default function ProfileShort({ id, name, bio, image, membership }: Profi
           </Link>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

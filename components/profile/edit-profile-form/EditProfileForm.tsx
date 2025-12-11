@@ -33,6 +33,7 @@ import {
   LocationSection,
   UploadFilesSection,
   MembershipSection,
+  RatingStarsSection,
 } from "./_components";
 import ReservationLinksSection from "./_components/ReservationLinksSection";
 import { useSession } from "next-auth/react";
@@ -53,6 +54,7 @@ type User = {
   certificates: Certificate[] | null;
   locations: Location[];
   membership: Membership | null;
+  ratingStars: number | null;
 };
 
 export default function EditProfileForm({ user }: { user: User }) {
@@ -76,6 +78,7 @@ export default function EditProfileForm({ user }: { user: User }) {
   const [phones, setPhones] = useState(user.phones || []);
   const [website, setWebsite] = useState(user.website || "");
   const [membership, setMembership] = useState<Membership>(user.membership ?? { status: false, link: "" });
+  const [ratingStars, setRatingStars] = useState<number | null>(user.ratingStars);
   const [schedule, setSchedule] = useState<Schedule[]>(user.schedule || []);
   const [displayEmail, setDisplayEmail] = useState(user.displayEmail || "");
   const [locations, setLocations] = useState<Location[]>(user.locations || []);
@@ -106,6 +109,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         locations,
         profileImagesOverride: updatedImages,
         membership,
+        ratingStars,
       });
 
       const response = await fetch('/api/update/update-profile', {
@@ -149,6 +153,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         locations,
         profileFilesOverride: updatedFiles,
         membership,
+        ratingStars,
       });
 
       const response = await fetch('/api/update/update-profile', {
@@ -449,6 +454,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         reservationLinks,
         locations,
         membership,
+        ratingStars,
       });
 
       const res = await fetch('/api/update/update-profile', {
@@ -681,6 +687,13 @@ export default function EditProfileForm({ user }: { user: User }) {
               <div className="tab-content border-primary p-3 md:p-10">
 
                 <MembershipSection membership={membership} setMembership={setMembership} />
+
+              </div>
+
+              <input type="radio" name="my_tabs_2" className="tab" aria-label="Rating Stars" />
+              <div className="tab-content border-primary p-3 md:p-10">
+
+                <RatingStarsSection ratingStars={ratingStars} setRatingStars={setRatingStars} />
 
               </div>
             </>

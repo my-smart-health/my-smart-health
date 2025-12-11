@@ -149,6 +149,7 @@ export type UserProfileSH = {
   profileImages: string[];
   category: string[];
   membership?: Membership | null;
+  ratingStars?: number | null;
 };
 
 export type CategoryNodeSH = {

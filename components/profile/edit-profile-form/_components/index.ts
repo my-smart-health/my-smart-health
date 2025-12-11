@@ -15,3 +15,4 @@ export { WorkScheduleSection } from './WorkScheduleSection';
 export { LocationSection } from './LocationSection';
 export { UploadFilesSection } from './UploadFilesSection';
 export { MembershipSection } from './MembershipSection';
+export { RatingStarsSection } from './RatingStarsSection';

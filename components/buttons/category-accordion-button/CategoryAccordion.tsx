@@ -239,7 +239,7 @@ export default function CategoryAccordion({
                       .slice()
                       .sort((a, b) => collator.compare((a.name || '').trim(), (b.name || '').trim()))
                       .map((user) => {
-                        const { id, name, bio, profileImages, membership } = user;
+                        const { id, name, bio, profileImages, membership, ratingStars } = user;
                         if (!bio || !name || !id) return null;
                         return (
                           <div key={id} className="relative">
@@ -249,6 +249,7 @@ export default function CategoryAccordion({
                               bio={bio}
                               image={profileImages?.[0] ?? null}
                               membership={membership ?? null}
+                              ratingStars={ratingStars ?? null}
                             />
                             {isAdmin && (
                               <div className="mt-1 ml-2">
