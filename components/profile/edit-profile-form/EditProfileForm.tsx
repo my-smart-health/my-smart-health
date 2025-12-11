@@ -70,11 +70,12 @@ export default function EditProfileForm({ user }: { user: User }) {
   const bioRef = useRef<HTMLTextAreaElement>(null);
   const inputFileRef = useRef<HTMLInputElement>(null);
   const addressRef = useRef<HTMLTextAreaElement>(null);
-  const errorModalRef = useRef<HTMLDialogElement>(null);
+  const statusModalRef = useRef<HTMLDialogElement>(null);
 
   const [bio, setBio] = useState(user.bio || "");
   const [name, setName] = useState(user.name ?? "");
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [phones, setPhones] = useState(user.phones || []);
   const [website, setWebsite] = useState(user.website || "");
   const [membership, setMembership] = useState<Membership>(user.membership ?? { status: false, link: "" });
@@ -219,10 +220,10 @@ export default function EditProfileForm({ user }: { user: User }) {
   }, [bio, locations]);
 
   useEffect(() => {
-    if (error) {
-      errorModalRef.current?.showModal();
+    if (error || success) {
+      statusModalRef.current?.showModal();
     }
-  }, [error]);
+  }, [error, success]);
 
   const toggleScheduleDay = (id: string, day: keyof Schedule['day']) => {
     setSchedule(schedule.map(schedule => schedule.id === id ? { ...schedule, day: { ...schedule.day, [day]: !schedule.day[day] } } : schedule));
@@ -464,16 +465,14 @@ export default function EditProfileForm({ user }: { user: User }) {
       });
 
       if (!res.ok) {
-        setError('Failed to update profile');
+        setError('Profil konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.');
         setIsDisabled(false);
         return;
       }
 
       setError(null);
+      setSuccess('Profil wurde erfolgreich aktualisiert!');
       setIsDisabled(false);
-
-      redirect.push(`/profile/${user.id}`);
-      redirect.refresh();
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error updating profile:', error);
@@ -481,23 +480,30 @@ export default function EditProfileForm({ user }: { user: User }) {
     }
   }
 
-  const handleErrorClose = () => {
+  const handleStatusClose = () => {
+    const wasSuccess = success !== null;
     setError(null);
-    errorModalRef.current?.close();
+    setSuccess(null);
+    statusModalRef.current?.close();
+
+    if (wasSuccess) {
+      redirect.push(`/profile/${user.id}`);
+      redirect.refresh();
+    }
   };
 
   return (
     <>
-      {error && (
+      {(error || success) && (
         <dialog
-          ref={errorModalRef}
-          id="edit_profile_error_modal"
+          ref={statusModalRef}
+          id="edit_profile_status_modal"
           className="modal modal-bottom fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 z-50 backdrop-grayscale-100 transition-all ease-linear duration-500"
           style={{ backgroundColor: 'transparent' }}
-          onClose={handleErrorClose}
+          onClose={handleStatusClose}
         >
           <div
-            className="modal-box bg-red-500 text-white rounded-2xl w-[95%]"
+            className={`modal-box ${success ? 'bg-green-500' : 'bg-red-500'} text-white rounded-2xl w-[95%]`}
             style={{
               width: "80vw",
               maxWidth: "80vw",
@@ -513,12 +519,23 @@ export default function EditProfileForm({ user }: { user: User }) {
             <form method="dialog">
               <button
                 className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 text-white"
-                onClick={handleErrorClose}
+                onClick={handleStatusClose}
                 type="button"
               >✕</button>
             </form>
-            <h3 className="font-bold text-lg">Fehler</h3>
-            <p className="py-4 text-center">{error}</p>
+            <h3 className="font-bold text-lg">{success ? 'Erfolg' : 'Fehler'}</h3>
+            <p className="py-4 text-center">{success || error}</p>
+            {success && (
+              <div className="flex justify-center">
+                <button
+                  type="button"
+                  className="btn btn-white btn-outline text-white hover:bg-white hover:text-green-600"
+                  onClick={handleStatusClose}
+                >
+                  Zum Profil
+                </button>
+              </div>
+            )}
           </div>
         </dialog>
       )}
