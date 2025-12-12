@@ -19,7 +19,7 @@ export async function POST(req: Request) {
       from:
         process.env.RESEND_FROM ||
         'My Smart Health Kontakt <onboarding@resend.dev>',
-      to: process.env.RESEND_TO || 'radoslav.marinov89@gmail.com',
+      to: process.env.RESEND_TO || 'f.jeute@spitzenmedizin.com',
       replyTo: email,
       subject: `Neue Kontaktanfrage von ${surname} ${name}`,
       react: ContactTemplate({
