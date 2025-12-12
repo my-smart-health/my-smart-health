@@ -13,6 +13,7 @@ type SearchResult = {
   bio: string;
   image: string | null;
   membership?: Membership | null;
+  ratingStars: number | null;
 };
 
 type ProfileSearchProps = {
@@ -105,7 +106,7 @@ export default function ProfileSearch({
 
       <div className="mt-6 space-y-4">
         {results.map((user) => (
-          <ProfileShort key={user.id} id={user.id} name={user.name} bio={user.bio} image={user.image} membership={user.membership} />
+          <ProfileShort key={user.id} id={user.id} name={user.name} bio={user.bio} image={user.image} membership={user.membership} ratingStars={user.ratingStars} />
         ))}
       </div>
     </section>
