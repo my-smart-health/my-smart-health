@@ -89,7 +89,17 @@ async function loadCategoryTree(profileType: ProfileType, isAdmin: boolean): Pro
     where: { categoryId: { in: Array.from(lookup.keys()) } },
     select: {
       categoryId: true,
-      user: { select: { id: true, name: true, bio: true, profileImages: true, membership: true, ratingStars: true } },
+      user: {
+        select: {
+          id: true,
+          name: true,
+          bio: true,
+          profileImages: true,
+          membership: true,
+          ratingStars: true,
+          ratingLink: true
+        }
+      },
     },
     cacheStrategy,
   });
@@ -111,6 +121,7 @@ async function loadCategoryTree(profileType: ProfileType, isAdmin: boolean): Pro
         ? user.membership as Membership
         : null,
       ratingStars: user.ratingStars ?? null,
+      ratingLink: user.ratingLink ?? null,
     });
   }
 

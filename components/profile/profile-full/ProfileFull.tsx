@@ -25,6 +25,8 @@ import TikTokLogo from '@/public/tik-tok-logo.png';
 import { Location } from "@/utils/types";
 import Divider from "@/components/divider/Divider";
 import GoBack from "@/components/buttons/go-back/GoBack";
+import RatingLinkDisplay from "@/components/common/RatingLinkDisplay";
+import RatingStars from "@/components/common/RatingStars";
 
 const platformIcons: Record<string, React.ReactNode> = {
   Email: <AtSign className="inline-block mr-1" size={30} />,
@@ -54,6 +56,8 @@ type User = {
   certificates: Certificate[];
   membership: Membership | null;
   reservationLinks?: ReservationLink[] | null;
+  ratingStars?: number | null;
+  ratingLink?: string | null;
 };
 
 export default function ProfileFull({ user, posts }: { user: User, posts: ProfileNewsCarouselItem[] }) {
@@ -76,6 +80,8 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
     phones = [],
     reservationLinks = [],
     membership,
+    ratingStars,
+    ratingLink
   } = user || {};
 
   const parsedSocials = parseSocials(socials || []);
@@ -93,6 +99,8 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
   const hasReservationOrMembership = (reservationLinks && reservationLinks.length > 0) || membership;
   const hasPhones = phones && phones.length > 0;
   const hasSocials = displayEmail || website || parsedSocials.length > 0;
+  const hasRatingStars = ratingStars !== null && ratingStars !== undefined;
+  const hasRatingLink = ratingLink && ratingLink.length > 0;
 
   return (
     <div className="flex flex-col gap-1 p-2 sm:p-3 w-full max-w-full overflow-hidden">
@@ -100,8 +108,13 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
       <section className="flex flex-col gap-2 w-full">
         <div className="flex justify-between items-center w-full gap-2">
           <h2 className="font-bold text-primary text-xl break-words">{name}</h2>
+          <div className="flex flex-col sm:flex-row gap-4">
+            {hasRatingStars && <RatingStars id={user.id} stars={ratingStars} />}
+            {hasRatingLink && <RatingLinkDisplay ratingLink={ratingLink} />}
+          </div>
           <GoBack />
         </div>
+
       </section>
 
       {hasFieldOfExpertise && (

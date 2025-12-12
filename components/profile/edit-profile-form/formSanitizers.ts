@@ -40,6 +40,7 @@ export type ProfileUpdatePayload = {
   }>;
   membership: Membership | null;
   ratingStars: number | null;
+  ratingLink: string | null;
 };
 
 export type BuildSanitizedPayloadArgs = {
@@ -60,6 +61,7 @@ export type BuildSanitizedPayloadArgs = {
   profileFilesOverride?: string[];
   membership?: Membership | null;
   ratingStars?: number | null;
+  ratingLink?: string | null;
 };
 
 export const sanitizePhoneList = (numbers?: string[] | null): string[] => {
@@ -329,8 +331,8 @@ export const buildSanitizedPayload = (
         certificate.expiryDate instanceof Date
           ? certificate.expiryDate.toISOString()
           : certificate.expiryDate
-          ? new Date(certificate.expiryDate).toISOString()
-          : null,
+            ? new Date(certificate.expiryDate).toISOString()
+            : null,
       credentialId:
         certificate.credentialId !== undefined &&
         certificate.credentialId !== null
@@ -356,5 +358,6 @@ export const buildSanitizedPayload = (
     profileFiles: sanitizedProfileFiles,
     membership: sanitizedMembership,
     ratingStars: args.ratingStars ?? null,
+    ratingLink: args.ratingLink ?? null,
   };
 };

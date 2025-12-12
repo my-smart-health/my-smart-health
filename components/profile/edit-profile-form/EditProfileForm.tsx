@@ -55,6 +55,7 @@ type User = {
   locations: Location[];
   membership: Membership | null;
   ratingStars: number | null;
+  ratingLink: string | null;
 };
 
 export default function EditProfileForm({ user }: { user: User }) {
@@ -80,6 +81,7 @@ export default function EditProfileForm({ user }: { user: User }) {
   const [website, setWebsite] = useState(user.website || "");
   const [membership, setMembership] = useState<Membership>(user.membership ?? { status: false, link: "" });
   const [ratingStars, setRatingStars] = useState<number | null>(user.ratingStars);
+  const [ratingLink, setRatingLink] = useState<string | null>(user.ratingLink || null);
   const [schedule, setSchedule] = useState<Schedule[]>(user.schedule || []);
   const [displayEmail, setDisplayEmail] = useState(user.displayEmail || "");
   const [locations, setLocations] = useState<Location[]>(user.locations || []);
@@ -111,6 +113,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         profileImagesOverride: updatedImages,
         membership,
         ratingStars,
+        ratingLink,
       });
 
       const response = await fetch('/api/update/update-profile', {
@@ -155,6 +158,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         profileFilesOverride: updatedFiles,
         membership,
         ratingStars,
+        ratingLink,
       });
 
       const response = await fetch('/api/update/update-profile', {
@@ -426,6 +430,18 @@ export default function EditProfileForm({ user }: { user: User }) {
     await handleRemoveImage(imageUrl, setCertificates);
   };
 
+  const handleStatusClose = () => {
+    const wasSuccess = success !== null;
+    setError(null);
+    setSuccess(null);
+    statusModalRef.current?.close();
+
+    if (wasSuccess) {
+      redirect.push(`/profile/${user.id}`);
+      redirect.refresh();
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     try {
@@ -456,6 +472,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         locations,
         membership,
         ratingStars,
+        ratingLink,
       });
 
       const res = await fetch('/api/update/update-profile', {
@@ -479,18 +496,6 @@ export default function EditProfileForm({ user }: { user: User }) {
       }
     }
   }
-
-  const handleStatusClose = () => {
-    const wasSuccess = success !== null;
-    setError(null);
-    setSuccess(null);
-    statusModalRef.current?.close();
-
-    if (wasSuccess) {
-      redirect.push(`/profile/${user.id}`);
-      redirect.refresh();
-    }
-  };
 
   return (
     <>
@@ -710,7 +715,7 @@ export default function EditProfileForm({ user }: { user: User }) {
               <input type="radio" name="my_tabs_2" className="tab" aria-label="Rating Stars" />
               <div className="tab-content border-primary p-3 md:p-10">
 
-                <RatingStarsSection ratingStars={ratingStars} setRatingStars={setRatingStars} />
+                <RatingStarsSection ratingStars={ratingStars} ratingLink={ratingLink} setRatingLink={setRatingLink} setRatingStars={setRatingStars} />
 
               </div>
             </>

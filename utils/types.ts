@@ -150,6 +150,7 @@ export type UserProfileSH = {
   category: string[];
   membership?: Membership | null;
   ratingStars?: number | null;
+  ratingLink?: string | null;
 };
 
 export type CategoryNodeSH = {

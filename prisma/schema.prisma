@@ -41,6 +41,7 @@ model User {
   reservationLinks Json?
   membership       Json?
   ratingStars      Int?
+  ratingLink       String?
   socials          String[]
   posts            Posts[]        @relation("UserPosts")
   locations        Location[]     @relation("UserLocations")

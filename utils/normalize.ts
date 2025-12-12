@@ -101,6 +101,8 @@ export function normalizeUser(raw: RawUser) {
       certificates: [] as Certificate[],
       reservationLinks: [] as ReservationLink[],
       membership: null as Membership | null,
+      ratingStars: null as number | null,
+      ratingLink: null as string | null,
     };
   }
 
@@ -147,5 +149,10 @@ export function normalizeUser(raw: RawUser) {
       'link' in raw.membership
         ? (raw.membership as Membership)
         : null,
+    ratingStars:
+      raw.ratingStars !== undefined && raw.ratingStars !== null
+        ? Number(raw.ratingStars)
+        : null,
+    ratingLink: raw.ratingLink ?? null,
   };
 }

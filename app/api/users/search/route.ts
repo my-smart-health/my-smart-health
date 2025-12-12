@@ -11,6 +11,7 @@ type RawUser = {
   profileImages: string[] | null;
   membership?: Membership | null;
   ratingStars?: number | null;
+  ratingLink?: string | null;
 };
 
 type SearchResult = {
@@ -20,6 +21,7 @@ type SearchResult = {
   image: string | null;
   membership?: Membership | null;
   ratingStars?: number | null;
+  ratingLink?: string | null;
 };
 
 const MAX_RESULTS = 20;
@@ -50,12 +52,13 @@ export async function GET(req: Request) {
         image: row.profileImages?.[0] ?? null,
         membership: row.membership ?? null,
         ratingStars: row.ratingStars ?? null,
+        ratingLink: row.ratingLink ?? null,
       }))
       .filter((user) => user.id && user.name);
 
   try {
     const rows = await prisma.$queryRaw<RawUser[]>(Prisma.sql`
-      SELECT "id", "name", "bio", "profileImages", "membership", "ratingStars"
+      SELECT "id", "name", "bio", "profileImages", "membership", "ratingStars", "ratingLink"
       FROM "User"
       WHERE (
         COALESCE("name", '') ILIKE ${likePattern}

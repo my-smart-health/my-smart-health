@@ -27,6 +27,7 @@ async function getData(sessionId: string) {
       reservationLinks: true,
       membership: true,
       ratingStars: true,
+      ratingLink: true,
     },
     cacheStrategy: CACHE_STRATEGY.NONE,
   });
@@ -105,6 +106,7 @@ export default async function EditProfileId({ params }: { params: Promise<{ id: 
     reservationLinks: safeReservationLinks,
     membership: safeMembership,
     ratingStars: user.ratingStars ?? null,
+    ratingLink: user.ratingLink ?? null,
   };
 
   return (

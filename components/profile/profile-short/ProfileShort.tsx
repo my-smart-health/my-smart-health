@@ -7,6 +7,7 @@ import { Membership } from "@/utils/types";
 import { MembershipSection } from "../profile-full/_components";
 import RatingStars from "@/components/common/RatingStars";
 import { Image as ImageIcon } from "lucide-react";
+import RatingLinkDisplay from "@/components/common/RatingLinkDisplay";
 
 type ProfileShortProps = {
   id: string;
@@ -15,9 +16,10 @@ type ProfileShortProps = {
   image?: string | null;
   membership?: Membership | null;
   ratingStars?: number | null;
+  ratingLink?: string | null;
 };
 
-export default function ProfileShort({ id, name, bio, image, membership, ratingStars }: ProfileShortProps) {
+export default function ProfileShort({ id, name, bio, image, membership, ratingStars, ratingLink }: ProfileShortProps) {
   const hasImage = Boolean(image);
 
   return (
@@ -50,9 +52,15 @@ export default function ProfileShort({ id, name, bio, image, membership, ratingS
             </div>
           )}
 
-          {ratingStars !== null && ratingStars !== undefined && (
-            <RatingStars id={id} stars={ratingStars} />
-          )}
+          <div className="flex flex-col mr-auto">
+            {ratingStars !== null && ratingStars !== undefined && (
+              <RatingStars id={id} stars={ratingStars} />
+            )}
+
+            {ratingLink !== null && ratingLink !== undefined && (
+              <RatingLinkDisplay ratingLink={ratingLink} />
+            )}
+          </div>
 
           <Link
             href={`/profile/${id}`}

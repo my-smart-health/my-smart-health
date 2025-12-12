@@ -4,10 +4,12 @@ import { Star } from 'lucide-react';
 
 type RatingStarsSectionProps = {
   ratingStars: number | null;
+  ratingLink: string | null;
   setRatingStars: (stars: number | null) => void;
+  setRatingLink?: (link: string | null) => void;
 };
 
-export function RatingStarsSection({ ratingStars, setRatingStars }: RatingStarsSectionProps) {
+export function RatingStarsSection({ ratingStars, ratingLink, setRatingStars, setRatingLink }: RatingStarsSectionProps) {
   const currentRating = ratingStars ?? 0;
 
   const handleRatingChange = (value: number) => {
@@ -59,6 +61,36 @@ export function RatingStarsSection({ ratingStars, setRatingStars }: RatingStarsS
               />
             );
           })}
+        </div>
+
+        <div>
+          <div className="flex flex-row flex-1 gap-2 items-center" >
+            <div className="flex flex-col flex-1 gap-2">
+              <h2 className="text-primary font-bold flex items-center gap-2">
+                <Star className="w-5 h-5" />
+                Google Rating Link
+              </h2>
+              <label className="flex flex-row gap-2">
+                <input
+                  type="text"
+                  name='rating-link'
+                  value={ratingLink || ''}
+                  placeholder='https://www.google.com/search?...'
+                  onChange={(e) => setRatingLink && setRatingLink(e.target.value)}
+                  className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                />
+              </label>
+              <button
+                type="button"
+                onClick={() => {
+
+                }}
+                className="btn btn-outline flex place-self-end mt-4 w-fit align-bottom text-red-500"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

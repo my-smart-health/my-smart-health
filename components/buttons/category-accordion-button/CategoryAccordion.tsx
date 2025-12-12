@@ -187,15 +187,6 @@ export default function CategoryAccordion({
         ];
         const categoryStyle = levelColors[Math.min(level, levelColors.length - 1)];
 
-        // const countSubcategories = (node: CategoryNodeSH): number => {
-        //   let count = node.children.size;
-        //   node.children.forEach((childNode) => {
-        //     count += countSubcategories(childNode);
-        //   });
-        //   return count;
-        // };
-        // const subcategoryCount = countSubcategories(child);
-
         return (
           <div key={key} className="w-full mb-3">
             <button
@@ -210,25 +201,7 @@ export default function CategoryAccordion({
               />
               <div className="flex-1">
                 <span>{catName}</span>
-                {/* {level > 0 && (
-                  <div className="text-xs text-gray-500 font-normal mt-1">
-                    {currentPathLabel}
-                  </div>
-                )} */}
               </div>
-              {/* <div className="flex flex-col gap-2"> 
-              {subcategoryCount > 0 && (
-                  <span className="badge badge-primary">
-                    {subcategoryCount} {subcategoryCount === 1 ? 'Kategorie' : 'Kategorien'}
-                  </span>
-                )} 
-
-              {child.users.length > 0 && (
-                  <span className="badge badge-primary">
-                    {child.users.length} {child.users.length === 1 ? 'Profil' : 'Profile'}
-                  </span>
-                )} 
-              </div> */}
             </button>
 
             {isOpen && (
@@ -250,6 +223,7 @@ export default function CategoryAccordion({
                               image={profileImages?.[0] ?? null}
                               membership={membership ?? null}
                               ratingStars={ratingStars ?? null}
+                              ratingLink={user.ratingLink ?? null}
                             />
                             {isAdmin && (
                               <div className="mt-1 ml-2">

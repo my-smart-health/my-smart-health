@@ -28,6 +28,8 @@ async function getUser(id: string) {
       reservationLinks: true,
       profileFiles: true,
       membership: true,
+      ratingStars: true,
+      ratingLink: true,
     },
     cacheStrategy: CACHE_STRATEGY.NONE,
   });
@@ -121,6 +123,8 @@ export default async function DashboardPage() {
     locations: safeLocations,
     profileFiles: safeProfileFiles,
     membership: safeMembership,
+    ratingStars: user.ratingStars ?? null,
+    ratingLink: user.ratingLink ?? null,
   };
 
   return (

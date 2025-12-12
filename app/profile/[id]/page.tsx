@@ -37,6 +37,8 @@ async function getUser(id: string) {
       certificates: true,
       reservationLinks: true,
       membership: true,
+      ratingStars: true,
+      ratingLink: true,
     },
     cacheStrategy: CACHE_STRATEGY.NONE,
   });
@@ -123,6 +125,8 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
     reservationLinks: safeReservationLinks,
     locations: safeLocations,
     membership: safeMembership,
+    ratingStars: user.ratingStars ?? null,
+    ratingLink: user.ratingLink ?? null,
   };
 
   return (
