@@ -6,6 +6,7 @@ import ParagraphContent from "@/components/common/ParagraphContent";
 import { Membership } from "@/utils/types";
 import { MembershipSection } from "../profile-full/_components";
 import RatingStars from "@/components/common/RatingStars";
+import { Image as ImageIcon } from "lucide-react";
 
 type ProfileShortProps = {
   id: string;
@@ -33,7 +34,7 @@ export default function ProfileShort({ id, name, bio, image, membership, ratingS
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-gray-400">
-            <span className="text-4xl">👤</span>
+            <span className="text-4xl border p-36"><ImageIcon /></span>
           </div>
         )}
       </figure>
