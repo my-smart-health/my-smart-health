@@ -40,9 +40,9 @@ export default function RatingStars({ id, stars, ratingLink }: RatingStarsProps)
         href={ratingLink}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex w-fit h-fit p-2 border-b border-primary justify-center items-center text-sm hover:bg-primary/15 transition-colors">
+        className="flex w-fit h-fit border-b border-primary text-sm hover:bg-primary/15 transition-colors">
         <div className="rating rating-sm rating-half my-auto pointer-events-none">
-          <input type="radio" name={`rating-${id}`} className="rating-hidden" defaultChecked={stars === 0} disabled />
+          <input type="radio" name={`rating-${id}`} className="rating-hidden hidden" defaultChecked={stars === 0} disabled />
           {starElements}
         </div>
       </Link>
