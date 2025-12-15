@@ -1,8 +1,8 @@
 import prisma from "@/lib/db";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import UserTable from "@/components/user/UserTable";
 import { CACHE_STRATEGY } from "@/utils/constants";
+import SearchFilter from "@/components/search/SearchFilter";
 
 async function getAllUsersWithCategories() {
   const users = await prisma.user.findMany({
@@ -91,7 +91,7 @@ export default async function AllUsersPage() {
   return (
     <>
       <h1>All Users</h1>
-      <UserTable users={users} />
+      <SearchFilter users={users} />
     </>
   );
 }

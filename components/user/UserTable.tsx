@@ -3,7 +3,7 @@
 import { Trash2, UserSearch } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDeletionProgress } from "@/components/modals/deletion-progress";
 
 type User = {
@@ -22,6 +22,11 @@ export default function UserTable({ users }: { users: User[] }) {
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortAsc, setSortAsc] = useState(true);
   const [allUsers, setAllUsers] = useState(users);
+
+  useEffect(() => {
+    setAllUsers(users);
+  }, [users]);
+
   const { startDeletion, updateMessage, finishDeletion } = useDeletionProgress();
 
   const handleSort = (key: SortKey) => {
@@ -66,7 +71,7 @@ export default function UserTable({ users }: { users: User[] }) {
       if (!res.ok) throw new Error("Failed to delete user");
 
       updateMessage('Benutzer erfolgreich gelöscht!');
-      setAllUsers(allUsers.filter(user => user.id !== id));
+      setAllUsers((prev) => prev.filter(user => user.id !== id));
 
       await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
