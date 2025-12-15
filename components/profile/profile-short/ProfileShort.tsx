@@ -7,7 +7,6 @@ import { Membership } from "@/utils/types";
 import { MembershipSection } from "../profile-full/_components";
 import RatingStars from "@/components/common/RatingStars";
 import { Image as ImageIcon } from "lucide-react";
-import RatingLinkDisplay from "@/components/common/RatingLinkDisplay";
 
 type ProfileShortProps = {
   id: string;
@@ -45,22 +44,17 @@ export default function ProfileShort({ id, name, bio, image, membership, ratingS
           {name}
         </h2>
         <ParagraphContent content={bio} maxLines={3} className="prose prose-sm" />
+        <div className="flex flex-col mr-auto">
+          {ratingStars !== null && ratingStars !== undefined && (
+            <RatingStars id={id} stars={ratingStars} ratingLink={ratingLink} />
+          )}
+        </div>
         <div className="flex flex-row gap-2 justify-end">
           {membership?.status && (
-            <div>
+            <div className="mr-auto">
               <MembershipSection membership={membership} />
             </div>
           )}
-
-          <div className="flex flex-col mr-auto">
-            {ratingStars !== null && ratingStars !== undefined && (
-              <RatingStars id={id} stars={ratingStars} />
-            )}
-
-            {ratingLink !== null && ratingLink !== undefined && (
-              <RatingLinkDisplay ratingLink={ratingLink} />
-            )}
-          </div>
 
           <Link
             href={`/profile/${id}`}

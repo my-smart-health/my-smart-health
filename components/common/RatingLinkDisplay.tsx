@@ -16,7 +16,7 @@ export default function RatingLinkDisplay({ ratingLink }: RatingLinkDisplayProps
           href={ratingLink}
           target="_blank"
           rel="noopener noreferrer"
-          className="badge badge-primary py-6 text-white hover:bg-primary/75 transition-colors duration-200 break-before-left link">
+          className="flex py-3 hover:bg-primary/75 transition-colors duration-200 break-before-left link">
           <span className="mr-1"><ExternalLink /></span>Google Rating
         </Link>
       </div>
