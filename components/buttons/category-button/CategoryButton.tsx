@@ -2,29 +2,35 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-type NewsSmartHealthMedizinButtonProps = {
+type CategoryButtonProps = {
   name: string;
   icon?: string | React.ReactNode;
   goTo: string;
   active?: boolean;
   imageAsTitle?: string;
+  imageAsTitleSecond?: string;
 };
 
-export default function NewsSmartHealthMedizinButton({ name, icon, goTo, active, imageAsTitle }: NewsSmartHealthMedizinButtonProps) {
+export default function CategoryButton({ name, icon, goTo, active, imageAsTitle, imageAsTitleSecond }: CategoryButtonProps) {
+
   return (
     <Link href={goTo} className={`flex flex-row ${imageAsTitle ? "" : "h-15"} w-full max-w-[100%] rounded-2xl border shadow-xl`}>
       {imageAsTitle ? (
         <div className={`flex flex-col items-center  justify-center w-full ${active ? 'bg-secondary rounded-2xl' : ''}`}>
           <Image priority loading="eager" src={imageAsTitle} width={150} height={150} alt={`${name} icon`} style={{ objectFit: "contain", width: "auto", height: "auto" }} className={`w-auto h-auto mx-auto py-4 ${active ? 'bg-secondary rounded-2xl' : ''}`} />
-          <div className={`w-full mx-auto border h-0 max-w-[90%] `}></div>
-          <Image
-            src="/termine-kurzfristig-neutral.png"
-            alt="Termine Kurzfristig Icon"
-            width={65}
-            height={65}
-            style={{ width: "auto", height: "auto" }}
-            className="inline-block my-4"
-          />
+          {imageAsTitleSecond && (
+            <>
+              <div className={`w-full mx-auto border h-0 max-w-[90%]`}></div>
+              <Image
+                src={imageAsTitleSecond}
+                alt={`${name} second icon`}
+                width={165}
+                height={65}
+                style={{ width: "auto", height: "auto" }}
+                className="inline-block my-4"
+              />
+            </>
+          )}
         </div>
       ) : (
         <>

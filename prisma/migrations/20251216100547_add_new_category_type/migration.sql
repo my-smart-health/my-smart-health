@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "public"."CategoryType" ADD VALUE 'MY_SMART_HEALTH_TERMINE_KURZFRISTIG';

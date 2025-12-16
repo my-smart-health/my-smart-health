@@ -1,4 +1,4 @@
-import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
+import CategoryButton from "@/components/buttons/category-button/CategoryButton";
 import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealthBarLink";
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
 import ProfileSearchToggle from "@/components/search/ProfileSearchToggle";
@@ -11,13 +11,14 @@ export default async function SmartHealthLayout({ children }: { children: React.
     <>
       <MySmartHealth />
       <ProfileSearchToggle className="max-w-5xl w-full" />
-      <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.theLeadingDoctors.name} goTo={CATEGORY_NAMES.theLeadingDoctors.link} imageAsTitle="/the-leading-doctors.png" />
-      <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.smartHealth.name} icon="/icon3.png" goTo='/' active />
+      <CategoryButton name={CATEGORY_NAMES.theLeadingDoctors.name} goTo={CATEGORY_NAMES.theLeadingDoctors.link} imageAsTitle="/the-leading-doctors.png" />
+      <CategoryButton name={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.name} goTo={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.link} imageAsTitle="/termine-kurzfristig-neutral.png" />
+      <CategoryButton name={CATEGORY_NAMES.smartHealth.name} icon="/icon3.png" goTo='/' active />
       <div className="min-h-full w-full max-w-5xl flex flex-col gap-4">
         {children}
       </div>
-      <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.medizinUndPflege.name} icon="/icon4.png" goTo={CATEGORY_NAMES.medizinUndPflege.link} />
-      <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.notfalle.name} icon={<CirclePlus size={34} color="red" />} goTo={CATEGORY_NAMES.notfalle.link} />
+      <CategoryButton name={CATEGORY_NAMES.medizinUndPflege.name} icon="/icon4.png" goTo={CATEGORY_NAMES.medizinUndPflege.link} />
+      <CategoryButton name={CATEGORY_NAMES.notfalle.name} icon={<CirclePlus size={34} color="red" />} goTo={CATEGORY_NAMES.notfalle.link} />
       <TheHealthBarLink />
     </>
   );

@@ -1,6 +1,6 @@
 import NewsCarousel from "@/components/carousels/newsCarousel/NewsCarousel";
 import TopCarousel from "@/components/carousels/topCarousel/TopCarousel";
-import NewsSmartHealthMedizinButton from "@/components/buttons/news-smart-health-medizin-button/NewsSmartHealthMedizinButton";
+import CategoryButton from "@/components/buttons/category-button/CategoryButton";
 import TheHealthBarLink from "@/components/buttons/the-health-bar-link/TheHealthBarLink";
 import prisma from "@/lib/db";
 import { CirclePlus } from "lucide-react";
@@ -112,10 +112,12 @@ export default async function Home() {
       <div className="flex flex-col mt-3 gap-3 w-full mx-auto max-w-[100%]">
         <MySmartHealth />
         <ProfileSearchToggle />
-        <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.theLeadingDoctors.name} goTo={CATEGORY_NAMES.theLeadingDoctors.link} imageAsTitle="/the-leading-doctors.png" />
-        <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.smartHealth.name} icon="/icon3.png" goTo={CATEGORY_NAMES.smartHealth.link} />
-        <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.medizinUndPflege.name} icon="/icon4.png" goTo={CATEGORY_NAMES.medizinUndPflege.link} />
-        <NewsSmartHealthMedizinButton name={CATEGORY_NAMES.notfalle.name} icon={<CirclePlus size={34} color="red" />} goTo={CATEGORY_NAMES.notfalle.link} />
+        <CategoryButton name={CATEGORY_NAMES.theLeadingDoctors.name} goTo={CATEGORY_NAMES.theLeadingDoctors.link} imageAsTitle="/the-leading-doctors.png" />
+        <CategoryButton name={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.name} goTo={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.link} imageAsTitle="/termine-kurzfristig-neutral.png" />
+
+        <CategoryButton name={CATEGORY_NAMES.smartHealth.name} icon="/icon3.png" goTo={CATEGORY_NAMES.smartHealth.link} />
+        <CategoryButton name={CATEGORY_NAMES.medizinUndPflege.name} icon="/icon4.png" goTo={CATEGORY_NAMES.medizinUndPflege.link} />
+        <CategoryButton name={CATEGORY_NAMES.notfalle.name} icon={<CirclePlus size={34} color="red" />} goTo={CATEGORY_NAMES.notfalle.link} />
         <TheHealthBarLink />
       </div>
     </>

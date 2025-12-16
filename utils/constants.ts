@@ -20,6 +20,8 @@ export const PROFILE_TYPE_MEDIZIN_UND_PFLEGE = 'MEDIZIN_UND_PFLEGE';
 export const PROFILE_TYPE_NOTFALLE = 'NOTFALLE';
 export const PROFILE_TYPE_THE_HEALTH_BAR = 'THE_HEALTH_BAR';
 export const PROFILE_TYPE_THE_LEADING_DOCTORS = 'THE_LEADING_DOCTORS';
+export const PROFILE_TYPE_MY_SMART_HEALTH_TERMINE_KURZFRISTIG =
+  'MY_SMART_HEALTH_TERMINE_KURZFRISTIG';
 
 /**
  * Category names and links used throughout the app
@@ -36,6 +38,10 @@ export const CATEGORY_NAMES = {
   theLeadingDoctors: {
     name: 'The Leading Doctors',
     link: '/the-leading-doctors',
+  },
+  mySmartHealthTermineKurzfristig: {
+    name: 'My Smart Health Termine Kurzfristig',
+    link: '/my-smart-health-termine-kurzfristig',
   },
   smartHealth: {
     name: 'Gut für meine Gesundheit',
