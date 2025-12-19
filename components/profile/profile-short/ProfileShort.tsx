@@ -7,6 +7,7 @@ import { Membership } from "@/utils/types";
 import { MembershipSection } from "../profile-full/_components";
 import RatingStars from "@/components/common/RatingStars";
 import { Image as ImageIcon } from "lucide-react";
+import Divider from "@/components/divider/Divider";
 
 type ProfileShortProps = {
   id: string;
@@ -43,6 +44,7 @@ export default function ProfileShort({ id, name, bio, image, membership, ratingS
         <h2 className="card-title text-primary">
           {name}
         </h2>
+        <Divider addClass="my-1" />
         <ParagraphContent content={bio} maxLines={3} className="prose prose-sm" />
         <div className="flex flex-col mr-auto">
           {ratingStars !== null && ratingStars !== undefined && (
