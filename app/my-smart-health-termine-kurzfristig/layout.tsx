@@ -12,7 +12,7 @@ export default async function SmartHealthLayout({ children }: { children: React.
       <MySmartHealth />
       <ProfileSearchToggle className="max-w-5xl w-full" />
       <CategoryButton name={CATEGORY_NAMES.theLeadingDoctors.name} goTo={CATEGORY_NAMES.theLeadingDoctors.link} imageAsTitle="/the-leading-doctors.png" />
-      <CategoryButton name={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.name} goTo='/' imageAsTitle="/termine-kurzfristig-neutral.png" active />
+      <CategoryButton name={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.name} goTo='/' imageAsTitle="/Termine-Kurzfristig.png" active />
       <div className="min-h-full w-full max-w-5xl flex flex-col gap-4">
         {children}
       </div>
