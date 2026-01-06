@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Membership } from "@/utils/types";
-import Divider from "@/components/divider/Divider";
 
 type MembershipSectionProps = {
   membership: Membership;
