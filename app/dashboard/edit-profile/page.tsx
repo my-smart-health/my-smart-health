@@ -101,7 +101,7 @@ export default async function EditProfile() {
 
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-primary mb-6">Edit Profile</h1>
+      <h1 className="text-4xl font-extrabold text-primary mb-2">Edit Profile</h1>
       <EditProfileForm user={safeUser} />
     </>
   );
