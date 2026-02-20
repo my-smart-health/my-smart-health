@@ -320,6 +320,12 @@ export type FamilyMember = {
   phones: string[];
 };
 
+export type TelMedicinePhoneNumber = {
+  type: string;
+  phone: string;
+  description?: string;
+};
+
 export type MemberProfileDashboardProps = {
   id: string;
   email: string;
@@ -339,4 +345,5 @@ export type MemberProfileDashboardProps = {
   updatedAt: string;
   isActive: boolean;
   activeUntil: string | null;
+  telMedicineNumbers: TelMedicinePhoneNumber[];
 } | null;
