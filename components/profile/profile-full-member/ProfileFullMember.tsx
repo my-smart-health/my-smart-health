@@ -96,6 +96,23 @@ export default function ProfileFullMember({
   const hasDoctors = doctors && doctors.length > 0;
   const hasDocuments = documents && documents.length > 0;
   const hasContacts = contacts && contacts.length > 0;
+  const hasAdminInfo = isAdmin;
+
+  const firstTab = hasAdminInfo
+    ? 'admin'
+    : hasPersonalInfo
+      ? 'personal'
+      : hasAnamneses
+        ? 'anamneses'
+        : hasBloodType
+          ? 'blood'
+          : hasDoctors
+            ? 'doctors'
+            : hasDocuments
+              ? 'documents'
+              : hasContacts
+                ? 'contacts'
+                : null;
 
   return (
     <div className="flex flex-col gap-1 p-2 sm:p-3 w-full max-w-full overflow-hidden">
@@ -108,64 +125,134 @@ export default function ProfileFullMember({
         </div>
       </section>
 
-      {isAdmin && (
+      {(hasAdminInfo || hasPersonalInfo || hasAnamneses || hasBloodType || hasDoctors || hasDocuments || hasContacts) && (
         <>
           <Divider addClass="my-1" />
-          <AdminOnlySection
-            email={email}
-            isActive={isActive}
-            activeUntil={activeUntil}
-            createdAt={createdAt}
-            updatedAt={updatedAt}
-          />
-        </>
-      )}
+          <div role="tablist" className="tabs tabs-lifted tabs-lg w-full">
+            {hasAdminInfo && (
+              <>
+                <input
+                  type="radio"
+                  name="member_profile_tabs"
+                  role="tab"
+                  className="tab"
+                  aria-label="Admin"
+                  defaultChecked={firstTab === 'admin'}
+                />
+                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                  <AdminOnlySection
+                    email={email}
+                    isActive={isActive}
+                    activeUntil={activeUntil}
+                    createdAt={createdAt}
+                    updatedAt={updatedAt}
+                  />
+                </div>
+              </>
+            )}
 
-      {hasPersonalInfo && (
-        <>
-          <Divider addClass="my-1" />
-          <PersonalInfoSection
-            birthday={birthday}
-            heightCm={heightCm}
-            weightKg={weightKg}
-            healthInsurances={healthInsurances}
-            familyMembers={familyMembers}
-          />
-        </>
-      )}
+            {hasPersonalInfo && (
+              <>
+                <input
+                  type="radio"
+                  name="member_profile_tabs"
+                  role="tab"
+                  className="tab"
+                  aria-label="Personal Info"
+                  defaultChecked={firstTab === 'personal'}
+                />
+                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                  <PersonalInfoSection
+                    birthday={birthday}
+                    heightCm={heightCm}
+                    weightKg={weightKg}
+                    healthInsurances={healthInsurances}
+                    familyMembers={familyMembers}
+                  />
+                </div>
+              </>
+            )}
 
-      {hasAnamneses && (
-        <>
-          <Divider addClass="my-1" />
-          <AnamnesesSection anamneses={anamneses} />
-        </>
-      )}
+            {hasAnamneses && (
+              <>
+                <input
+                  type="radio"
+                  name="member_profile_tabs"
+                  role="tab"
+                  className="tab"
+                  aria-label="Anamneses"
+                  defaultChecked={firstTab === 'anamneses'}
+                />
+                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                  <AnamnesesSection anamneses={anamneses} />
+                </div>
+              </>
+            )}
 
-      {hasBloodType && (
-        <>
-          <Divider addClass="my-1" />
-          <BloodTypeSection bloodType={bloodType} bloodTypeFiles={bloodTypeFiles} />
-        </>
-      )}
+            {hasBloodType && (
+              <>
+                <input
+                  type="radio"
+                  name="member_profile_tabs"
+                  role="tab"
+                  className="tab"
+                  aria-label="Blood Type"
+                  defaultChecked={firstTab === 'blood'}
+                />
+                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                  <BloodTypeSection bloodType={bloodType} bloodTypeFiles={bloodTypeFiles} />
+                </div>
+              </>
+            )}
 
-      {hasDoctors && (
-        <>
-          <Divider addClass="my-1" />
-          <DoctorsSection doctors={doctors} />
-        </>
-      )}
+            {hasDoctors && (
+              <>
+                <input
+                  type="radio"
+                  name="member_profile_tabs"
+                  role="tab"
+                  className="tab"
+                  aria-label="Doctors"
+                  defaultChecked={firstTab === 'doctors'}
+                />
+                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                  <DoctorsSection doctors={doctors} />
+                </div>
+              </>
+            )}
 
-      {hasDocuments && (
-        <>
-          <Divider addClass="my-1" />
-          <DocumentsSection documents={documents} />
-        </>
-      )}
+            {hasDocuments && (
+              <>
+                <input
+                  type="radio"
+                  name="member_profile_tabs"
+                  role="tab"
+                  className="tab"
+                  aria-label="Documents"
+                  defaultChecked={firstTab === 'documents'}
+                />
+                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                  <DocumentsSection documents={documents} />
+                </div>
+              </>
+            )}
 
-      {hasContacts && (
-        <>
-          <Divider addClass="my-1" />
-          <ContactsDisplay contacts={contacts} />
+            {hasContacts && (
+              <>
+                <input
+                  type="radio"
+                  name="member_profile_tabs"
+                  role="tab"
+                  className="tab"
+                  aria-label="Contacts"
+                  defaultChecked={firstTab === 'contacts'}
+                />
+                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                  <ContactsDisplay contacts={contacts} />
+                </div>
+              </>
+            )}
+          </div>
         </>
       )}
 

@@ -8,6 +8,8 @@ type FileAttachmentsListProps = {
 };
 
 export function FileAttachmentsList({ files, title = 'Attachments' }: FileAttachmentsListProps) {
+  const hasTitle = title.trim().length > 0;
+
   const validFiles = files.filter(file => {
     if (typeof file === 'string') {
       return file?.trim();
@@ -21,10 +23,12 @@ export function FileAttachmentsList({ files, title = 'Attachments' }: FileAttach
 
   return (
     <div>
-      <p className="text-xs font-medium text-gray-700 mb-2 flex items-center gap-1">
-        <FileText size={14} />
-        {title}
-      </p>
+      {hasTitle && (
+        <p className="text-xs font-medium text-gray-700 mb-2 flex items-center gap-1">
+          <FileText size={14} />
+          {title}
+        </p>
+      )}
       <div className="grid grid-cols-1 gap-2">
         {validFiles.map((file, fileIndex) => {
           const isStringFormat = typeof file === 'string';
@@ -40,7 +44,7 @@ export function FileAttachmentsList({ files, title = 'Attachments' }: FileAttach
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 p-2 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:border-primary transition-colors group"
+              className="flex items-center gap-3 p-2 rounded-lg border border-primary hover:bg-primary/10 hover:border-primary transition-colors group"
             >
               <FileText className="text-gray-600 group-hover:text-primary flex-shrink-0" size={18} />
               <div className="flex-1 min-w-0">
