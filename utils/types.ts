@@ -209,6 +209,8 @@ export type FileWithDescription = {
   description?: string;
 };
 
+export type MemberDocument = FileWithDescription;
+
 export type Allergies = {
   name: string;
   severity: string;
