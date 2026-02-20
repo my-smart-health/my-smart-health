@@ -82,26 +82,27 @@ model Posts {
 }
 
 model MemberProfile {
-  id               String         @id @default(uuid())
-  email            String         @unique
-  password         String         @db.VarChar(255)
-  role             Role           @default(MEMBER)
-  createdAt        DateTime       @default(now())
-  name             String?
-  birthday         DateTime?
-  heightCm         Decimal?       @db.Decimal(5, 2)
-  weightKg         Decimal?       @db.Decimal(5, 2)
-  healthInsurances Json? // Array of { provider, insuranceName, insuranceNumber, phone }
-  familyMembers    Json? // Array of { name, phones }
-  bloodType        BloodType?
-  bloodTypeFiles   Json? // Array of { url, description }
-  anamneses        Json? // Medical history with nested data including medication plans with file attachments
-  documents        Json? // Array of { url, description }
-  doctors          Json? // Array of { name, specialty, emails, phones }
-  memberDoctors    MemberDoctor[]
-  updatedAt        DateTime       @updatedAt
-  isActive         Boolean        @default(true)
-  activeUntil      DateTime?
+  id                 String         @id @default(uuid())
+  email              String         @unique
+  password           String         @db.VarChar(255)
+  role               Role           @default(MEMBER)
+  createdAt          DateTime       @default(now())
+  name               String?
+  birthday           DateTime?
+  heightCm           Decimal?       @db.Decimal(5, 2)
+  weightKg           Decimal?       @db.Decimal(5, 2)
+  healthInsurances   Json? // Array of { provider, insuranceName, insuranceNumber, phone }
+  familyMembers      Json? // Array of { name, phones }
+  bloodType          BloodType?
+  bloodTypeFiles     Json? // Array of { url, description }
+  anamneses          Json? // Medical history with nested data including medication plans with file attachments
+  documents          Json? // Array of { url, description }
+  doctors            Json? // Array of { name, specialty, emails, phones }
+  memberDoctors      MemberDoctor[]
+  updatedAt          DateTime       @updatedAt
+  isActive           Boolean        @default(true)
+  activeUntil        DateTime?
+  telMedicineNumbers Json? // Array of { type, number, description }
 }
 
 model MemberDoctor {
