@@ -29,7 +29,6 @@ body {
 
 input[type='time']::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  filter: invert(1);
 }
 
 .tab {
@@ -237,4 +236,8 @@ span.swiper-pagination-bullet-active {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+input {
+  color-scheme: light;
 }
