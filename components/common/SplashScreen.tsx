@@ -6,10 +6,8 @@ import Image from 'next/image';
 export default function SplashScreen() {
   const [isVisible, setIsVisible] = useState(false);
   const [isAnimatingOut, setIsAnimatingOut] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
     const hasShownSplash = sessionStorage.getItem('splashShown');
 
     if (hasShownSplash) {
@@ -33,7 +31,7 @@ export default function SplashScreen() {
     };
   }, []);
 
-  if (!isMounted || !isVisible) return null;
+  if (!isVisible) return null;
 
   return (
     <div
