@@ -67,6 +67,13 @@ export async function PUT(req: Request) {
             ? Prisma.JsonNull
             : data.familyMembers || Prisma.JsonNull,
       }),
+      ...(data.telMedicineNumbers !== undefined && {
+        telMedicineNumbers:
+          Array.isArray(data.telMedicineNumbers) &&
+          data.telMedicineNumbers.length === 0
+            ? Prisma.JsonNull
+            : data.telMedicineNumbers || Prisma.JsonNull,
+      }),
     };
 
     const updated = await prisma.memberProfile.update({
