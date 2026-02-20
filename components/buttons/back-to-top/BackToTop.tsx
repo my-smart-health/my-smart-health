@@ -6,8 +6,6 @@ export default function BackToTop() {
   const rafId = useRef<number | null>(null);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-
     const updateVisibility = () => {
       const threshold = window.innerHeight;
       setVisible(window.scrollY > threshold);
