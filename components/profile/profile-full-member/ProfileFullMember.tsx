@@ -10,6 +10,7 @@ import {
   DocumentsSection,
   AdminOnlySection,
   ContactsDisplay,
+  SpecialNumbersSection,
 } from "./_components";
 import Divider from "@/components/divider/Divider";
 import GoBack from "@/components/buttons/go-back/GoBack";
@@ -84,6 +85,7 @@ export default function ProfileFullMember({
     doctors,
     documents,
     familyMembers,
+    telMedicineNumbers,
     isActive,
     activeUntil,
     createdAt,
@@ -96,6 +98,7 @@ export default function ProfileFullMember({
   const hasDoctors = doctors && doctors.length > 0;
   const hasDocuments = documents && documents.length > 0;
   const hasContacts = contacts && contacts.length > 0;
+  const hasSpecialNumbers = isActive && telMedicineNumbers && telMedicineNumbers.length > 0;
   const hasAdminInfo = isAdmin;
 
   const firstTab = hasAdminInfo
@@ -112,7 +115,9 @@ export default function ProfileFullMember({
               ? 'documents'
               : hasContacts
                 ? 'contacts'
-                : null;
+                : hasSpecialNumbers
+                  ? 'special'
+                  : null;
 
   return (
     <div className="flex flex-col gap-1 p-2 sm:p-3 w-full max-w-full overflow-hidden">
@@ -125,7 +130,7 @@ export default function ProfileFullMember({
         </div>
       </section>
 
-      {(hasAdminInfo || hasPersonalInfo || hasAnamneses || hasBloodType || hasDoctors || hasDocuments || hasContacts) && (
+      {(hasAdminInfo || hasPersonalInfo || hasAnamneses || hasBloodType || hasDoctors || hasDocuments || hasContacts || hasSpecialNumbers) && (
         <>
           <Divider addClass="my-1" />
           <div role="tablist" className="tabs tabs-lifted tabs-lg w-full">
@@ -252,6 +257,22 @@ export default function ProfileFullMember({
                 </div>
               </>
             )}
+
+            {hasSpecialNumbers && (
+              <>
+                <input
+                  type="radio"
+                  name="member_profile_tabs"
+                  role="tab"
+                  className="tab"
+                  aria-label="Telemedizin"
+                  defaultChecked={firstTab === 'special'}
+                />
+                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                  <SpecialNumbersSection specialNumbers={telMedicineNumbers} />
+                </div>
+              </>
+            )}
           </div>
         </>
       )}
@@ -261,7 +282,8 @@ export default function ProfileFullMember({
         !hasAnamneses &&
         !hasDoctors &&
         !hasDocuments &&
-        !hasContacts && (
+        !hasContacts &&
+        !hasSpecialNumbers && (
           <>
             <Divider addClass="my-1" />
             <div className="p-8 text-center text-gray-500">

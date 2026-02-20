@@ -11,6 +11,7 @@ import {
   Anamneses,
   FamilyMember,
   FileWithDescription,
+  TelMedicinePhoneNumber,
 } from "@/utils/types";
 import GoBack from "@/components/buttons/go-back/GoBack";
 
@@ -45,6 +46,7 @@ async function getMemberForContact(memberId: string, viewerId: string) {
       documents: true,
       doctors: true,
       familyMembers: true,
+      telMedicineNumbers: true,
       isActive: true,
       activeUntil: true,
     },
@@ -78,6 +80,9 @@ async function getMemberForContact(memberId: string, viewerId: string) {
       : [],
     familyMembers: Array.isArray(member.familyMembers)
       ? (member.familyMembers as unknown as FamilyMember[])
+      : [],
+    telMedicineNumbers: Array.isArray(member.telMedicineNumbers)
+      ? (member.telMedicineNumbers as unknown as TelMedicinePhoneNumber[])
       : [],
   };
 

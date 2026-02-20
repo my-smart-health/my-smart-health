@@ -14,6 +14,7 @@ import {
   Schedule,
   Anamneses,
   FileWithDescription,
+  TelMedicinePhoneNumber,
 } from "@/utils/types";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
@@ -83,6 +84,7 @@ async function getMemberByUserId(userId: string) {
       documents: true,
       doctors: true,
       familyMembers: true,
+      telMedicineNumbers: true,
       isActive: true,
       activeUntil: true,
     },
@@ -121,6 +123,9 @@ async function getMemberByUserId(userId: string) {
       : [],
     familyMembers: Array.isArray(member.familyMembers)
       ? (member.familyMembers as { name: string; phones: string[] }[])
+      : [],
+    telMedicineNumbers: Array.isArray(member.telMedicineNumbers)
+      ? (member.telMedicineNumbers as unknown as TelMedicinePhoneNumber[])
       : [],
   };
 

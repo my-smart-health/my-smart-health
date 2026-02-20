@@ -12,6 +12,7 @@ import {
   Anamneses,
   FamilyMember,
   FileWithDescription,
+  TelMedicinePhoneNumber,
 } from "@/utils/types";
 
 async function getMember(id: string) {
@@ -34,6 +35,7 @@ async function getMember(id: string) {
       documents: true,
       doctors: true,
       familyMembers: true,
+      telMedicineNumbers: true,
       isActive: true,
       activeUntil: true,
     },
@@ -67,6 +69,9 @@ async function getMember(id: string) {
       : [],
     familyMembers: Array.isArray(member.familyMembers)
       ? (member.familyMembers as unknown as FamilyMember[])
+      : [],
+    telMedicineNumbers: Array.isArray(member.telMedicineNumbers)
+      ? (member.telMedicineNumbers as unknown as TelMedicinePhoneNumber[])
       : [],
   };
 

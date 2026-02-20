@@ -4,6 +4,7 @@ export { HealthInsurancesSection } from './HealthInsurancesSection';
 export { AnamnesesSection } from './AnamnesesSection';
 export { DoctorsSection } from './DoctorsSection';
 export { DocumentsSection } from './DocumentsSection';
+export { SpecialNumbersSection } from './SpecialNumbersSection';
 export { AdminOnlySection } from './AdminOnlySection';
 export { FileAttachmentsList } from './FileAttachmentsList';
 export { ContactsDisplay } from './ContactsDisplay';

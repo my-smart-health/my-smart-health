@@ -7,5 +7,6 @@ export { DoctorsSection } from './DoctorsSection';
 export { AnamnesesSection } from './AnamnesesSection';
 export { DocumentsSection } from './DocumentsSection';
 export { FamilyMembersSection } from './FamilyMembersSection';
+export { SpecialNumbersSection } from './SpecialNumbersSection';
 export { ContactsSection } from './ContactsSection';
 export { AddContactModal } from './AddContactModal';

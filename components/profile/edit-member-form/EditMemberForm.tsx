@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { SaveAll } from "lucide-react";
 
 import Divider from "@/components/divider/Divider";
-import { MemberProfileDashboardProps, HealthInsurances, MyDoctors, Anamneses, FamilyMember, FileWithDescription } from "@/utils/types";
+import { MemberProfileDashboardProps, HealthInsurances, MyDoctors, Anamneses, FamilyMember, FileWithDescription, TelMedicinePhoneNumber } from "@/utils/types";
 import {
   cleanupHealthInsurances,
   cleanupDoctors,
@@ -14,6 +14,7 @@ import {
   cleanupBloodTypeFiles,
   cleanupFamilyMembers,
   cleanupDocuments,
+  cleanupSpecialNumbers,
 } from "@/utils/common";
 
 import {
@@ -26,6 +27,7 @@ import {
   AnamnesesSection,
   DocumentsSection,
   FamilyMembersSection,
+  SpecialNumbersSection,
   ContactsSection,
   AddContactModal,
 } from "./_components";
@@ -77,6 +79,7 @@ export default function EditMemberForm({
   const [healthInsurances, setHealthInsurances] = useState<HealthInsurances[]>(member?.healthInsurances || []);
   const [doctors, setDoctors] = useState<MyDoctors[]>(member?.doctors || []);
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>(member?.familyMembers || []);
+  const [telMedicineNumbers, setTelMedicineNumbers] = useState<TelMedicinePhoneNumber[]>(member?.telMedicineNumbers || []);
 
   const [anamneses, setAnamneses] = useState<Anamneses[]>(member?.anamneses || []);
   const [documents, setDocuments] = useState<FileWithDescription[]>(member?.documents || []);
@@ -145,6 +148,7 @@ export default function EditMemberForm({
       healthInsurances: cleanupHealthInsurances(healthInsurances),
       doctors: cleanupDoctors(doctors),
       familyMembers: cleanupFamilyMembers(familyMembers),
+      telMedicineNumbers: cleanupSpecialNumbers(telMedicineNumbers),
       isActive,
       activeUntil: activeUntil ? new Date(`${activeUntil}T00:00:00.000Z`) : null,
     };
@@ -257,13 +261,20 @@ export default function EditMemberForm({
 
           {isAdmin && (
             <>
-              <input type="radio" name="member_tabs" className="tab" aria-label="Status" />
+              <input type="radio" name="member_tabs" className="tab" aria-label="Status / Telemedizin" />
               <div className="tab-content border-primary p-3 md:p-10">
                 <StatusSection
                   isActive={isActive}
                   setIsActive={setIsActive}
                   activeUntil={activeUntil}
                   setActiveUntil={setActiveUntil}
+                />
+
+                <Divider addClass="my-4" />
+
+                <SpecialNumbersSection
+                  specialNumbers={telMedicineNumbers}
+                  setSpecialNumbers={setTelMedicineNumbers}
                 />
               </div>
             </>

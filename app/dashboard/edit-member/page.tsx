@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { CACHE_STRATEGY } from "@/utils/constants";
 import EditMemberForm from "@/components/profile/edit-member-form/EditMemberForm";
-import { HealthInsurances, MyDoctors, Anamneses, FamilyMember, FileWithDescription } from "@/utils/types";
+import { HealthInsurances, MyDoctors, Anamneses, FamilyMember, FileWithDescription, TelMedicinePhoneNumber } from "@/utils/types";
 
 async function getMember(id: string) {
   const member = await prisma.memberProfile.findUnique({
@@ -25,6 +25,7 @@ async function getMember(id: string) {
       documents: true,
       doctors: true,
       familyMembers: true,
+      telMedicineNumbers: true,
       isActive: true,
       activeUntil: true,
     },
@@ -69,6 +70,9 @@ export default async function EditMemberPage() {
     healthInsurances: (Array.isArray(member.healthInsurances) ? member.healthInsurances : []) as HealthInsurances[],
     doctors: (Array.isArray(member.doctors) ? member.doctors : []) as MyDoctors[],
     familyMembers: (Array.isArray(member.familyMembers) ? member.familyMembers : []) as FamilyMember[],
+    telMedicineNumbers: Array.isArray(member.telMedicineNumbers)
+      ? (member.telMedicineNumbers as unknown as TelMedicinePhoneNumber[])
+      : [],
   };
 
   return (

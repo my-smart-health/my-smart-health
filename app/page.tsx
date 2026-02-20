@@ -20,6 +20,7 @@ import {
   MemberProfileDashboardProps,
   FamilyMember,
   FileWithDescription,
+  TelMedicinePhoneNumber,
 } from "@/utils/types";
 
 async function getHomePageData(isLogged: boolean) {
@@ -100,6 +101,7 @@ async function getMemberByUserId(userId: string) {
         documents: true,
         doctors: true,
         familyMembers: true,
+        telMedicineNumbers: true,
         isActive: true,
         activeUntil: true,
       },
@@ -133,6 +135,9 @@ async function getMemberByUserId(userId: string) {
         : [],
       familyMembers: Array.isArray(member.familyMembers)
         ? (member.familyMembers as FamilyMember[])
+        : [],
+      telMedicineNumbers: Array.isArray(member.telMedicineNumbers)
+        ? (member.telMedicineNumbers as unknown as TelMedicinePhoneNumber[])
         : [],
     };
 

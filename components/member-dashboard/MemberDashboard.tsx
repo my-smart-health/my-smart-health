@@ -11,6 +11,7 @@ import {
   DocumentsSection,
   DoctorsSection,
   ContactsDisplay,
+  SpecialNumbersSection,
 } from '@/components/profile/profile-full-member/_components';
 
 type ContactDoctor = {
@@ -63,9 +64,10 @@ export default function MemberDashboard({ member }: MemberDashboardProps) {
   const hasDocuments = member.documents && member.documents.length > 0;
   const hasDoctors = member.doctors && member.doctors.length > 0;
   const hasContacts = contacts && contacts.length > 0;
+  const hasSpecialNumbers = member.isActive && member.telMedicineNumbers && member.telMedicineNumbers.length > 0;
 
   if (!hasPersonalInfo && !hasBloodType &&
-    !hasAnamneses && !hasDocuments && !hasDoctors && !hasContacts) {
+    !hasAnamneses && !hasDocuments && !hasDoctors && !hasContacts && !hasSpecialNumbers) {
     return null;
   }
 
@@ -152,6 +154,15 @@ export default function MemberDashboard({ member }: MemberDashboardProps) {
               <input type="radio" name="member_home_tabs" role="tab" className="tab" aria-label="Contacts" />
               <div role="tabpanel" className="tab-content rounded-box p-6">
                 <ContactsDisplay contacts={contacts} />
+              </div>
+            </>
+          )}
+
+          {hasSpecialNumbers && (
+            <>
+              <input type="radio" name="member_home_tabs" role="tab" className="tab" aria-label="Special Numbers" />
+              <div role="tabpanel" className="tab-content rounded-box p-6">
+                <SpecialNumbersSection specialNumbers={member.telMedicineNumbers} />
               </div>
             </>
           )}
