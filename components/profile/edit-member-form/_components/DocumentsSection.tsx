@@ -50,11 +50,11 @@ export function DocumentsSection({
               <div key={index} className="flex flex-col gap-2 p-3 border border-gray-200 rounded-lg">
                 <div className="flex gap-2">
                   <input
-                    type="text"
-                    value={doc.description || ''}
-                    onChange={e => handleChangeDescription(index, e.target.value)}
-                    placeholder="Document description (optional)"
-                    className="p-2 rounded border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary flex-1"
+                    type="url"
+                    value={doc.url}
+                    onChange={e => handleChangeUrl(index, e.target.value)}
+                    placeholder="Enter document URL"
+                    className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
                   />
                   <button
                     type="button"
@@ -65,11 +65,11 @@ export function DocumentsSection({
                   </button>
                 </div>
                 <input
-                  type="url"
-                  value={doc.url}
-                  onChange={e => handleChangeUrl(index, e.target.value)}
-                  placeholder="Enter document URL"
-                  className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                  type="text"
+                  value={doc.description || ''}
+                  onChange={e => handleChangeDescription(index, e.target.value)}
+                  placeholder="Document description (optional)"
+                  className="p-2 rounded border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary flex-1"
                 />
               </div>
             ))
