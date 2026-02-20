@@ -45,54 +45,56 @@ export default function AGBPage() {
           <h3 className="text-lg font-bold text-primary mb-3">§ 2 Vertragsbeginn und Laufzeit</h3>
           <p className="mb-2">
             Der Vertrag tritt mit der Registrierung des Teilnehmers durch beide Parteien in Kraft.
+          </p>
+          <p className="mb-2">
             Er wird auf unbestimmte Zeit geschlossen und ist monatlich kündbar.
-            <br />
+          </p>
+          <p className="mb-2">
             Die Kündigung muss schriftlich oder in Textform (E-Mail genügt) bis spätestens 14 Tage vor
             Monatsende erfolgen.
-            <br />
           </p>
           <p className="mb-2">
             Zur Einrichtung eines Administrator-Accounts werden folgende Angaben benötigt:
           </p>
-          <ul className="list-disc pl-6 space-y-1">
+          <ul className="list-disc pl-6 space-y-1 mb-2">
             <li>Name des Lizenznehmers</li>
             <li>Anschrift des Lizenznehmers</li>
             <li>E-Mail-Adresse</li>
             <li>Einrichtung eines Zahlungsmittels</li>
           </ul>
-          <p>
+          <p className="mb-2">
             Durch Registrierung gelangt der Administrator des Teilnehmers in den
-            <br />
             Administrationsbereich von Future Health bzw. eigener Future Health Seiten. Die Daten des
             Administrator-Accounts können über die Account-Einstellung jederzeit geändert werden.
-            <br />
+          </p>
+          <p className="mb-2">
             Bei darauffolgenden Anmeldevorgängen ist die Eingabe der hinterlegten E-Mail-Adresse
             sowie des Passwortes erforderlich. Ein Ändern des Passwortes ist ausschließlich in den
             Account-Einstellungen möglich.
-            <br />
+          </p>
+          <p className="mb-2">
             Der Inhaber bzw. Administrator des Teilnehmers ist für die sichere Aufbewahrung der
             Account-Zugangsdaten verantwortlich. Durch einen etwaigen Verlust entstehenden Schaden
             kommt der Lizenzgeber nicht auf.
           </p>
-
         </section>
 
         <section>
           <h3 className="text-lg font-bold text-primary mb-3">§ 3 Vergütung</h3>
           <p className="mb-2">
-            Die Nutzung der Plattform ist ab Vertragsbeginn kostenpflichtig.
-            <br />
-            Die Vergütung richtet sich nach der jeweils gültigen Preisliste bzw. dem individuell
-            <br />
-            vereinbarten monatlichen Nutzungsentgelt.
-            <br />
-            Zahlungen sind monatlich im Voraus ohne Abzug fällig.
-            <br />
+            Die Nutzung der Plattform ist ab Vertragsbeginn kostenfrei.
+          </p>
+          <p className="mb-2">
+            Zusätzliche Angebote werden vergütet nach der jeweils gültigen Preisliste bzw. dem
+            individuell vereinbarten monatlichen Nutzungsentgelt.
+          </p>
+          <p className="mb-2">
+            Zahlungen sind jährlich im Voraus ohne Abzug fällig.
+          </p>
+          <p className="mb-2">
             Der Anbieter ist berechtigt, Preise mit einer Frist von 30 Tagen zum Monatsende
             anzupassen.
           </p>
-
-
         </section>
 
         <section>
@@ -172,11 +174,15 @@ export default function AGBPage() {
           <h3 className="text-lg font-bold text-primary mb-3">§ 10 Schlussbestimmungen</h3>
           <p className="mb-2">
             Änderungen und Ergänzungen dieses Vertrages bedürfen der Schriftform.
-            <br />
+          </p>
+          <p className="mb-2">
             Sollten einzelne Bestimmungen unwirksam sein, bleibt die Wirksamkeit der übrigen
             Bestimmungen unberührt.
-            <br />
+          </p>
+          <p className="mb-2">
             Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts.
+          </p>
+          <p className="mb-2">
             Gerichtsstand ist Düsseldorf.
           </p>
         </section>
