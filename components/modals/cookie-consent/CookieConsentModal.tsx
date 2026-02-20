@@ -17,7 +17,6 @@ export interface CookiePreferences {
 }
 
 export default function CookieConsentModal() {
-  const [isMounted, setIsMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [preferences, setPreferences] = useState<CookiePreferences>({
@@ -29,7 +28,6 @@ export default function CookieConsentModal() {
   const acceptBtnRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
-    setIsMounted(true);
     try {
       const consentRaw = window.localStorage.getItem(STORAGE_KEY);
       const prefsRaw = window.localStorage.getItem(STORAGE_PREFERENCES);
@@ -137,7 +135,7 @@ export default function CookieConsentModal() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  if (!isMounted || !open) return null;
+  if (!open) return null;
 
   const buttons = [
     {
