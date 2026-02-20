@@ -1,8 +1,8 @@
-import { MedicationPlan, FileWithDescription } from '@/utils/types';
+import { MedicationPlanTable, FileWithDescription } from '@/utils/types';
 
 type MedicationPlanSectionProps = {
-  medicationPlan: MedicationPlan[];
-  setMedicationPlan: (val: MedicationPlan[]) => void;
+  medicationPlan: MedicationPlanTable[];
+  setMedicationPlan: (val: MedicationPlanTable[]) => void;
 };
 
 export function MedicationPlanSection({
@@ -12,7 +12,7 @@ export function MedicationPlanSection({
   const handleAdd = () => {
     setMedicationPlan([
       ...medicationPlan,
-      { name: '', dateOfIssue: '', fileUrl: [] },
+      { medication: '', dosage: '', sinceWhen: '', reason: '', fileUrl: [] },
     ]);
   };
 
@@ -20,7 +20,7 @@ export function MedicationPlanSection({
     setMedicationPlan(medicationPlan.filter((_, i) => i !== index));
   };
 
-  const handleChange = (index: number, field: keyof Omit<MedicationPlan, 'fileUrl'>, value: string) => {
+  const handleChange = (index: number, field: keyof Omit<MedicationPlanTable, 'fileUrl'>, value: string) => {
     const updated = [...medicationPlan];
     updated[index] = { ...updated[index], [field]: value };
     setMedicationPlan(updated);
@@ -28,25 +28,28 @@ export function MedicationPlanSection({
 
   const handleAddFileUrl = (index: number) => {
     const updated = [...medicationPlan];
+    const existingFileUrls = updated[index].fileUrl ?? [];
     updated[index] = {
       ...updated[index],
-      fileUrl: [...updated[index].fileUrl, { url: '', description: '' }],
+      fileUrl: [...existingFileUrls, { url: '', description: '' }],
     };
     setMedicationPlan(updated);
   };
 
   const handleRemoveFileUrl = (medIndex: number, fileIndex: number) => {
     const updated = [...medicationPlan];
+    const existingFileUrls = updated[medIndex].fileUrl ?? [];
     updated[medIndex] = {
       ...updated[medIndex],
-      fileUrl: updated[medIndex].fileUrl.filter((_, i) => i !== fileIndex),
+      fileUrl: existingFileUrls.filter((_, i) => i !== fileIndex),
     };
     setMedicationPlan(updated);
   };
 
   const handleFileUrlChange = (medIndex: number, fileIndex: number, field: keyof FileWithDescription, value: string) => {
     const updated = [...medicationPlan];
-    const updatedUrls = [...updated[medIndex].fileUrl];
+    const existingFileUrls = updated[medIndex].fileUrl ?? [];
+    const updatedUrls = [...existingFileUrls];
     updatedUrls[fileIndex] = { ...updatedUrls[fileIndex], [field]: value };
     updated[medIndex] = { ...updated[medIndex], fileUrl: updatedUrls };
     setMedicationPlan(updated);
@@ -83,16 +86,16 @@ export function MedicationPlanSection({
                 </div>
                 <input
                   type="text"
-                  value={med.name}
-                  onChange={e => handleChange(medIndex, 'name', e.target.value)}
+                  value={med.medication}
+                  onChange={e => handleChange(medIndex, 'medication', e.target.value)}
                   placeholder="Medication Name"
                   className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
                 />
                 <input
                   type="date"
-                  value={med.dateOfIssue}
-                  onChange={e => handleChange(medIndex, 'dateOfIssue', e.target.value)}
-                  placeholder="Date of Issue"
+                  value={med.sinceWhen}
+                  onChange={e => handleChange(medIndex, 'sinceWhen', e.target.value)}
+                  placeholder="Since when"
                   className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
                   style={{ colorScheme: 'light' }}
                 />
@@ -107,7 +110,7 @@ export function MedicationPlanSection({
                       + Add URL
                     </button>
                   </div>
-                  {med.fileUrl.map((file, fileIndex) => (
+                  {(med.fileUrl ?? []).map((file, fileIndex) => (
                     <div key={fileIndex} className="flex flex-col gap-2 p-2 bg-gray-50 rounded">
                       <div className="flex gap-2">
                         <input

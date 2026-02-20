@@ -17,7 +17,7 @@ export function LifestyleSection({
           <label className="flex items-center gap-2 text-sm">
             <input
               type="checkbox"
-              checked={lifestyle.isSmoking}
+              checked={Boolean(lifestyle.isSmoking)}
               onChange={e => onChange('isSmoking', e.target.checked)}
               className="checkbox checkbox-sm checkbox-primary"
             />
