@@ -7,6 +7,7 @@ import { ErrorState } from "@/utils/types";
 
 import ErrorModal from "./ErrorModal";
 
+
 export default function RegisterForm() {
   const router = useRouter();
   const [error, setError] = useState<ErrorState>(null);
@@ -53,7 +54,7 @@ export default function RegisterForm() {
       const email = formData.get("email");
       const password = formData.get("password");
       const passwordConfirmation = formData.get("passwordConfirmation");
-
+      const role = formData.get("role") || "USER";
       if (!name) {
         setError({ type: "error", message: "Bitte geben Sie Ihren Namen ein" });
         setIsDisabled(false);
@@ -81,6 +82,7 @@ export default function RegisterForm() {
         name: name,
         email: email,
         password: password,
+        role: role
       };
 
       const res = await fetch("/api/auth/register", {
@@ -185,6 +187,27 @@ export default function RegisterForm() {
           >
             {showPasswordConfirmation ? "Hide" : "Show"}
           </button>
+        </div>
+
+        <label htmlFor="role">Role</label>
+        <div className="relative space-x-2">
+          <label htmlFor="radioUser">User</label>
+          <input
+            id="radioUser"
+            type="radio"
+            name="role"
+            value={"USER"}
+            defaultChecked
+            className="radio bg-red-100 border-red-300 checked:bg-red-200 checked:text-red-600 checked:border-red-600" />
+
+          <label htmlFor="radioMember">Member</label>
+          <input
+            id="radioMember"
+            type="radio"
+            name="role"
+            value={"MEMBER"}
+            className="radio bg-blue-100 border-blue-300 checked:bg-blue-200 checked:text-blue-600 checked:border-blue-600" />
+
         </div>
 
         <div className="flex mt-10 justify-end">

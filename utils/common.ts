@@ -1,4 +1,11 @@
-import { ErrorState, Social } from './types';
+import {
+  Anamneses,
+  ErrorState,
+  Social,
+  MedicationPlanTable,
+  HospitalStays,
+  FileWithDescription,
+} from './types';
 
 export function parseSocials(socials: string[]): Social[] {
   return socials
@@ -35,7 +42,7 @@ export function isInstagramLink(item: string) {
 
 export function getModalColor(
   error: ErrorState | null,
-  isDefaultLogo: boolean
+  isDefaultLogo: boolean,
 ) {
   if (!error) return '';
   if (error.type === 'success')
@@ -46,4 +53,208 @@ export function getModalColor(
 
 export function isBlobUrl(url: string) {
   return url.startsWith(process.env.BLOB_URL_PREFIX || '');
+}
+
+export function cleanupHealthInsurances(
+  healthInsurances: {
+    provider: string;
+    insuranceName: string;
+    insuranceNumber: string;
+    phone: string;
+  }[],
+) {
+  return healthInsurances.filter(
+    (item) =>
+      item.provider?.trim() ||
+      item.insuranceName?.trim() ||
+      item.insuranceNumber?.trim() ||
+      item.phone?.trim(),
+  );
+}
+
+export function cleanupMedicationPlan(
+  medicationPlan: {
+    name: string;
+    dateOfIssue: string;
+    fileUrl: { url: string; description?: string }[];
+  }[],
+) {
+  return medicationPlan
+    .map((item) => ({
+      ...item,
+      fileUrl: item.fileUrl
+        ? item.fileUrl
+            .map((file) => ({
+              url: file.url?.trim() || '',
+              description: file.description?.trim() || undefined,
+            }))
+            .filter((file) => file.url)
+        : [],
+    }))
+    .filter(
+      (item) =>
+        item.name?.trim() ||
+        item.dateOfIssue?.trim() ||
+        (item.fileUrl && item.fileUrl.length > 0),
+    );
+}
+
+export function cleanupAllergies(
+  allergies: { name: string; severity: string }[],
+) {
+  return allergies.filter((item) => item.name?.trim() || item.severity?.trim());
+}
+
+export function cleanupIntolerances(
+  intolerances: { name: string; severity: string }[],
+) {
+  return intolerances.filter(
+    (item) => item.name?.trim() || item.severity?.trim(),
+  );
+}
+
+export function cleanupDoctors(
+  doctors: {
+    name: string;
+    specialty: string;
+    emails?: string[];
+    phones?: string[];
+  }[],
+) {
+  return doctors
+    .map((item) => ({
+      ...item,
+      emails: item.emails ? item.emails.filter((email) => email?.trim()) : [],
+      phones: item.phones ? item.phones.filter((phone) => phone?.trim()) : [],
+    }))
+    .filter(
+      (item) =>
+        item.name?.trim() ||
+        item.specialty?.trim() ||
+        (item.emails && item.emails.length > 0) ||
+        (item.phones && item.phones.length > 0),
+    );
+}
+
+export function cleanupAnamneses(anamneses: Anamneses[]) {
+  return anamneses
+    .map((item) => {
+      const medicationPlanTable = item.medicationPlan?.medicationPlanTable
+        ? item.medicationPlan.medicationPlanTable
+            .map((med: MedicationPlanTable) => ({
+              medication: med.medication?.trim() || '',
+              dosage: med.dosage?.trim() || '',
+              sinceWhen: med.sinceWhen?.trim() || '',
+              reason: med.reason?.trim() || '',
+              fileUrl: med.fileUrl
+                ? med.fileUrl
+                    .map((file: FileWithDescription) => ({
+                      url: file.url?.trim() || '',
+                      description: file.description?.trim() || undefined,
+                    }))
+                    .filter((file: FileWithDescription) => {
+                      const url = file.url;
+                      return (
+                        url &&
+                        url.length > 0 &&
+                        url !== 'File' &&
+                        url !== 'file'
+                      );
+                    })
+                : null,
+            }))
+            .filter(
+              (med) =>
+                med.medication ||
+                med.dosage ||
+                med.sinceWhen ||
+                med.reason ||
+                (med.fileUrl && med.fileUrl.length > 0),
+            )
+        : [];
+
+      const hospitalStays = item.hospitalStays
+        ? item.hospitalStays
+            .map((stay: HospitalStays) => ({
+              year: stay.year,
+              treatment: stay.treatment?.trim() || '',
+              hospital: stay.hospital?.trim() || '',
+            }))
+            .filter((stay) => stay.year || stay.treatment || stay.hospital)
+        : [];
+
+      return {
+        text: item.text?.trim() || '',
+        illnesses: item.illnesses || {},
+        hospitalStays,
+        medicationPlan: {
+          medicationPlanTable,
+          noRegularMedications:
+            item.medicationPlan?.noRegularMedications ?? null,
+        },
+        allergiesIntolerances: item.allergiesIntolerances || {},
+        familyHistoryOfIllnesses: item.familyHistoryOfIllnesses || {},
+        lifestyle: item.lifestyle || {},
+        vaccinationStatus: item.vaccinationStatus || {},
+      };
+    })
+    .filter(
+      (item) =>
+        item.text ||
+        item.hospitalStays.length > 0 ||
+        item.medicationPlan.medicationPlanTable.length > 0 ||
+        item.medicationPlan.noRegularMedications !== null ||
+        Object.values(item.illnesses).some((v) => v !== null) ||
+        Object.values(item.allergiesIntolerances).some((v) => v !== null) ||
+        Object.values(item.familyHistoryOfIllnesses).some((v) => v !== null) ||
+        Object.values(item.vaccinationStatus).some((v) => v !== null),
+    );
+}
+
+export function cleanupFamilyMembers(
+  familyMembers: { name: string; phones: string[] }[],
+) {
+  return familyMembers
+    .map((item) => ({
+      name: item.name,
+      phones: item.phones ? item.phones.filter((phone) => phone?.trim()) : [],
+    }))
+    .filter(
+      (item) => item.name?.trim() || (item.phones && item.phones.length > 0),
+    );
+}
+
+export function cleanupBloodType(bloodType: string): string | null {
+  const trimmed = bloodType?.trim();
+  return trimmed && trimmed.length > 0 ? trimmed : null;
+}
+
+export function cleanupBloodTypeFiles(
+  files: { url: string; description?: string }[],
+): { url: string; description?: string }[] {
+  return files
+    .map((file) => ({
+      url: file.url?.trim() || '',
+      description: file.description?.trim() || undefined,
+    }))
+    .filter((file) => {
+      const url = file.url;
+      // Filter out empty URLs and invalid placeholders like "File"
+      return url && url.length > 0 && url !== 'File' && url !== 'file';
+    });
+}
+
+export function cleanupDocuments(
+  documents: { url: string; description?: string }[],
+) {
+  return documents
+    .map((item) => ({
+      url: item.url?.trim() || '',
+      description: item.description?.trim() || undefined,
+    }))
+    .filter((item) => {
+      const url = item.url;
+      // Filter out empty URLs and invalid placeholders like "File"
+      return url && url.length > 0 && url !== 'File' && url !== 'file';
+    });
 }

@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { ErrorState } from "@/utils/types";
 import StatusModal from "@/components/modals/status-modal/StatusModal";
 
 export default function ChangePasswordForm() {
+  const { data: session } = useSession();
 
   const [error, setError] = useState<ErrorState>(null);
 
@@ -59,7 +61,11 @@ export default function ChangePasswordForm() {
     }
 
     try {
-      const response = await fetch('/api/update/change-password', {
+      const apiRoute = session?.user?.role === 'MEMBER'
+        ? '/api/update/change-member-password'
+        : '/api/update/change-password';
+
+      const response = await fetch(apiRoute, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -12,6 +12,18 @@ generator client {
 enum Role {
   USER
   ADMIN
+  MEMBER
+}
+
+enum BloodType {
+  A_POSITIVE
+  A_NEGATIVE
+  B_POSITIVE
+  B_NEGATIVE
+  AB_POSITIVE
+  AB_NEGATIVE
+  O_POSITIVE
+  O_NEGATIVE
 }
 
 enum CategoryType {
@@ -48,6 +60,7 @@ model User {
   locations        Location[]     @relation("UserLocations")
   certificates     Certificate[]  @relation("UserCertificates")
   categoryUsers    CategoryUser[]
+  memberDoctors    MemberDoctor[]
 }
 
 model Posts {
@@ -66,6 +79,42 @@ model Posts {
   cubeOrder   Int?
 
   @@index([cubeId, cubeOrder])
+}
+
+model MemberProfile {
+  id               String         @id @default(uuid())
+  email            String         @unique
+  password         String         @db.VarChar(255)
+  role             Role           @default(MEMBER)
+  createdAt        DateTime       @default(now())
+  name             String?
+  birthday         DateTime?
+  heightCm         Decimal?       @db.Decimal(5, 2)
+  weightKg         Decimal?       @db.Decimal(5, 2)
+  healthInsurances Json? // Array of { provider, insuranceName, insuranceNumber, phone }
+  familyMembers    Json? // Array of { name, phones }
+  bloodType        BloodType?
+  bloodTypeFiles   Json? // Array of { url, description }
+  anamneses        Json? // Medical history with nested data including medication plans with file attachments
+  documents        Json? // Array of { url, description }
+  doctors          Json? // Array of { name, specialty, emails, phones }
+  memberDoctors    MemberDoctor[]
+  updatedAt        DateTime       @updatedAt
+  isActive         Boolean        @default(true)
+  activeUntil      DateTime?
+}
+
+model MemberDoctor {
+  id       String        @id @default(uuid())
+  member   MemberProfile @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId String
+  doctor   User          @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  doctorId String
+  notes    Json?
+
+  @@unique([memberId, doctorId])
+  @@index([memberId])
+  @@index([doctorId])
 }
 
 model Certificate {

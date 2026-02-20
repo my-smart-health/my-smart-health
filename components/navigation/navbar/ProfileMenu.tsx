@@ -4,6 +4,7 @@ import { Settings, Bell, BellRing } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import LogOut from "@/components/buttons/log-out/LogOut";
+import { useEffect, useState } from "react";
 
 interface ProfileMenuProps {
   unreadNotifications?: number;
@@ -11,6 +12,25 @@ interface ProfileMenuProps {
 
 export default function ProfileMenu({ unreadNotifications = 0 }: ProfileMenuProps) {
   const { data: session } = useSession();
+  const [hasContacts, setHasContacts] = useState(false);
+
+  useEffect(() => {
+    const checkContacts = async () => {
+      if (session?.user?.role === "USER") {
+        try {
+          const response = await fetch(`/api/member/contacts/check`);
+          if (response.ok) {
+            const data = await response.json();
+            setHasContacts(data.hasContacts);
+          }
+        } catch (error) {
+          console.error("Error checking contacts:", error);
+        }
+      }
+    };
+
+    checkContacts();
+  }, [session]);
 
   if (!session) return null;
 
@@ -47,16 +67,27 @@ export default function ProfileMenu({ unreadNotifications = 0 }: ProfileMenuProp
         <ul tabIndex={0} className="dropdown-content menu bg-primary border rounded-box z-1 w-52 p-2 shadow-sm transition-opacity ease-in-out">
           <li><Link href="/" className="flex gap-1">Home</Link></li>
           <li><Link href="/dashboard" className="flex gap-1">Dashboard</Link></li>
+          {session.user.role === "USER" && hasContacts && (
+            <li><Link href="/dashboard/my-contacts" className="flex gap-1">My Contacts</Link></li>
+          )}
+
+
+          {(session.user.role === "USER" || session.user.role === "ADMIN") && (
+            <>
+              <li className="tab-disabled"></li>
+              <li><Link href="/dashboard/all-posts" className="flex gap-1">All Posts</Link></li>
+              <li><Link href="/dashboard/create-post" className="flex gap-1">Create Post</Link></li>
+              <li className="tab-disabled"></li>
+              <li><Link href="/dashboard/edit-profile" className="flex gap-1">Edit profile</Link></li>
+              <li>
+                <Link href="/dashboard/change-email" className="flex gap-1">
+                  Change Email
+                </Link>
+              </li>
+            </>
+          )}
+
           <li className="tab-disabled"></li>
-          <li><Link href="/dashboard/all-posts" className="flex gap-1">All Posts</Link></li>
-          <li><Link href="/dashboard/create-post" className="flex gap-1">Create Post</Link></li>
-          <li className="tab-disabled"></li>
-          <li><Link href="/dashboard/edit-profile" className="flex gap-1">Edit profile</Link></li>
-          <li>
-            <Link href="/dashboard/change-email" className="flex gap-1">
-              Change Email
-            </Link>
-          </li>
           <li>
             <Link href="/dashboard/change-password" className="flex gap-1">
               Change Password
@@ -67,6 +98,7 @@ export default function ProfileMenu({ unreadNotifications = 0 }: ProfileMenuProp
             <>
               <span className="font-bold self-center">Admin Only</span>
               <li><Link href="/dashboard/all-users" className="flex gap-1">All Users</Link></li>
+              <li><Link href="/dashboard/all-members" className="flex gap-1">All Members</Link></li>
               <li><Link href="/dashboard/edit-cube" className="flex gap-1">Edit Cube</Link></li>
               <li><Link href="/dashboard/edit-my-smart-health" className="flex gap-1">Edit My Smart Health</Link></li>
               <li><Link href="/register" className="flex gap-1">Create new user</Link></li>

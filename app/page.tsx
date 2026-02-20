@@ -12,6 +12,15 @@ import TopCarouselSkeleton from "@/components/carousels/topCarousel/TopCarouselS
 import NewsCarouselSkeleton from "@/components/carousels/newsCarousel/NewsCarouselSkeleton";
 import { withRetry } from "@/lib/prisma-retry";
 import { auth } from "@/auth";
+import MemberDashboard from "@/components/member-dashboard/MemberDashboard";
+import {
+  HealthInsurances,
+  MyDoctors,
+  Anamneses,
+  MemberProfileDashboardProps,
+  FamilyMember,
+  FileWithDescription,
+} from "@/utils/types";
 
 async function getHomePageData(isLogged: boolean) {
   const cacheStrategy = isLogged ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.SHORT;
@@ -70,10 +79,79 @@ async function getHomePageData(isLogged: boolean) {
   }
 }
 
+async function getMemberByUserId(userId: string) {
+  try {
+    const member = await prisma.memberProfile.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+        name: true,
+        birthday: true,
+        heightCm: true,
+        weightKg: true,
+        healthInsurances: true,
+        bloodType: true,
+        bloodTypeFiles: true,
+        anamneses: true,
+        documents: true,
+        doctors: true,
+        familyMembers: true,
+        isActive: true,
+        activeUntil: true,
+      },
+      cacheStrategy: CACHE_STRATEGY.NONE,
+    });
+
+    if (!member) return null;
+
+    const safeMember: MemberProfileDashboardProps = {
+      ...member,
+      createdAt: member.createdAt.toISOString(),
+      updatedAt: member.updatedAt.toISOString(),
+      birthday: member.birthday ? member.birthday.toISOString() : null,
+      activeUntil: member.activeUntil ? member.activeUntil.toISOString() : null,
+      heightCm: member.heightCm ? Number(member.heightCm.toString()) : null,
+      weightKg: member.weightKg ? Number(member.weightKg.toString()) : null,
+      healthInsurances: Array.isArray(member.healthInsurances)
+        ? (member.healthInsurances as unknown as HealthInsurances[])
+        : [],
+      bloodTypeFiles: Array.isArray(member.bloodTypeFiles)
+        ? (member.bloodTypeFiles as unknown as FileWithDescription[])
+        : [],
+      doctors: Array.isArray(member.doctors)
+        ? (member.doctors as unknown as MyDoctors[])
+        : [],
+      anamneses: Array.isArray(member.anamneses)
+        ? (member.anamneses as unknown as Anamneses[])
+        : [],
+      documents: Array.isArray(member.documents)
+        ? (member.documents as unknown as FileWithDescription[])
+        : [],
+      familyMembers: Array.isArray(member.familyMembers)
+        ? (member.familyMembers as FamilyMember[])
+        : [],
+    };
+
+    return safeMember;
+  } catch (error) {
+    console.error('Error fetching member profile:', error);
+    return null;
+  }
+}
+
 export default async function Home() {
   const session = await auth();
   const isLogged = !!session?.user;
   const { news, cube, cubePosts } = await getHomePageData(isLogged);
+
+  let memberData: MemberProfileDashboardProps = null;
+  if (session?.user?.id) {
+    memberData = await getMemberByUserId(session.user.id);
+  }
 
 
   const newsTopCarousel = news.length > 0
@@ -110,10 +188,13 @@ export default async function Home() {
       )}
 
       <div className="flex flex-col mt-3 gap-3 w-full mx-auto max-w-[100%]">
+
+        {memberData && <MemberDashboard member={memberData} />}
+
         <MySmartHealth />
         <ProfileSearchToggle />
         <CategoryButton name={CATEGORY_NAMES.theLeadingDoctors.name} goTo={CATEGORY_NAMES.theLeadingDoctors.link} imageAsTitle="/the-leading-doctors.png" />
-        <CategoryButton name={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.name} goTo={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.link} imageAsTitle="/Termine-Kurzfristig.png" />
+        <CategoryButton name={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.name} goTo={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.link} imageAsTitle="/the-leading-hospitals.png" />
 
         <CategoryButton name={CATEGORY_NAMES.smartHealth.name} icon="/icon3.png" goTo={CATEGORY_NAMES.smartHealth.link} />
         <CategoryButton name={CATEGORY_NAMES.medizinUndPflege.name} icon="/icon4.png" goTo={CATEGORY_NAMES.medizinUndPflege.link} />

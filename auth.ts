@@ -75,15 +75,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const password = credentials?.password as string;
         if (!email || !password) return null;
 
-        const user = await prisma.user.findUnique({
-          where: { email },
-        });
-        if (!user || !user.password) return null;
+        const account =
+          (await prisma.user.findUnique({ where: { email } })) ??
+          (await prisma.memberProfile.findUnique({ where: { email } }));
 
-        const isValid = await compare(password, user.password);
+        if (!account || !account.password) return null;
+
+        const isValid = await compare(password, account.password);
         if (!isValid) return null;
 
-        const { password: _, ...userWithoutPassword } = user;
+        const { password: _, ...userWithoutPassword } = account;
 
         return {
           ...userWithoutPassword,

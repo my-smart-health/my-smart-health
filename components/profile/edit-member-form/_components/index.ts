@@ -1,0 +1,11 @@
+export { BasicInfoSection } from './BasicInfoSection';
+export { StatusSection } from './StatusSection';
+export { PersonalInfoSection } from './PersonalInfoSection';
+export { BloodTypeSection } from './BloodTypeSection';
+export { HealthInsurancesSection } from './HealthInsurancesSection';
+export { DoctorsSection } from './DoctorsSection';
+export { AnamnesesSection } from './AnamnesesSection';
+export { DocumentsSection } from './DocumentsSection';
+export { FamilyMembersSection } from './FamilyMembersSection';
+export { ContactsSection } from './ContactsSection';
+export { AddContactModal } from './AddContactModal';

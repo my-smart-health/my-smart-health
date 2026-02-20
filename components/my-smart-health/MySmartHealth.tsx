@@ -71,7 +71,7 @@ export default async function MySmartHealth() {
         <input type="checkbox" className='w-full h-full' />
         <div className="collapse-title flex items-center gap-3 w-full h-full font-bold text-xl">
           <Image
-            src="/navbar.jpg"
+            src="/my-smart-health-section.png"
             alt="My Smart Health"
             width={150}
             height={60}

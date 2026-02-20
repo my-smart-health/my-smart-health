@@ -437,7 +437,9 @@ export default function EditProfileForm({ user }: { user: User }) {
     statusModalRef.current?.close();
 
     if (wasSuccess) {
-      redirect.push(`/profile/${user.id}`);
+      session.data?.user.role === 'ADMIN' ?
+        redirect.push(`/profile/${user.id}`) :
+        redirect.push('/dashboard');
       redirect.refresh();
     }
   };

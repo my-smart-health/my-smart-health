@@ -1,3 +1,4 @@
+import { $Enums } from '@prisma/client';
 import { Session } from 'next-auth';
 
 import { User } from 'next-auth';
@@ -191,3 +192,149 @@ export type AdminNotification = {
   resetReadAt: string | null;
   archivedAt: string | null;
 };
+
+export type RegisterFormProps = {
+  role?: 'USER' | 'MEMBER';
+};
+
+export type HealthInsurances = {
+  provider: string;
+  insuranceName: string;
+  insuranceNumber: string;
+  phone: string;
+};
+
+export type FileWithDescription = {
+  url: string;
+  description?: string;
+};
+
+export type Allergies = {
+  name: string;
+  severity: string;
+};
+
+export type Intolerances = {
+  name: string;
+  severity: string;
+};
+
+export type MyDoctors = {
+  name: string;
+  specialty: string;
+  emails?: string[];
+  phones?: string[];
+};
+
+export type Illnesses = {
+  highBloodPressure: boolean | null;
+  diabetes: boolean | null;
+  heartDisease: boolean | null;
+  stroke: boolean | null;
+  asthma: boolean | null;
+  allergies: boolean | null;
+  thyroidDisorders: boolean | null;
+  gastrointestinalDiseases: boolean | null;
+  liverDisorders: boolean | null;
+  kidneyDiseases: boolean | null;
+  rheumatism: boolean | null;
+  autoimmuneDiseases: boolean | null;
+  cancer: boolean | null;
+  mentalHealthDisorders: boolean | null;
+  infectiousDiseases: boolean | null;
+  other: string | null;
+};
+
+export type HospitalStays = {
+  year: number;
+  treatment: string;
+  hospital: string;
+};
+
+export type MedicationPlanTable = {
+  medication: string;
+  dosage: string;
+  sinceWhen: string;
+  reason: string;
+  fileUrl: FileWithDescription[] | null;
+};
+
+export type MedicationPlan = {
+  medicationPlanTable: MedicationPlanTable[];
+  noRegularMedications: boolean | null;
+};
+
+export type AllergiesIntolerances = {
+  noneKnown: boolean | null;
+  medications: boolean | null;
+  foods: boolean | null;
+  pollen: boolean | null;
+  petHair: boolean | null;
+  other: string | null;
+  typeOfReaction: string | null;
+};
+
+export type FamilyHistoryOfIllness = {
+  cardiovascularDisease: boolean | null;
+  diabetes: boolean | null;
+  cancer: boolean | null;
+  hereditaryDiseases: boolean | null;
+  mentalHealthConditions: boolean | null;
+  noKnownRelevantIllnesses: boolean | null;
+};
+
+export type Lifestyle = {
+  isSmoking: boolean | null;
+  cigarettesPerDay: number | null;
+  alcohol: 'NO' | 'OCCASIONALLY' | 'REGULARLY';
+  exercise: 'NO' | 'LITTLE' | 'MODERATE' | 'REGULARLY';
+  diet: 'BALANCED' | 'VEGETARIAN' | 'VEGAN' | 'UNBALANCED';
+  stressLevel: 'LOW' | 'MODERATE' | 'HIGH';
+};
+
+export type VaccinationStatus = {
+  tetanus: boolean | null;
+  measles: boolean | null;
+  hepatitisB: boolean | null;
+  influenza: boolean | null;
+  covid19: boolean | null;
+  unknown: boolean | null;
+  other: string | null;
+};
+
+export type Anamneses = {
+  text: string;
+  illnesses: Illnesses;
+  hospitalStays: HospitalStays[];
+  medicationPlan: MedicationPlan;
+  allergiesIntolerances: AllergiesIntolerances;
+  familyHistoryOfIllnesses: FamilyHistoryOfIllness;
+  lifestyle: Lifestyle;
+  vaccinationStatus: VaccinationStatus;
+};
+
+export type FamilyMember = {
+  name: string;
+  phones: string[];
+};
+
+export type MemberProfileDashboardProps = {
+  id: string;
+  email: string;
+  role: $Enums.Role;
+  createdAt: string;
+  name: string | null;
+  birthday: string | null;
+  heightCm: number | null;
+  weightKg: number | null;
+  healthInsurances: HealthInsurances[];
+  bloodType: $Enums.BloodType | null;
+  bloodTypeFiles: FileWithDescription[];
+  anamneses: Anamneses[];
+  documents: FileWithDescription[];
+  doctors: MyDoctors[];
+  familyMembers: FamilyMember[];
+  updatedAt: string;
+  isActive: boolean;
+  activeUntil: string | null;
+} | null;
