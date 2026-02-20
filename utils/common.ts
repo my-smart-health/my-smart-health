@@ -5,6 +5,7 @@ import {
   MedicationPlanTable,
   HospitalStays,
   FileWithDescription,
+  TelMedicinePhoneNumber,
 } from './types';
 
 export function parseSocials(socials: string[]): Social[] {
@@ -239,7 +240,6 @@ export function cleanupBloodTypeFiles(
     }))
     .filter((file) => {
       const url = file.url;
-      // Filter out empty URLs and invalid placeholders like "File"
       return url && url.length > 0 && url !== 'File' && url !== 'file';
     });
 }
@@ -254,7 +254,18 @@ export function cleanupDocuments(
     }))
     .filter((item) => {
       const url = item.url;
-      // Filter out empty URLs and invalid placeholders like "File"
       return url && url.length > 0 && url !== 'File' && url !== 'file';
     });
+}
+
+export function cleanupSpecialNumbers(
+  specialNumbers: TelMedicinePhoneNumber[],
+) {
+  return specialNumbers
+    .map((item) => ({
+      type: item.type?.trim() || '',
+      phone: item.phone?.trim() || '',
+      description: item.description?.trim() || undefined,
+    }))
+    .filter((item) => item.type || item.phone || item.description);
 }
