@@ -34,7 +34,7 @@ export function SpecialNumbersSection({
     <section>
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <span className="font-semibold text-gray-700">Special Numbers</span>
+          <span className="font-semibold text-gray-700">Telemedizin</span>
           <button
             type="button"
             onClick={handleAdd}
