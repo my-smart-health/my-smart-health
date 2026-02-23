@@ -51,7 +51,7 @@ export default function ProfileShort({ id, name, bio, image, membership, ratingS
             <RatingStars id={id} stars={ratingStars} ratingLink={ratingLink} />
           )}
         </div>
-        <div className="flex flex-row gap-2 justify-end">
+        <div className="flex flex-col sm:flex-row gap-2 justify-end">
           {membership?.status && (
             <div className="mr-auto">
               <MembershipSection membership={membership} />
