@@ -20,7 +20,7 @@ export default function SocialLinks({ displayEmail, website, parsedSocials, plat
         {displayEmail && (
           <Link
             href={`mailto:${displayEmail}`}
-            className="badge badge-primary py-5 px-3 text-white hover:bg-primary/75 transition-colors duration-200">
+            className="py-5 px-3  hover:bg-primary/75 transition-colors duration-200">
             {platformIcons.Email}
           </Link>
         )}
@@ -30,7 +30,7 @@ export default function SocialLinks({ displayEmail, website, parsedSocials, plat
             href={website}
             target="_blank"
             rel="noreferrer noopener"
-            className="badge badge-primary py-5 px-3 text-white hover:bg-primary/75 transition-colors duration-200">
+            className="py-5 px-3  hover:bg-primary/75 transition-colors duration-200">
             {platformIcons.Website}
           </Link>
         )}
@@ -41,7 +41,7 @@ export default function SocialLinks({ displayEmail, website, parsedSocials, plat
               href={social.url}
               target="_blank"
               rel="noreferrer noopener"
-              className="badge badge-primary py-5 px-3 text-white hover:bg-primary/75 transition-colors duration-200">
+              className="py-5 px-3  hover:bg-primary/75 transition-colors duration-200">
               {platformIcons[social.platform]}
             </Link>
           </div>
