@@ -2,6 +2,18 @@ import prisma from '@/lib/db';
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 
+const hasPrismaErrorCode = (
+  err: unknown,
+  code: string,
+): err is { code: string } => {
+  return (
+    typeof err === 'object' &&
+    err !== null &&
+    'code' in err &&
+    (err as { code?: unknown }).code === code
+  );
+};
+
 export async function GET(req: Request) {
   const session = await auth();
   if (!session) {
@@ -91,11 +103,19 @@ export async function POST(req: Request) {
       { message: 'Contact added successfully', data: memberDoctor },
       { status: 201 },
     );
-  } catch (err: any) {
-    if (err?.code === 'P2002') {
+  } catch (err: unknown) {
+    if (hasPrismaErrorCode(err, 'P2002')) {
       return NextResponse.json(
         { error: 'Contact already exists' },
         { status: 409 },
+      );
+    }
+
+    if (err instanceof Error) {
+      console.error('Error adding member contact:', err.message);
+      return NextResponse.json(
+        { error: 'Failed to add contact' },
+        { status: 500 },
       );
     }
 
