@@ -1,3 +1,4 @@
+import Divider from "@/components/divider/Divider";
 import Link from "next/link";
 
 type SocialLinksProps = {
@@ -46,7 +47,7 @@ export default function SocialLinks({ displayEmail, website, parsedSocials, plat
             </Link>
           </div>
         ))}
-
+        <Divider addClass="my-1" />
       </div>
     </>
   );
