@@ -3,7 +3,6 @@ import { CalendarPlus2, ClipboardPlus, NotebookTabs, ShoppingCart, AtSign } from
 import Link from "next/link";
 import { RESERVATION_LINK_TYPES, ReservationLink, Membership } from "@/utils/types";
 import { MembershipSection } from ".";
-import Divider from "@/components/divider/Divider";
 
 type Props = {
   reservationLinks?: ReservationLink[];
@@ -25,7 +24,6 @@ export default function PrescriptionReservation({ reservationLinks, membership =
         <>
           <div className="flex flex-col mt-2 justify-center w-full">
             <MembershipSection membership={membership} />
-            <Divider addClass="my-1 mt-5" />
           </div>
         </>
       )}
