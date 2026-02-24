@@ -1,8 +1,13 @@
 import { Lifestyle } from '@/utils/types';
 
+type LifestyleChangeHandler = <K extends keyof Lifestyle>(
+  field: K,
+  value: Lifestyle[K],
+) => void;
+
 type LifestyleSectionProps = {
   lifestyle: Lifestyle;
-  onChange: (field: keyof Lifestyle, value: any) => void;
+  onChange: LifestyleChangeHandler;
 };
 
 export function LifestyleSection({
@@ -39,7 +44,7 @@ export function LifestyleSection({
             <label className="block text-xs font-medium mb-1">Alcohol</label>
             <select
               value={lifestyle.alcohol}
-              onChange={e => onChange('alcohol', e.target.value)}
+              onChange={e => onChange('alcohol', e.target.value as Lifestyle['alcohol'])}
               className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
             >
               <option value="NO">No</option>
@@ -51,7 +56,7 @@ export function LifestyleSection({
             <label className="block text-xs font-medium mb-1">Exercise</label>
             <select
               value={lifestyle.exercise}
-              onChange={e => onChange('exercise', e.target.value)}
+              onChange={e => onChange('exercise', e.target.value as Lifestyle['exercise'])}
               className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
             >
               <option value="NO">No</option>
@@ -64,7 +69,7 @@ export function LifestyleSection({
             <label className="block text-xs font-medium mb-1">Diet</label>
             <select
               value={lifestyle.diet}
-              onChange={e => onChange('diet', e.target.value)}
+              onChange={e => onChange('diet', e.target.value as Lifestyle['diet'])}
               className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
             >
               <option value="BALANCED">Balanced</option>
@@ -77,7 +82,7 @@ export function LifestyleSection({
             <label className="block text-xs font-medium mb-1">Stress Level</label>
             <select
               value={lifestyle.stressLevel}
-              onChange={e => onChange('stressLevel', e.target.value)}
+              onChange={e => onChange('stressLevel', e.target.value as Lifestyle['stressLevel'])}
               className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
             >
               <option value="LOW">Low</option>

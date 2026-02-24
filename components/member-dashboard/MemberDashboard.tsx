@@ -29,14 +29,12 @@ type MemberDashboardProps = {
 
 export default function MemberDashboard({ member }: MemberDashboardProps) {
   const [contacts, setContacts] = useState<ContactDoctor[]>([]);
-  const [isLoadingContacts, setIsLoadingContacts] = useState(true);
 
   useEffect(() => {
     const fetchContacts = async () => {
       if (!member?.id) return;
 
       try {
-        setIsLoadingContacts(true);
         const response = await fetch(`/api/member/contacts?memberId=${member.id}`);
         if (response.ok) {
           const data = await response.json();
@@ -44,8 +42,6 @@ export default function MemberDashboard({ member }: MemberDashboardProps) {
         }
       } catch (error) {
         console.error('Error fetching contacts:', error);
-      } finally {
-        setIsLoadingContacts(false);
       }
     };
 

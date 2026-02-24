@@ -34,7 +34,6 @@ export default function ProfileFullMember({
 }) {
   const [mounted, setMounted] = useState(false);
   const [contacts, setContacts] = useState<ContactDoctor[]>([]);
-  const [isLoadingContacts, setIsLoadingContacts] = useState(true);
 
   useEffect(() => setMounted(true), []);
 
@@ -43,7 +42,6 @@ export default function ProfileFullMember({
       if (!member?.id) return;
 
       try {
-        setIsLoadingContacts(true);
         const response = await fetch(`/api/member/contacts?memberId=${member.id}`);
         if (response.ok) {
           const data = await response.json();
@@ -51,8 +49,6 @@ export default function ProfileFullMember({
         }
       } catch (error) {
         console.error('Error fetching contacts:', error);
-      } finally {
-        setIsLoadingContacts(false);
       }
     };
 

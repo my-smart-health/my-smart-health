@@ -207,7 +207,11 @@ export function AnamnesesSection({
     setAnamneses(updated);
   };
 
-  const handleLifestyleChange = (anamnesisIndex: number, field: keyof Lifestyle, value: any) => {
+  const handleLifestyleChange = <K extends keyof Lifestyle>(
+    anamnesisIndex: number,
+    field: K,
+    value: Lifestyle[K],
+  ) => {
     const updated = [...anamneses];
     updated[anamnesisIndex].lifestyle = {
       ...updated[anamnesisIndex].lifestyle,
