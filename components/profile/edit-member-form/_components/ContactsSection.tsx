@@ -43,7 +43,7 @@ export function ContactsSection({
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-primary font-bold text-xl">Contacts</h2>
+        <h2 className="text-primary font-bold text-xl">My Smart Health Contacts</h2>
         <button
           type="button"
           onClick={onAddClick}

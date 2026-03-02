@@ -112,6 +112,7 @@ export default function MemberDashboard({ member }: MemberDashboardProps) {
               <input type="radio" name="member_home_tabs" role="tab" className="tab" aria-label="Blood Type" />
               <div role="tabpanel" className="tab-content rounded-box p-6">
                 <BloodTypeSection
+                  memberId={member.id}
                   bloodType={member.bloodType}
                   bloodTypeFiles={member.bloodTypeFiles}
                 />
@@ -123,7 +124,10 @@ export default function MemberDashboard({ member }: MemberDashboardProps) {
             <>
               <input type="radio" name="member_home_tabs" role="tab" className="tab" aria-label="Anamneses" />
               <div role="tabpanel" className="tab-content rounded-box p-6">
-                <AnamnesesSection anamneses={member.anamneses} />
+                <AnamnesesSection
+                  memberId={member.id}
+                  anamneses={member.anamneses}
+                />
               </div>
             </>
           )}
@@ -132,7 +136,10 @@ export default function MemberDashboard({ member }: MemberDashboardProps) {
             <>
               <input type="radio" name="member_home_tabs" role="tab" className="tab" aria-label="Documents" />
               <div role="tabpanel" className="tab-content rounded-box p-6">
-                <DocumentsSection documents={member.documents} />
+                <DocumentsSection
+                  memberId={member.id}
+                  documents={member.documents}
+                />
               </div>
             </>
           )}
