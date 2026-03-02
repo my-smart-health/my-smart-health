@@ -56,6 +56,26 @@ export function isBlobUrl(url: string) {
   return url.startsWith(process.env.BLOB_URL_PREFIX || '');
 }
 
+export function getFileNameFromUrl(fileUrl: string) {
+  const stripGeneratedSuffix = (filename: string) =>
+    filename.replace(
+      /-[a-f0-9]{12}(\.[^.]+)?$/i,
+      (_match, extension = '') => extension,
+    );
+
+  try {
+    const url = new URL(fileUrl);
+    url.searchParams.delete('download');
+    const parts = url.pathname.split('/');
+    const fileName = decodeURIComponent(parts.pop() || fileUrl);
+    return stripGeneratedSuffix(fileName);
+  } catch {
+    const stripped = fileUrl.split(/[?#]/)[0];
+    const fileName = stripped.replace(/^.*[\\/]/, '') || fileUrl;
+    return stripGeneratedSuffix(fileName);
+  }
+}
+
 export function cleanupHealthInsurances(
   healthInsurances: {
     provider: string;
