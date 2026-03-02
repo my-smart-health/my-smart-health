@@ -4,10 +4,14 @@ import { FileAttachmentsList } from '../FileAttachmentsList';
 import { Fragment } from 'react';
 
 type MedicationPlanDisplayProps = {
+  memberId: string;
   medicationPlan: MedicationPlan;
 };
 
-export function MedicationPlanDisplay({ medicationPlan }: MedicationPlanDisplayProps) {
+export function MedicationPlanDisplay({
+  memberId,
+  medicationPlan,
+}: MedicationPlanDisplayProps) {
   const hasMedications = medicationPlan.medicationPlanTable && medicationPlan.medicationPlanTable.length > 0;
 
   if (!hasMedications && !medicationPlan.noRegularMedications) {
@@ -47,9 +51,13 @@ export function MedicationPlanDisplay({ medicationPlan }: MedicationPlanDisplayP
                   </tr>
                   {med.fileUrl && med.fileUrl.length > 0 && (
                     <tr className="border-b border-primary">
-                      <td colSpan={4} className="py-2 px-3 bg-gray-50">
+                      <td colSpan={4} className="py-2 px-3">
                         <div className="text-xs font-semibold text-gray-600 mb-1">Attachments:</div>
-                        <FileAttachmentsList files={med.fileUrl} title="" />
+                        <FileAttachmentsList
+                          memberId={memberId}
+                          files={med.fileUrl}
+                          title=""
+                        />
                       </td>
                     </tr>
                   )}

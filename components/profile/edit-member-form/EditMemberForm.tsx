@@ -257,6 +257,20 @@ export default function EditMemberForm({
               updatedAt={member.updatedAt}
               isAdmin={isAdmin}
             />
+
+            <Divider addClass="my-4" />
+
+            <HealthInsurancesSection
+              healthInsurances={healthInsurances}
+              setHealthInsurances={setHealthInsurances}
+            />
+
+            <Divider addClass="my-4" />
+            <FamilyMembersSection
+              familyMembers={familyMembers}
+              setFamilyMembers={setFamilyMembers}
+            />
+
           </div>
 
           {isAdmin && (
@@ -297,6 +311,7 @@ export default function EditMemberForm({
           <div className="tab-content border-primary p-3 md:p-10">
 
             <AnamnesesSection
+              memberId={member.id}
               anamneses={anamneses}
               setAnamneses={setAnamneses}
             />
@@ -305,18 +320,11 @@ export default function EditMemberForm({
           <input type="radio" name="member_tabs" className="tab" aria-label="Blood Type" />
           <div className="tab-content border-primary p-3 md:p-10">
             <BloodTypeSection
+              memberId={member.id}
               bloodType={bloodType}
               setBloodType={setBloodType}
               bloodTypeFiles={bloodTypeFiles}
               setBloodTypeFiles={setBloodTypeFiles}
-            />
-          </div>
-
-          <input type="radio" name="member_tabs" className="tab" aria-label="Health Insurance" />
-          <div className="tab-content border-primary p-3 md:p-10">
-            <HealthInsurancesSection
-              healthInsurances={healthInsurances}
-              setHealthInsurances={setHealthInsurances}
             />
           </div>
 
@@ -328,23 +336,16 @@ export default function EditMemberForm({
             />
           </div>
 
-          <input type="radio" name="member_tabs" className="tab" aria-label="Family Members" />
-          <div className="tab-content border-primary p-3 md:p-10">
-            <FamilyMembersSection
-              familyMembers={familyMembers}
-              setFamilyMembers={setFamilyMembers}
-            />
-          </div>
-
           <input type="radio" name="member_tabs" className="tab" aria-label="Documents" />
           <div className="tab-content border-primary p-3 md:p-10">
             <DocumentsSection
+              memberId={member.id}
               documents={documents}
               setDocuments={setDocuments}
             />
           </div>
 
-          <input type="radio" name="member_tabs" className="tab" aria-label="Contacts" />
+          <input type="radio" name="member_tabs" className="tab" aria-label="My Smart Health Contacts" />
           <div className="tab-content border-primary p-3 md:p-10">
             <ContactsSection
               memberId={member.id}

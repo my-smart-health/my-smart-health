@@ -185,7 +185,10 @@ export default function ProfileFullMember({
                   defaultChecked={firstTab === 'anamneses'}
                 />
                 <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
-                  <AnamnesesSection anamneses={anamneses} />
+                  <AnamnesesSection
+                    memberId={member.id}
+                    anamneses={anamneses}
+                  />
                 </div>
               </>
             )}
@@ -201,7 +204,11 @@ export default function ProfileFullMember({
                   defaultChecked={firstTab === 'blood'}
                 />
                 <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
-                  <BloodTypeSection bloodType={bloodType} bloodTypeFiles={bloodTypeFiles} />
+                  <BloodTypeSection
+                    memberId={member.id}
+                    bloodType={bloodType}
+                    bloodTypeFiles={bloodTypeFiles}
+                  />
                 </div>
               </>
             )}
@@ -233,7 +240,10 @@ export default function ProfileFullMember({
                   defaultChecked={firstTab === 'documents'}
                 />
                 <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
-                  <DocumentsSection documents={documents} />
+                  <DocumentsSection
+                    memberId={member.id}
+                    documents={documents}
+                  />
                 </div>
               </>
             )}

@@ -10,6 +10,7 @@ import {
 } from './anamnesis-sections';
 
 type AnamnesesSectionProps = {
+  memberId: string;
   anamneses: Anamneses[];
   setAnamneses: (val: Anamneses[]) => void;
 };
@@ -76,6 +77,7 @@ const createDefaultAnamnesis = (): Anamneses => ({
 });
 
 export function AnamnesesSection({
+  memberId,
   anamneses,
   setAnamneses,
 }: AnamnesesSectionProps) {
@@ -285,6 +287,8 @@ export function AnamnesesSection({
                   />
 
                   <MedicationPlanSection
+                    memberId={memberId}
+                    anamnesisIndex={index}
                     medicationPlan={anamnesis.medicationPlan}
                     onAddMedication={() => handleAddMedication(index)}
                     onRemoveMedication={(medIndex) => handleRemoveMedication(index, medIndex)}

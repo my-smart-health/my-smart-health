@@ -1,6 +1,14 @@
 import { MedicationPlan, MedicationPlanTable, FileWithDescription } from '@/utils/types';
+import { getFileNameFromUrl } from '@/utils/common';
+import {
+  getMemberFileDownloadUrl,
+  deleteMemberFile,
+  uploadMemberFile,
+} from '@/utils/member-files-client';
 
 type MedicationPlanSectionProps = {
+  memberId: string;
+  anamnesisIndex: number;
   medicationPlan: MedicationPlan;
   onAddMedication: () => void;
   onRemoveMedication: (index: number) => void;
@@ -12,6 +20,8 @@ type MedicationPlanSectionProps = {
 };
 
 export function MedicationPlanSection({
+  memberId,
+  anamnesisIndex,
   medicationPlan,
   onAddMedication,
   onRemoveMedication,
@@ -21,6 +31,53 @@ export function MedicationPlanSection({
   onRemoveFile,
   onFileChange,
 }: MedicationPlanSectionProps) {
+  const handleUploadFile = async (
+    medIndex: number,
+    fileIndex: number,
+    file: File,
+  ) => {
+    try {
+      const uploaded = await uploadMemberFile({
+        memberId,
+        target: 'anamnesesMedicationPlan',
+        file,
+        folder: 'anamneses/medicationplan',
+        anamnesisIndex,
+        medicationIndex: medIndex,
+      });
+
+      onFileChange(medIndex, fileIndex, 'url', uploaded.file.url);
+    } catch (error) {
+      window.alert(
+        error instanceof Error ? error.message : 'Failed to upload file',
+      );
+    }
+  };
+
+  const handleRemoveFileWithApi = async (medIndex: number, fileIndex: number) => {
+    const selectedMedication = medicationPlan.medicationPlanTable[medIndex];
+    const selectedFile = selectedMedication.fileUrl?.[fileIndex];
+
+    if (selectedFile?.url) {
+      try {
+        await deleteMemberFile({
+          memberId,
+          fileUrl: selectedFile.url,
+          target: 'anamnesesMedicationPlan',
+          anamnesisIndex,
+          medicationIndex: medIndex,
+        });
+      } catch (error) {
+        window.alert(
+          error instanceof Error ? error.message : 'Failed to remove file',
+        );
+        return;
+      }
+    }
+
+    onRemoveFile(medIndex, fileIndex);
+  };
+
   return (
     <details className="rounded border-2 border-primary p-3">
       <summary className="cursor-pointer font-semibold text-primary">Medication Plan</summary>
@@ -99,21 +156,50 @@ export function MedicationPlanSection({
                 <div className="space-y-2">
                   {med.fileUrl.map((file, fileIndex) => (
                     <div key={fileIndex} className="flex flex-col gap-2 p-2 bg-gray-50 rounded">
-                      <div className="flex gap-2">
-                        <input
-                          type="url"
-                          value={file.url}
-                          onChange={e => onFileChange(medIndex, fileIndex, 'url', e.target.value)}
-                          placeholder="Enter file URL"
-                          className="p-2 rounded border border-gray-300 text-xs focus:outline-none focus:ring-1 focus:ring-primary flex-1"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => onRemoveFile(medIndex, fileIndex)}
-                          className="btn btn-xs btn-error text-white"
-                        >
-                          Remove
-                        </button>
+                      <div className="flex items-center justify-between gap-2">
+                        {file.url ? (
+                          <>
+                            <p className="text-xs text-gray-800 font-medium truncate flex-1 min-w-0">
+                              {getFileNameFromUrl(file.url)}
+                            </p>
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                              <a
+                                href={getMemberFileDownloadUrl(memberId, file.url)}
+                                className="btn btn-xs btn-outline btn-primary"
+                              >
+                                Download
+                              </a>
+                              <button
+                                type="button"
+                                onClick={() => void handleRemoveFileWithApi(medIndex, fileIndex)}
+                                className="btn btn-xs btn-error text-white"
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <input
+                              type="file"
+                              onChange={(event) => {
+                                const selected = event.target.files?.[0];
+                                if (!selected) {
+                                  return;
+                                }
+                                void handleUploadFile(medIndex, fileIndex, selected);
+                              }}
+                              className="file-input file-input-bordered file-input-primary w-full"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => void handleRemoveFileWithApi(medIndex, fileIndex)}
+                              className="btn btn-xs btn-error text-white"
+                            >
+                              Remove
+                            </button>
+                          </>
+                        )}
                       </div>
                       <input
                         type="text"

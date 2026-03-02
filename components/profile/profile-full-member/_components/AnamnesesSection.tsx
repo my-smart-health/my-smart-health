@@ -11,10 +11,14 @@ import {
 } from './anamnesis-display';
 
 type AnamnesesSectionProps = {
+  memberId: string;
   anamneses: Anamneses[];
 };
 
-export function AnamnesesSection({ anamneses }: AnamnesesSectionProps) {
+export function AnamnesesSection({
+  memberId,
+  anamneses,
+}: AnamnesesSectionProps) {
   if (!anamneses || anamneses.length === 0) {
     return null;
   }
@@ -39,7 +43,10 @@ export function AnamnesesSection({ anamneses }: AnamnesesSectionProps) {
 
               <HospitalStaysDisplay hospitalStays={anamnesis.hospitalStays} />
 
-              <MedicationPlanDisplay medicationPlan={anamnesis.medicationPlan} />
+              <MedicationPlanDisplay
+                memberId={memberId}
+                medicationPlan={anamnesis.medicationPlan}
+              />
 
               <AllergiesIntolerancesDisplay allergiesIntolerances={anamnesis.allergiesIntolerances} />
 
@@ -55,4 +62,3 @@ export function AnamnesesSection({ anamneses }: AnamnesesSectionProps) {
     </div>
   );
 }
-

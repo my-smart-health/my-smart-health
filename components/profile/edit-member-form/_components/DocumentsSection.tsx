@@ -1,11 +1,19 @@
 import { MemberDocument } from '@/utils/types';
+import { getFileNameFromUrl } from '@/utils/common';
+import {
+  getMemberFileDownloadUrl,
+  deleteMemberFile,
+  uploadMemberFile,
+} from '@/utils/member-files-client';
 
 type DocumentsSectionProps = {
+  memberId: string;
   documents: MemberDocument[];
   setDocuments: (val: MemberDocument[]) => void;
 };
 
 export function DocumentsSection({
+  memberId,
   documents,
   setDocuments,
 }: DocumentsSectionProps) {
@@ -13,20 +21,56 @@ export function DocumentsSection({
     setDocuments([...documents, { url: '', description: '' }]);
   };
 
-  const handleRemove = (index: number) => {
-    setDocuments(documents.filter((_, i) => i !== index));
-  };
+  const handleRemove = async (index: number) => {
+    const selectedDocument = documents[index];
 
-  const handleChangeUrl = (index: number, value: string) => {
-    const updated = [...documents];
-    updated[index] = { ...updated[index], url: value };
-    setDocuments(updated);
+    if (selectedDocument?.url) {
+      try {
+        await deleteMemberFile({
+          memberId,
+          fileUrl: selectedDocument.url,
+          target: 'documents',
+        });
+      } catch (error) {
+        window.alert(
+          error instanceof Error
+            ? error.message
+            : 'Failed to remove document',
+        );
+        return;
+      }
+    }
+
+    setDocuments(documents.filter((_, i) => i !== index));
   };
 
   const handleChangeDescription = (index: number, value: string) => {
     const updated = [...documents];
     updated[index] = { ...updated[index], description: value };
     setDocuments(updated);
+  };
+
+  const handleUpload = async (index: number, file: File) => {
+    try {
+      const uploaded = await uploadMemberFile({
+        memberId,
+        target: 'documents',
+        file,
+        folder: 'documents',
+        description: documents[index]?.description,
+      });
+
+      const updated = [...documents];
+      updated[index] = {
+        ...updated[index],
+        url: uploaded.file.url,
+      };
+      setDocuments(updated);
+    } catch (error) {
+      window.alert(
+        error instanceof Error ? error.message : 'Failed to upload document',
+      );
+    }
   };
 
   return (
@@ -39,7 +83,7 @@ export function DocumentsSection({
             onClick={handleAdd}
             className="btn btn-sm btn-primary text-white"
           >
-            + Add Document URL
+            + Add Document
           </button>
         </div>
         <div className="space-y-3">
@@ -48,21 +92,50 @@ export function DocumentsSection({
           ) : (
             documents.map((doc, index) => (
               <div key={index} className="flex flex-col gap-2 p-3 border border-gray-200 rounded-lg">
-                <div className="flex gap-2">
-                  <input
-                    type="url"
-                    value={doc.url}
-                    onChange={e => handleChangeUrl(index, e.target.value)}
-                    placeholder="Enter document URL"
-                    className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => handleRemove(index)}
-                    className="btn btn-sm btn-error text-white"
-                  >
-                    Remove
-                  </button>
+                <div className="flex items-center justify-between gap-2">
+                  {doc.url ? (
+                    <>
+                      <p className="text-sm text-gray-800 font-medium truncate flex-1 min-w-0">
+                        {getFileNameFromUrl(doc.url)}
+                      </p>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <a
+                          href={getMemberFileDownloadUrl(memberId, doc.url)}
+                          className="btn btn-sm btn-outline btn-primary"
+                        >
+                          Download
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => void handleRemove(index)}
+                          className="btn btn-sm btn-error text-white"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <input
+                        type="file"
+                        onChange={(event) => {
+                          const selected = event.target.files?.[0];
+                          if (!selected) {
+                            return;
+                          }
+                          void handleUpload(index, selected);
+                        }}
+                        className="file-input file-input-bordered file-input-primary w-full"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => void handleRemove(index)}
+                        className="btn btn-sm btn-error text-white"
+                      >
+                        Remove
+                      </button>
+                    </>
+                  )}
                 </div>
                 <input
                   type="text"

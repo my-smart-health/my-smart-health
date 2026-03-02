@@ -1,8 +1,11 @@
 import { Droplet, FileText, ExternalLink } from 'lucide-react';
 import { $Enums } from '@prisma/client';
 import { FileWithDescription } from '@/utils/types';
+import { getFileNameFromUrl } from '@/utils/common';
+import { getMemberFileDownloadUrl } from '@/utils/member-files-client';
 
 type BloodTypeSectionProps = {
+  memberId: string;
   bloodType: $Enums.BloodType | null;
   bloodTypeFiles: FileWithDescription[];
 };
@@ -18,7 +21,11 @@ const BLOOD_TYPE_DISPLAY: Record<$Enums.BloodType, string> = {
   O_NEGATIVE: 'O-',
 };
 
-export function BloodTypeSection({ bloodType, bloodTypeFiles }: BloodTypeSectionProps) {
+export function BloodTypeSection({
+  memberId,
+  bloodType,
+  bloodTypeFiles,
+}: BloodTypeSectionProps) {
   const hasFiles = bloodTypeFiles && bloodTypeFiles.length > 0;
 
   return (
@@ -42,21 +49,20 @@ export function BloodTypeSection({ bloodType, bloodTypeFiles }: BloodTypeSection
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {bloodTypeFiles.map((file, index) => {
-                const displayTitle = file.description && file.description.trim() !== ''
+                const fileName = getFileNameFromUrl(file.url);
+                const description = file.description && file.description.trim() !== ''
                   ? file.description
                   : `Document ${index + 1}`;
                 return (
                   <a
                     key={index}
-                    href={file.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 hover:border-primary transition-colors group"
+                    href={getMemberFileDownloadUrl(memberId, file.url)}
+                    className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:bg-gray-100 hover:border-primary transition-colors group"
                   >
                     <FileText className="text-gray-600 group-hover:text-primary flex-shrink-0" size={20} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm text-gray-900 truncate">{displayTitle}</p>
-                      <p className="text-xs text-gray-500 truncate">{file.url}</p>
+                      <p className="text-sm text-gray-900 truncate font-medium">{fileName}</p>
+                      <p className="text-xs text-gray-500 truncate">{description}</p>
                     </div>
                     <ExternalLink className="text-gray-400 group-hover:text-primary flex-shrink-0" size={16} />
                   </a>

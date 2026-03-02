@@ -1,5 +1,11 @@
 import { $Enums } from '@prisma/client';
 import { FileWithDescription } from '@/utils/types';
+import { getFileNameFromUrl } from '@/utils/common';
+import {
+  getMemberFileDownloadUrl,
+  deleteMemberFile,
+  uploadMemberFile,
+} from '@/utils/member-files-client';
 
 const BLOOD_TYPE_OPTIONS: { value: $Enums.BloodType; label: string }[] = [
   { value: $Enums.BloodType.A_POSITIVE, label: 'A+' },
@@ -13,6 +19,7 @@ const BLOOD_TYPE_OPTIONS: { value: $Enums.BloodType; label: string }[] = [
 ];
 
 type BloodTypeSectionProps = {
+  memberId: string;
   bloodType: string;
   setBloodType: (val: string) => void;
   bloodTypeFiles: FileWithDescription[];
@@ -20,6 +27,7 @@ type BloodTypeSectionProps = {
 };
 
 export function BloodTypeSection({
+  memberId,
   bloodType,
   setBloodType,
   bloodTypeFiles,
@@ -29,7 +37,26 @@ export function BloodTypeSection({
     setBloodTypeFiles([...bloodTypeFiles, { url: '', description: '' }]);
   };
 
-  const handleRemoveFile = (index: number) => {
+  const handleRemoveFile = async (index: number) => {
+    const selectedFile = bloodTypeFiles[index];
+
+    if (selectedFile?.url) {
+      try {
+        await deleteMemberFile({
+          memberId,
+          fileUrl: selectedFile.url,
+          target: 'bloodTypeFiles',
+        });
+      } catch (error) {
+        window.alert(
+          error instanceof Error
+            ? error.message
+            : 'Failed to remove blood type file',
+        );
+        return;
+      }
+    }
+
     setBloodTypeFiles(bloodTypeFiles.filter((_, i) => i !== index));
   };
 
@@ -37,6 +64,29 @@ export function BloodTypeSection({
     const updated = [...bloodTypeFiles];
     updated[index] = { ...updated[index], [field]: value };
     setBloodTypeFiles(updated);
+  };
+
+  const handleUploadFile = async (index: number, file: File) => {
+    try {
+      const uploaded = await uploadMemberFile({
+        memberId,
+        target: 'bloodTypeFiles',
+        file,
+        folder: 'blood-type-files',
+        description: bloodTypeFiles[index]?.description,
+      });
+
+      const updated = [...bloodTypeFiles];
+      updated[index] = {
+        ...updated[index],
+        url: uploaded.file.url,
+      };
+      setBloodTypeFiles(updated);
+    } catch (error) {
+      window.alert(
+        error instanceof Error ? error.message : 'Failed to upload file',
+      );
+    }
   };
 
   return (
@@ -68,7 +118,7 @@ export function BloodTypeSection({
               onClick={handleAddFile}
               className="btn btn-sm btn-primary text-white"
             >
-              + Add File URL
+              + Add File
             </button>
           </div>
           <div className="space-y-2">
@@ -77,21 +127,50 @@ export function BloodTypeSection({
             ) : (
               bloodTypeFiles.map((file, index) => (
                 <div key={index} className="flex flex-col gap-2 p-2 bg-gray-50 rounded">
-                  <div className="flex gap-2">
-                    <input
-                      type="url"
-                      value={file.url}
-                      onChange={e => handleFileChange(index, 'url', e.target.value)}
-                      placeholder="Enter file URL"
-                      className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary flex-1"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveFile(index)}
-                      className="btn btn-sm btn-error text-white"
-                    >
-                      Remove
-                    </button>
+                  <div className="flex items-center justify-between gap-2">
+                    {file.url ? (
+                      <>
+                        <p className="text-sm text-gray-800 font-medium truncate flex-1 min-w-0">
+                          {getFileNameFromUrl(file.url)}
+                        </p>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <a
+                            href={getMemberFileDownloadUrl(memberId, file.url)}
+                            className="btn btn-sm btn-outline btn-primary"
+                          >
+                            Download
+                          </a>
+                          <button
+                            type="button"
+                            onClick={() => void handleRemoveFile(index)}
+                            className="btn btn-sm btn-error text-white"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <input
+                          type="file"
+                          onChange={(event) => {
+                            const selected = event.target.files?.[0];
+                            if (!selected) {
+                              return;
+                            }
+                            void handleUploadFile(index, selected);
+                          }}
+                          className="file-input file-input-bordered file-input-primary w-full"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => void handleRemoveFile(index)}
+                          className="btn btn-sm btn-error text-white"
+                        >
+                          Remove
+                        </button>
+                      </>
+                    )}
                   </div>
                   <input
                     type="text"
