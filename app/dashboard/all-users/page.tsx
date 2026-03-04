@@ -12,7 +12,8 @@ async function getAllUsersWithCategories() {
       email: true,
       role: true,
       createdAt: true,
-      profileImages: true
+      profileImages: true,
+      isContactable: true,
     },
     cacheStrategy: CACHE_STRATEGY.ADMIN,
   });
