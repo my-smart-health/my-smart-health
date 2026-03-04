@@ -5,7 +5,7 @@ import { RESERVATION_LINK_TYPES, ReservationLink, Membership } from "@/utils/typ
 import { MembershipSection } from ".";
 
 type Props = {
-  reservationLinks?: ReservationLink[];
+  reservationLinks?: ReservationLink[] | null;
   membership?: Membership | null;
 };
 
@@ -28,7 +28,7 @@ export default function PrescriptionReservation({ reservationLinks, membership =
         </>
       )}
 
-      <div className="flex flex-col gap-3 w-full mb-2">
+      <div className="flex flex-col gap-3 w-full">
         {nonEmailLinks.map((item, idx) => {
           type LucideIcon = typeof CalendarPlus2;
           let Icon: LucideIcon = CalendarPlus2;
