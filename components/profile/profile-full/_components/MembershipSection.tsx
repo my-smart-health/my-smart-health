@@ -13,7 +13,7 @@ export default function MembershipSection({ membership }: MembershipSectionProps
     <>
       <Link href={link} target="_self" className="mx-auto flex gap-2 rounded">
         <Image
-          src="/msh-termine-klicken.png"
+          src="/termine-icon.png"
           alt="Termine Kurzfristig Icon"
           width={208}
           height={208}
