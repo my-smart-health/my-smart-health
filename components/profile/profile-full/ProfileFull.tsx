@@ -96,7 +96,11 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
   const hasCertificates = certificates && certificates.length > 0;
   const hasLocations = filteredLocations && filteredLocations.length > 0;
   const hasSchedule = schedule && schedule.length > 0;
-  const hasReservationOrMembership = (reservationLinks && reservationLinks.length > 0) || membership;
+  const hasValidReservationLinks = (reservationLinks || []).some(
+    (linkItem) => typeof linkItem.url === "string" && linkItem.url.trim().length > 0
+  );
+  const hasActiveMembership = Boolean(membership?.status);
+  const hasReservationOrMembership = hasValidReservationLinks || hasActiveMembership;
   const hasPhones = phones && phones.length > 0;
   const hasSocials = displayEmail || website || parsedSocials.length > 0;
 
@@ -200,7 +204,7 @@ export default function ProfileFull({ user, posts }: { user: User, posts: Profil
       {hasReservationOrMembership && (
         <>
           {dividerNeeded(9)}
-          <PrescriptionReservation reservationLinks={reservationLinks || undefined} membership={membership} />
+          <PrescriptionReservation reservationLinks={reservationLinks} membership={membership} />
         </>
       )}
 
