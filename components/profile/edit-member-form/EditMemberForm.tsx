@@ -244,7 +244,7 @@ export default function EditMemberForm({
         <Divider addClass="mb-4" />
 
         <div className="tabs tabs-lift m-2 w-full mx-auto max-w-[96%]">
-          <input type="radio" name="member_tabs" className="tab" aria-label="Basic Info" defaultChecked />
+          <input type="radio" name="member_tabs" className="tab" aria-label="Personal Info" defaultChecked />
           <div className="tab-content border-primary p-3 md:p-10">
             <BasicInfoSection
               name={name}
