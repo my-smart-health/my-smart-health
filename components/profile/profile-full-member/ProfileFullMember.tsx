@@ -255,7 +255,7 @@ export default function ProfileFullMember({
                   name="member_profile_tabs"
                   role="tab"
                   className="tab"
-                  aria-label="Contacts"
+                  aria-label="My Smart Health Contacts"
                   defaultChecked={firstTab === 'contacts'}
                 />
                 <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
