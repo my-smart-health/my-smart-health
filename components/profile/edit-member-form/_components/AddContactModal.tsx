@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { X, Search, UserPlus } from 'lucide-react';
 
@@ -35,13 +35,7 @@ export function AddContactModal({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (isOpen) {
-      fetchAllUsers();
-    }
-  }, [isOpen]);
-
-  const fetchAllUsers = async () => {
+  const fetchAllUsers = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
@@ -57,7 +51,13 @@ export function AddContactModal({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [isAdmin]);
+
+  useEffect(() => {
+    if (isOpen) {
+      fetchAllUsers();
+    }
+  }, [isOpen, fetchAllUsers]);
 
   const handleAddContact = async (doctorId: string) => {
     try {
