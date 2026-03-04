@@ -11,6 +11,7 @@ type User = {
   createdAt: Date;
   name: string | null;
   profileImages: string[];
+  isContactable: boolean;
 };
 
 type SearchFilterProps = {
@@ -26,7 +27,8 @@ export default function SearchFilter({ users }: SearchFilterProps) {
     return users.filter((user) => {
       const name = (user.name || "").toLowerCase();
       const email = (user.email || "").toLowerCase();
-      return name.includes(normalized) || email.includes(normalized);
+      const isContactable = user.isContactable;
+      return (name.includes(normalized) || email.includes(normalized)) && isContactable;
     });
   }, [users, query]);
 

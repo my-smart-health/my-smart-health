@@ -14,9 +14,10 @@ type User = {
   createdAt: Date;
   role: string;
   profileImages?: string[];
+  isContactable: boolean;
 };
 
-type SortKey = keyof Pick<User, "name" | "email" | "category" | "role" | "createdAt">;
+type SortKey = keyof Pick<User, "name" | "email" | "category" | "role" | "createdAt" | "isContactable">;
 
 export default function UserTable({ users }: { users: User[] }) {
   const [sortKey, setSortKey] = useState<SortKey>("name");
@@ -58,6 +59,27 @@ export default function UserTable({ users }: { users: User[] }) {
   const sortArrow = (key: SortKey) =>
     sortKey === key ? (sortAsc ? "▲" : "▼") : "";
 
+  const handleChangeContactable = async (userId: string, currentValue: boolean) => {
+    try {
+      const response = await fetch(`/api/users/${userId}/change-contactable`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isContactable: !currentValue }),
+      });
+      if (!response.ok) throw new Error("Failed to update contactable status");
+
+      setAllUsers((prev) =>
+        prev.map((user) =>
+          user.id === userId ? { ...user, isContactable: !currentValue } : user
+        )
+      );
+    } catch (error) {
+      if (process.env.NODE_ENV === "development") {
+        console.error("Error updating contactable status:", error);
+      }
+    }
+  };
+
   const handleDeleteUser = async (id: string, userName: string) => {
     if (!confirm("Are you sure you want to delete this user?")) return;
 
@@ -84,6 +106,20 @@ export default function UserTable({ users }: { users: User[] }) {
       finishDeletion();
     }
   };
+
+  const ToggleContactable = ({ user }: { user: User }) => {
+    return (
+      <div className="flex items-center gap-2">
+        <input
+          type="checkbox"
+          checked={user.isContactable}
+          onChange={() => handleChangeContactable(user.id, user.isContactable)}
+          className={`px-2 py-1 rounded-md text-sm font-semibold ${user.isContactable ? 'checkbox checkbox-primary text-green-800' : 'checkbox checkbox-primary text-gray-600'}`}
+        />
+        {user.isContactable ? 'Yes' : 'No'}
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-x-auto w-full">
@@ -114,6 +150,12 @@ export default function UserTable({ users }: { users: User[] }) {
               Created at {sortArrow("createdAt")}
             </th>
             <th>Profile Image</th>
+            <th
+              className="cursor-pointer select-none"
+              onClick={() => handleSort("isContactable")}
+            >
+              Contactable {sortArrow("isContactable")}
+            </th>
             <th
               className="cursor-pointer select-none"
               onClick={() => handleSort("role")}
@@ -163,6 +205,7 @@ export default function UserTable({ users }: { users: User[] }) {
                     <span className="text-gray-400">No Image</span>
                   )}
                 </td>
+                <td><ToggleContactable user={user} /></td>
                 <td className="uppercase font-bold">{user.role}</td>
                 <td>
                   <Link
