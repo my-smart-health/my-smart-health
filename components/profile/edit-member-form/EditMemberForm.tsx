@@ -375,6 +375,7 @@ export default function EditMemberForm({
           setContacts([...contacts, contact]);
         }}
         existingContactIds={contacts.map(c => c.id)}
+        isAdmin={isAdmin}
       />
     </>
   );

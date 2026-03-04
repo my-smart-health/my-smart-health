@@ -19,6 +19,7 @@ type AddContactModalProps = {
   memberId: string;
   onContactAdded: (contact: UserSearchResult) => void;
   existingContactIds: string[];
+  isAdmin: boolean;
 };
 
 export function AddContactModal({
@@ -27,6 +28,7 @@ export function AddContactModal({
   memberId,
   onContactAdded,
   existingContactIds,
+  isAdmin,
 }: AddContactModalProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [users, setUsers] = useState<UserSearchResult[]>([]);
@@ -43,7 +45,10 @@ export function AddContactModal({
     setIsLoading(true);
     setError(null);
     try {
-      const response = await fetch('/api/users/all-doctors');
+      const response = isAdmin ?
+        await fetch('/api/users/all-doctors') :
+        await fetch('/api/users/all-contactable-doctors');
+
       if (!response.ok) throw new Error('Failed to fetch users');
       const data = await response.json();
       setUsers(data);
