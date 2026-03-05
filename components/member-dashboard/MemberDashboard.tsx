@@ -4,15 +4,7 @@ import { MemberProfileDashboardProps } from '@/utils/types';
 import Image from 'next/image';
 import { Info } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import {
-  PersonalInfoSection,
-  BloodTypeSection,
-  AnamnesesSection,
-  DocumentsSection,
-  DoctorsSection,
-  ContactsDisplay,
-  SpecialNumbersSection,
-} from '@/components/profile/profile-full-member/_components';
+import ProfileFullMember from '../profile/profile-full-member/ProfileFullMember';
 
 type ContactDoctor = {
   id: string;
@@ -90,89 +82,9 @@ export default function MemberDashboard({ member }: MemberDashboardProps) {
       </div>
 
       <div className="collapse-content">
-        <div role="tablist" className="tabs tabs-lifted tabs-lg w-full">
-
-          {hasPersonalInfo && (
-            <>
-              <input type="radio" name="member_home_tabs" role="tab" className="tab" aria-label="My Profile" defaultChecked />
-              <div role="tabpanel" className="tab-content rounded-box p-6">
-                <PersonalInfoSection
-                  birthday={member.birthday}
-                  heightCm={member.heightCm}
-                  weightKg={member.weightKg}
-                  healthInsurances={member.healthInsurances}
-                  familyMembers={member.familyMembers}
-                />
-              </div>
-            </>
-          )}
-
-          {hasBloodType && (
-            <>
-              <input type="radio" name="member_home_tabs" role="tab" className="tab" aria-label="Blood Type" />
-              <div role="tabpanel" className="tab-content rounded-box p-6">
-                <BloodTypeSection
-                  memberId={member.id}
-                  bloodType={member.bloodType}
-                  bloodTypeFiles={member.bloodTypeFiles}
-                />
-              </div>
-            </>
-          )}
-
-          {hasAnamneses && (
-            <>
-              <input type="radio" name="member_home_tabs" role="tab" className="tab" aria-label="Anamneses" />
-              <div role="tabpanel" className="tab-content rounded-box p-6">
-                <AnamnesesSection
-                  memberId={member.id}
-                  anamneses={member.anamneses}
-                />
-              </div>
-            </>
-          )}
-
-          {hasDocuments && (
-            <>
-              <input type="radio" name="member_home_tabs" role="tab" className="tab" aria-label="Documents" />
-              <div role="tabpanel" className="tab-content rounded-box p-6">
-                <DocumentsSection
-                  memberId={member.id}
-                  documents={member.documents}
-                />
-              </div>
-            </>
-          )}
-
-          {hasDoctors && (
-            <>
-              <input type="radio" name="member_home_tabs" role="tab" className="tab" aria-label="My Doctors" />
-              <div role="tabpanel" className="tab-content rounded-box p-6">
-                <DoctorsSection doctors={member.doctors} />
-              </div>
-            </>
-          )}
-          {hasContacts && (
-            <>
-              <input type="radio" name="member_home_tabs" role="tab" className="tab" aria-label="Contacts" />
-              <div role="tabpanel" className="tab-content rounded-box p-6">
-                <ContactsDisplay contacts={contacts} />
-              </div>
-            </>
-          )}
-
-          {hasSpecialNumbers && (
-            <>
-              <input type="radio" name="member_home_tabs" role="tab" className="tab" aria-label="Special Numbers" />
-              <div role="tabpanel" className="tab-content rounded-box p-6">
-                <SpecialNumbersSection specialNumbers={member.telMedicineNumbers} />
-              </div>
-            </>
-          )}
-
-
-        </div>
+        <ProfileFullMember member={member} />
       </div>
+
     </div>
   );
 }
