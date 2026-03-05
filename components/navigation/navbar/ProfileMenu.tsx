@@ -88,6 +88,7 @@ export default function ProfileMenu({ unreadNotifications = 0 }: ProfileMenuProp
           )}
 
           <li className="tab-disabled"></li>
+          {session.user.role === "MEMBER" && <li><Link href="/dashboard/edit-member" className="flex gap-1">Edit profile</Link></li>}
           <li>
             <Link href="/dashboard/change-password" className="flex gap-1">
               Change Password
