@@ -1,12 +1,7 @@
-'use client';
-
-import LogOut from "@/components/buttons/log-out/LogOut";
 import CookieSettingsButton from "@/components/modals/cookie-consent/CookieSettingsButton";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 export default function Footer() {
-  const { data: session } = useSession();
 
   return (
     <footer className="bg-primary w-full text-center text-white py-4 mt-8">
@@ -27,14 +22,6 @@ export default function Footer() {
       </Link>
       <span className="mx-1">|</span>
       <CookieSettingsButton />
-      <span className="mx-1">|</span>
-      {!session?.user ? (
-        <Link href="/login" className="hover:underline capitalize">
-          Login
-        </Link>
-      ) : (
-        <LogOut addClasses="link link-error hover:text-white" />
-      )}
     </footer>
   )
 }
