@@ -53,15 +53,22 @@ export default function ProfileShort({ id, name, bio, image, membership, ratingS
         </div>
         <div className="flex flex-col sm:flex-row gap-2 justify-end">
           {membership?.status && (
-            <div className="mr-auto">
+            <div className="mx-auto sm:mr-auto">
               <MembershipSection membership={membership} />
             </div>
           )}
 
           <Link
             href={`/profile/${id}`}
-            className="btn btn-primary my-auto"
+            className="btn btn-primary text-lg text-black bg-white hover:bg-primary/20 rounded-lg my-auto mx-auto h-14 min-w-44 max-w-44"
           >
+            <Image
+              src="/android-chrome-192x192.png"
+              alt="Profil Icon"
+              width={27}
+              height={27}
+              className="inline-block mr-2 h-9 w-9"
+            />
             zum Profil
           </Link>
         </div>
