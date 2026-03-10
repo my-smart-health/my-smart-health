@@ -1,16 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 
 export default function TimeoutModal() {
-  const params = useSearchParams();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const flag = params.get("timeout");
-    setOpen(flag === "1");
-  }, [params]);
+    const readTimeoutFlag = () => {
+      const query = new URLSearchParams(window.location.search);
+      setOpen(query.get("timeout") === "1");
+    };
+
+    readTimeoutFlag();
+    window.addEventListener("popstate", readTimeoutFlag);
+
+    return () => {
+      window.removeEventListener("popstate", readTimeoutFlag);
+    };
+  }, []);
 
   if (!open) return null;
 

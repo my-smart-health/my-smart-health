@@ -2,7 +2,6 @@
 
 import { useEffect, useCallback, useRef } from 'react';
 import { useSession, signOut } from 'next-auth/react';
-import { useRouter, usePathname } from 'next/navigation';
 
 const SESSION_TIMEOUT_MS = 10 * 60 * 1000;
 const ACTIVITY_STORAGE_KEY = 'lastActivity';
@@ -18,6 +17,28 @@ const createChecksum = (timestamp: number): string => {
   return hash;
 };
 
+const getStorageItem = (key: string): string | null => {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+
+const setStorageItem = (key: string, value: string): void => {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+  }
+};
+
+const removeStorageItem = (key: string): void => {
+  try {
+    localStorage.removeItem(key);
+  } catch {
+  }
+};
+
 const validateChecksum = (timestamp: number, checksum: string): boolean => {
   return createChecksum(timestamp) === checksum;
 };
@@ -29,24 +50,22 @@ declare global {
 
 export default function SessionChecker() {
   const { status, update } = useSession();
-  const router = useRouter();
-  const pathname = usePathname();
   const lastUpdateRef = useRef<number>(0);
   const initializedRef = useRef(false);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const isRestrictedPath = useCallback(() => {
+  const isRestrictedPath = useCallback((path: string) => {
     return RESTRICTED_PATHS.some(
-      (path) => pathname === path || pathname?.startsWith(path + '/')
+      (restrictedPath) => path === restrictedPath || path.startsWith(restrictedPath + '/')
     );
-  }, [pathname]);
+  }, []);
 
   const updateActivity = useCallback(() => {
     if (typeof window === 'undefined') return;
 
     const timestamp = Date.now();
-    localStorage.setItem(ACTIVITY_STORAGE_KEY, timestamp.toString());
-    localStorage.setItem(CHECKSUM_KEY, createChecksum(timestamp));
+    setStorageItem(ACTIVITY_STORAGE_KEY, timestamp.toString());
+    setStorageItem(CHECKSUM_KEY, createChecksum(timestamp));
     try {
       document.cookie = `lastActivity=${timestamp}; path=/; SameSite=Lax`;
     } catch { }
@@ -67,8 +86,8 @@ export default function SessionChecker() {
   const performLogout = useCallback(async () => {
     if (typeof window === 'undefined') return;
 
-    localStorage.removeItem(ACTIVITY_STORAGE_KEY);
-    localStorage.removeItem(CHECKSUM_KEY);
+    removeStorageItem(ACTIVITY_STORAGE_KEY);
+    removeStorageItem(CHECKSUM_KEY);
     try {
       document.cookie = `lastActivity=; Max-Age=0; path=/; SameSite=Lax`;
     } catch { }
@@ -91,8 +110,8 @@ export default function SessionChecker() {
   const checkInactivity = useCallback(() => {
     if (typeof window === 'undefined') return false;
 
-    const lastActivity = localStorage.getItem(ACTIVITY_STORAGE_KEY);
-    const checksum = localStorage.getItem(CHECKSUM_KEY);
+    const lastActivity = getStorageItem(ACTIVITY_STORAGE_KEY);
+    const checksum = getStorageItem(CHECKSUM_KEY);
 
     if (!lastActivity || !checksum) {
       console.log('No activity data found');
@@ -122,8 +141,8 @@ export default function SessionChecker() {
   const scheduleInactivityTimer = useCallback(() => {
     if (typeof window === 'undefined') return;
 
-    const lastActivity = localStorage.getItem(ACTIVITY_STORAGE_KEY);
-    const checksum = localStorage.getItem(CHECKSUM_KEY);
+    const lastActivity = getStorageItem(ACTIVITY_STORAGE_KEY);
+    const checksum = getStorageItem(CHECKSUM_KEY);
     let remaining = SESSION_TIMEOUT_MS;
     if (lastActivity && checksum) {
       const ts = parseInt(lastActivity, 10);
@@ -145,13 +164,13 @@ export default function SessionChecker() {
   useEffect(() => {
     if (status !== 'authenticated') return;
 
-    const lastActivity = localStorage.getItem(ACTIVITY_STORAGE_KEY);
-    const checksum = localStorage.getItem(CHECKSUM_KEY);
+    const lastActivity = getStorageItem(ACTIVITY_STORAGE_KEY);
+    const checksum = getStorageItem(CHECKSUM_KEY);
     if (lastActivity && checksum) {
       const ts = parseInt(lastActivity, 10);
       if (isNaN(ts) || !validateChecksum(ts, checksum) || Date.now() - ts > SESSION_TIMEOUT_MS) {
-        localStorage.removeItem(ACTIVITY_STORAGE_KEY);
-        localStorage.removeItem(CHECKSUM_KEY);
+        removeStorageItem(ACTIVITY_STORAGE_KEY);
+        removeStorageItem(CHECKSUM_KEY);
         try {
           document.cookie = `lastActivity=; Max-Age=0; path=/; SameSite=Lax`;
         } catch { }
@@ -259,18 +278,13 @@ export default function SessionChecker() {
   }, [status, checkInactivity]);
 
   useEffect(() => {
-    if (status === 'authenticated' && initializedRef.current) {
-      updateServerSession();
-    }
-  }, [pathname, status, updateServerSession]);
+    if (typeof window === 'undefined') return;
 
-  useEffect(() => {
-    if (status === 'unauthenticated' && isRestrictedPath()) {
-      localStorage.removeItem(ACTIVITY_STORAGE_KEY);
-      localStorage.removeItem(CHECKSUM_KEY);
-      router.push('/');
+    if (status === 'unauthenticated' && isRestrictedPath(window.location.pathname)) {
+      removeStorageItem(ACTIVITY_STORAGE_KEY);
+      removeStorageItem(CHECKSUM_KEY);
     }
-  }, [status, router, isRestrictedPath]);
+  }, [status, isRestrictedPath]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
