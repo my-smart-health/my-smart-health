@@ -44,7 +44,7 @@ export const CATEGORY_NAMES = {
     link: '/my-smart-health-termine-kurzfristig',
   },
   smartHealth: {
-    name: 'Lebensqualität',
+    name: 'Lebensqualität & Prävention',
     link: '/smart-health',
   },
   medizinUndPflege: {
