@@ -97,6 +97,9 @@ export default function ProfileFullMember({
   const hasSpecialNumbers = isActive && telMedicineNumbers && telMedicineNumbers.length > 0;
   const hasAdminInfo = isAdmin;
 
+  const tabClassName = "tab border-x border-t rounded border-primary";
+  const tabPanelClassName = "tab-content rounded-box p-4 sm:p-6";
+
   const firstTab = hasAdminInfo
     ? 'admin'
     : hasPersonalInfo
@@ -136,11 +139,11 @@ export default function ProfileFullMember({
                   type="radio"
                   name="member_profile_tabs"
                   role="tab"
-                  className="tab"
+                  className={tabClassName}
                   aria-label="Admin"
                   defaultChecked={firstTab === 'admin'}
                 />
-                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                <div role="tabpanel" className={tabPanelClassName}>
                   <AdminOnlySection
                     email={email}
                     isActive={isActive}
@@ -158,11 +161,11 @@ export default function ProfileFullMember({
                   type="radio"
                   name="member_profile_tabs"
                   role="tab"
-                  className="tab"
+                  className={tabClassName}
                   aria-label="Personal Info"
                   defaultChecked={firstTab === 'personal'}
                 />
-                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                <div role="tabpanel" className={tabPanelClassName}>
                   <PersonalInfoSection
                     birthday={birthday}
                     heightCm={heightCm}
@@ -180,11 +183,11 @@ export default function ProfileFullMember({
                   type="radio"
                   name="member_profile_tabs"
                   role="tab"
-                  className="tab"
+                  className={tabClassName}
                   aria-label="Anamneses"
                   defaultChecked={firstTab === 'anamneses'}
                 />
-                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                <div role="tabpanel" className={tabPanelClassName}>
                   <AnamnesesSection
                     memberId={member.id}
                     anamneses={anamneses}
@@ -199,11 +202,11 @@ export default function ProfileFullMember({
                   type="radio"
                   name="member_profile_tabs"
                   role="tab"
-                  className="tab"
+                  className={tabClassName}
                   aria-label="Blood Type"
                   defaultChecked={firstTab === 'blood'}
                 />
-                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                <div role="tabpanel" className={tabPanelClassName}>
                   <BloodTypeSection
                     memberId={member.id}
                     bloodType={bloodType}
@@ -219,11 +222,11 @@ export default function ProfileFullMember({
                   type="radio"
                   name="member_profile_tabs"
                   role="tab"
-                  className="tab"
+                  className={tabClassName}
                   aria-label="Doctors"
                   defaultChecked={firstTab === 'doctors'}
                 />
-                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                <div role="tabpanel" className={tabPanelClassName}>
                   <DoctorsSection doctors={doctors} />
                 </div>
               </>
@@ -235,11 +238,11 @@ export default function ProfileFullMember({
                   type="radio"
                   name="member_profile_tabs"
                   role="tab"
-                  className="tab"
+                  className={tabClassName}
                   aria-label="Documents"
                   defaultChecked={firstTab === 'documents'}
                 />
-                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                <div role="tabpanel" className={tabPanelClassName}>
                   <DocumentsSection
                     memberId={member.id}
                     documents={documents}
@@ -254,11 +257,11 @@ export default function ProfileFullMember({
                   type="radio"
                   name="member_profile_tabs"
                   role="tab"
-                  className="tab"
+                  className={tabClassName}
                   aria-label="My Smart Health Contacts"
                   defaultChecked={firstTab === 'contacts'}
                 />
-                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                <div role="tabpanel" className={tabPanelClassName}>
                   <ContactsDisplay contacts={contacts} />
                 </div>
               </>
@@ -270,11 +273,11 @@ export default function ProfileFullMember({
                   type="radio"
                   name="member_profile_tabs"
                   role="tab"
-                  className="tab"
+                  className={tabClassName}
                   aria-label="Telemedizin"
                   defaultChecked={firstTab === 'special'}
                 />
-                <div role="tabpanel" className="tab-content rounded-box p-4 sm:p-6">
+                <div role="tabpanel" className={tabPanelClassName}>
                   <SpecialNumbersSection specialNumbers={telMedicineNumbers} />
                 </div>
               </>
