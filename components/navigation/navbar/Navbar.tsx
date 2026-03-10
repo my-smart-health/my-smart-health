@@ -4,9 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import ProfileMenu from "./ProfileMenu";
 import LogOut from "@/components/buttons/log-out/LogOut";
-import Divider from "@/components/divider/Divider";
-
-
 
 async function getUnreadNotifications() {
   const session = await auth();
