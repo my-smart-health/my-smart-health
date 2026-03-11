@@ -60,16 +60,16 @@ export default function ProfileShort({ id, name, bio, image, membership, ratingS
 
           <Link
             href={`/profile/${id}`}
-            className="btn btn-primary text-lg text-black bg-white hover:bg-primary/20 rounded-lg my-auto mx-auto h-14 min-w-44 max-w-44"
+            className="btn btn-primary text-black bg-white hover:bg-primary/20 rounded-lg my-auto mx-auto h-14 min-w-44 max-w-44"
           >
             <Image
               src="/android-chrome-192x192.png"
               alt="Profil Icon"
               width={27}
               height={27}
-              className="inline-block mr-2 h-9 w-9"
+              className="inline-block h-9 w-9"
             />
-            zum Profil
+            <span> zum Profil</span>
           </Link>
         </div>
       </div>
