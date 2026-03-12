@@ -45,10 +45,6 @@ export function MembershipSection({ membership, setMembership }: MembershipSecti
           value={membership.link}
           onChange={(e) => setMembership({ ...membership, link: e.target.value })}
         />
-
-        <label className="label">
-          <span className="label-text-alt">Default: Internal profile link | Custom: Any valid URL</span>
-        </label>
       </div>
 
       <div className={`p-4 border rounded-lg w-full text-center ${membership.status ? 'border-green-500 bg-green-50' : 'border-gray-300 bg-gray-50'}`}>
