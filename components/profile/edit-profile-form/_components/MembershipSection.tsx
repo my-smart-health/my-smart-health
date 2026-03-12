@@ -28,8 +28,10 @@ export function MembershipSection({ membership, setMembership }: MembershipSecti
 
         <div className="flex flex-col space-y-1">
           Below are examples of valid URLs for the Membership Link:
-          URL:<span className="label text-primary font-semibold"> https://example.com</span>
-          Phone:<span className="label text-primary font-semibold"> tel:+1234567</span>
+          <br />
+          <br />
+          URL:<span className="label text-primary font-semibold"> https://example.com</span><br />
+          Phone:<span className="label text-primary font-semibold"> tel:+1234567</span><br />
           Email:<span className="label text-primary font-semibold"> mailto:example@example.com</span>
         </div>
 
