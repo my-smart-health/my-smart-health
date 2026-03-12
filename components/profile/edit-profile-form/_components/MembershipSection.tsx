@@ -24,9 +24,17 @@ export function MembershipSection({ membership, setMembership }: MembershipSecti
         </label>
       </div>
 
-      <div className="form-control mb-4">
+      <div className="form-control mb-4 space-y-2 border border-primary p-4 rounded-lg">
+
+        <div className="flex flex-col space-y-1">
+          Below are examples of valid URLs for the Membership Link:
+          URL:<span className="label text-primary font-semibold"> https://example.com</span>
+          Phone:<span className="label text-primary font-semibold"> tel:+1234567</span>
+          Email:<span className="label text-primary font-semibold"> mailto:example@example.com</span>
+        </div>
+
         <label className="label">
-          <span className="label-text font-semibold">Membership Link</span>
+          <span className="font-semibold">Membership Link</span>
         </label>
         <input
           type="text"
@@ -35,6 +43,7 @@ export function MembershipSection({ membership, setMembership }: MembershipSecti
           value={membership.link}
           onChange={(e) => setMembership({ ...membership, link: e.target.value })}
         />
+
         <label className="label">
           <span className="label-text-alt">Default: Internal profile link | Custom: Any valid URL</span>
         </label>
