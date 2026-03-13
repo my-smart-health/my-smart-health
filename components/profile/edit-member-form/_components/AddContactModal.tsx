@@ -86,7 +86,10 @@ export function AddContactModal({
     const query = searchQuery.toLowerCase();
     const name = (user.name || '').toLowerCase();
     const email = (user.displayEmail || '').toLowerCase();
-    const specialty = user.fieldOfExpertise?.map(f => f.name.toLowerCase()).join(' ') || '';
+    const specialty = (user.fieldOfExpertise || [])
+      .map((f) => (typeof f?.name === 'string' ? f.name.toLowerCase() : ''))
+      .filter((value) => value.length > 0)
+      .join(' ');
 
     return name.includes(query) || email.includes(query) || specialty.includes(query);
   });
@@ -170,7 +173,10 @@ export function AddContactModal({
                         </h4>
                         {user.fieldOfExpertise && user.fieldOfExpertise.length > 0 && (
                           <p className="text-sm text-gray-600 truncate">
-                            {user.fieldOfExpertise.map(f => f.name).join(', ')}
+                            {user.fieldOfExpertise
+                              .map((f) => (typeof f?.name === 'string' ? f.name : ''))
+                              .filter((value) => value.length > 0)
+                              .join(', ')}
                           </p>
                         )}
                         {user.displayEmail && (
