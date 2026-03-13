@@ -1,7 +1,11 @@
 import prisma from '@/lib/db';
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
-import { extractS3KeyFromUrlOrPath, uploadRequestToS3 } from '@/lib/s3-storage';
+import {
+  deleteS3ObjectByKey,
+  extractS3KeyFromUrlOrPath,
+  uploadRequestToS3,
+} from '@/lib/s3-storage';
 import {
   MAX_PROFILE_FILE_SIZE_BYTES,
   MAX_PROFILE_FILE_SIZE_MB,
@@ -21,6 +25,14 @@ type MedicationPlanEntry = {
   fileUrl?: unknown;
   [key: string]: unknown;
 };
+
+const createDefaultMedicationPlanEntry = (): MedicationPlanEntry => ({
+  medication: '',
+  dosage: '',
+  sinceWhen: '',
+  reason: '',
+  fileUrl: [],
+});
 
 type AnamnesisEntry = {
   medicationPlan?: {
@@ -99,6 +111,8 @@ const getDefaultFolderByTarget = (target: MemberFileTarget) => {
 };
 
 export async function PUT(request: Request) {
+  let uploadedObjectKey: string | null = null;
+
   try {
     const session = await auth();
     if (!session?.user) {
@@ -172,6 +186,44 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: 'Member not found' }, { status: 404 });
     }
 
+    let currentAnamneses: AnamnesisEntry[] = [];
+    let selectedAnamnesis: AnamnesisEntry | null = null;
+    let medicationPlanTable: unknown[] = [];
+
+    if (target === 'anamnesesMedicationPlan') {
+      if (anamnesisIndex === null || medicationIndex === null) {
+        return NextResponse.json(
+          {
+            error:
+              'anamnesisIndex and medicationIndex are required for anamnesesMedicationPlan target',
+          },
+          { status: 400 },
+        );
+      }
+
+      currentAnamneses = toAnamnesesArray(member.anamneses);
+      if (!currentAnamneses[anamnesisIndex]) {
+        return NextResponse.json(
+          { error: 'Invalid anamnesisIndex' },
+          { status: 400 },
+        );
+      }
+
+      selectedAnamnesis = currentAnamneses[anamnesisIndex];
+      medicationPlanTable = Array.isArray(
+        selectedAnamnesis.medicationPlan?.medicationPlanTable,
+      )
+        ? [
+            ...(selectedAnamnesis.medicationPlan
+              ?.medicationPlanTable as unknown[]),
+          ]
+        : [];
+
+      while (medicationPlanTable.length <= medicationIndex) {
+        medicationPlanTable.push(createDefaultMedicationPlanEntry());
+      }
+    }
+
     const safeFolder = sanitizeFolderSegment(
       folder || getDefaultFolderByTarget(target),
     );
@@ -184,8 +236,10 @@ export async function PUT(request: Request) {
       visibility: 'private',
     });
 
+    uploadedObjectKey = extractS3KeyFromUrlOrPath(uploadedFile.pathname);
+
     const savedFile: FileWithDescription = {
-      url: extractS3KeyFromUrlOrPath(uploadedFile.pathname),
+      url: uploadedObjectKey,
       description,
     };
 
@@ -229,43 +283,10 @@ export async function PUT(request: Request) {
       );
     }
 
-    if (anamnesisIndex === null || medicationIndex === null) {
-      return NextResponse.json(
-        {
-          error:
-            'anamnesisIndex and medicationIndex are required for anamnesesMedicationPlan target',
-        },
-        { status: 400 },
-      );
-    }
-
-    const currentAnamneses = toAnamnesesArray(member.anamneses);
-    if (!currentAnamneses[anamnesisIndex]) {
-      return NextResponse.json(
-        { error: 'Invalid anamnesisIndex' },
-        { status: 400 },
-      );
-    }
-
-    const selectedAnamnesis = currentAnamneses[anamnesisIndex];
-    const medicationPlanTable = Array.isArray(
-      selectedAnamnesis.medicationPlan?.medicationPlanTable,
-    )
-      ? [
-          ...(selectedAnamnesis.medicationPlan
-            ?.medicationPlanTable as unknown[]),
-        ]
-      : [];
-
-    if (!medicationPlanTable[medicationIndex]) {
-      return NextResponse.json(
-        { error: 'Invalid medicationIndex' },
-        { status: 400 },
-      );
-    }
-
     const selectedMedication = {
-      ...(medicationPlanTable[medicationIndex] as MedicationPlanEntry),
+      ...(medicationPlanTable[
+        medicationIndex as number
+      ] as MedicationPlanEntry),
     };
 
     selectedMedication.fileUrl = [
@@ -273,13 +294,13 @@ export async function PUT(request: Request) {
       savedFile,
     ];
 
-    medicationPlanTable[medicationIndex] = selectedMedication;
+    medicationPlanTable[medicationIndex as number] = selectedMedication;
 
     const updatedAnamneses = [...currentAnamneses];
-    updatedAnamneses[anamnesisIndex] = {
-      ...selectedAnamnesis,
+    updatedAnamneses[anamnesisIndex as number] = {
+      ...(selectedAnamnesis as AnamnesisEntry),
       medicationPlan: {
-        ...(selectedAnamnesis.medicationPlan || {}),
+        ...((selectedAnamnesis as AnamnesisEntry).medicationPlan || {}),
         medicationPlanTable,
       },
     };
@@ -300,6 +321,12 @@ export async function PUT(request: Request) {
       { status: 200 },
     );
   } catch (error) {
+    if (uploadedObjectKey) {
+      try {
+        await deleteS3ObjectByKey(uploadedObjectKey, 'private');
+      } catch {}
+    }
+
     if (process.env.NODE_ENV === 'development') {
       console.error('Error uploading member file:', error);
     }

@@ -11,7 +11,7 @@ type MedicationPlanSectionProps = {
   anamnesisIndex: number;
   medicationPlan: MedicationPlan;
   onAddMedication: () => void;
-  onRemoveMedication: (index: number) => void;
+  onRemoveMedication: (index: number) => Promise<void> | void;
   onMedicationChange: (index: number, field: keyof MedicationPlanTable, value: string) => void;
   onNoRegularMedicationsChange: (value: boolean | null) => void;
   onAddFile: (medIndex: number) => void;
@@ -31,6 +31,7 @@ export function MedicationPlanSection({
   onRemoveFile,
   onFileChange,
 }: MedicationPlanSectionProps) {
+
   const handleUploadFile = async (
     medIndex: number,
     fileIndex: number,
@@ -104,7 +105,7 @@ export function MedicationPlanSection({
               <span className="text-xs font-semibold">Medication #{medIndex + 1}</span>
               <button
                 type="button"
-                onClick={() => onRemoveMedication(medIndex)}
+                onClick={() => void onRemoveMedication(medIndex)}
                 className="btn btn-xs btn-error text-white"
               >
                 Remove

@@ -8,6 +8,7 @@ import {
   LifestyleSection,
   VaccinationStatusSection,
 } from './anamnesis-sections';
+import { deleteMemberFile } from '@/utils/member-files-client';
 
 type AnamnesesSectionProps = {
   memberId: string;
@@ -140,11 +141,66 @@ export function AnamnesesSection({
     setAnamneses(updated);
   };
 
-  const handleRemoveMedication = (anamnesisIndex: number, medIndex: number) => {
-    const updated = [...anamneses];
-    updated[anamnesisIndex].medicationPlan.medicationPlanTable =
-      updated[anamnesisIndex].medicationPlan.medicationPlanTable.filter((_, i) => i !== medIndex);
-    setAnamneses(updated);
+  const handleRemoveMedication = async (anamnesisIndex: number, medIndex: number) => {
+    const currentAnamneses = [...anamneses];
+    const selectedAnamnesis = currentAnamneses[anamnesisIndex];
+    const selectedMedication =
+      selectedAnamnesis?.medicationPlan?.medicationPlanTable?.[medIndex];
+
+    if (!selectedAnamnesis || !selectedMedication) {
+      return;
+    }
+
+    const medicationFiles = (selectedMedication.fileUrl || []).filter(
+      (file) => file.url && file.url.trim().length > 0,
+    );
+
+    try {
+      for (const file of medicationFiles) {
+        await deleteMemberFile({
+          memberId,
+          fileUrl: file.url,
+          target: 'anamnesesMedicationPlan',
+          anamnesisIndex,
+          medicationIndex: medIndex,
+        });
+      }
+
+      const updated = [...currentAnamneses];
+      updated[anamnesisIndex] = {
+        ...updated[anamnesisIndex],
+        medicationPlan: {
+          ...updated[anamnesisIndex].medicationPlan,
+          medicationPlanTable:
+            updated[anamnesisIndex].medicationPlan.medicationPlanTable.filter(
+              (_, i) => i !== medIndex,
+            ),
+        },
+      };
+
+      setAnamneses(updated);
+
+      const response = await fetch('/api/update/update-member-profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: memberId,
+          data: { anamneses: updated },
+        }),
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null);
+        setAnamneses(currentAnamneses);
+        window.alert(payload?.message || 'Failed to update medication plan');
+      }
+    } catch (error) {
+      window.alert(
+        error instanceof Error
+          ? error.message
+          : 'Failed to remove medication files',
+      );
+    }
   };
 
   const handleMedicationChange = (anamnesisIndex: number, medIndex: number, field: keyof MedicationPlanTable, value: string) => {
