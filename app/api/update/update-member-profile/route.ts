@@ -4,6 +4,15 @@ import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { Prisma } from '@prisma/client';
 
+function parseNullableInt(value: unknown): number | null {
+  if (value === null || value === undefined || value === '') {
+    return null;
+  }
+
+  const parsed = Number.parseInt(String(value), 10);
+  return Number.isNaN(parsed) ? null : parsed;
+}
+
 export async function PUT(req: Request) {
   try {
     const session = await auth();
@@ -37,10 +46,10 @@ export async function PUT(req: Request) {
         activeUntil: data.activeUntil ? new Date(data.activeUntil) : null,
       }),
       ...(data.heightCm !== undefined && {
-        heightCm: data.heightCm ? new Prisma.Decimal(data.heightCm) : null,
+        heightCm: parseNullableInt(data.heightCm),
       }),
       ...(data.weightKg !== undefined && {
-        weightKg: data.weightKg ? new Prisma.Decimal(data.weightKg) : null,
+        weightKg: parseNullableInt(data.weightKg),
       }),
       ...(data.isActive !== undefined && { isActive: Boolean(data.isActive) }),
       ...(data.bloodTypeFiles !== undefined && {
