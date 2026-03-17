@@ -19,10 +19,17 @@ type User = {
 
 type SortKey = keyof Pick<User, "name" | "email" | "category" | "role" | "createdAt" | "isContactable">;
 
-export default function UserTable({ users }: { users: User[] }) {
+export default function UserTable({
+  users,
+  currentUserId,
+}: {
+  users: User[];
+  currentUserId: string;
+}) {
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortAsc, setSortAsc] = useState(true);
   const [allUsers, setAllUsers] = useState(users);
+  const [deletingUserId, setDeletingUserId] = useState<string | null>(null);
 
   useEffect(() => {
     setAllUsers(users);
@@ -81,8 +88,10 @@ export default function UserTable({ users }: { users: User[] }) {
   };
 
   const handleDeleteUser = async (id: string, userName: string) => {
+    if (id === currentUserId) return;
     if (!confirm("Are you sure you want to delete this user?")) return;
 
+    setDeletingUserId(id);
     startDeletion(userName || 'Unbekannter Benutzer');
 
     try {
@@ -104,6 +113,7 @@ export default function UserTable({ users }: { users: User[] }) {
       await new Promise(resolve => setTimeout(resolve, 1500));
     } finally {
       finishDeletion();
+      setDeletingUserId(null);
     }
   };
 
@@ -224,11 +234,15 @@ export default function UserTable({ users }: { users: User[] }) {
                   </Link>
                 </td>
                 <td>
+                  {user.id === currentUserId && (
+                    <div className="text-xs text-gray-500 text-center mb-1">Current user</div>
+                  )}
                   <button
                     onClick={() => handleDeleteUser(user.id, user.name || user.email)}
-                    className="font-semibold text-red-500 hover:underline flex flex-col justify-center items-center gap-1"
+                    disabled={user.id === currentUserId || deletingUserId === user.id}
+                    className="font-semibold text-red-500 hover:underline flex flex-col justify-center items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Trash2 className="inline-block mb-1" /> Delete User
+                    <Trash2 className="inline-block mb-1" /> {deletingUserId === user.id ? "Deleting..." : "Delete User"}
                   </button>
                 </td>
               </tr>

@@ -16,9 +16,10 @@ type User = {
 
 type SearchFilterProps = {
   users: User[];
+  currentUserId: string;
 };
 
-export default function SearchFilter({ users }: SearchFilterProps) {
+export default function SearchFilter({ users, currentUserId }: SearchFilterProps) {
   const [query, setQuery] = useState("");
 
   const filteredUsers = useMemo(() => {
@@ -41,7 +42,7 @@ export default function SearchFilter({ users }: SearchFilterProps) {
         onChange={(event) => setQuery(event.target.value)}
         className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-blue-400 w-[90%] max-w-md mb-4"
       />
-      <UserTable users={filteredUsers} />
+      <UserTable users={filteredUsers} currentUserId={currentUserId} />
     </>
   );
 }

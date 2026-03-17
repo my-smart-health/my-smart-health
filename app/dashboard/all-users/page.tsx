@@ -92,7 +92,7 @@ export default async function AllUsersPage() {
   return (
     <>
       <h1>All Users</h1>
-      <SearchFilter users={users} />
+      <SearchFilter users={users} currentUserId={session.user.id} />
     </>
   );
 }
