@@ -9,6 +9,7 @@ type PersonalInfoSectionProps = {
   weightKg: number | null;
   healthInsurances?: HealthInsurances[];
   familyMembers?: FamilyMember[];
+  phoneNumbers?: string[];
 };
 
 export function PersonalInfoSection({
@@ -17,6 +18,7 @@ export function PersonalInfoSection({
   weightKg,
   healthInsurances,
   familyMembers,
+  phoneNumbers,
 }: PersonalInfoSectionProps) {
   const formatBirthday = (dateString: string | null) => {
     if (!dateString) return null;
@@ -144,6 +146,26 @@ export function PersonalInfoSection({
                     )}
                   </div>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {phoneNumbers && phoneNumbers.length > 0 && (
+        <div className="mt-6">
+          <h3 className="text-lg font-semibold text-primary mb-3">My Phone Numbers</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {phoneNumbers.map((phone, index) => (
+              <div key={index} className="p-4 border border-primary rounded-lg">
+                <label className='label floating-label'>Phone Number {index + 1}</label>
+                <Link
+                  href={`tel:${phone}`}
+                  className="flex items-center gap-1 text-sm text-primary hover:text-primary/75 transition-colors"
+                >
+                  <PhoneIcon size={14} />
+                  <span>{phone}</span>
+                </Link>
               </div>
             ))}
           </div>

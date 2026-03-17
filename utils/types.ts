@@ -330,6 +330,7 @@ export type MemberProfileDashboardProps = {
   id: string;
   email: string;
   role: $Enums.Role;
+  phoneNumbers: string[];
   createdAt: string;
   name: string | null;
   birthday: string | null;

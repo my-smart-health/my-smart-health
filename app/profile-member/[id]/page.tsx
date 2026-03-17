@@ -32,6 +32,7 @@ async function getMemberForContact(memberId: string, viewerId: string) {
     select: {
       id: true,
       email: true,
+      phoneNumbers: true,
       role: true,
       createdAt: true,
       updatedAt: true,
@@ -59,6 +60,7 @@ async function getMemberForContact(memberId: string, viewerId: string) {
     ...member,
     createdAt: member.createdAt.toISOString(),
     updatedAt: member.updatedAt.toISOString(),
+    phoneNumbers: Array.isArray(member.phoneNumbers) ? member.phoneNumbers : [],
     birthday: member.birthday ? member.birthday.toISOString() : null,
     activeUntil: member.activeUntil ? member.activeUntil.toISOString() : null,
     heightCm: member.heightCm ? Number(member.heightCm.toString()) : null,

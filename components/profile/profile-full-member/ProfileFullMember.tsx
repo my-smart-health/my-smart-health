@@ -76,7 +76,7 @@ export default function ProfileFullMember({
     bloodType,
     bloodTypeFiles,
     healthInsurances,
-
+    phoneNumbers,
     anamneses,
     doctors,
     documents,
@@ -88,7 +88,7 @@ export default function ProfileFullMember({
     updatedAt,
   } = member;
 
-  const hasPersonalInfo = birthday || heightCm || weightKg || (healthInsurances && healthInsurances.length > 0) || (familyMembers && familyMembers.length > 0);
+  const hasPersonalInfo = birthday || heightCm || weightKg || (healthInsurances && healthInsurances.length > 0) || (familyMembers && familyMembers.length > 0) || (phoneNumbers && phoneNumbers.length > 0);
   const hasBloodType = bloodType || (bloodTypeFiles && bloodTypeFiles.length > 0);
   const hasAnamneses = anamneses && anamneses.length > 0;
   const hasDoctors = doctors && doctors.length > 0;
@@ -170,6 +170,7 @@ export default function ProfileFullMember({
                     birthday={birthday}
                     heightCm={heightCm}
                     weightKg={weightKg}
+                    phoneNumbers={phoneNumbers}
                     healthInsurances={healthInsurances}
                     familyMembers={familyMembers}
                   />

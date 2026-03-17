@@ -51,6 +51,9 @@ export async function PUT(req: Request) {
       ...(data.weightKg !== undefined && {
         weightKg: parseNullableInt(data.weightKg),
       }),
+      ...(data.phoneNumbers !== undefined && {
+        phoneNumbers: data.phoneNumbers || [],
+      }),
       ...(data.isActive !== undefined && { isActive: Boolean(data.isActive) }),
       ...(data.bloodTypeFiles !== undefined && {
         bloodTypeFiles: data.bloodTypeFiles || [],

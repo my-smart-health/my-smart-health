@@ -8,6 +8,9 @@ type BasicInfoSectionProps = {
   createdAt: string;
   updatedAt: string;
   isAdmin?: boolean;
+  phoneNumbers: string[];
+  setPhoneNumbers: (val: string[]) => void;
+
 };
 
 export function BasicInfoSection({
@@ -20,6 +23,8 @@ export function BasicInfoSection({
   createdAt,
   updatedAt,
   isAdmin = false,
+  phoneNumbers,
+  setPhoneNumbers,
 }: BasicInfoSectionProps) {
   return (
     <div className="space-y-4">
@@ -76,6 +81,50 @@ export function BasicInfoSection({
           />
         </label>
       </section>
+
+
+      <section>
+        <label className="flex flex-col gap-2">
+          <span className="font-semibold text-gray-700">Phone Numbers</span>
+
+          <div className="flex flex-col gap-2">
+            {phoneNumbers.map((phone, index) => (
+              <div key={`phone-${index}`} className="flex items-center gap-2">
+                <input
+                  type="tel"
+                  key={`phone-${index}`}
+                  name={`phoneNumbers[${index}]`}
+                  value={phone}
+                  placeholder="+1234567890"
+                  onChange={e => {
+                    const newPhones = [...phoneNumbers];
+                    newPhones[index] = e.target.value;
+                    setPhoneNumbers(newPhones);
+                  }}
+                  className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
+                />
+                <button
+                  type="button"
+                  onClick={() => setPhoneNumbers(phoneNumbers.filter((_, i) => i !== index))}
+                  className="btn btn-sm px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setPhoneNumbers([...phoneNumbers, ""])}
+                className="btn btn-sm px-3 py-1 bg-primary text-white rounded hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                + Add Phone Number
+              </button>
+            </div>
+          </div>
+        </label>
+      </section>
+
 
       {isAdmin && (
         <>

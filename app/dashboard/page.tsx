@@ -70,6 +70,7 @@ async function getMemberByUserId(userId: string) {
     select: {
       id: true,
       email: true,
+      phoneNumbers: true,
       role: true,
       createdAt: true,
       updatedAt: true,
@@ -99,6 +100,7 @@ async function getMemberByUserId(userId: string) {
     updatedAt: member.updatedAt.toISOString(),
     birthday: member.birthday ? member.birthday.toISOString() : null,
     activeUntil: member.activeUntil ? member.activeUntil.toISOString() : null,
+    phoneNumbers: Array.isArray(member.phoneNumbers) ? member.phoneNumbers : [],
     heightCm: member.heightCm ? Number(member.heightCm.toString()) : null,
     weightKg: member.weightKg ? Number(member.weightKg.toString()) : null,
     healthInsurances: Array.isArray(member.healthInsurances)

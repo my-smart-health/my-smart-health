@@ -65,6 +65,7 @@ export default function EditMemberForm({
 
   const [name, setName] = useState(member?.name ?? "");
   const [email, setEmail] = useState(member?.email ?? "");
+  const [phoneNumbers, setPhoneNumbers] = useState<string[]>(member?.phoneNumbers || []);
 
   const [isActive, setIsActive] = useState(Boolean(member?.isActive));
   const [activeUntil, setActiveUntil] = useState(toDateInputValue(member?.activeUntil));
@@ -138,6 +139,7 @@ export default function EditMemberForm({
     const payload = {
       name: name.trim().length > 0 ? name.trim() : null,
       email: email.trim(),
+      phoneNumbers: phoneNumbers ? phoneNumbers.filter(p => p.trim().length > 0).map(p => p.trim()) : [],
       birthday: birthday ? new Date(`${birthday}T00:00:00.000Z`) : null,
       heightCm: heightCm.trim().length > 0 ? parseFloat(heightCm.trim()) : null,
       weightKg: weightKg.trim().length > 0 ? parseFloat(weightKg.trim()) : null,
@@ -256,6 +258,8 @@ export default function EditMemberForm({
               createdAt={member.createdAt}
               updatedAt={member.updatedAt}
               isAdmin={isAdmin}
+              phoneNumbers={phoneNumbers}
+              setPhoneNumbers={setPhoneNumbers}
             />
 
             <Divider addClass="my-4" />
