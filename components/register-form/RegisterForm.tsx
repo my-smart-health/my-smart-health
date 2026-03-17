@@ -11,6 +11,7 @@ import ErrorModal from "./ErrorModal";
 export default function RegisterForm() {
   const router = useRouter();
   const [error, setError] = useState<ErrorState>(null);
+  const registerRoleRef = useRef<'USER' | 'MEMBER'>('USER');
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState<boolean>(false);
@@ -36,7 +37,12 @@ export default function RegisterForm() {
       setError(null);
       errorModalRef.current?.close();
       if (error.userId) {
-        router.push(`/profile/${error.userId}`);
+        const successRoute =
+          registerRoleRef.current === 'MEMBER'
+            ? `/profile-member/${error.userId}`
+            : `/profile/${error.userId}`;
+
+        router.push(successRoute);
       } else {
         router.push("/dashboard");
       }
@@ -76,6 +82,8 @@ export default function RegisterForm() {
         setIsDisabled(false);
         return null;
       }
+
+      registerRoleRef.current = role === 'MEMBER' ? 'MEMBER' : 'USER';
       setIsDisabled(true);
 
       const data = {
