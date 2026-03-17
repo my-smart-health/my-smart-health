@@ -86,7 +86,7 @@ model MemberProfile {
   id                 String         @id @default(uuid())
   email              String         @unique
   password           String         @db.VarChar(255)
-  phoneNumbers       String[]
+  phoneNumbers       String[]       @default([])
   role               Role           @default(MEMBER)
   createdAt          DateTime       @default(now())
   name               String?
