@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { UserSearch, Eye } from "lucide-react";
+import { UserSearch, Eye, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type Member = {
   id: string;
@@ -15,9 +16,11 @@ type Member = {
 type SortKey = keyof Pick<Member, "name" | "email" | "role" | "createdAt">;
 
 export default function UserTableMembers({ members }: { members: Member[] }) {
+  const router = useRouter();
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortAsc, setSortAsc] = useState(true);
   const [allMembers, setAllMembers] = useState(members);
+  const [deletingMemberId, setDeletingMemberId] = useState<string | null>(null);
 
   useEffect(() => {
     setAllMembers(members);
@@ -43,6 +46,39 @@ export default function UserTableMembers({ members }: { members: Member[] }) {
 
   const sortArrow = (key: SortKey) =>
     sortKey === key ? (sortAsc ? "▲" : "▼") : "";
+
+  const handleDeleteMember = async (member: Member) => {
+    const displayName = member.name?.trim() || member.email;
+    const isConfirmed = window.confirm(
+      `Warning: You are about to permanently delete member "${displayName}" including all files. This cannot be undone. Continue?`,
+    );
+
+    if (!isConfirmed) {
+      return;
+    }
+
+    try {
+      setDeletingMemberId(member.id);
+      const response = await fetch(
+        `/api/delete/delete-member?memberId=${encodeURIComponent(member.id)}`,
+        { method: "DELETE" },
+      );
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        alert(data?.error || "Failed to delete member");
+        return;
+      }
+
+      setAllMembers((prev) => prev.filter((item) => item.id !== member.id));
+      router.refresh();
+    } catch {
+      alert("Failed to delete member");
+    } finally {
+      setDeletingMemberId(null);
+    }
+  };
 
   return (
     <div className="overflow-x-auto w-full">
@@ -74,6 +110,7 @@ export default function UserTableMembers({ members }: { members: Member[] }) {
             </th>
             <th>View</th>
             <th>Edit</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -100,6 +137,17 @@ export default function UserTableMembers({ members }: { members: Member[] }) {
                   >
                     <UserSearch className="inline-block mr-1" /> Edit
                   </Link>
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteMember(member)}
+                    disabled={deletingMemberId === member.id}
+                    className="font-semibold text-red-500 hover:underline flex flex-col justify-center items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Trash2 className="inline-block mr-1" />
+                    {deletingMemberId === member.id ? "Deleting..." : "Delete"}
+                  </button>
                 </td>
               </tr>
             )
