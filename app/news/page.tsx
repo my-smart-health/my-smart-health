@@ -6,6 +6,22 @@ import { CACHE_STRATEGY } from "@/utils/constants";
 import { NewsCardType, Social } from "@/utils/types";
 import NewsList from "@/components/posts/news-list/NewsList";
 
+type NewsPostRaw = {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+  photos: unknown;
+  tags: unknown;
+  socialLinks: unknown;
+  author: {
+    id: string;
+    name: string | null;
+    fieldOfExpertise: unknown;
+  };
+};
+
 async function getData(isLogged: boolean) {
   const cacheStrategy = isLogged ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.SHORT;
 
@@ -35,9 +51,9 @@ async function getData(isLogged: boolean) {
   })).catch((error) => {
     console.error('Error fetching news posts:', error);
     return [];
-  });
+  }) as NewsPostRaw[];
 
-  return posts.map((post) => ({
+  return posts.map((post: NewsPostRaw) => ({
     ...post,
     socialLinks: Array.isArray(post.socialLinks) ? (post.socialLinks as unknown as Social[]) : []
   }));

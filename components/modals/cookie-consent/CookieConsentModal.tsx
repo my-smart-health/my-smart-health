@@ -23,7 +23,7 @@ export default function CookieConsentModal() {
     technical: true,
     analytics: false,
     socialMedia: false,
-    timestamp: Date.now(),
+    timestamp: 0,
   });
   const acceptBtnRef = useRef<HTMLButtonElement | null>(null);
 

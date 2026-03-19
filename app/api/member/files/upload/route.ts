@@ -34,6 +34,14 @@ const createDefaultMedicationPlanEntry = (): MedicationPlanEntry => ({
   fileUrl: [],
 });
 
+const createDefaultAnamnesisEntry = (): AnamnesisEntry => ({
+  text: '',
+  medicationPlan: {
+    medicationPlanTable: [],
+    noRegularMedications: null,
+  },
+});
+
 type AnamnesisEntry = {
   medicationPlan?: {
     medicationPlanTable?: unknown;
@@ -202,14 +210,13 @@ export async function PUT(request: Request) {
       }
 
       currentAnamneses = toAnamnesesArray(member.anamneses);
-      if (!currentAnamneses[anamnesisIndex]) {
-        return NextResponse.json(
-          { error: 'Invalid anamnesisIndex' },
-          { status: 400 },
-        );
+
+      while (currentAnamneses.length <= anamnesisIndex) {
+        currentAnamneses.push(createDefaultAnamnesisEntry());
       }
 
-      selectedAnamnesis = currentAnamneses[anamnesisIndex];
+      selectedAnamnesis =
+        currentAnamneses[anamnesisIndex] || createDefaultAnamnesisEntry();
       medicationPlanTable = Array.isArray(
         selectedAnamnesis.medicationPlan?.medicationPlanTable,
       )

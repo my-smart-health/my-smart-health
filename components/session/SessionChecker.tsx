@@ -53,6 +53,7 @@ export default function SessionChecker() {
   const lastUpdateRef = useRef<number>(0);
   const initializedRef = useRef(false);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const scheduleInactivityTimerRef = useRef<() => void>(() => { });
 
   const isRestrictedPath = useCallback((path: string) => {
     return RESTRICTED_PATHS.some(
@@ -156,10 +157,14 @@ export default function SessionChecker() {
     globalThis.inactivityTimer = setTimeout(() => {
       const timedOut = checkInactivity();
       if (!timedOut) {
-        scheduleInactivityTimer();
+        scheduleInactivityTimerRef.current();
       }
     }, remaining);
   }, [checkInactivity, clearInactivityTimer]);
+
+  useEffect(() => {
+    scheduleInactivityTimerRef.current = scheduleInactivityTimer;
+  }, [scheduleInactivityTimer]);
 
   useEffect(() => {
     if (status !== 'authenticated') return;

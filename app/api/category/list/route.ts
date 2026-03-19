@@ -16,13 +16,31 @@ export async function GET() {
           include: {
             children: true,
             categoryUsers: {
-              include: { user: true },
+              include: {
+                user: {
+                  select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                    role: true,
+                  },
+                },
+              },
               orderBy: { user: { name: 'asc' } },
             },
           },
         },
         categoryUsers: {
-          include: { user: true },
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+              },
+            },
+          },
           orderBy: { user: { name: 'asc' } },
         },
       },
@@ -34,7 +52,7 @@ export async function GET() {
     if (process.env.NODE_ENV === 'development') console.error(err);
     return NextResponse.json(
       { error: 'Failed to list categories' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

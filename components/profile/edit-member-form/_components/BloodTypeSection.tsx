@@ -1,4 +1,3 @@
-import { $Enums } from '@prisma/client';
 import { FileWithDescription } from '@/utils/types';
 import { getFileNameFromUrl } from '@/utils/common';
 import {
@@ -7,16 +6,26 @@ import {
   uploadMemberFile,
 } from '@/utils/member-files-client';
 
-const BLOOD_TYPE_OPTIONS: { value: $Enums.BloodType; label: string }[] = [
-  { value: $Enums.BloodType.A_POSITIVE, label: 'A+' },
-  { value: $Enums.BloodType.A_NEGATIVE, label: 'A-' },
-  { value: $Enums.BloodType.B_POSITIVE, label: 'B+' },
-  { value: $Enums.BloodType.B_NEGATIVE, label: 'B-' },
-  { value: $Enums.BloodType.AB_POSITIVE, label: 'AB+' },
-  { value: $Enums.BloodType.AB_NEGATIVE, label: 'AB-' },
-  { value: $Enums.BloodType.O_POSITIVE, label: 'O+' },
-  { value: $Enums.BloodType.O_NEGATIVE, label: 'O-' },
+const BLOOD_TYPE_OPTIONS: { value: BloodType; label: string }[] = [
+  { value: 'A_POSITIVE', label: 'A+' },
+  { value: 'A_NEGATIVE', label: 'A-' },
+  { value: 'B_POSITIVE', label: 'B+' },
+  { value: 'B_NEGATIVE', label: 'B-' },
+  { value: 'AB_POSITIVE', label: 'AB+' },
+  { value: 'AB_NEGATIVE', label: 'AB-' },
+  { value: 'O_POSITIVE', label: 'O+' },
+  { value: 'O_NEGATIVE', label: 'O-' },
 ];
+
+type BloodType =
+  | 'A_POSITIVE'
+  | 'A_NEGATIVE'
+  | 'B_POSITIVE'
+  | 'B_NEGATIVE'
+  | 'AB_POSITIVE'
+  | 'AB_NEGATIVE'
+  | 'O_POSITIVE'
+  | 'O_NEGATIVE';
 
 type BloodTypeSectionProps = {
   memberId: string;

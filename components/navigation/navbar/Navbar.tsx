@@ -50,8 +50,7 @@ export default async function Navbar() {
             className="flex items-center justify-center ml-auto"
           >
             <Image
-              priority
-              loading="eager"
+              preload
               draggable={false}
               src="/navbar_v4.png"
               alt="My Smart Health"

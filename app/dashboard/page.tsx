@@ -185,28 +185,37 @@ export default async function DashboardPage() {
       ? (user.reservationLinks as ReservationLink[])
       : [];
 
-    const safeLocations = (user.locations || []).map((location) => {
-      let schedule: Schedule[] = [];
-      if (Array.isArray(location.schedule)) {
-        schedule = location.schedule.filter((item) => item !== null) as Schedule[];
-      } else if (typeof location.schedule === "string") {
-        try {
-          const parsed = JSON.parse(location.schedule);
-          schedule = Array.isArray(parsed) ? (parsed.filter((scheduleItem: unknown) => scheduleItem !== null) as Schedule[]) : [];
-        } catch {
-          schedule = [];
+    const safeLocations = (user.locations || []).map(
+      (location: (NonNullable<typeof user.locations>)[number]) => {
+        let schedule: Schedule[] = [];
+        if (Array.isArray(location.schedule)) {
+          schedule = location.schedule.filter(
+            (item: unknown) => item !== null,
+          ) as Schedule[];
+        } else if (typeof location.schedule === "string") {
+          try {
+            const parsed = JSON.parse(location.schedule);
+            schedule = Array.isArray(parsed) ? (parsed.filter((scheduleItem: unknown) => scheduleItem !== null) as Schedule[]) : [];
+          } catch {
+            schedule = [];
+          }
+        } else if (location.schedule !== null && typeof location.schedule === "object") {
+          schedule = [location.schedule as unknown as Schedule].filter(
+            (item: Schedule) => item !== null,
+          ) as Schedule[];
         }
-      } else if (location.schedule !== null && typeof location.schedule === "object") {
-        schedule = [location.schedule as unknown as Schedule].filter((item) => item !== null) as Schedule[];
-      }
 
-      const locLinksUnknown = (location as unknown as { reservationLinks?: unknown }).reservationLinks;
-      const reservationLinks: ReservationLink[] = Array.isArray(locLinksUnknown)
-        ? (locLinksUnknown as ReservationLink[]).filter((link) => link && typeof link.url === "string" && link.url.trim().length > 0)
-        : [];
+        const locLinksUnknown = (location as unknown as { reservationLinks?: unknown }).reservationLinks;
+        const reservationLinks: ReservationLink[] = Array.isArray(locLinksUnknown)
+          ? (locLinksUnknown as ReservationLink[]).filter(
+            (link: ReservationLink) =>
+              Boolean(link) && typeof link.url === "string" && link.url.trim().length > 0,
+          )
+          : [];
 
-      return { ...location, schedule, reservationLinks };
-    });
+        return { ...location, schedule, reservationLinks };
+      },
+    );
 
     const safeProfileFiles = Array.isArray((user as unknown as { profileFiles?: unknown }).profileFiles)
       ? ((user as unknown as { profileFiles: string[] }).profileFiles)

@@ -26,7 +26,7 @@ export default async function EditCubePage() {
 
       <div className="mb-6">
         <h2 className="text-lg font-semibold mb-2">Preview</h2>
-        <NewsCarousel props={cubePosts.map(p => ({ id: p.id, info: p.title, image: p.photos && p.photos[0] ? p.photos[0] : '' }))} />
+        <NewsCarousel props={cubePosts.map((p: (typeof cubePosts)[number]) => ({ id: p.id, info: p.title, image: p.photos && p.photos[0] ? p.photos[0] : '' }))} />
       </div>
 
       <form action={toggleCube} className="mb-6 border border-primary rounded-xl p-4 flex items-center gap-3">
@@ -42,7 +42,7 @@ export default async function EditCubePage() {
             <div className="text-sm text-gray-500">No posts in the cube.</div>
           ) : (
             <ul className="space-y-2">
-              {cubePosts.map((p, idx) => (
+              {cubePosts.map((p: (typeof cubePosts)[number], idx: number) => (
                 <li key={p.id}>
                   <form className="flex items-center gap-2 border border-primary rounded p-2">
                     <span className="w-6 text-right mr-2">{idx + 1}</span>
@@ -71,7 +71,7 @@ export default async function EditCubePage() {
             <div className="text-sm text-gray-500">No more posts available.</div>
           ) : (
             <ul className="space-y-2 max-h-[480px] overflow-auto pr-1">
-              {candidates.map((p) => (
+              {candidates.map((p: (typeof candidates)[number]) => (
                 <li key={p.id} className="flex items-center gap-2 border border-primary rounded p-2">
                   <div className="w-16 h-10 overflow-hidden rounded border border-primary bg-white relative">
                     {p.photos && p.photos[0] ? (

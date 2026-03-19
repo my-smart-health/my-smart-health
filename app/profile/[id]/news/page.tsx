@@ -33,7 +33,7 @@ async function getAllPostsByUserId(userId: string, isOwnProfile: boolean, isLogg
     cacheStrategy,
   });
 
-  return posts.map((post) => ({
+  return posts.map((post: (typeof posts)[number]) => ({
     ...post,
     socialLinks: Array.isArray(post.socialLinks) ? (post.socialLinks as unknown as Social[]) : []
   })) as NewsCardType[];

@@ -2,6 +2,17 @@ import prisma from '@/lib/db';
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 
+type MemberDoctorContactWithDoctor = {
+  doctor: {
+    id: string;
+    name: string | null;
+    profileImages: unknown;
+    fieldOfExpertise: unknown;
+    displayEmail: unknown;
+    phones: unknown;
+  };
+};
+
 const hasPrismaErrorCode = (
   err: unknown,
   code: string,
@@ -51,7 +62,9 @@ export async function GET(req: Request) {
       },
     });
 
-    const contacts = memberContacts.map((mc) => mc.doctor);
+    const contacts = memberContacts.map(
+      (mc: MemberDoctorContactWithDoctor) => mc.doctor,
+    );
 
     return NextResponse.json(contacts, { status: 200 });
   } catch (err) {

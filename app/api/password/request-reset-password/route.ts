@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     if (!email || !email.trim()) {
       return NextResponse.json(
         { message: 'E-Mail-Adresse ist erforderlich' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     if (!user) {
       return NextResponse.json(
         { message: 'Die E-Mail-Adresse existiert nicht in unserem System.' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
           message:
             'Es gibt bereits eine ausstehende Anfrage für diese E-Mail-Adresse. Bitte warten Sie auf die Bearbeitung durch den Administrator.',
         },
-        { status: 409 }
+        { status: 409 },
       );
     }
 
@@ -87,7 +87,7 @@ export async function POST(request: NextRequest) {
         message:
           'Anfrage erfolgreich gesendet. Der Administrator wird sich mit Ihnen in Verbindung setzen.',
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error('Error creating password reset request:', error);
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
         message:
           'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Administrator direkt.',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

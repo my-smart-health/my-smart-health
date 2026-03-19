@@ -23,13 +23,35 @@ import {
   TelMedicinePhoneNumber,
 } from "@/utils/types";
 
+type HomeNewsItem = {
+  id: string;
+  title: string;
+  photos: string[];
+  createdAt: Date;
+  author: {
+    id: string;
+    name: string | null;
+  } | null;
+};
+
+type HomeCube = {
+  id: string;
+  onOff: boolean;
+};
+
+type HomeCubePostItem = {
+  id: string;
+  title: string;
+  photos: string[];
+};
+
 async function getHomePageData(isLogged: boolean) {
   const cacheStrategy = isLogged ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.SHORT;
   const cubeCacheStrategy = isLogged ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.MEDIUM;
 
   try {
     const [news, cube] = await Promise.all([
-      withRetry(() =>
+      withRetry<HomeNewsItem[]>(() =>
         prisma.posts.findMany({
           orderBy: { createdAt: 'desc' },
           take: 20,
@@ -46,7 +68,7 @@ async function getHomePageData(isLogged: boolean) {
         console.error('Error fetching news posts:', error);
         return [];
       }),
-      withRetry(() =>
+      withRetry<HomeCube | null>(() =>
         prisma.cube.findFirst({
           cacheStrategy: cubeCacheStrategy,
         })
@@ -57,7 +79,7 @@ async function getHomePageData(isLogged: boolean) {
     ]);
 
     const cubePosts = cube?.onOff
-      ? await withRetry(() =>
+      ? await withRetry<HomeCubePostItem[]>(() =>
         prisma.posts.findMany({
           where: { cubeId: cube.id },
           orderBy: [
@@ -163,15 +185,15 @@ export default async function Home() {
 
   const newsTopCarousel = news.length > 0
     ? news
-      .filter(item => item.author && item.author.name && item.id && item.photos && item.photos[0])
-      .map(item => ({
+      .filter((item: HomeNewsItem) => item.author && item.author.name && item.id && item.photos && item.photos[0])
+      .map((item: HomeNewsItem) => ({
         id: item.id,
         name: item.title,
         profileImage: item.photos[0]
       }))
     : undefined;
 
-  const cubeCarousel = (cubePosts || []).map(p => ({
+  const cubeCarousel = (cubePosts || []).map((p: HomeCubePostItem) => ({
     id: p.id,
     info: p.title,
     image: p.photos && p.photos.length > 0 ? p.photos[0] : '',
@@ -199,9 +221,9 @@ export default async function Home() {
         {memberData && <MemberDashboard member={memberData} />}
 
         <MySmartHealth />
-        <ProfileSearchToggle />
         <CategoryButton name={CATEGORY_NAMES.theLeadingDoctors.name} goTo={CATEGORY_NAMES.theLeadingDoctors.link} imageAsTitle="/the-leading-doctors.png" />
         <CategoryButton name={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.name} goTo={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.link} imageAsTitle="/the-leading-hospitals.png" />
+        <ProfileSearchToggle />
 
         <CategoryButton name={CATEGORY_NAMES.smartHealth.name} icon="/icon3.png" goTo={CATEGORY_NAMES.smartHealth.link} />
         <CategoryButton name={CATEGORY_NAMES.medizinUndPflege.name} icon="/icon4.png" goTo={CATEGORY_NAMES.medizinUndPflege.link} />

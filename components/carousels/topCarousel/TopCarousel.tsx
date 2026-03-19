@@ -42,8 +42,7 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
               className="cursor-pointer pb-6">
               <Link href={`/news/${news.id}`} className="block" prefetch={false}>
                 <Image
-                  priority={index === 0}
-                  fetchPriority={index === 0 ? 'high' : 'auto'}
+                  preload={index === 0}
                   placeholder="empty"
                   width={182}
                   height={182}

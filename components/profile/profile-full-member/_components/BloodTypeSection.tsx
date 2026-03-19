@@ -1,16 +1,25 @@
 import { Droplet, FileText, ExternalLink } from 'lucide-react';
-import { $Enums } from '@prisma/client';
 import { FileWithDescription } from '@/utils/types';
 import { getFileNameFromUrl } from '@/utils/common';
 import { getMemberFileDownloadUrl } from '@/utils/member-files-client';
 
+type BloodType =
+  | 'A_POSITIVE'
+  | 'A_NEGATIVE'
+  | 'B_POSITIVE'
+  | 'B_NEGATIVE'
+  | 'AB_POSITIVE'
+  | 'AB_NEGATIVE'
+  | 'O_POSITIVE'
+  | 'O_NEGATIVE';
+
 type BloodTypeSectionProps = {
   memberId: string;
-  bloodType: $Enums.BloodType | null;
+  bloodType: BloodType | null;
   bloodTypeFiles: FileWithDescription[];
 };
 
-const BLOOD_TYPE_DISPLAY: Record<$Enums.BloodType, string> = {
+const BLOOD_TYPE_DISPLAY: Record<BloodType, string> = {
   A_POSITIVE: 'A+',
   A_NEGATIVE: 'A-',
   B_POSITIVE: 'B+',

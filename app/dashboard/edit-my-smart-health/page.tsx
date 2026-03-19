@@ -18,7 +18,7 @@ async function getMySmartHealthLocations(): Promise<MySmartHealthFormLocation[]>
   const locations = await prisma.mySmartHealthLocation.findMany({
     cacheStrategy: CACHE_STRATEGY.NONE,
   });
-  return locations.map((loc) => ({
+  return locations.map((loc: (typeof locations)[number]) => ({
     ...loc,
     schedule: (loc.schedule as unknown) as Schedule[] | null,
   }));

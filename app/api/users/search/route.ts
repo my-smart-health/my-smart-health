@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { Prisma } from '@prisma/client';
 
 import prisma from '@/lib/db';
 import { Membership } from '@/utils/types';
@@ -37,7 +36,7 @@ export async function GET(req: Request) {
   if (!trimmed) {
     return NextResponse.json(
       { users: [] satisfies SearchResult[] },
-      { status: 200 }
+      { status: 200 },
     );
   }
 
@@ -57,7 +56,7 @@ export async function GET(req: Request) {
       .filter((user) => user.id && user.name);
 
   try {
-    const rows = await prisma.$queryRaw<RawUser[]>(Prisma.sql`
+    const rows = (await prisma.$queryRaw`
       SELECT "id", "name", "bio", "profileImages", "membership", "ratingStars", "ratingLink"
       FROM "User"
       WHERE (
@@ -73,8 +72,8 @@ export async function GET(req: Request) {
         )
       )
       ORDER BY "name" NULLS LAST
-      LIMIT ${Prisma.raw(String(MAX_RESULTS))};
-    `);
+      LIMIT ${MAX_RESULTS};
+    `) as RawUser[];
 
     const users = mapUsers(rows);
 
@@ -85,7 +84,7 @@ export async function GET(req: Request) {
     }
     return NextResponse.json(
       { error: 'Failed to search users' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

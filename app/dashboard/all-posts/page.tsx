@@ -34,7 +34,7 @@ export default async function AllPostsPage() {
 
   const allPosts = await getAllPosts(session.user.id);
 
-  const safePosts = allPosts.map(post => ({
+  const safePosts = allPosts.map((post: (typeof allPosts)[number]) => ({
     ...post,
     author: {
       ...post.author,

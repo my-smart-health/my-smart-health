@@ -29,7 +29,7 @@ async function getMyContacts(userId: string) {
     cacheStrategy: CACHE_STRATEGY.NONE,
   });
 
-  return contacts.map((contact) => ({
+  return contacts.map((contact: (typeof contacts)[number]) => ({
     id: contact.member.id,
     name: contact.member.name,
     email: contact.member.email,
@@ -87,7 +87,7 @@ export default async function MyContactsPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {contacts.map((contact) => (
+          {contacts.map((contact: (typeof contacts)[number]) => (
             <Link
               key={contact.id}
               href={`/profile-member/${contact.id}`}

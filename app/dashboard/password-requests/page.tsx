@@ -20,14 +20,16 @@ export default async function PasswordRequestsPage() {
     cacheStrategy: CACHE_STRATEGY.REAL_TIME,
   });
 
-  const notifications: AdminNotification[] = notificationsData.map((n) => ({
-    id: n.id,
-    message: n.message,
-    isRead: n.isRead,
-    createdAt: n.createdAt.toISOString(),
-    resetReadAt: n.resetReadAt ? n.resetReadAt.toISOString() : null,
-    archivedAt: n.archivedAt ? n.archivedAt.toISOString() : null,
-  }));
+  const notifications: AdminNotification[] = notificationsData.map(
+    (n: (typeof notificationsData)[number]) => ({
+      id: n.id,
+      message: n.message,
+      isRead: n.isRead,
+      createdAt: n.createdAt.toISOString(),
+      resetReadAt: n.resetReadAt ? n.resetReadAt.toISOString() : null,
+      archivedAt: n.archivedAt ? n.archivedAt.toISOString() : null,
+    }),
+  );
 
   return (
     <div className="container mx-auto p-6 max-w-6xl">

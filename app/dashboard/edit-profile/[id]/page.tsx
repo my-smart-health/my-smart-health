@@ -58,36 +58,44 @@ export default async function EditProfileId({ params }: { params: Promise<{ id: 
     schedule: typeof user.schedule === "string" ? JSON.parse(user.schedule) : user.schedule,
   };
 
-  const safeLocations = parsedUser.locations.map((location) => {
-    let schedule: Schedule[] = [];
-    if (Array.isArray(location.schedule)) {
-      schedule = location.schedule.filter((scheduleItem) => scheduleItem !== null) as Schedule[];
-    } else if (typeof location.schedule === "string") {
-      try {
-        const parsed = JSON.parse(location.schedule);
-        schedule = Array.isArray(parsed) ? parsed.filter((scheduleItem) => scheduleItem !== null) as Schedule[] : [];
-      } catch {
-        schedule = [];
-      }
-    } else if (location.schedule !== null && typeof location.schedule === "object") {
-      schedule = [location.schedule as Schedule].filter((scheduleItem) => scheduleItem !== null) as Schedule[];
-    }
-    const reservationLinks: ReservationLink[] = Array.isArray(location.reservationLinks)
-      ? (location.reservationLinks as unknown[]).filter(
-        (link): link is ReservationLink => {
-          if (typeof link !== "object" || link === null) return false;
-          const url = (link as Record<string, unknown>).url;
-          return typeof url === "string" && url.trim().length > 0;
+  const safeLocations = parsedUser.locations.map(
+    (location: (typeof parsedUser.locations)[number]) => {
+      let schedule: Schedule[] = [];
+      if (Array.isArray(location.schedule)) {
+        schedule = location.schedule.filter(
+          (scheduleItem: unknown) => scheduleItem !== null,
+        ) as Schedule[];
+      } else if (typeof location.schedule === "string") {
+        try {
+          const parsed = JSON.parse(location.schedule);
+          schedule = Array.isArray(parsed)
+            ? parsed.filter((scheduleItem: unknown) => scheduleItem !== null) as Schedule[]
+            : [];
+        } catch {
+          schedule = [];
         }
-      )
-      : [];
+      } else if (location.schedule !== null && typeof location.schedule === "object") {
+        schedule = [location.schedule as Schedule].filter(
+          (scheduleItem: Schedule) => scheduleItem !== null,
+        ) as Schedule[];
+      }
+      const reservationLinks: ReservationLink[] = Array.isArray(location.reservationLinks)
+        ? (location.reservationLinks as unknown[]).filter(
+          (link): link is ReservationLink => {
+            if (typeof link !== "object" || link === null) return false;
+            const url = (link as Record<string, unknown>).url;
+            return typeof url === "string" && url.trim().length > 0;
+          }
+        )
+        : [];
 
-    return {
-      ...location,
-      schedule,
-      reservationLinks,
-    };
-  });
+      return {
+        ...location,
+        schedule,
+        reservationLinks,
+      };
+    },
+  );
 
   const safeField = Array.isArray(parsedUser.fieldOfExpertise) ? (parsedUser.fieldOfExpertise as unknown as FieldOfExpertise[]) : [];
   const safeReservationLinks: ReservationLink[] = Array.isArray(user.reservationLinks)

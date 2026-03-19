@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     if (!session?.user || session.user.role !== 'ADMIN') {
       return NextResponse.json(
         { message: 'Nur Administratoren können Passwörter zurücksetzen' },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     if (!notificationId || !email) {
       return NextResponse.json(
         { message: 'Notification ID und E-Mail sind erforderlich' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
     if (!user) {
       return NextResponse.json(
         { message: 'Benutzer nicht gefunden' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -78,16 +78,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         message: 'Passwort erfolgreich zurückgesetzt',
-        newPassword,
         email: user.email,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error('Error resetting password:', error);
     return NextResponse.json(
       { message: 'Ein Fehler ist beim Zurücksetzen des Passworts aufgetreten' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

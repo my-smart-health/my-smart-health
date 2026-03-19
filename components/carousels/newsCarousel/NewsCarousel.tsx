@@ -49,8 +49,7 @@ export default function NewsCarousel({ props }: NewsCarouselProps) {
               <Link href={`/news/${item.id}`} prefetch={false}>
                 <div className="flex flex-col border-2 border-primary justify-center items-center rounded-box cursor-pointer">
                   <Image
-                    priority={index === 0}
-                    fetchPriority={index === 0 ? 'high' : 'auto'}
+                    preload={index === 0}
                     width={400}
                     height={400}
                     src={item.image}

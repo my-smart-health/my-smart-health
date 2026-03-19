@@ -17,7 +17,7 @@ async function getAllMembers() {
     orderBy: {
       createdAt: "desc",
     },
-    cacheStrategy: CACHE_STRATEGY.ADMIN,
+    cacheStrategy: CACHE_STRATEGY.NONE,
   });
 
   return members;

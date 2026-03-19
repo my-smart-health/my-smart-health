@@ -7,7 +7,29 @@ import {
   Membership,
 } from './types';
 
-type RawUser = any;
+type RawUser =
+  | {
+      id?: string;
+      name?: string | null;
+      email?: string | null;
+      profileImages?: unknown;
+      profileFiles?: unknown;
+      bio?: string | null;
+      socials?: unknown;
+      fieldOfExpertise?: unknown;
+      website?: string | null;
+      displayEmail?: string | null;
+      phones?: unknown;
+      locations?: unknown;
+      schedule?: unknown;
+      certificates?: unknown;
+      reservationLinks?: unknown;
+      membership?: unknown;
+      ratingStars?: number | string | null;
+      ratingLink?: string | null;
+    }
+  | null
+  | undefined;
 
 function ensureArray<T>(v: unknown): T[] {
   if (!v) return [];
@@ -23,7 +45,7 @@ function ensureArray<T>(v: unknown): T[] {
 }
 
 function normalizeFieldOfExpertise(v: unknown): FieldOfExpertise[] {
-  const arr = ensureArray<FieldOfExpertise>(v);
+  const arr = ensureArray<unknown>(v);
   return arr.map((item) => {
     if (!item || typeof item === 'string') {
       try {
@@ -41,14 +63,21 @@ function normalizeFieldOfExpertise(v: unknown): FieldOfExpertise[] {
         };
       }
     }
+    const itemRecord = item as Partial<FieldOfExpertise> &
+      Record<string, unknown>;
+
     return {
       id:
-        item.id ??
-        (item.label
-          ? item.label.replace(/\s+/g, '-').toLowerCase()
+        itemRecord.id ??
+        (typeof itemRecord.label === 'string' && itemRecord.label
+          ? itemRecord.label.replace(/\s+/g, '-').toLowerCase()
           : crypto.randomUUID()),
-      label: (item as any).label ?? String(item),
-      description: (item as any).description ?? '',
+      label:
+        typeof itemRecord.label === 'string' ? itemRecord.label : String(item),
+      description:
+        typeof itemRecord.description === 'string'
+          ? itemRecord.description
+          : '',
     };
   });
 }
@@ -114,7 +143,7 @@ export function normalizeUser(raw: RawUser) {
       const locationData = locationRecord as unknown as Record<string, unknown>;
       const schedule = normalizeScheduleArray(locationData.schedule ?? []);
       const reservationLinks: ReservationLink[] = Array.isArray(
-        locationData.reservationLinks
+        locationData.reservationLinks,
       )
         ? (locationData.reservationLinks as ReservationLink[])
         : [];
@@ -123,7 +152,7 @@ export function normalizeUser(raw: RawUser) {
         schedule,
         reservationLinks,
       } as Location;
-    }
+    },
   );
 
   return {

@@ -52,6 +52,13 @@ export async function DELETE(request: Request) {
 
     const deletedUser = await prisma.user.delete({
       where: { id: id },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        role: true,
+        createdAt: true,
+      },
     });
 
     return NextResponse.json(

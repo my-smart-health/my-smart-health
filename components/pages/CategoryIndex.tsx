@@ -26,7 +26,9 @@ function buildCategoryTree(users: UserProfileSH[]): CategoryNodeSH {
   const collator = new Intl.Collator('de', { sensitivity: 'base', ignorePunctuation: true });
   for (const user of users) {
     let node = root;
-    const cleanCategories = (user.category || []).map(c => c.trim()).filter(Boolean);
+    const cleanCategories = (user.category || [])
+      .map((c: string) => c.trim())
+      .filter(Boolean);
     for (let i = 0; i < cleanCategories.length; i++) {
       const cat = cleanCategories[i];
       if (!node.children.has(cat)) {
@@ -82,7 +84,9 @@ async function loadCategoryTree(profileType: ProfileType, isAdmin: boolean): Pro
     return { tree: buildCategoryTree([]), pathToCategoryId: {} };
   }
 
-  const lookup: CategoryLookup = new Map(categories.map(category => [category.id, category]));
+  const lookup: CategoryLookup = new Map(
+    categories.map((category: CategoryRecord) => [category.id, category]),
+  );
   const pathCache = new Map<string, string[]>();
 
   const links = await prisma.categoryUser.findMany({

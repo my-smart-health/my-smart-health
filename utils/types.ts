@@ -1,4 +1,3 @@
-import { $Enums } from '@prisma/client';
 import { Session } from 'next-auth';
 
 import { User } from 'next-auth';
@@ -6,6 +5,18 @@ import { User } from 'next-auth';
 export interface SessionUser extends User {
   role: 'ADMIN' | 'USER';
 }
+
+export type Role = 'ADMIN' | 'USER' | 'MEMBER';
+
+export type BloodType =
+  | 'A_POSITIVE'
+  | 'A_NEGATIVE'
+  | 'B_POSITIVE'
+  | 'B_NEGATIVE'
+  | 'AB_POSITIVE'
+  | 'AB_NEGATIVE'
+  | 'O_POSITIVE'
+  | 'O_NEGATIVE';
 
 export type NavbarProps = {
   session: Session | null;
@@ -329,7 +340,7 @@ export type TelMedicinePhoneNumber = {
 export type MemberProfileDashboardProps = {
   id: string;
   email: string;
-  role: $Enums.Role;
+  role: Role;
   phoneNumbers: string[];
   createdAt: string;
   name: string | null;
@@ -337,7 +348,7 @@ export type MemberProfileDashboardProps = {
   heightCm: number | null;
   weightKg: number | null;
   healthInsurances: HealthInsurances[];
-  bloodType: $Enums.BloodType | null;
+  bloodType: BloodType | null;
   bloodTypeFiles: FileWithDescription[];
   anamneses: Anamneses[];
   documents: FileWithDescription[];

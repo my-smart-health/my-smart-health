@@ -19,7 +19,7 @@ async function getAllUsersWithCategories() {
   });
 
   const links = await prisma.categoryUser.findMany({
-    where: { userId: { in: users.map(u => u.id) } },
+    where: { userId: { in: users.map((u: (typeof users)[number]) => u.id) } },
     include: {
       category: {
         select: {
@@ -40,7 +40,9 @@ async function getAllUsersWithCategories() {
     cacheStrategy: CACHE_STRATEGY.LONG,
   });
 
-  const categoryMap = new Map(allCategories.map(c => [c.id, c]));
+  const categoryMap = new Map<string, (typeof allCategories)[number]>(
+    allCategories.map((c: (typeof allCategories)[number]) => [c.id, c]),
+  );
 
   const buildCategoryPath = (categoryId: string): string => {
     const path: string[] = [];
@@ -65,9 +67,11 @@ async function getAllUsersWithCategories() {
     userCategoryMap.get(userId)!.push(categoryPath);
   }
 
-  return users.map(u => ({
+  return users.map((u: (typeof users)[number]) => ({
     ...u,
-    category: (userCategoryMap.get(u.id) || []).sort((a, b) => a.localeCompare(b, 'de', { sensitivity: 'base' })),
+    category: (userCategoryMap.get(u.id) || []).sort((a: string, b: string) =>
+      a.localeCompare(b, 'de', { sensitivity: 'base' }),
+    ),
   }));
 }
 

@@ -1,4 +1,4 @@
-import NextAuth, { Session, User } from 'next-auth';
+import NextAuth, { Session } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { compare } from 'bcrypt';
 import prisma from './lib/db';
@@ -34,15 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: '/login',
   },
   callbacks: {
-    async session({
-      session,
-      token,
-      user,
-    }: {
-      session: Session;
-      token: JWT;
-      user: User;
-    }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role as string;
@@ -84,10 +76,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const isValid = await compare(password, account.password);
         if (!isValid) return null;
 
-        const { password: _, ...userWithoutPassword } = account;
-
         return {
-          ...userWithoutPassword,
+          id: account.id,
+          role: account.role,
+          email: account.email ?? null,
+          name: account.name ?? null,
+          image: null,
         };
       },
     }),

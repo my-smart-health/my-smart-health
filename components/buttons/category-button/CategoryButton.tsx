@@ -17,7 +17,7 @@ export default function CategoryButton({ name, icon, goTo, active, imageAsTitle,
     <Link href={goTo} className={`flex flex-row ${imageAsTitle ? "" : "h-15"} w-full max-w-[100%] rounded-2xl border shadow-xl`}>
       {imageAsTitle ? (
         <div className={`flex flex-col items-center  justify-center w-full ${active ? 'bg-secondary rounded-2xl' : ''}`}>
-          <Image priority loading="eager" src={imageAsTitle} width={150} height={150} alt={`${name} icon`} style={{ objectFit: "contain", width: "auto", height: "auto" }} className={`w-auto h-auto mx-auto py-4 ${active ? 'bg-secondary rounded-2xl' : ''}`} />
+          <Image src={imageAsTitle} width={150} height={150} alt={`${name} icon`} style={{ objectFit: "contain", width: "auto", height: "auto" }} className={`w-auto h-auto mx-auto py-4 ${active ? 'bg-secondary rounded-2xl' : ''}`} />
           {imageAsTitleSecond && (
             <>
               <div className={`w-full mx-auto border h-0 max-w-[90%]`}></div>
@@ -36,7 +36,7 @@ export default function CategoryButton({ name, icon, goTo, active, imageAsTitle,
         <>
           <div className="w-14 rounded-tl-2xl rounded-bl-2xl flex items-center p-2 justify-center bg-primary text-white">
             {typeof icon === "string" ? (
-              <Image priority loading="eager" src={icon} width={26} height={26} alt={`${name} icon`} style={{ objectFit: "contain", width: "auto", height: "auto" }} className="w-7 h-7 bg-primary text-white" />
+              <Image src={icon} width={26} height={26} alt={`${name} icon`} style={{ objectFit: "contain", width: "auto", height: "auto" }} className="w-7 h-7 bg-primary text-white" />
             ) : (
               icon
             )}

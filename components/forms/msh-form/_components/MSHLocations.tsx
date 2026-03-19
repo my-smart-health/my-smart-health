@@ -1,11 +1,16 @@
 import Link from "next/link";
 import { MapPin } from "lucide-react";
-import { MySmartHealthLocation } from "@prisma/client";
 import type { ReactNode } from "react";
 
 import Divider from "@/components/divider/Divider";
 import { Schedule } from "@/utils/types";
 import ScheduleSection from "@/components/profile/profile-full/_components/ScheduleSection";
+
+type MSHLocation = {
+  address: string;
+  phone: string[];
+  schedule: unknown;
+};
 
 export default function MSHLocations({
   phoneNumbers,
@@ -14,7 +19,7 @@ export default function MSHLocations({
   platformIcons,
 }: {
   phoneNumbers: string[];
-  locations: MySmartHealthLocation[];
+  locations: MSHLocation[];
   parsedSocials: { platform: string; url: string }[];
   platformIcons: Record<string, ReactNode>;
 }) {

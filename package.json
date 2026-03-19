@@ -7,7 +7,7 @@
     "build": "prisma migrate deploy && next build",
     "start": "next start",
     "postinstall": "prisma generate --no-engine",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
@@ -33,8 +33,9 @@
     "dotenv": "^17.2.3",
     "jose": "^6.0.13",
     "lucide-react": "^0.540.0",
-    "next": "^15.5.7",
+    "next": "^16.1.7",
     "next-auth": "^5.0.0-beta.29",
+    "next-intl": "^4.8.3",
     "react": "^19.1.2",
     "react-dom": "^19.1.2",
     "resend": "^6.5.2",
@@ -49,7 +50,7 @@
     "@types/react-dom": "^19",
     "daisyui": "^5.0.50",
     "eslint": "^9.18.0",
-    "eslint-config-next": "^15.5.12",
+    "eslint-config-next": "^16.1.7",
     "globals": "^17.3.0",
     "lodash": "^4.17.23",
     "minimatch": "^10.2.2",

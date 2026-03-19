@@ -16,7 +16,7 @@ export async function PUT(req: Request) {
     if (!body.id || !body.data) {
       return NextResponse.json(
         { message: 'User ID and data are required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -32,40 +32,42 @@ export async function PUT(req: Request) {
       include: { certificates: true, locations: true },
     });
 
-    const dbCertIds =
-      dbUser?.certificates.map((certificate) => certificate.id) || [];
-    const incomingCertIds = certificates
-      .filter((certificate) => certificate.id)
-      .map((c) => c.id);
+    const dbCertIds: string[] =
+      dbUser?.certificates.map(
+        (certificate: { id: string }) => certificate.id,
+      ) || [];
+    const incomingCertIds: string[] = certificates
+      .filter((certificate: Certificate) => Boolean(certificate.id))
+      .map((certificate: Certificate) => certificate.id);
     const certsToDelete = dbCertIds.filter(
-      (id) => !incomingCertIds.includes(id)
+      (id: string) => !incomingCertIds.includes(id),
     );
     const newCertificates = certificates.filter(
-      (certificate) => !dbCertIds.includes(certificate.id)
+      (certificate) => !dbCertIds.includes(certificate.id),
     );
     const existingCertificates = certificates.filter((certificate) =>
-      dbCertIds.includes(certificate.id)
+      dbCertIds.includes(certificate.id),
     );
 
-    const dbLocationIds =
-      dbUser?.locations.map((location) => location.id) || [];
+    const dbLocationIds: string[] =
+      dbUser?.locations.map((location: { id: string }) => location.id) || [];
     const incomingLocationIds = locations
       .filter((location: { id: string }) => location.id)
       .map((locationItem: { id: string }) => locationItem.id);
     const locationsToDelete = dbLocationIds.filter(
-      (id) => !incomingLocationIds.includes(id)
+      (id) => !incomingLocationIds.includes(id),
     );
     const newLocations = locations.filter(
-      (location: { id: string }) => !dbLocationIds.includes(location.id)
+      (location: { id: string }) => !dbLocationIds.includes(location.id),
     );
     const existingLocations = locations.filter((location: { id: string }) =>
-      dbLocationIds.includes(location.id)
+      dbLocationIds.includes(location.id),
     );
 
     const sanitizedReservationLinks = Array.isArray(body.data.reservationLinks)
       ? body.data.reservationLinks.filter(
           (linkItem: { url?: string }) =>
-            typeof linkItem?.url === 'string' && linkItem.url.trim().length > 0
+            typeof linkItem?.url === 'string' && linkItem.url.trim().length > 0,
         )
       : undefined;
 
@@ -137,12 +139,12 @@ export async function PUT(req: Request) {
                       reservationLinks: locLinks.filter(
                         (reservationLink) =>
                           typeof reservationLink?.url === 'string' &&
-                          (reservationLink.url as string).trim().length > 0
+                          (reservationLink.url as string).trim().length > 0,
                       ),
                     }),
                   },
                 };
-              }
+              },
             ),
           }),
           ...(newLocations.length > 0 && {
@@ -169,11 +171,11 @@ export async function PUT(req: Request) {
                     reservationLinks: locLinks.filter(
                       (reservationLink) =>
                         typeof reservationLink?.url === 'string' &&
-                        (reservationLink.url as string).trim().length > 0
+                        (reservationLink.url as string).trim().length > 0,
                     ),
                   }),
                 };
-              }
+              },
             ),
           }),
         },
@@ -195,7 +197,7 @@ export async function PUT(req: Request) {
         message: 'Failed to update profile',
         error: error instanceof Error ? error.message : String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

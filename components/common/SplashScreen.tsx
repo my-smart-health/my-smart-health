@@ -53,7 +53,7 @@ export default function SplashScreen() {
         }}
       >
         <Image
-          priority
+          preload
           src="/navbar.jpg"
           alt="My Smart Health"
           width={350}

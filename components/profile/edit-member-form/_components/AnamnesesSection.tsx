@@ -86,8 +86,62 @@ export function AnamnesesSection({
     setAnamneses([...anamneses, createDefaultAnamnesis()]);
   };
 
-  const handleRemove = (index: number) => {
-    setAnamneses(anamneses.filter((_, i) => i !== index));
+  const handleRemove = async (anamnesisIndex: number) => {
+    const currentAnamneses = [...anamneses];
+    const selectedAnamnesis = currentAnamneses[anamnesisIndex];
+
+    if (!selectedAnamnesis) {
+      return;
+    }
+
+    const medicationTable =
+      selectedAnamnesis.medicationPlan?.medicationPlanTable || [];
+
+    try {
+      for (let medicationIndex = 0; medicationIndex < medicationTable.length; medicationIndex += 1) {
+        const medication = medicationTable[medicationIndex];
+        const medicationFiles = (medication.fileUrl || []).filter(
+          (file) => file.url && file.url.trim().length > 0,
+        );
+
+        for (const file of medicationFiles) {
+          await deleteMemberFile({
+            memberId,
+            fileUrl: file.url,
+            target: 'anamnesesMedicationPlan',
+            anamnesisIndex,
+            medicationIndex,
+          });
+        }
+      }
+
+      const updatedAnamneses = currentAnamneses.filter(
+        (_, index) => index !== anamnesisIndex,
+      );
+
+      setAnamneses(updatedAnamneses);
+
+      const response = await fetch('/api/update/update-member-profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: memberId,
+          data: { anamneses: updatedAnamneses },
+        }),
+      });
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => null);
+        setAnamneses(currentAnamneses);
+        window.alert(payload?.message || 'Failed to remove anamnesis entry');
+      }
+    } catch (error) {
+      window.alert(
+        error instanceof Error
+          ? error.message
+          : 'Failed to remove medication files before deleting anamnesis entry',
+      );
+    }
   };
 
   const handleTextChange = (index: number, value: string) => {
@@ -310,7 +364,7 @@ export function AnamnesesSection({
                   <h4 className="font-bold text-primary">Anamnesis #{index + 1}</h4>
                   <button
                     type="button"
-                    onClick={() => handleRemove(index)}
+                    onClick={() => void handleRemove(index)}
                     className="btn btn-sm btn-error text-white"
                   >
                     Remove Entry

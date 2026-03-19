@@ -2,7 +2,6 @@ import prisma from '@/lib/db';
 import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { Prisma } from '@prisma/client';
 
 function parseNullableInt(value: unknown): number | null {
   if (value === null || value === undefined || value === '') {
@@ -33,7 +32,7 @@ export async function PUT(req: Request) {
       return NextResponse.json({ message: 'Forbidden' }, { status: 403 });
     }
 
-    const updateData: Prisma.MemberProfileUpdateInput = {
+    const updateData = {
       ...(data.name !== undefined && { name: data.name?.trim() || null }),
       ...(data.email !== undefined && { email: data.email?.trim() }),
       ...(data.bloodType !== undefined && {
@@ -64,27 +63,27 @@ export async function PUT(req: Request) {
         healthInsurances:
           Array.isArray(data.healthInsurances) &&
           data.healthInsurances.length === 0
-            ? Prisma.JsonNull
-            : data.healthInsurances || Prisma.JsonNull,
+            ? null
+            : (data.healthInsurances ?? null),
       }),
       ...(data.doctors !== undefined && {
         doctors:
           Array.isArray(data.doctors) && data.doctors.length === 0
-            ? Prisma.JsonNull
-            : data.doctors || Prisma.JsonNull,
+            ? null
+            : (data.doctors ?? null),
       }),
       ...(data.familyMembers !== undefined && {
         familyMembers:
           Array.isArray(data.familyMembers) && data.familyMembers.length === 0
-            ? Prisma.JsonNull
-            : data.familyMembers || Prisma.JsonNull,
+            ? null
+            : (data.familyMembers ?? null),
       }),
       ...(data.telMedicineNumbers !== undefined && {
         telMedicineNumbers:
           Array.isArray(data.telMedicineNumbers) &&
           data.telMedicineNumbers.length === 0
-            ? Prisma.JsonNull
-            : data.telMedicineNumbers || Prisma.JsonNull,
+            ? null
+            : (data.telMedicineNumbers ?? null),
       }),
     };
 
