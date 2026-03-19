@@ -10,12 +10,12 @@ export default async function SmartHealthLayout({ children }: { children: React.
   return (
     <>
       <MySmartHealth />
-      <ProfileSearchToggle className="max-w-5xl w-full" />
       <CategoryButton name={CATEGORY_NAMES.theLeadingDoctors.name} goTo={CATEGORY_NAMES.theLeadingDoctors.link} imageAsTitle="/the-leading-doctors.png" />
       <CategoryButton name={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.name} goTo='/' imageAsTitle="/the-leading-hospitals.png" active />
       <div className="min-h-full w-full max-w-5xl flex flex-col gap-4">
         {children}
       </div>
+      <ProfileSearchToggle className="max-w-5xl w-full" />
       <CategoryButton name={CATEGORY_NAMES.smartHealth.name} icon="/icon3.png" goTo={CATEGORY_NAMES.smartHealth.link} />
       <CategoryButton name={CATEGORY_NAMES.medizinUndPflege.name} icon="/icon4.png" goTo={CATEGORY_NAMES.medizinUndPflege.link} />
       <CategoryButton name={CATEGORY_NAMES.notfalle.name} icon={<CirclePlus size={34} color="red" />} goTo={CATEGORY_NAMES.notfalle.link} />
