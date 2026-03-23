@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ProfileMenu from "./ProfileMenu";
 import LogOut from "@/components/buttons/log-out/LogOut";
+import LocalePicker from "@/components/navigation/locale/LocalePicker";
 
 async function getUnreadNotifications() {
   const session = await auth();
@@ -24,13 +25,19 @@ async function isLogged() {
   const session = await auth();
   if (!session) {
     return (
-      <Link href="/login" className="ml-auto relative top-0 right-0 hover:underline capitalize p-2 border-l-2 border-primary h-10 text-primary">
-        Login
-      </Link>
+      <div className="flex flex-col ml-auto items-center gap-2">
+        <LocalePicker />
+        <Link href="/login" className="hover:underline capitalize p-2 border-l-2 border-primary h-10 text-primary">
+          Login
+        </Link>
+      </div>
     );
   } else {
     return (
-      <LogOut addClasses="ml-auto link link-error p-2 border-l-2 border-primary h-10" />
+      <div className="flex flex-row items-center gap-2">
+        <LocalePicker />
+        <LogOut addClasses="ml-auto link link-error p-2 border-l-2 border-primary h-10" />
+      </div>
     );
   }
 }

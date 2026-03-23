@@ -1,0 +1,19 @@
+{
+  "HomePage": {
+    "search": "Suche",
+    "categories": {
+      "theLeadingDoctors": "The Leading Doctors",
+      "mySmartHealthTermineKurzfristig": "My Smart Health Termine Kurzfristig",
+      "smartHealth": "Lebensqualität & Prävention",
+      "medizinUndPflege": "Medizin & Pflege",
+      "notfalle": "Notfälle"
+    }
+  },
+  "Footer": {
+    "legalNotice": "Impressum",
+    "privacyPolicy": "Datenschutz",
+    "termsAndConditions": "AGB",
+    "contact": "Kontakt",
+    "cookieSettings": "Cookie-Einstellungen"
+  }
+}
