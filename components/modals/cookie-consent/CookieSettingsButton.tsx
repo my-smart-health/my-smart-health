@@ -1,6 +1,10 @@
 "use client";
 
-export default function CookieSettingsButton() {
+type CookieSettingsButtonProps = {
+  title: string;
+};
+
+export default function CookieSettingsButton({ title }: CookieSettingsButtonProps) {
   return (
     <button
       type="button"
@@ -9,7 +13,7 @@ export default function CookieSettingsButton() {
       }}
       className="underline hover:opacity-80"
     >
-      Cookie Einstellungen
+      {title}
     </button>
   );
 }

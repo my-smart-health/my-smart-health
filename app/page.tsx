@@ -22,6 +22,7 @@ import {
   FileWithDescription,
   TelMedicinePhoneNumber,
 } from "@/utils/types";
+import { getTranslations } from "next-intl/server";
 
 type HomeNewsItem = {
   id: string;
@@ -174,6 +175,8 @@ async function getMemberByUserId(userId: string) {
 
 export default async function Home() {
   const session = await auth();
+  const t = await getTranslations('HomePage');
+
   const isLogged = !!session?.user;
   const { news, cube, cubePosts } = await getHomePageData(isLogged);
 
@@ -219,15 +222,14 @@ export default async function Home() {
       <div className="flex flex-col mt-3 gap-3 w-full mx-auto max-w-[100%]">
 
         {memberData && <MemberDashboard member={memberData} />}
-
         <MySmartHealth />
-        <CategoryButton name={CATEGORY_NAMES.theLeadingDoctors.name} goTo={CATEGORY_NAMES.theLeadingDoctors.link} imageAsTitle="/the-leading-doctors.png" />
-        <CategoryButton name={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.name} goTo={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.link} imageAsTitle="/the-leading-hospitals.png" />
-        <ProfileSearchToggle />
+        <CategoryButton name={t('categories.theLeadingDoctors')} goTo={CATEGORY_NAMES.theLeadingDoctors.link} imageAsTitle="/the-leading-doctors.png" />
+        <CategoryButton name={t('categories.mySmartHealthTermineKurzfristig')} goTo={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.link} imageAsTitle="/the-leading-hospitals.png" />
+        <ProfileSearchToggle label={t('search')} />
 
-        <CategoryButton name={CATEGORY_NAMES.smartHealth.name} icon="/icon3.png" goTo={CATEGORY_NAMES.smartHealth.link} />
-        <CategoryButton name={CATEGORY_NAMES.medizinUndPflege.name} icon="/icon4.png" goTo={CATEGORY_NAMES.medizinUndPflege.link} />
-        <CategoryButton name={CATEGORY_NAMES.notfalle.name} icon={<CirclePlus size={34} color="red" />} goTo={CATEGORY_NAMES.notfalle.link} />
+        <CategoryButton name={t('categories.smartHealth')} icon="/icon3.png" goTo={CATEGORY_NAMES.smartHealth.link} />
+        <CategoryButton name={t('categories.medizinUndPflege')} icon="/icon4.png" goTo={CATEGORY_NAMES.medizinUndPflege.link} />
+        <CategoryButton name={t('categories.notfalle')} icon={<CirclePlus size={34} color="red" />} goTo={CATEGORY_NAMES.notfalle.link} />
         <TheHealthBarLink />
       </div>
     </>

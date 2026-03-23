@@ -16,7 +16,8 @@ import TimeoutModal from "@/components/modals/timeout/TimeoutModal";
 import SplashScreen from "@/components/common/SplashScreen";
 import { UploadProgressProvider, UploadProgressModal } from "@/components/modals/upload-progress";
 import { DeletionProgressProvider, DeletionProgressModal } from "@/components/modals/deletion-progress";
-
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale } from 'next-intl/server';
 
 const ibmPlexSans = IBM_Plex_Sans({
   variable: "--font-ibm-plex-sans",
@@ -51,9 +52,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
+  const locale = await getLocale();
 
   return (
-    <html lang="de" data-scroll-behavior="smooth">
+    <html lang={locale} data-scroll-behavior="smooth">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#ffffff" />
@@ -70,28 +72,30 @@ export default async function RootLayout({
       <body
         className={`${ibmPlexSans.variable} antialiased flex flex-col justify-center items-center pt-2 min-h-[100dvh] w-auto lg:max-w-3xl mx-auto p-2 overscroll-x-none border bg-white text-black`}
       >
-        <SplashScreen />
-        <UploadProgressProvider>
-          <DeletionProgressProvider>
-            <SessionProvider session={session}>
-              <SessionChecker />
-              <TimeoutModal />
-              <UploadProgressModal />
-              <DeletionProgressModal />
-              <Navbar />
-              <CookieConsentModal />
+        <NextIntlClientProvider>
+          <SplashScreen />
+          <UploadProgressProvider>
+            <DeletionProgressProvider>
+              <SessionProvider session={session}>
+                <SessionChecker />
+                <TimeoutModal />
+                <UploadProgressModal />
+                <DeletionProgressModal />
+                <Navbar />
+                <CookieConsentModal />
 
-              <Divider addClass="my-1" />
+                <Divider addClass="my-1" />
 
-              <main className="flex flex-col gap-2 items-center min-h-[72dvh] py-8 pt-2 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
-                {children}
-                <BackToTop />
-              </main>
-              <AnalyticsConsent />
-              <Footer />
-            </SessionProvider>
-          </DeletionProgressProvider>
-        </UploadProgressProvider>
+                <main className="flex flex-col gap-2 items-center min-h-[72dvh] py-8 pt-2 w-full max-w-[99.9%] text-wrap break-normal overflow-clip overscroll-x-none">
+                  {children}
+                  <BackToTop />
+                </main>
+                <AnalyticsConsent />
+                <Footer />
+              </SessionProvider>
+            </DeletionProgressProvider>
+          </UploadProgressProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
