@@ -35,7 +35,7 @@ async function isLogged(loginText: string) {
     );
   } else {
     return (
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex flex-col ml-auto items-center gap-2">
         <LocalePicker />
         <LogOut addClasses="ml-auto link link-error p-2 border-l-2 border-primary h-10" />
       </div>
