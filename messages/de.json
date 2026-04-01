@@ -488,6 +488,16 @@
         "stressLevel": "Stresslevel",
         "yes": "Ja",
         "no": "Nein",
+        "occasionally": "Gelegentlich",
+        "regularly": "Regelmäßig",
+        "little": "Wenig",
+        "moderate": "Mittel",
+        "balanced": "Ausgewogen",
+        "vegetarian": "Vegetarisch",
+        "vegan": "Vegan",
+        "unbalanced": "Unausgewogen",
+        "low": "Niedrig",
+        "high": "Hoch",
         "cigarettesPerDay": "{count} Zigaretten/Tag"
       },
       "vaccination": {

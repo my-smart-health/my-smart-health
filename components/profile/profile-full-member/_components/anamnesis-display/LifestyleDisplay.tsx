@@ -31,7 +31,12 @@ export function LifestyleDisplay({ lifestyle }: LifestyleDisplayProps) {
     return t('anamnesisDisplay.lifestyle.no');
   };
 
-  const formatValue = (value: string) => {
+  const getLifestyleValueLabel = (value: string) => {
+    const translatedKey = `anamnesisDisplay.lifestyle.${value.toLowerCase()}`;
+    if (t.has(translatedKey)) {
+      return t(translatedKey);
+    }
+
     return value
       .split('_')
       .map(word => word.charAt(0) + word.slice(1).toLowerCase())
@@ -54,25 +59,25 @@ export function LifestyleDisplay({ lifestyle }: LifestyleDisplayProps) {
         {lifestyle.alcohol && (
           <div className="flex p-2 border-b border-primary">
             <span className="pr-2">{t('anamnesisDisplay.lifestyle.alcohol')}:</span>
-            <span>{formatValue(lifestyle.alcohol)}</span>
+            <span>{getLifestyleValueLabel(lifestyle.alcohol)}</span>
           </div>
         )}
         {lifestyle.exercise && (
           <div className="flex p-2 border-b border-primary">
             <span className="pr-2">{t('anamnesisDisplay.lifestyle.exercise')}:</span>
-            <span>{formatValue(lifestyle.exercise)}</span>
+            <span>{getLifestyleValueLabel(lifestyle.exercise)}</span>
           </div>
         )}
         {lifestyle.diet && (
           <div className="flex p-2 border-b border-primary">
             <span className="pr-2">{t('anamnesisDisplay.lifestyle.diet')}:</span>
-            <span>{formatValue(lifestyle.diet)}</span>
+            <span>{getLifestyleValueLabel(lifestyle.diet)}</span>
           </div>
         )}
         {lifestyle.stressLevel && (
           <div className="flex p-2 border-b border-primary last:border-b-0">
             <span className="pr-2">{t('anamnesisDisplay.lifestyle.stressLevel')}:</span>
-            <span>{formatValue(lifestyle.stressLevel)}</span>
+            <span>{getLifestyleValueLabel(lifestyle.stressLevel)}</span>
           </div>
         )}
       </div>
