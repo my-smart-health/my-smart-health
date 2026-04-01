@@ -1,7 +1,9 @@
+'use client';
+
 import React from "react";
 import { FieldOfExpertise } from "@/utils/types";
-
 import Divider from "@/components/divider/Divider";
+import { useTranslations } from 'next-intl';
 
 type AreaOfExpertiseSectionProps = {
   fieldOfExpertise: FieldOfExpertise[];
@@ -14,16 +16,17 @@ export function AreaOfExpertiseSection({
   setFieldOfExpertise,
   icon,
 }: AreaOfExpertiseSectionProps) {
+  const t = useTranslations('EditProfileForm');
   return (
     <section>
       {!fieldOfExpertise.length && (
-        <span className="font-semibold text-gray-700">Expertise</span>
+        <span className="font-semibold text-gray-700">{t('expertise.emptyLabel')}</span>
       )}
       {fieldOfExpertise.map((expertise, idx) => (
         <div className="flex flex-row flex-1 gap-2 items-center" key={expertise.id || idx}>
           <div className="flex flex-col flex-1">
             <span className="font-semibold text-gray-700">
-              {icon} Expertise {idx + 1}
+              {icon} {t('expertise.itemLabel', { index: idx + 1 })}
             </span>
             <label htmlFor={`expertise[${idx}]`} className="flex flex-row gap-2">
               <input
@@ -49,7 +52,7 @@ export function AreaOfExpertiseSection({
                   updated[idx] = { ...updated[idx], description: e.target.value };
                   setFieldOfExpertise(updated);
                 }}
-                placeholder="Description (optional)"
+                placeholder={t('expertise.descriptionPlaceholder')}
                 className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
               />
             </label>
@@ -62,7 +65,7 @@ export function AreaOfExpertiseSection({
               }}
               className="btn btn-outline flex place-self-end mt-4 w-fit align-bottom text-red-500"
             >
-              Remove
+              {t('expertise.removeButton')}
             </button>
           </div>
         </div>
@@ -78,7 +81,7 @@ export function AreaOfExpertiseSection({
         }}
         className="btn btn-outline btn-primary w-full mt-2 px-3 py-1 rounded"
       >
-        + Expertise
+        {t('expertise.addButton')}
       </button>
     </section>
   );

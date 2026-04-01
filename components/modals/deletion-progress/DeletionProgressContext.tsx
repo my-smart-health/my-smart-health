@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { useTranslations } from 'next-intl';
 
 type DeletionProgressState = {
   isDeleting: boolean;
@@ -24,15 +25,16 @@ const initialState: DeletionProgressState = {
 const DeletionProgressContext = createContext<DeletionProgressContextType | null>(null);
 
 export function DeletionProgressProvider({ children }: { children: ReactNode }) {
+  const t = useTranslations('DeletionProgressContext');
   const [state, setState] = useState<DeletionProgressState>(initialState);
 
   const startDeletion = useCallback((userName: string) => {
     setState({
       isDeleting: true,
       userName,
-      message: 'Löschvorgang wird gestartet...',
+      message: t('starting'),
     });
-  }, []);
+  }, [t]);
 
   const updateMessage = useCallback((message: string) => {
     setState(prev => ({

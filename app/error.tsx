@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 export default function Error({
   error,
@@ -9,6 +10,8 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const t = useTranslations('AppError');
+
   useEffect(() => {
     console.error('Application error:', error);
   }, [error]);
@@ -21,30 +24,30 @@ export default function Error({
     <div className="flex flex-col items-center justify-center min-h-[50vh] p-8 gap-4">
       <div className="text-center max-w-md">
         <h2 className="text-2xl font-bold mb-4 text-error">
-          {isPrismaError ? 'Verbindungsfehler' : 'Etwas ist schiefgelaufen'}
+          {isPrismaError ? t('connectionErrorTitle') : t('genericErrorTitle')}
         </h2>
         <p className="text-base-content mb-6">
           {isPrismaError
-            ? 'Wir haben Probleme, die Daten zu laden. Bitte versuchen Sie es erneut.'
-            : 'Ein unerwarteter Fehler ist aufgetreten.'}
+            ? t('connectionErrorMessage')
+            : t('genericErrorMessage')}
         </p>
         <div className="flex gap-4 justify-center">
           <button
             onClick={reset}
             className="btn btn-primary"
           >
-            Erneut versuchen
+            {t('tryAgain')}
           </button>
           <button
             onClick={() => window.location.href = '/'}
             className="btn btn-outline"
           >
-            Zur Startseite
+            {t('toHomepage')}
           </button>
         </div>
         {error.digest && (
           <p className="text-xs text-base-content/60 mt-4">
-            Fehler-ID: {error.digest}
+            {t('errorId')} {error.digest}
           </p>
         )}
       </div>

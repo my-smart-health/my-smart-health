@@ -5,6 +5,7 @@ import EditPostForm from "../../../../components/posts/edit-post-form/EditPostFo
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import { Social } from "@/utils/types";
 import { CACHE_STRATEGY } from "@/utils/constants";
+import { getTranslations } from "next-intl/server";
 
 
 async function getPostdata(id: string) {
@@ -24,6 +25,7 @@ async function getPostdata(id: string) {
 }
 
 export default async function EditPostIdPage({ params }: { params: Promise<{ id: string }> }) {
+  const t = await getTranslations("EditPostIdPage");
 
   const { id } = await params;
   const session = await auth();
@@ -36,10 +38,10 @@ export default async function EditPostIdPage({ params }: { params: Promise<{ id:
 
   if (!post) {
     return <>
-      <h1 className="text-xl font-bold">Post not found</h1>
+      <h1 className="text-xl font-bold">{t('postNotFound')}</h1>
       <div className="flex flex-row gap-4">
-        <GoToButton name="Go to Home" src="/" className="btn btn-primary" />
-        <GoToButton name="Go to Dashboard" src="/dashboard" className="btn btn-primary" />
+        <GoToButton name={t('goToHome')} src="/" className="btn btn-primary" />
+        <GoToButton name={t('goToDashboard')} src="/dashboard" className="btn btn-primary" />
       </div>
     </>;
   }

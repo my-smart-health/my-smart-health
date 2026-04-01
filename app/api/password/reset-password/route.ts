@@ -2,6 +2,24 @@ import prisma from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
 import { auth } from '@/auth';
+import { resolveLocale } from '@/utils/common';
+
+const messages = {
+  de: {
+    adminOnly: 'Nur Administratoren koennen Passwoerter zuruecksetzen',
+    paramsRequired: 'Notification-ID und E-Mail sind erforderlich',
+    userNotFound: 'Benutzer nicht gefunden',
+    success: 'Passwort erfolgreich zurueckgesetzt',
+    genericError: 'Ein Fehler ist beim Zuruecksetzen des Passworts aufgetreten',
+  },
+  en: {
+    adminOnly: 'Only administrators can reset passwords',
+    paramsRequired: 'Notification ID and email are required',
+    userNotFound: 'User not found',
+    success: 'Password reset successfully',
+    genericError: 'An error occurred while resetting the password',
+  },
+} as const;
 
 function generateSimplePassword(): string {
   const lowercase = 'abcdefghjkmnpqrstuvwxyz';
@@ -26,12 +44,12 @@ function generateSimplePassword(): string {
 
 export async function POST(request: NextRequest) {
   try {
+    const locale = resolveLocale(request);
+    const t = messages[locale];
+
     const session = await auth();
     if (!session?.user || session.user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { message: 'Nur Administratoren können Passwörter zurücksetzen' },
-        { status: 403 },
-      );
+      return NextResponse.json({ message: t.adminOnly }, { status: 403 });
     }
 
     const { notificationId, email } = (await request.json()) as {
@@ -40,10 +58,7 @@ export async function POST(request: NextRequest) {
     };
 
     if (!notificationId || !email) {
-      return NextResponse.json(
-        { message: 'Notification ID und E-Mail sind erforderlich' },
-        { status: 400 },
-      );
+      return NextResponse.json({ message: t.paramsRequired }, { status: 400 });
     }
 
     const user = await prisma.user.findUnique({
@@ -52,10 +67,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { message: 'Benutzer nicht gefunden' },
-        { status: 404 },
-      );
+      return NextResponse.json({ message: t.userNotFound }, { status: 404 });
     }
 
     const newPassword = generateSimplePassword();
@@ -77,15 +89,16 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
-        message: 'Passwort erfolgreich zurückgesetzt',
+        message: t.success,
         email: user.email,
       },
       { status: 200 },
     );
   } catch (error) {
     console.error('Error resetting password:', error);
+    const locale = resolveLocale(request);
     return NextResponse.json(
-      { message: 'Ein Fehler ist beim Zurücksetzen des Passworts aufgetreten' },
+      { message: messages[locale].genericError },
       { status: 500 },
     );
   }

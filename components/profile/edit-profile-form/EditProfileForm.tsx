@@ -16,6 +16,7 @@ import { AtSign, Facebook, Globe, Instagram, Linkedin, Phone, SaveAll, Youtube }
 import Divider from "@/components/divider/Divider";
 import { MAX_IMAGE_SIZE_MB, MAX_IMAGE_SIZE_BYTES } from "@/utils/constants";
 import { useUploadProgress } from "@/components/modals/upload-progress";
+import { useTranslations } from 'next-intl';
 import {
   NameSection,
   BioSection,
@@ -63,6 +64,7 @@ export default function EditProfileForm({ user }: { user: User }) {
   const MEDIA_WIDTH = 200;
   const MEDIA_HEIGHT = 200;
 
+  const t = useTranslations('EditProfileForm');
   const redirect = useRouter();
 
   const session = useSession();
@@ -126,13 +128,13 @@ export default function EditProfileForm({ user }: { user: User }) {
       });
 
       if (!response.ok) {
-        setError('Failed to auto-save profile images. Your changes may not be saved.');
+        setError(t('errors.autoSaveImagesFailed'));
         if (process.env.NODE_ENV === 'development') {
           console.error('Failed to auto-save profile images to database');
         }
       }
     } catch (error) {
-      setError('Error saving profile images. Please try again or contact support.');
+      setError(t('errors.autoSaveImagesError'));
       if (process.env.NODE_ENV === 'development') {
         console.error('Error auto-saving profile images:', error);
       }
@@ -171,12 +173,12 @@ export default function EditProfileForm({ user }: { user: User }) {
       });
 
       if (!response.ok) {
-        setError('Failed to auto-save profile files. Bitte erneut versuchen.');
+        setError(t('errors.autoSaveFilesFailed'));
       } else {
         setError(null);
       }
     } catch (error) {
-      setError('Error saving profile files. Bitte Support kontaktieren.');
+      setError(t('errors.autoSaveFilesError'));
       if (process.env.NODE_ENV === 'development') {
         console.error('Error auto-saving profile files:', error);
       }
@@ -196,9 +198,9 @@ export default function EditProfileForm({ user }: { user: User }) {
     Phone: <Phone className="inline-block mr-1" size={20} />,
     Facebook: <Facebook className="inline-block mr-1" size={20} />,
     Linkedin: <Linkedin className="inline-block mr-1" size={20} />,
-    X: <Image src={Xlogo} width={16} height={16} alt="X.com" loading="lazy" placeholder="empty" style={{ objectFit: "contain", width: "auto", height: "auto" }} className="mr-2" />,
+    X: <Image src={Xlogo} width={16} height={16} alt={t('socials.platform.x')} loading="lazy" placeholder="empty" style={{ objectFit: "contain", width: "auto", height: "auto" }} className="mr-2" />,
     Youtube: <Youtube className="inline-block mr-1" size={20} />,
-    TikTok: <Image src={TikTokLogo} width={20} height={20} alt="TikTok" loading="lazy" placeholder="empty" style={{ objectFit: "contain", width: "auto", height: "auto" }} className="-m-1" />,
+    TikTok: <Image src={TikTokLogo} width={20} height={20} alt={t('socials.platform.tiktok')} loading="lazy" placeholder="empty" style={{ objectFit: "contain", width: "auto", height: "auto" }} className="-m-1" />,
     Instagram: <Instagram className="inline-block mr-1" size={20} />,
   };
 
@@ -246,7 +248,7 @@ export default function EditProfileForm({ user }: { user: User }) {
     const mediaUrl = formData.get(`media`)?.toString().trim();
 
     if (!mediaUrl || mediaUrl.length === 0) {
-      setError('Media URL cannot be empty');
+      setError(t('errors.mediaUrlEmpty'));
       return;
     }
 
@@ -262,7 +264,7 @@ export default function EditProfileForm({ user }: { user: User }) {
       const uploadedUrls: string[] = [];
 
       if (!files || files.length === 0) {
-        setError('No files selected');
+        setError(t('errors.noFilesSelected'));
         setIsDisabled(false);
         return [];
       }
@@ -270,7 +272,7 @@ export default function EditProfileForm({ user }: { user: User }) {
       for (const file of Array.from(files)) {
         if (file.size > MAX_IMAGE_SIZE_BYTES) {
           window.scrollTo({ top: 0, behavior: "smooth" });
-          setError(`Image "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`);
+          setError(t('errors.imageTooLarge', { name: file.name, maxMB: MAX_IMAGE_SIZE_MB }));
           setIsDisabled(false);
           return [];
         }
@@ -293,8 +295,8 @@ export default function EditProfileForm({ user }: { user: User }) {
 
         if (!response.ok) {
           finishUpload();
-          setError('Failed to upload image');
-          throw new Error('Failed to upload image');
+          setError(t('errors.failedToUploadImage'));
+          throw new Error(t('errors.failedToUploadImage'));
         }
 
         const result = await response.json() as PutBlobResult;
@@ -309,7 +311,7 @@ export default function EditProfileForm({ user }: { user: User }) {
     } catch (error) {
       finishUpload();
       window.scrollTo({ top: 0, behavior: "smooth" });
-      let message = 'Error uploading files';
+      let message = t('errors.errorUploadingFiles');
       if (error instanceof Error) {
         message = error.message;
       }
@@ -328,7 +330,7 @@ export default function EditProfileForm({ user }: { user: User }) {
       const uploadedUrls: string[] = [];
 
       if (!certificateFiles || certificateFiles.length === 0) {
-        setError('No certificate file selected');
+        setError(t('errors.noCertificateFileSelected'));
         setIsDisabled(false);
         return [];
       }
@@ -336,7 +338,7 @@ export default function EditProfileForm({ user }: { user: User }) {
       for (const cert of certificateFiles) {
         if (cert.size > MAX_IMAGE_SIZE_BYTES) {
           window.scrollTo({ top: 0, behavior: "smooth" });
-          setError(`Certificate image "${cert.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`);
+          setError(t('errors.certificateImageTooLarge', { name: cert.name, maxMB: MAX_IMAGE_SIZE_MB }));
           setIsDisabled(false);
           return [];
         }
@@ -358,8 +360,8 @@ export default function EditProfileForm({ user }: { user: User }) {
 
         if (!response.ok) {
           finishUpload();
-          setError('Failed to upload certificate');
-          throw new Error('Failed to upload certificate');
+          setError(t('errors.failedToUploadCertificate'));
+          throw new Error(t('errors.failedToUploadCertificate'));
         }
 
         const result = await response.json() as PutBlobResult;
@@ -374,7 +376,7 @@ export default function EditProfileForm({ user }: { user: User }) {
     } catch (error) {
       finishUpload();
       window.scrollTo({ top: 0, behavior: "smooth" });
-      let message = 'Error uploading files';
+      let message = t('errors.errorUploadingFiles');
       if (error instanceof Error) {
         message = error.message;
       }
@@ -394,8 +396,8 @@ export default function EditProfileForm({ user }: { user: User }) {
         });
 
         if (!response.ok) {
-          setError('Failed to remove image');
-          throw new Error('Failed to remove image');
+          setError(t('errors.failedToRemoveImage'));
+          throw new Error(t('errors.failedToRemoveImage'));
         }
       }
       if (setCertificates) {
@@ -406,7 +408,7 @@ export default function EditProfileForm({ user }: { user: User }) {
       } else if (setBlobResult) {
         setBlobResult(blobResult.filter((url) => url !== imageUrl));
       } else {
-        setError('No state update function for the removed image');
+        setError(t('errors.noStateUpdateFunction'));
         setIsDisabled(false);
         return;
       }
@@ -415,7 +417,7 @@ export default function EditProfileForm({ user }: { user: User }) {
       setError(null);
     } catch (error) {
       window.scrollTo({ top: 0, behavior: "smooth" });
-      let message = 'Error removing image';
+      let message = t('errors.errorRemovingImage');
       if (error instanceof Error) {
         message = error.message;
       }
@@ -455,7 +457,7 @@ export default function EditProfileForm({ user }: { user: User }) {
       setError(null);
 
       if (!isImageFirst) {
-        setError('The first media must be an image. Please rearrange the media files.');
+        setError(t('errors.firstMediaMustBeImage'));
         setIsDisabled(false);
         return;
       }
@@ -486,13 +488,13 @@ export default function EditProfileForm({ user }: { user: User }) {
       });
 
       if (!res.ok) {
-        setError('Profil konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.');
+        setError(t('errors.profileUpdateFailed'));
         setIsDisabled(false);
         return;
       }
 
       setError(null);
-      setSuccess('Profil wurde erfolgreich aktualisiert!');
+      setSuccess(t('errors.profileUpdateSuccess'));
       setIsDisabled(false);
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
@@ -532,7 +534,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                 type="button"
               >✕</button>
             </form>
-            <h3 className="font-bold text-lg">{success ? 'Erfolg' : 'Fehler'}</h3>
+            <h3 className="font-bold text-lg">{success ? t('modal.successTitle') : t('modal.errorTitle')}</h3>
             <p className="py-4 text-center">{success || error}</p>
             {success && (
               <div className="flex justify-center">
@@ -541,7 +543,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                   className="btn btn-white btn-outline text-white hover:bg-white hover:text-green-600"
                   onClick={handleStatusClose}
                 >
-                  Zum Profil
+                  {t('modal.toProfile')}
                 </button>
               </div>
             )}
@@ -557,7 +559,7 @@ export default function EditProfileForm({ user }: { user: User }) {
 
         <div className="tabs tabs-lift m-2 w-full mx-auto max-w-[96%]">
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Name/Expertise" defaultChecked />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label={t('tabs.nameExpertise')} defaultChecked />
           <div className="tab-content border-primary p-3 md:p-10">
 
             <NameSection name={name} onChange={setName} />
@@ -572,14 +574,14 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Text" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label={t('tabs.text')} />
           <div className="tab-content border-primary p-3 md:p-10">
 
             <BioSection bio={bio} setBio={setBio} />
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Upload Files" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label={t('tabs.uploadFiles')} />
           <div className="tab-content border-primary p-3 md:p-10">
 
             <UploadFilesSection
@@ -595,14 +597,14 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Address" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label={t('tabs.address')} />
           <div className="tab-content border-primary p-3 md:p-10">
 
             <LocationSection locations={locations} setLocationsAction={setLocations} profileId={user.id} addressRef={addressRef} />
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Phone/Email" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label={t('tabs.phoneEmail')} />
           <div className="tab-content border-primary p-3 md:p-10">
 
             <section about="links" className="space-y-4">
@@ -622,7 +624,7 @@ export default function EditProfileForm({ user }: { user: User }) {
             </section>
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Additional Social Links" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label={t('tabs.socialLinks')} />
           <div className="tab-content border-primary p-3 md:p-10">
 
             <section about="links" className="space-y-4">
@@ -636,7 +638,7 @@ export default function EditProfileForm({ user }: { user: User }) {
           </div>
 
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Image/Video" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label={t('tabs.imageVideo')} />
           <div className="tab-content border-primary p-3 md:p-10">
 
             <ProfileMediaCarousel blobResult={blobResult} />
@@ -673,7 +675,7 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Certificates" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label={t('tabs.certificates')} />
           <div className="tab-content border-primary p-3 md:p-10">
 
             <CertificatesSection
@@ -685,7 +687,7 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Global Schedule" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label={t('tabs.globalSchedule')} />
           <div className="tab-content border-primary p-3 md:p-10">
 
             <WorkScheduleSection
@@ -697,7 +699,7 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           </div>
 
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="Reservierungen/Termine" />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label={t('tabs.reservations')} />
           <div className="tab-content border-primary p-3 md:p-10">
 
             <ReservationLinksSection
@@ -709,14 +711,14 @@ export default function EditProfileForm({ user }: { user: User }) {
 
           {session.data?.user?.role === 'ADMIN' && (
             <>
-              <input type="radio" name="my_tabs_2" className="tab" aria-label="Member Status" />
+              <input type="radio" name="my_tabs_2" className="tab" aria-label={t('tabs.memberStatus')} />
               <div className="tab-content border-primary p-3 md:p-10">
 
                 <MembershipSection membership={membership} setMembership={setMembership} />
 
               </div>
 
-              <input type="radio" name="my_tabs_2" className="tab" aria-label="Rating Stars" />
+              <input type="radio" name="my_tabs_2" className="tab" aria-label={t('tabs.ratingStars')} />
               <div className="tab-content border-primary p-3 md:p-10">
 
                 <RatingStarsSection ratingStars={ratingStars} ratingLink={ratingLink} setRatingLink={setRatingLink} setRatingStars={setRatingStars} />
@@ -733,7 +735,7 @@ export default function EditProfileForm({ user }: { user: User }) {
             type="submit"
             className="btn btn-success m-4  text-white rounded-lg font-semibold hover:bg-primary-dark transition-colors duration-300 ease-in-out "
           >
-            <SaveAll />  Save Changes and go to Dashboard
+            <SaveAll />  {t('saveButton')}
           </button>
 
         </div>

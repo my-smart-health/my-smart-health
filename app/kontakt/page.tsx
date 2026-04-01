@@ -2,9 +2,12 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
+import { useTranslations } from 'next-intl';
 import StatusModal from '@/components/modals/status-modal/StatusModal';
 
 export default function KontaktPage() {
+  const t = useTranslations('Contact');
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -31,17 +34,16 @@ export default function KontaktPage() {
       });
 
       if (!response.ok) {
-        const result = await response.json();
-        setMessage({ type: 'error', text: result.error || 'Ein Fehler ist aufgetreten.' });
+        setMessage({ type: 'error', text: t('messages.error') });
         setLoading(false);
         return;
       }
 
       form.reset();
-      setMessage({ type: 'success', text: 'Ihre Nachricht wurde erfolgreich gesendet!' });
+      setMessage({ type: 'success', text: t('messages.success') });
     } catch (error) {
       console.error('Contact form error:', error);
-      setMessage({ type: 'error', text: 'Netzwerkfehler. Bitte versuchen Sie es später erneut.' });
+      setMessage({ type: 'error', text: t('messages.networkError') });
     } finally {
       setLoading(false);
     }
@@ -50,14 +52,14 @@ export default function KontaktPage() {
   return (
     <>
       <div className="flex flex-col justify-center align-baseline p-4 mb-4 mx-auto w-full bg-primary rounded-lg">
-        <h1 className="text-white text-2xl font-bold">Kontakt</h1>
+        <h1 className="text-white text-2xl font-bold">{t('title')}</h1>
         <br />
-        <p className="text-white">Falls Sie Fragen haben, senden Sie uns gern eine email. Füllen Sie dazu das Mailformular aus und klicken Sie auf senden. Alle Felder sind Pflichtfelder.</p>
+        <p className="text-white">{t('intro')}</p>
       </div>
       <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto p-4">
         <form className="w-full space-y-4" onSubmit={handleSubmit}>
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">{t('form.name')}</label>
             <input
               type="text"
               id="name"
@@ -67,7 +69,7 @@ export default function KontaktPage() {
             />
           </div>
           <div>
-            <label htmlFor="surname" className="block text-sm font-medium text-gray-700 mb-1">Vorname *</label>
+            <label htmlFor="surname" className="block text-sm font-medium text-gray-700 mb-1">{t('form.surname')}</label>
             <input
               type="text"
               id="surname"
@@ -77,7 +79,7 @@ export default function KontaktPage() {
             />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">{t('form.email')}</label>
             <input
               type="email"
               id="email"
@@ -87,7 +89,7 @@ export default function KontaktPage() {
             />
           </div>
           <div>
-            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">Telefon *</label>
+            <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">{t('form.phone')}</label>
             <input
               type="tel"
               id="phoneNumber"
@@ -97,7 +99,7 @@ export default function KontaktPage() {
             />
           </div>
           <div>
-            <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Nachricht *</label>
+            <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">{t('form.message')}</label>
             <textarea
               id="message"
               name="message"
@@ -112,7 +114,7 @@ export default function KontaktPage() {
             disabled={loading}
             className="w-full px-4 py-3 bg-primary text-white font-semibold rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Wird gesendet...' : 'Senden'}
+            {loading ? t('form.sending') : t('form.submit')}
           </button>
         </form>
       </div>

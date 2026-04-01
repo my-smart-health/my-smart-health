@@ -1,8 +1,10 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useDeletionProgress } from './DeletionProgressContext';
 
 export default function DeletionProgressModal() {
+  const t = useTranslations('DeletionProgressModal');
   const { state } = useDeletionProgress();
 
   if (!state.isDeleting) return null;
@@ -14,12 +16,12 @@ export default function DeletionProgressModal() {
     >
       <div className="modal-box bg-white/90 backdrop-blur-md border border-white/20 shadow-xl">
         <h3 className="font-bold text-lg text-error mb-4">
-          Profil wird gelöscht...
+          {t('title')}
         </h3>
 
         <div className="flex flex-col gap-3">
           <div className="text-sm text-gray-700">
-            <span>Benutzer: </span>
+            <span>{t('user')} </span>
             <span className="font-semibold">{state.userName}</span>
           </div>
 
@@ -38,7 +40,7 @@ export default function DeletionProgressModal() {
 
           <div className="flex items-center justify-center gap-2 mt-2">
             <span className="loading loading-spinner loading-md text-error" />
-            <span className="text-sm text-gray-600">Bitte warten...</span>
+            <span className="text-sm text-gray-600">{t('pleaseWait')}</span>
           </div>
         </div>
       </div>

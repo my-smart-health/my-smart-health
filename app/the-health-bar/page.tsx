@@ -5,6 +5,7 @@ import GoToButton from "@/components/buttons/go-to/GoToButton";
 import { auth } from "@/auth";
 import CategoryIndex from "@/components/pages/CategoryIndex";
 import { PROFILE_TYPE_THE_HEALTH_BAR, CACHE_STRATEGY } from "@/utils/constants";
+import { getTranslations } from "next-intl/server";
 
 async function getTheHealthBarProfile(isLogged: boolean) {
   const cacheStrategy = isLogged ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.MEDIUM_LONG;
@@ -33,6 +34,7 @@ async function getTheHealthBarPosts(isLogged: boolean) {
 }
 
 export default async function TheHealthBarPage() {
+  const t = await getTranslations("TheHealthBarPage");
   const session = await auth();
   const isLogged = !!session?.user;
 
@@ -42,7 +44,7 @@ export default async function TheHealthBarPage() {
     <>
       {session?.user.role === "ADMIN" && (
         <GoToButton
-          name="Edit The Health Bar"
+          name={t('editButton')}
           src={`/dashboard/edit-profile/${theHealthBar.id}`}
           className="btn btn-warning rounded text-white mb-2"
         />

@@ -8,6 +8,8 @@ export interface SessionUser extends User {
 
 export type Role = 'ADMIN' | 'USER' | 'MEMBER';
 
+export type Locale = 'de' | 'en';
+
 export type BloodType =
   | 'A_POSITIVE'
   | 'A_NEGATIVE'

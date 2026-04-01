@@ -1,6 +1,9 @@
+'use client';
+
 import Divider from "@/components/divider/Divider";
 import { MAX_FILES_PER_USER } from "@/utils/constants";
 import React from "react";
+import { useTranslations } from 'next-intl';
 
 type MediaUrlSectionProps = {
   blobResult: string[];
@@ -13,18 +16,19 @@ export function MediaUrlSection({
   blobResult,
   handleAddURL,
 }: MediaUrlSectionProps) {
+  const t = useTranslations('EditProfileForm');
   return (
     <section>
       <fieldset className={blobResult.length >= MAX_FILES_PER_USER ? 'opacity-50 pointer-events-none' : ''}>
-        <legend className="fieldset-legend">Add Media URL</legend>
+        <legend className="fieldset-legend">{t('mediaUrl.legend')}</legend>
         <div className="flex flex-col gap-4 w-full">
           <label htmlFor="media" className="">
-            Media URL must be a valid URL from YouTube or Instagram
+            {t('mediaUrl.instruction')}
           </label>
           <input
             type="text"
             name="media"
-            placeholder="https://"
+            placeholder={t('mediaUrl.placeholder')}
             className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
           />
 
@@ -33,7 +37,7 @@ export function MediaUrlSection({
             onClick={handleAddURL}
             className="btn btn-outline btn-primary w-full mt-2"
           >
-            Upload Media URL
+            {t('mediaUrl.button')}
           </button>
 
           <Divider addClass="my-1" />
@@ -42,10 +46,10 @@ export function MediaUrlSection({
             {blobResult && blobResult.length > 0 && (
               <>
                 <div className="text-sm">
-                  You can add up to {MAX_FILES_PER_USER} media files (images, Instagram videos, or YouTube videos)
+                  {t('mediaUrl.countInfo', { max: MAX_FILES_PER_USER })}
                 </div>
                 <p className="text-wrap text-warning">
-                  NB: Please ensure that the first media is image.
+                  {t('mediaUrl.firstMediaWarning')}
                 </p>
               </>
             )}

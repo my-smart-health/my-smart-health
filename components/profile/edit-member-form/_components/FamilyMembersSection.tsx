@@ -1,4 +1,5 @@
 import { FamilyMember } from '@/utils/types';
+import { useTranslations } from 'next-intl';
 
 type FamilyMembersSectionProps = {
   familyMembers: FamilyMember[];
@@ -9,6 +10,7 @@ export function FamilyMembersSection({
   familyMembers,
   setFamilyMembers,
 }: FamilyMembersSectionProps) {
+  const t = useTranslations('EditMemberForm.familyMembers');
   const handleAdd = () => {
     setFamilyMembers([...familyMembers, { name: '', phones: [] }]);
   };
@@ -53,48 +55,48 @@ export function FamilyMembersSection({
     <section>
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <span className="font-semibold text-gray-700">Family Members</span>
+          <span className="font-semibold text-gray-700">{t('title')}</span>
           <button
             type="button"
             onClick={handleAdd}
             className="btn btn-sm btn-primary text-white"
           >
-            + Add Family Member
+            {t('addFamilyMember')}
           </button>
         </div>
         <div className="space-y-4">
           {familyMembers.length === 0 ? (
-            <p className="text-gray-500 italic text-sm">No family members added yet</p>
+            <p className="text-gray-500 italic text-sm">{t('empty')}</p>
           ) : (
             familyMembers.map((member, memberIndex) => (
               <div key={memberIndex} className="p-4 border border-gray-300 rounded-lg space-y-3">
                 <div className="flex justify-between items-center">
-                  <h4 className="font-semibold text-sm text-gray-600">Family Member #{memberIndex + 1}</h4>
+                  <h4 className="font-semibold text-sm text-gray-600">{t('familyMemberItem', { index: memberIndex + 1 })}</h4>
                   <button
                     type="button"
                     onClick={() => handleRemove(memberIndex)}
                     className="btn btn-xs btn-error text-white"
                   >
-                    Remove
+                    {t('remove')}
                   </button>
                 </div>
                 <input
                   type="text"
                   value={member.name}
                   onChange={e => handleChange(memberIndex, 'name', e.target.value)}
-                  placeholder="Family Member Name"
+                  placeholder={t('namePlaceholder')}
                   className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
                 />
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-600">Phone Numbers</span>
+                    <span className="text-sm font-medium text-gray-600">{t('phoneNumbers')}</span>
                     <button
                       type="button"
                       onClick={() => handleAddPhone(memberIndex)}
                       className="btn btn-xs btn-primary text-white"
                     >
-                      + Add Phone
+                      {t('addPhone')}
                     </button>
                   </div>
                   {member.phones.map((phone, phoneIndex) => (
@@ -103,7 +105,7 @@ export function FamilyMembersSection({
                         type="tel"
                         value={phone}
                         onChange={e => handlePhoneChange(memberIndex, phoneIndex, e.target.value)}
-                        placeholder="+49 123 456789"
+                        placeholder={t('phonePlaceholder')}
                         className="p-2 rounded border border-gray-300 text-xs focus:outline-none focus:ring-1 focus:ring-primary flex-1"
                       />
                       <button

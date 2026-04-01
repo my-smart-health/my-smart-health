@@ -1,6 +1,7 @@
 'use client';
 
 import { Navigation, NavigationOff, Phone } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 import type { Schedule } from '@/utils/types';
 import type { MySmartHealthFormLocation } from './mshFormSanitizers';
@@ -22,6 +23,7 @@ export function MSHLocationSection({
   setLocationsAction,
   mySmartHealthId,
 }: MSHLocationSectionProps) {
+  const t = useTranslations('MSHLocationSection');
   const addLocation = () => {
     setLocationsAction([
       ...locations,
@@ -124,7 +126,7 @@ export function MSHLocationSection({
             onClick={() => removeLocation(index)}
             className="btn btn-outline w-full flex place-self-end mt-4 align-bottom text-red-500"
           >
-            <NavigationOff /> Remove Location
+            <NavigationOff /> {t('removeLocation')}
           </button>
         </div>
       ))}
@@ -134,7 +136,7 @@ export function MSHLocationSection({
         onClick={addLocation}
         className="btn btn-primary w-full flex place-self-end mt-4 align-bottom"
       >
-        <Navigation /> Add Location
+        <Navigation /> {t('addLocation')}
       </button>
     </section>
   );

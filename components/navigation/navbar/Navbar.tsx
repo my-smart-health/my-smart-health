@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { getTranslations } from 'next-intl/server';
 import prisma from "@/lib/db";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,14 +22,14 @@ async function getUnreadNotifications() {
 
   return count;
 }
-async function isLogged() {
+async function isLogged(loginText: string) {
   const session = await auth();
   if (!session) {
     return (
       <div className="flex flex-col ml-auto items-center gap-2">
         <LocalePicker />
         <Link href="/login" className="hover:underline capitalize p-2 border-l-2 border-primary h-10 text-primary">
-          Login
+          {loginText}
         </Link>
       </div>
     );
@@ -42,6 +43,7 @@ async function isLogged() {
   }
 }
 export default async function Navbar() {
+  const t = await getTranslations('Navbar');
   const unreadCount = await getUnreadNotifications();
 
   return (
@@ -60,14 +62,14 @@ export default async function Navbar() {
               preload
               draggable={false}
               src="/navbar_v4.png"
-              alt="My Smart Health"
+              alt={t('srOnly')}
               width={356}
               height={112}
               className="w-auto h-auto my-3 mx-auto"
             />
-            <span className="ml-2 text-xl font-bold uppercase sr-only">My Smart Health</span>
+            <span className="ml-2 text-xl font-bold uppercase sr-only">{t('srOnly')}</span>
           </Link>
-          {await isLogged()}
+          {await isLogged(t('login'))}
         </div>
       </nav>
       <ProfileMenu unreadNotifications={unreadCount} />

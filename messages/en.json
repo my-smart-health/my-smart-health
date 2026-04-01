@@ -1,13 +1,19 @@
 {
   "HomePage": {
-    "search": "Search",
-    "categories": {
-      "theLeadingDoctors": "The Leading Doctors",
-      "mySmartHealthTermineKurzfristig": "My Smart Health Appointments Short Notice",
-      "smartHealth": "Quality of Life & Prevention",
-      "medizinUndPflege": "Medicine & Care",
-      "notfalle": "Emergencies"
-    }
+    "errorPost": "Error fetching news posts:",
+    "errorCube": "Error fetching cube:",
+    "errorCubePosts": "Error fetching cube posts:",
+    "errorData": "Error fetching data:",
+    "errorMemberProfile": "Error fetching member profile:"
+  },
+  "Categories": {
+    "news": "Health News",
+    "theLeadingDoctors": "The Leading Doctors",
+    "mySmartHealthTermineKurzfristig": "My Smart Health Appointments Short Notice",
+    "smartHealth": "Quality of Life & Prevention",
+    "medizinUndPflege": "Medicine & Care",
+    "notfalle": "Emergencies",
+    "search": "Search"
   },
   "Footer": {
     "legalNotice": "Legal Notice",
@@ -15,5 +21,1753 @@
     "termsAndConditions": "Terms and Conditions",
     "contact": "Contact",
     "cookieSettings": "Cookie Settings"
+  },
+  "AGBPage": {
+    "title": "User Agreement - General Terms and Conditions (GTC) of the mysmart.health Platform",
+
+    "section1": {
+      "title": "§ 1 Subject of the Agreement",
+      "text1": "The provider \"Future Health GmbH, Wildenbruchstr. 13, 40545 Düsseldorf - District Court Düsseldorf, HRB / 72666, represented by Managing Director Dr. Ferdinand Jeute, Email jeute@future-health.de\" operates the digital platform mysmart.health, which provides companies and organizations with a presentation and digital health services.",
+      "text2": "The subject of this agreement is the time-limited integration and use of the platform by the partner for the following purposes:",
+      "list": [
+        "Digital presentation and marketing presence of the partner company on the platform,",
+        "Access to digital content and health services from mysmart.health,",
+        "Participation in mysmart.health initiatives and digital events."
+      ]
+    },
+
+    "section2": {
+      "title": "§ 2 Contract Start and Duration",
+      "text": [
+        "The contract comes into force upon registration of the participant by both parties.",
+        "It is concluded for an indefinite period and can be terminated monthly.",
+        "Termination must be made in writing or in text form (email is sufficient) at least 14 days before the end of the month.",
+        "The following information is required to set up an administrator account:"
+      ],
+      "list": [
+        "Name of the licensee",
+        "Address of the licensee",
+        "Email address",
+        "Setup of a payment method"
+      ],
+      "text2": [
+        "Upon registration, the participant's administrator gains access to the administration area of Future Health or their own Future Health pages. The administrator account data can be changed at any time in the account settings.",
+        "For subsequent logins, the stored email address and password must be entered. Changing the password is only possible in the account settings.",
+        "The owner or administrator is responsible for securely storing the account credentials. The licensor is not liable for any damages resulting from loss."
+      ]
+    },
+
+    "section3": {
+      "title": "§ 3 Remuneration",
+      "text": [
+        "The use of the platform is free of charge from the start of the contract.",
+        "Additional services are charged according to the current price list or the individually agreed monthly fee.",
+        "Payments are due annually in advance without deduction.",
+        "The provider is entitled to adjust prices with a notice period of 30 days to the end of the month."
+      ]
+    },
+
+    "section4": {
+      "title": "§ 4 Services of the Provider",
+      "text": "The provider grants the partner access to the mysmart.health platform and enables the use of its functions. The provider ensures technical availability of at least 95% monthly. Content and technical changes for further development are reserved."
+    },
+
+    "section5": {
+      "title": "§ 5 Obligations of the Partner",
+      "text": "The partner undertakes to use the platform exclusively within the scope of the contractual purpose. The partner is responsible for the content they publish. The partner may not publish unlawful or discriminatory content. Brands, logos, and materials of mysmart.health may only be used within this cooperation."
+    },
+
+    "section6": {
+      "title": "§ 6 Usage Rights",
+      "text": "The provider grants the partner a simple, non-transferable right to use the platform for the duration of the contract. Sharing access or content with third parties is prohibited. All rights to the platform, content, and designs remain with the provider."
+    },
+
+    "section7": {
+      "title": "§ 7 Liability",
+      "text": "The provider is only liable in cases of intent and gross negligence. No liability is assumed for data loss or indirect damages. Liability under the Product Liability Act remains unaffected."
+    },
+
+    "section8": {
+      "title": "§ 8 Data Protection",
+      "text": "Both parties undertake to comply with data protection regulations in accordance with the GDPR. Personal data is processed exclusively for the purpose of fulfilling the contract. Further details are governed by a separate data processing agreement (DPA), if required."
+    },
+
+    "section9": {
+      "title": "§ 9 Confidentiality",
+      "text": "Both parties undertake to treat all confidential information obtained under this agreement as strictly confidential and not to disclose it to third parties."
+    },
+
+    "section10": {
+      "title": "§ 10 Final Provisions",
+      "text": [
+        "Amendments and additions to this contract must be made in writing.",
+        "If individual provisions are invalid, the validity of the remaining provisions remains unaffected.",
+        "German law applies, excluding the UN Convention on Contracts for the International Sale of Goods.",
+        "Place of jurisdiction is Düsseldorf."
+      ]
+    },
+
+    "footer": {
+      "company": "Future Health GmbH · Wildenbruchstr. 13 · 40545 Düsseldorf · www.mysmart.health · info@mysmart.health",
+      "date": "Status:"
+    }
+  },
+  "LegalNotice": {
+    "title": "Legal Notice",
+
+    "company": "Future Health GmbH",
+
+    "address": {
+      "street": "Wildenbruchstr. 13",
+      "city": "40545 Düsseldorf",
+      "country": "Germany",
+      "email": "info@future-health.de"
+    },
+
+    "ceo": {
+      "title": "Managing Director",
+      "name": "Dr. Ferdinand Jeute (CEO)"
+    },
+
+    "register": {
+      "title": "Commercial Register",
+      "value": "District Court Düsseldorf, HRB / 72666"
+    },
+
+    "vat": {
+      "title": "VAT ID:",
+      "value": "DE 295913675"
+    },
+
+    "responsible": {
+      "title": "Responsible for content according to § 18 para. 2 MStV:",
+      "name": "Dr. Ferdinand Jeute",
+      "address": "Wildenbruchstr. 13, 40545 Düsseldorf, Germany"
+    },
+
+    "eu": {
+      "text1": "The European Commission provides a platform for online dispute resolution. You can find it at",
+      "text2": "Future Health is neither willing nor obliged to participate in dispute resolution proceedings before a consumer arbitration board."
+    }
+  },
+  "PrivacyPolicy": {
+    "title": "Privacy Policy",
+
+    "intro": "We appreciate your interest in our company and our website. The protection of your personal data is very important to us. Below we inform you about the processing of personal data when using our website.",
+
+    "section1": {
+      "title": "1. Controller",
+      "company": "Future Health GmbH",
+      "address": "Wildenbruchstr. 13, 40545 Düsseldorf, Germany",
+      "phone": "Tel.: +49 (0) 211 9241 1744",
+      "email": "info@future-health.de",
+      "website": "https://www.future-health.de/"
+    },
+
+    "section2": {
+      "title": "2. Data Protection Officer",
+      "name": "Dr. Ferdinand Jeute",
+      "email": "info@future-health.de"
+    },
+
+    "section3": {
+      "title": "3. Legal Basis",
+      "text": "We process personal data exclusively in accordance with the provisions of the General Data Protection Regulation (GDPR), the Federal Data Protection Act (BDSG), and the Telecommunications-Telemedia Data Protection Act (TTDSG)."
+    },
+
+    "section4": {
+      "title": "4. Processing of Personal Data When Visiting the Website",
+      "intro": "When you access our website, the following data is automatically transmitted by your browser to our server and stored in log files:",
+      "list": [
+        "IP address",
+        "Date and time of access",
+        "Requested page/file",
+        "Browser and operating system used",
+        "Referrer URL (previously visited page)"
+      ],
+      "text": "Purpose: Ensuring functionality, system security, error analysis. Legal basis: Art. 6 para. 1 lit. f GDPR (legitimate interest). Data will be deleted after a maximum of 14 days."
+    },
+
+    "section5": {
+      "title": "5. Cookies and Consent Management",
+      "text1": "Our website uses cookies and similar technologies.",
+      "text2": "Essential cookies: necessary for the operation of the website (e.g. shopping cart, login).",
+      "text3": "Statistics, marketing or convenience cookies are only set with your explicit consent (§ 25 para. 1 TTDSG in conjunction with Art. 6 para. 1 lit. a GDPR).",
+      "text4": "When you first visit our website, we show you a consent banner where you can choose which cookies you want to allow. You can change this selection at any time in the cookie settings."
+    },
+
+    "section6": {
+      "title": "6. Services and Tools Used",
+      "list": [
+        "a) Hosting: [Hosting Provider]",
+        "b) Web analytics: [Google Analytics / Matomo]",
+        "c) Newsletter: [Mailchimp / CleverReach]",
+        "d) Social media plugins: [Facebook, LinkedIn, Instagram]",
+        "e) Videos / maps: [YouTube, Google Maps]"
+      ]
+    },
+
+    "section7": {
+      "title": "7. Contact",
+      "text1": "If you contact us via contact form or email, your data (e.g. name, email address, message content) will be stored for processing.",
+      "text2": "The legal basis for data processing is Art. 6 para. 1 lit. a GDPR (consent) for voluntarily activated cookies and Art. 6 para. 1 lit. f GDPR (legitimate interest) for essential cookies.",
+      "text3": "You can revoke your consent at any time in the cookie settings."
+    },
+
+    "section8": {
+      "title": "8. Storage Duration",
+      "text": "We store personal data only as long as necessary to fulfill the respective purpose or as required by statutory retention periods."
+    },
+
+    "section9": {
+      "title": "9. Rights of Data Subjects",
+      "text": "You have the following rights at any time: access, rectification, erasure, restriction, data portability, objection, withdrawal, and the right to lodge a complaint with a supervisory authority."
+    },
+
+    "section10": {
+      "title": "10. Automated Decision-Making",
+      "text": "Automated decision-making or profiling does not take place."
+    },
+
+    "section11": {
+      "title": "11. Validity of this Privacy Policy",
+      "text": "Status: September 2025"
+    }
+  },
+  "Contact": {
+    "title": "Contact",
+
+    "intro": "If you have any questions, feel free to send us an email. Please fill out the contact form and click submit. All fields are required.",
+
+    "form": {
+      "name": "Last Name *",
+      "surname": "First Name *",
+      "email": "Email *",
+      "phone": "Phone *",
+      "message": "Message *",
+
+      "submit": "Send",
+      "sending": "Sending..."
+    },
+
+    "messages": {
+      "success": "Your message has been sent successfully!",
+      "error": "An error occurred.",
+      "networkError": "Network error. Please try again later."
+    }
+  },
+  "CookieConsent": {
+    "title": "Cookies & Local Storage",
+    "description": {
+      "line1": "This website uses technically necessary cookies and local storage (LocalStorage) to ensure website functionality and improve your user experience.",
+      "line2": "In addition, third-party content such as YouTube videos (Google) and Instagram reels (Meta) can be embedded, which may set their own cookies and collect data."
+    },
+    "categories": {
+      "technical": {
+        "title": "Technically Necessary",
+        "description": "Required for basic functions (e.g. session, login). Cannot be disabled."
+      },
+      "analytics": {
+        "title": "Analytics & Statistics",
+        "description": "Helps us understand website usage and improve the experience."
+      },
+      "social": {
+        "title": "Social Media & External Content",
+        "description": "YouTube videos (Google), Instagram reels (Meta). These services set their own cookies and may track your usage behavior."
+      }
+    },
+    "toggle": {
+      "more": "Show cookie categories",
+      "less": "Show less"
+    },
+    "buttons": {
+      "decline": "Decline",
+      "declineAria": "Use technically necessary cookies only",
+      "decideLater": "Decide later",
+      "decideLaterAria": "Hide this message for 30 days",
+      "saveSelection": "Save selection",
+      "saveSelectionAria": "Save selected cookie categories",
+      "acceptAll": "Accept all"
+    },
+    "links": {
+      "prefix": "More information can be found in our",
+      "privacy": "Privacy Policy",
+      "terms": "Terms and Conditions",
+      "legalNotice": "Legal Notice",
+      "and": "and",
+      "contact": "Contact"
+    }
+  },
+  "ForgotPassword": {
+    "title": "Forgot your password?",
+    "subtitle": "Only the administrator can reset your password",
+
+    "notice": {
+      "title": "Note:",
+      "text": "For security reasons, only administrators can reset passwords. Enter your email address to send a request. The administrator will contact you."
+    },
+
+    "form": {
+      "emailLabel": "Email address",
+      "emailPlaceholder": "abc@email.com",
+      "submit": "Send password request",
+      "submitting": "Sending request..."
+    },
+
+    "links": {
+      "backToLogin": "Back to login",
+      "contactText": "You can also directly",
+      "contactLink": "leave a message via the contact page",
+      "contactEnd": "."
+    },
+
+    "validation": {
+      "invalidEmail": "Please enter a valid email address."
+    },
+
+    "messages": {
+      "success": "Request sent successfully. The administrator will contact you.",
+      "notFound": "The email address does not exist in our system.",
+      "conflict": "There is already a pending request for this email address.",
+      "error": "An error occurred. Please contact the administrator directly or leave a message on the contact page."
+    },
+
+    "modal": {
+      "successTitle": "Success!",
+      "notFoundTitle": "Email not found",
+      "errorTitle": "Error",
+      "confirm": "OK",
+      "close": "Close"
+    }
+  },
+  "ProfilePage": {
+    "userNotFound": "User not found",
+    "editProfile": "Edit profile"
+  },
+  "ProfileNewsPage": {
+    "unknownAuthor": "Unknown Author",
+    "newsSuffix": "News",
+    "fetchError": "Error fetching news articles"
+  },
+  "MemberProfileFull": {
+    "profileNotFound": "Member profile not found",
+    "defaultTitle": "Member Profile",
+    "tabs": {
+      "admin": "Admin",
+      "personalInfo": "Personal Info",
+      "anamneses": "Anamneses",
+      "bloodType": "Blood Type",
+      "doctors": "Doctors",
+      "documents": "Documents",
+      "contacts": "My Smart Health Contacts",
+      "telemedicine": "Telemedicine"
+    },
+    "noMedicalInfoTitle": "No medical information available yet.",
+    "noMedicalInfoSubtitle": "Please update your profile to add details.",
+    "admin": {
+      "title": "Admin Information",
+      "email": "Email",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "activeUntil": "Active Until",
+      "created": "Created",
+      "updated": "Updated"
+    },
+    "anamneses": {
+      "title": "Medical History (Anamneses)"
+    },
+    "bloodType": {
+      "title": "Blood Type",
+      "label": "Blood Type",
+      "relatedDocuments": "Related Documents"
+    },
+    "contacts": {
+      "noneAvailable": "No contacts available",
+      "title": "My Contacts",
+      "profileAlt": "Profile",
+      "notAvailable": "N/A",
+      "unnamed": "Unnamed",
+      "viewProfile": "View Profile"
+    },
+    "doctors": {
+      "title": "My Doctors",
+      "phone": "Phone",
+      "email": "Email"
+    },
+    "documents": {
+      "title": "Documents",
+      "documentFallback": "Document {index}"
+    },
+    "attachments": {
+      "title": "Attachments",
+      "documentFallback": "Document {index}"
+    },
+    "insurance": {
+      "title": "Health Insurance",
+      "provider": "Provider",
+      "insuranceName": "Insurance Name",
+      "insuranceNumber": "Insurance Number"
+    },
+    "personal": {
+      "title": "Personal Information",
+      "birthday": "Birthday",
+      "yearsOld": "years old",
+      "height": "Height",
+      "weight": "Weight",
+      "bmi": "Body Mass Index (BMI)",
+      "bmiUnderweight": "Underweight",
+      "bmiNormal": "Normal weight",
+      "bmiOverweight": "Overweight",
+      "bmiObese": "Obese",
+      "familyMembers": "Family Members",
+      "myPhoneNumbers": "My Phone Numbers",
+      "phoneNumber": "Phone Number {index}"
+    },
+    "special": {
+      "title": "Telemedicine Numbers",
+      "specialNumber": "Special Number"
+    },
+    "anamnesisDisplay": {
+      "otherPrefix": "Other",
+      "illnesses": {
+        "title": "Medical Conditions",
+        "highBloodPressure": "High Blood Pressure",
+        "diabetes": "Diabetes",
+        "heartDisease": "Heart Disease",
+        "stroke": "Stroke",
+        "asthma": "Asthma",
+        "allergies": "Allergies",
+        "thyroidDisorders": "Thyroid Disorders",
+        "gastrointestinalDiseases": "Gastrointestinal Diseases",
+        "liverDisorders": "Liver Disorders",
+        "kidneyDiseases": "Kidney Diseases",
+        "rheumatism": "Rheumatism",
+        "autoimmuneDiseases": "Autoimmune Diseases",
+        "cancer": "Cancer",
+        "mentalHealthDisorders": "Mental Health Disorders",
+        "infectiousDiseases": "Infectious Diseases"
+      },
+      "hospitalStays": {
+        "title": "Hospital Stays",
+        "year": "Year",
+        "treatment": "Treatment",
+        "hospital": "Hospital"
+      },
+      "medicationPlan": {
+        "title": "Medication Plan",
+        "noRegularMedications": "No regular medications",
+        "medication": "Medication",
+        "dosage": "Dosage",
+        "sinceWhen": "Since When",
+        "reason": "Reason",
+        "attachments": "Attachments:"
+      },
+      "allergies": {
+        "title": "Allergies & Intolerances",
+        "medications": "Medications",
+        "foods": "Foods",
+        "pollen": "Pollen",
+        "petHair": "Pet Hair",
+        "typeOfReaction": "Type of Reaction"
+      },
+      "familyHistory": {
+        "title": "Family History of Illnesses",
+        "cardiovascularDisease": "Cardiovascular Disease",
+        "diabetes": "Diabetes",
+        "cancer": "Cancer",
+        "hereditaryDiseases": "Hereditary Diseases",
+        "mentalHealthConditions": "Mental Health Conditions"
+      },
+      "lifestyle": {
+        "title": "Lifestyle",
+        "smoking": "Smoking",
+        "alcohol": "Alcohol",
+        "exercise": "Exercise",
+        "diet": "Diet",
+        "stressLevel": "Stress Level",
+        "yes": "Yes",
+        "no": "No",
+        "cigarettesPerDay": "{count} cigarettes/day"
+      },
+      "vaccination": {
+        "title": "Vaccination Status",
+        "tetanus": "Tetanus",
+        "measles": "Measles",
+        "hepatitisB": "Hepatitis B",
+        "influenza": "Influenza",
+        "covid19": "COVID-19",
+        "unknown": "Unknown"
+      }
+    }
+  },
+  "ProfileFull": {
+    "newsTitle": "News",
+    "uploadedFiles": {
+      "defaultHeading": "Documents & Files"
+    },
+    "contact": {
+      "route": "Route"
+    },
+    "reservation": {
+      "onlineAppointments": "Online Appointments",
+      "onlineReservation": "Online Reservation",
+      "onlinePrescription": "Online Prescription",
+      "onlineShop": "Online Shop",
+      "email": "Email"
+    },
+    "certificates": {
+      "title": "Certificates",
+      "issuedBy": "Issued by",
+      "issueDate": "Issue date",
+      "expiryDate": "Expiry date",
+      "credentialId": "Certificate ID",
+      "close": "Close",
+      "notAvailable": "N/A",
+      "imageAlt": "Certificate image {index}",
+      "zoomedAlt": "Zoomed certificate image"
+    },
+    "schedule": {
+      "title": "Opening Hours",
+      "open": "Open",
+      "closed": "Closed",
+      "open24h": "Open 24h",
+      "noHoursSpecified": "No opening hours specified",
+      "closesInHoursMinutes": "closes in {hours}h {minutes}min",
+      "closesInMinutes": "closes in {minutes}min",
+      "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      }
+    }
+  },
+  "MemberPublicProfile": {
+    "accessDenied": {
+      "title": "Access Denied",
+      "description": "You don't have permission to view this member profile.",
+      "reason": "This member has not added you to their contacts list."
+    },
+    "profile": {
+      "title": "Member Profile"
+    }
+  },
+  "EditMemberForm": {
+    "modal": {
+      "successTitle": "Success",
+      "errorTitle": "Error"
+    },
+    "cta": {
+      "toMemberProfile": "Go to Member Profile",
+      "toDashboard": "Go to Dashboard"
+    },
+    "errors": {
+      "failedUpdateMemberProfile": "Failed to update member profile",
+      "memberNotFound": "Member not found"
+    },
+    "messages": {
+      "profileUpdatedSuccess": "Member profile updated successfully"
+    },
+    "tabs": {
+      "personalInfo": "Personal Info",
+      "statusTelemedicine": "Status / Telemedicine",
+      "personal": "Personal",
+      "anamnesesMedicationPlan": "Anamneses / Medication Plan",
+      "bloodType": "Blood Type",
+      "doctors": "Doctors",
+      "documents": "Documents",
+      "contacts": "My Smart Health Contacts"
+    },
+    "save": {
+      "saving": "Saving...",
+      "saveChanges": "Save Changes"
+    },
+    "addContactModal": {
+      "title": "Add Contact",
+      "searchPlaceholder": "Search by name, email or specialty...",
+      "noUsersFound": "No users found",
+      "noAvailableUsers": "No available users",
+      "profileAlt": "Profile",
+      "notAvailable": "N/A",
+      "unnamed": "Unnamed",
+      "addButton": "Add",
+      "closeButton": "Close",
+      "errors": {
+        "fetchUsers": "Failed to fetch users",
+        "addContact": "Failed to add contact"
+      }
+    },
+    "basicInfo": {
+      "memberId": "Member ID",
+      "role": "Role",
+      "email": "Email",
+      "name": "Name",
+      "phoneNumbers": "Phone Numbers",
+      "phonePlaceholder": "+1234567890",
+      "removePhone": "Remove",
+      "addPhone": "+ Add Phone Number",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    },
+    "status": {
+      "active": "Active",
+      "activeUntil": "Active Until"
+    },
+    "personalInfo": {
+      "birthday": "Birthday",
+      "heightCm": "Height (cm)",
+      "heightPlaceholder": "e.g. 175",
+      "weightKg": "Weight (kg)",
+      "weightPlaceholder": "e.g. 70"
+    },
+    "healthInsurances": {
+      "title": "Health Insurances",
+      "addInsurance": "+ Add Insurance",
+      "empty": "No health insurances added yet",
+      "insuranceItem": "Insurance #{index}",
+      "remove": "Remove",
+      "providerPlaceholder": "Provider",
+      "insuranceNamePlaceholder": "Insurance Name",
+      "insuranceNumberPlaceholder": "Insurance Number",
+      "phonePlaceholder": "Phone"
+    },
+    "doctors": {
+      "title": "My Doctors",
+      "addDoctor": "+ Add Doctor",
+      "empty": "No doctors added yet",
+      "doctorItem": "Doctor #{index}",
+      "remove": "Remove",
+      "namePlaceholder": "Doctor Name",
+      "specialtyPlaceholder": "Specialty (e.g., Cardiology)",
+      "emails": "Emails",
+      "addEmail": "+ Add Email",
+      "emailPlaceholder": "doctor@example.com",
+      "phones": "Phones",
+      "addPhone": "+ Add Phone",
+      "phonePlaceholder": "+49 123 456789"
+    },
+    "documents": {
+      "title": "Documents",
+      "addDocument": "+ Add Document",
+      "empty": "No documents added yet",
+      "download": "Download",
+      "remove": "Remove",
+      "descriptionPlaceholder": "Document description (optional)",
+      "errors": {
+        "failedRemoveDocument": "Failed to remove document",
+        "failedUploadDocument": "Failed to upload document"
+      }
+    },
+    "familyMembers": {
+      "title": "Family Members",
+      "addFamilyMember": "+ Add Family Member",
+      "empty": "No family members added yet",
+      "familyMemberItem": "Family Member #{index}",
+      "remove": "Remove",
+      "namePlaceholder": "Family Member Name",
+      "phoneNumbers": "Phone Numbers",
+      "addPhone": "+ Add Phone",
+      "phonePlaceholder": "+49 123 456789"
+    },
+    "specialNumbers": {
+      "title": "Telemedicine",
+      "addNumber": "+ Add Number",
+      "empty": "No special numbers added yet",
+      "numberItem": "Number #{index}",
+      "remove": "Remove",
+      "typePlaceholder": "Type (e.g. Video Doctor, Emergency Hotline)",
+      "phonePlaceholder": "Phone number",
+      "descriptionPlaceholder": "Description (optional)"
+    },
+    "contacts": {
+      "title": "My Smart Health Contacts",
+      "addContact": "Add Contact",
+      "empty": "No contacts added yet",
+      "profileAlt": "Profile",
+      "notAvailable": "N/A",
+      "unnamed": "Unnamed",
+      "viewProfile": "View Profile",
+      "remove": "Remove"
+    },
+    "bloodType": {
+      "label": "Blood Type (Optional)",
+      "selectPlaceholder": "Select blood type...",
+      "filesTitle": "Blood Type Files",
+      "addFile": "+ Add File",
+      "emptyFiles": "No files added yet",
+      "download": "Download",
+      "remove": "Remove",
+      "descriptionPlaceholder": "Description (optional)",
+      "errors": {
+        "failedRemoveBloodTypeFile": "Failed to remove blood type file",
+        "failedUploadFile": "Failed to upload file"
+      }
+    },
+    "allergies": {
+      "title": "Allergies",
+      "addAllergy": "+ Add Allergy",
+      "empty": "No allergies added yet",
+      "allergyItem": "Allergy #{index}",
+      "remove": "Remove",
+      "namePlaceholder": "Allergy Name (e.g., Pollen)",
+      "selectSeverity": "Select Severity",
+      "severityMild": "Mild",
+      "severityModerate": "Moderate",
+      "severitySevere": "Severe"
+    },
+    "intolerances": {
+      "title": "Intolerances",
+      "addIntolerance": "+ Add Intolerance",
+      "empty": "No intolerances added yet",
+      "intoleranceItem": "Intolerance #{index}",
+      "remove": "Remove",
+      "namePlaceholder": "Intolerance Name (e.g., Lactose)",
+      "selectSeverity": "Select Severity",
+      "severityMild": "Mild",
+      "severityModerate": "Moderate",
+      "severitySevere": "Severe"
+    },
+    "medicationPlan": {
+      "title": "Medication Plan",
+      "addMedication": "+ Add Medication",
+      "empty": "No medications added yet",
+      "medicationItem": "Medication #{index}",
+      "remove": "Remove",
+      "medicationNamePlaceholder": "Medication Name",
+      "sinceWhenPlaceholder": "Since when",
+      "fileUrls": "File URLs",
+      "addUrl": "+ Add URL",
+      "fileUrlPlaceholder": "Enter file URL",
+      "descriptionPlaceholder": "Description (optional)"
+    },
+    "anamneses": {
+      "title": "Anamneses (Medical History)",
+      "addAnamnesis": "+ Add Anamnesis",
+      "empty": "No anamneses added yet",
+      "anamnesisItem": "Anamnesis #{index}",
+      "removeEntry": "Remove Entry",
+      "medicalHistoryNotes": "Medical History Notes",
+      "medicalHistoryPlaceholder": "Enter detailed medical history notes...",
+      "errors": {
+        "failedRemoveAnamnesis": "Failed to remove anamnesis entry",
+        "failedRemoveMedicationFiles": "Failed to remove medication files before deleting anamnesis entry",
+        "failedUpdateMedicationPlan": "Failed to update medication plan"
+      }
+    },
+    "anamnesisSections": {
+      "allergiesIntolerances": {
+        "title": "Allergies & Intolerances",
+        "noneKnown": "None Known",
+        "medications": "Medications",
+        "foods": "Foods",
+        "pollen": "Pollen",
+        "petHair": "Pet Hair",
+        "otherPlaceholder": "Other allergies/intolerances...",
+        "reactionPlaceholder": "Type of reaction..."
+      },
+      "familyHistory": {
+        "title": "Family History of Illnesses",
+        "cardiovascularDisease": "Cardiovascular Disease",
+        "diabetes": "Diabetes",
+        "cancer": "Cancer",
+        "hereditaryDiseases": "Hereditary Diseases",
+        "mentalHealthConditions": "Mental Health Conditions",
+        "noKnownRelevantIllnesses": "No Known Relevant Illnesses"
+      },
+      "illnesses": {
+        "title": "Illnesses",
+        "highBloodPressure": "High Blood Pressure",
+        "diabetes": "Diabetes",
+        "heartDisease": "Heart Disease",
+        "stroke": "Stroke",
+        "asthma": "Asthma",
+        "allergies": "Allergies",
+        "thyroidDisorders": "Thyroid Disorders",
+        "gastrointestinalDiseases": "Gastrointestinal Diseases",
+        "liverDisorders": "Liver Disorders",
+        "kidneyDiseases": "Kidney Diseases",
+        "rheumatism": "Rheumatism",
+        "autoimmuneDiseases": "Autoimmune Diseases",
+        "cancer": "Cancer",
+        "mentalHealthDisorders": "Mental Health Disorders",
+        "infectiousDiseases": "Infectious Diseases",
+        "otherLabel": "Other",
+        "otherPlaceholder": "Other illnesses..."
+      },
+      "vaccinationStatus": {
+        "title": "Vaccination Status",
+        "unknown": "Unknown",
+        "tetanus": "Tetanus",
+        "measles": "Measles",
+        "hepatitisB": "Hepatitis B",
+        "influenza": "Influenza",
+        "covid19": "COVID-19",
+        "otherPlaceholder": "Other vaccinations..."
+      },
+      "hospitalStays": {
+        "title": "Hospital Stays",
+        "addHospitalStay": "+ Add Hospital Stay",
+        "stayItem": "Stay #{index}",
+        "remove": "Remove",
+        "yearPlaceholder": "Year",
+        "treatmentPlaceholder": "Treatment",
+        "hospitalPlaceholder": "Hospital"
+      },
+      "fileAttachments": {
+        "title": "File Attachments",
+        "addFileUrl": "+ Add File URL",
+        "fileUrlPlaceholder": "File URL",
+        "descriptionPlaceholder": "Description (optional)",
+        "remove": "Remove"
+      },
+      "lifestyle": {
+        "title": "Lifestyle",
+        "smoking": "Smoking",
+        "cigarettesPerDayPlaceholder": "Cigarettes/day",
+        "alcohol": "Alcohol",
+        "exercise": "Exercise",
+        "diet": "Diet",
+        "stressLevel": "Stress Level",
+        "no": "No",
+        "occasionally": "Occasionally",
+        "regularly": "Regularly",
+        "little": "Little",
+        "moderate": "Moderate",
+        "balanced": "Balanced",
+        "vegetarian": "Vegetarian",
+        "vegan": "Vegan",
+        "unbalanced": "Unbalanced",
+        "low": "Low",
+        "high": "High"
+      },
+      "medicationPlan": {
+        "title": "Medication Plan",
+        "noRegularMedications": "No Regular Medications",
+        "addMedication": "+ Add Medication",
+        "medicationItem": "Medication #{index}",
+        "remove": "Remove",
+        "medicationPlaceholder": "Medication",
+        "dosagePlaceholder": "Dosage",
+        "sinceWhenPlaceholder": "Since when",
+        "reasonPlaceholder": "Reason",
+        "fileAttachments": "File Attachments",
+        "addFile": "+ Add File",
+        "download": "Download",
+        "descriptionPlaceholder": "Description (optional)",
+        "errors": {
+          "failedUploadFile": "Failed to upload file",
+          "failedRemoveFile": "Failed to remove file"
+        }
+      }
+    }
+  },
+  "EditProfileForm": {
+    "tabs": {
+      "nameExpertise": "Name/Expertise",
+      "text": "Text",
+      "uploadFiles": "Upload Files",
+      "address": "Address",
+      "phoneEmail": "Phone/Email",
+      "socialLinks": "Additional Social Links",
+      "imageVideo": "Image/Video",
+      "certificates": "Certificates",
+      "globalSchedule": "Global Schedule",
+      "reservations": "Reservierungen/Termine",
+      "memberStatus": "Member Status",
+      "ratingStars": "Rating Stars"
+    },
+    "modal": {
+      "successTitle": "Success",
+      "errorTitle": "Error",
+      "toProfile": "Go to Profile"
+    },
+    "saveButton": "Save Changes and go to Dashboard",
+    "errors": {
+      "firstMediaMustBeImage": "The first media must be an image. Please rearrange the media files.",
+      "profileUpdateFailed": "Profile could not be updated. Please try again.",
+      "profileUpdateSuccess": "Profile has been successfully updated!",
+      "autoSaveImagesFailed": "Failed to auto-save profile images. Your changes may not be saved.",
+      "autoSaveImagesError": "Error saving profile images. Please try again or contact support.",
+      "autoSaveFilesFailed": "Failed to auto-save profile files. Please try again.",
+      "autoSaveFilesError": "Error saving profile files. Please contact support.",
+      "mediaUrlEmpty": "Media URL cannot be empty",
+      "noFilesSelected": "No files selected",
+      "failedToUploadImage": "Failed to upload image",
+      "errorUploadingFiles": "Error uploading files",
+      "noCertificateFileSelected": "No certificate file selected",
+      "failedToUploadCertificate": "Failed to upload certificate",
+      "failedToRemoveImage": "Failed to remove image",
+      "errorRemovingImage": "Error removing image",
+      "imageTooLarge": "Image \"{name}\" is too large. Maximum size is {maxMB}MB.",
+      "certificateImageTooLarge": "Certificate image \"{name}\" is too large. Maximum size is {maxMB}MB.",
+      "noStateUpdateFunction": "Internal state update function is missing for removed media."
+    },
+    "name": {
+      "label": "Name"
+    },
+    "address": {
+      "label": "Address"
+    },
+    "email": {
+      "label": "Email (Display)"
+    },
+    "bio": {
+      "label": "Bio",
+      "placeholder": "Write your bio with rich formatting..."
+    },
+    "website": {
+      "label": "Website"
+    },
+    "phones": {
+      "emptyLabel": "Phone Numbers",
+      "label": "Phone Number",
+      "addButton": "Add Phone Number",
+      "removeButton": "Remove",
+      "confirmRemove": "Are you sure you want to remove this phone number?"
+    },
+    "socials": {
+      "label": "Socials",
+      "urlPlaceholder": "URL",
+      "pickPlatform": "Pick a platform",
+      "platform": {
+        "email": "Email",
+        "website": "Website",
+        "facebook": "Facebook",
+        "linkedin": "Linkedin",
+        "x": "X.com",
+        "youtube": "Youtube",
+        "tiktok": "TikTok",
+        "instagram": "Instagram"
+      },
+      "removeButton": "Remove",
+      "addButton": "Add Social Link",
+      "confirmRemove": "Are you sure you want to remove this social link?"
+    },
+    "expertise": {
+      "emptyLabel": "Expertise",
+      "itemLabel": "Expertise {index}",
+      "descriptionPlaceholder": "Description (optional)",
+      "removeButton": "Remove",
+      "addButton": "+ Expertise"
+    },
+    "reservationLinks": {
+      "emptyLabel": "Reservierungen/Rezepte",
+      "linkLabel": "Link",
+      "typeLabel": "Type",
+      "emailLabel": "E-Mail",
+      "urlLabel": "URL",
+      "removeButton": "Remove",
+      "addButton": "Add Link Reservierungen/Rezepte",
+      "confirmRemove": "Are you sure you want to remove this link?"
+    },
+    "certificates": {
+      "legend": "Certificates",
+      "nameLabel": "Certificate Name",
+      "namePlaceholder": "e.g. Certificate for ...",
+      "issuerLabel": "Issuer",
+      "issuerPlaceholder": "e.g. Issued by ...",
+      "issueDateLabel": "Issue Date",
+      "expiryDateLabel": "Expiry Date",
+      "enableCheckbox": "Enable",
+      "credentialIdLabel": "Credential ID",
+      "credentialIdPlaceholder": "e.g. 123-ABC-456",
+      "credentialUrlLabel": "Credential URL",
+      "imagesLabel": "Certificate Images",
+      "noImages": "No images attached",
+      "uploadingImages": "Uploading certificate images...",
+      "addButton": "+ Add Certificate",
+      "removeAriaLabel": "Remove certificate",
+      "removeTitle": "Remove certificate",
+      "confirmDelete": "Delete certificate \"{name}\" and its images?"
+    },
+    "schedule": {
+      "legend": "Work Schedule",
+      "previewLabel": "Schedule Preview",
+      "titleLabel": "Title (optional)",
+      "titlePlaceholder": "e.g. Monday - Friday",
+      "timeStart": "Time start",
+      "timeEnd": "Time end",
+      "clickToSet": "click here to set",
+      "nonStopLegend": "Non-stop",
+      "open24h": "Open 24 hours / 7 days",
+      "removeButton": "Remove",
+      "addButton": "Add Schedule",
+      "confirmRemove": "Are you sure you want to remove this schedule?",
+      "days": {
+        "Monday": "Monday",
+        "Tuesday": "Tuesday",
+        "Wednesday": "Wednesday",
+        "Thursday": "Thursday",
+        "Friday": "Friday",
+        "Saturday": "Saturday",
+        "Sunday": "Sunday"
+      }
+    },
+    "location": {
+      "removeButton": "Remove Location",
+      "addButton": "Add Location",
+      "confirmRemove": "Are you sure you want to remove this location?"
+    },
+    "membership": {
+      "statusHeading": "Membership Status",
+      "displayBadgeLabel": "Display Membership Badge",
+      "urlExamplesText": "Below are examples of valid URLs for the Membership Link:",
+      "urlLabel": "URL",
+      "phoneLabel": "Phone",
+      "emailLabel": "Email",
+      "linkLabel": "Membership Link",
+      "linkPlaceholder": "schnelle Termine - mysmart.health",
+      "badgeActive": "✓ Membership Badge Active",
+      "badgeDisabled": "Membership Badge Disabled"
+    },
+    "rating": {
+      "heading": "Rating Stars",
+      "selectLabel": "Select rating (0 - 5 stars)",
+      "noRating": "No rating",
+      "starSingular": "{value} star",
+      "starPlural": "{value} stars",
+      "googleLinkHeading": "Google Rating Link",
+      "removeButton": "Remove",
+      "ratingSet": "Rating: {rating} out of 5 stars",
+      "noRatingSet": "No rating set"
+    },
+    "uploadFiles": {
+      "legend": "Upload files",
+      "description": "Upload additional documents for your profile. Each file can be up to {maxMB}MB.",
+      "supportedTypes": "Supported file types: any document or image format up to {maxMB}MB.",
+      "uploadingSpinner": "Uploading files...",
+      "uploadedFilesHeading": "Uploaded files",
+      "deleteAriaLabel": "Delete file",
+      "errors": {
+        "selectAtLeastOne": "Please select at least one file.",
+        "missingUserId": "Missing user ID. Please reload the page.",
+        "fileTooLarge": "The file \"{name}\" is too large. Maximum allowed is {maxMB}MB.",
+        "uploadFailed": "An error occurred while uploading the files.",
+        "deleteFailed": "Failed to delete file",
+        "deleteError": "An error occurred while deleting the file."
+      }
+    },
+    "mediaUpload": {
+      "legend": "Select Images",
+      "maxImagesError": "You can select up to {max} images only.",
+      "imageTooLarge": "Image \"{name}\" is too large. Maximum size is {maxMB}MB.",
+      "maxSizeLabel": "Maximum image size: {maxMB}MB per image",
+      "uploadingSpinner": "Uploading images..."
+    },
+    "mediaCarousel": {
+      "noImages": "No Images"
+    },
+    "mediaUrl": {
+      "legend": "Add Media URL",
+      "instruction": "Media URL must be a valid URL from YouTube or Instagram",
+      "placeholder": "https://",
+      "button": "Upload Media URL",
+      "countInfo": "You can add up to {max} media files (images, Instagram videos, or YouTube videos)",
+      "firstMediaWarning": "NB: Please ensure that the first media is image."
+    },
+    "photoAlt": "Photo {index}"
+  },
+  "StatusModal": {
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "close": "Close"
+  },
+  "TimeoutModal": {
+    "title": "Session Expired",
+    "message": "For security reasons, you have been automatically logged out after 10 minutes of inactivity.",
+    "ok": "OK"
+  },
+  "UploadProgressModal": {
+    "title": "Uploading files...",
+    "progress": "Progress",
+    "files": "Files",
+    "currentFile": "Current file:",
+    "pleaseWait": "Please wait..."
+  },
+  "DeletionProgressModal": {
+    "title": "Deleting profile...",
+    "user": "User:",
+    "pleaseWait": "Please wait..."
+  },
+  "Navbar": {
+    "login": "Login",
+    "srOnly": "My Smart Health"
+  },
+  "ProfileMenu": {
+    "welcome": "Welcome,",
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "myContacts": "My Contacts",
+    "allPosts": "All Posts",
+    "createPost": "Create Post",
+    "editProfile": "Edit profile",
+    "changeEmail": "Change Email",
+    "changePassword": "Change Password",
+    "adminOnly": "Admin Only",
+    "allUsers": "All Users",
+    "allMembers": "All Members",
+    "editCube": "Edit Cube",
+    "editMySmartHealth": "Edit My Smart Health",
+    "createNewUser": "Create new user"
+  },
+  "LogOut": {
+    "logout": "Logout"
+  },
+  "GoBack": {
+    "back": "Back"
+  },
+  "ProfileShort": {
+    "toProfile": "to profile",
+    "profileIconAlt": "Profile Icon"
+  },
+  "LoginPage": {
+    "title": "Login to your account"
+  },
+  "LoginForm": {
+    "emailLabel": "Email",
+    "emailPlaceholder": "Email",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Password",
+    "hidePasswordAria": "Hide password",
+    "showPasswordAria": "Show password",
+    "hide": "Hide",
+    "show": "Show",
+    "login": "Login",
+    "forgotPassword": "Forgot Password?",
+    "errors": {
+      "invalidCredentials": "Wrong email or password."
+    }
+  },
+  "RegisterPage": {
+    "title": "Create new user"
+  },
+  "RegisterForm": {
+    "nameLabel": "Name",
+    "namePlaceholder": "Name",
+    "emailLabel": "Email",
+    "emailPlaceholder": "Email",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Password",
+    "passwordConfirmationLabel": "Password Confirmation",
+    "passwordConfirmationPlaceholder": "Password Confirmation",
+    "hidePasswordAria": "Hide password",
+    "showPasswordAria": "Show password",
+    "hidePasswordConfirmationAria": "Hide password confirmation",
+    "showPasswordConfirmationAria": "Show password confirmation",
+    "hide": "Hide",
+    "show": "Show",
+    "roleLabel": "Role",
+    "userRole": "User",
+    "memberRole": "Member",
+    "register": "Register",
+    "messages": {
+      "userCreated": "User successfully created"
+    },
+    "errors": {
+      "nameRequired": "Please enter your name",
+      "emailRequired": "Please enter your email address",
+      "fillAllFields": "Please fill in all fields",
+      "passwordsMismatch": "Passwords do not match",
+      "emailExists": "Email already exists",
+      "generic": "An error occurred"
+    },
+    "errorModal": {
+      "success": "Success",
+      "warning": "Warning",
+      "error": "Error"
+    }
+  },
+  "ChangeEmailPage": {
+    "title": "Change Email"
+  },
+  "ChangeEmailForm": {
+    "currentEmailLabel": "Current Email:",
+    "passwordLabel": "Password:",
+    "passwordPlaceholder": "Enter your password",
+    "hidePasswordAria": "Hide password",
+    "showPasswordAria": "Show password",
+    "hide": "Hide",
+    "show": "Show",
+    "newEmailLabel": "New Email:",
+    "newEmailPlaceholder": "New Email",
+    "confirmNewEmailLabel": "Confirm New Email:",
+    "confirmNewEmailPlaceholder": "Confirm New Email",
+    "newEmailStatusLabel": "New Email Status:",
+    "updateEmail": "Update Email",
+    "status": {
+      "notEntered": "Not entered",
+      "invalidFormat": "Invalid format",
+      "sameAsCurrent": "Same as current",
+      "valid": "Valid"
+    },
+    "messages": {
+      "emailChanged": "Email changed successfully! Please log in again with your new email."
+    },
+    "errors": {
+      "enterPassword": "Please enter your password.",
+      "enterNewEmail": "Please enter a new email.",
+      "validEmail": "Please enter a valid email address.",
+      "emailMismatch": "Email addresses do not match.",
+      "newMustDiffer": "New email must be different from current email.",
+      "failedChangeEmail": "Failed to change email.",
+      "generic": "An error occurred. Please try again."
+    }
+  },
+  "ChangePasswordPage": {
+    "title": "Change Password"
+  },
+  "ChangePasswordForm": {
+    "currentPasswordLabel": "Current Password:",
+    "currentPasswordPlaceholder": "Current Password",
+    "newPasswordLabel": "New Password:",
+    "newPasswordPlaceholder": "New Password",
+    "confirmNewPasswordLabel": "Confirm New Password:",
+    "confirmNewPasswordPlaceholder": "Confirm New Password",
+    "hidePasswordAria": "Hide password",
+    "showPasswordAria": "Show password",
+    "hide": "Hide",
+    "show": "Show",
+    "newPasswordStrengthLabel": "New Password Strength:",
+    "updatePassword": "Update Password",
+    "strength": {
+      "notEntered": "Not entered",
+      "weak": "Weak",
+      "medium": "Medium",
+      "strong": "Strong"
+    },
+    "messages": {
+      "passwordChanged": "Password changed successfully!"
+    },
+    "errors": {
+      "enterCurrentPassword": "Please enter your current password.",
+      "enterNewPassword": "Please enter a new password.",
+      "minLength": "New password must be at least 8 characters long.",
+      "passwordMismatch": "New password and confirmation do not match.",
+      "newMustDiffer": "New password must be different from current password.",
+      "failedChangePassword": "Failed to change password.",
+      "generic": "An error occurred. Please try again."
+    }
+  },
+  "AppError": {
+    "connectionErrorTitle": "Connection Error",
+    "genericErrorTitle": "Something went wrong",
+    "connectionErrorMessage": "We are having trouble loading data. Please try again.",
+    "genericErrorMessage": "An unexpected error occurred.",
+    "tryAgain": "Try Again",
+    "toHomepage": "Go to Homepage",
+    "errorId": "Error ID:"
+  },
+  "NotFoundPage": {
+    "title": "404 - Not Found",
+    "description": "We're sorry, but the page you are looking for does not exist.",
+    "goBack": "Go back"
+  },
+  "ProfileSearch": {
+    "placeholder": "Search by name, text...",
+    "ariaLabel": "Profile search",
+    "search": "Search",
+    "loading": "Searching...",
+    "noResults": "No profiles found.",
+    "errors": {
+      "minChars": "Please enter at least {count} characters.",
+      "searchRequestFailed": "Search request failed",
+      "searchFailed": "Search could not be completed. Please try again."
+    }
+  },
+  "SearchFilter": {
+    "placeholder": "Search users by name or email..."
+  },
+  "SearchFilterMembers": {
+    "placeholder": "Search members by name or email..."
+  },
+  "UserTable": {
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "category": "Category",
+      "createdAt": "Created at",
+      "profileImage": "Profile Image",
+      "contactable": "Contactable",
+      "role": "Role",
+      "view": "View",
+      "editUser": "Edit User",
+      "deleteUser": "Delete User"
+    },
+    "actions": {
+      "view": "View",
+      "editUser": "Edit User",
+      "deleteUser": "Delete User",
+      "deleting": "Deleting..."
+    },
+    "confirm": {
+      "deleteUser": "Are you sure you want to delete this user?"
+    },
+    "messages": {
+      "deleting": "Deleting user data...",
+      "deleted": "User successfully deleted!",
+      "deleteFailed": "Error deleting user"
+    },
+    "noName": "No Name",
+    "noCategories": "No categories assigned",
+    "noImage": "No Image",
+    "yes": "Yes",
+    "no": "No",
+    "currentUser": "Current user",
+    "unknownUser": "Unknown User"
+  },
+  "UserTableMembers": {
+    "columns": {
+      "name": "Name",
+      "email": "Email",
+      "createdAt": "Created at",
+      "role": "Role",
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "actions": {
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleting": "Deleting..."
+    },
+    "confirm": {
+      "deleteMember": "Warning: You are about to permanently delete member \"{name}\" including all files. This cannot be undone. Continue?"
+    },
+    "errors": {
+      "deleteFailed": "Failed to delete member"
+    },
+    "noName": "No Name"
+  },
+  "AddCategoryModal": {
+    "label": "Category Name",
+    "placeholder": "Enter category name",
+    "cancel": "Cancel",
+    "submit": "Add Category"
+  },
+  "EditCategoryModal": {
+    "defaultTitle": "Rename Category",
+    "label": "Name",
+    "cancel": "Cancel",
+    "save": "Save"
+  },
+  "AddUserModal": {
+    "title": "Add User to Category",
+    "searchLabel": "Search Users",
+    "searchPlaceholder": "Search by name or email",
+    "loading": "Loading users...",
+    "noUsersFound": "No users found",
+    "noName": "No Name",
+    "cancel": "Cancel",
+    "submit": "Add User"
+  },
+  "PostCard": {
+    "noPosts": "No active posts"
+  },
+  "PostCardDetails": {
+    "noData": "Error: No data found",
+    "links": "Links",
+    "deleteError": "Error deleting post. Please try again.",
+    "xAlt": "X icon",
+    "tiktokAlt": "TikTok icon"
+  },
+  "DeletePostModal": {
+    "title": "Delete post?",
+    "defaultMessage": "Do you really want to delete this post? This action cannot be undone.",
+    "confirm": "Delete",
+    "cancel": "Cancel"
+  },
+  "PostForm": {
+    "titleLabel": "Title",
+    "titleResize": "You can pull the right corner to resize it",
+    "contentLabel": "Content",
+    "contentPlaceholder": "Write your post...",
+    "tagsLegend": "Post Tags",
+    "tagPlaceholder": "Tag",
+    "addTag": "Add Tag",
+    "socialLinksLegend": "Social Links",
+    "urlPlaceholder": "URL",
+    "pickPlatform": "Pick a platform",
+    "platform": {
+      "email": "Email",
+      "website": "Website",
+      "facebook": "Facebook",
+      "linkedin": "Linkedin",
+      "x": "X.com",
+      "youtube": "Youtube",
+      "tiktok": "TikTok",
+      "instagram": "Instagram"
+    },
+    "removeLink": "Remove",
+    "addSocialLink": "Add Social Link",
+    "addMediaLegend": "Add Media URL",
+    "mediaUrlLabel": "Media URL must be a valid URL from YouTube or Instagram",
+    "mediaUrlPlaceholder": "https://",
+    "uploadMediaUrl": "Upload Media URL",
+    "selectFileLegend": "Select File",
+    "selectImageFileLegend": "Select Image Files",
+    "imageFileLabel": "The image file must be a valid image format",
+    "maxFileSize": "Maximum file size: {size}MB per file",
+    "uploadingImages": "Uploading images...",
+    "photoAlt": "Photo {number}",
+    "mediaInfo": "You can add up to {max} media files (images, Instagram videos, or YouTube videos)",
+    "firstMediaWarning": "NB: Please ensure that the first media is an image.",
+    "noImageDefault": "No image file was selected, default logo will be used",
+    "noImageDefaultHint": "You can change it later in the edit post section",
+    "confirm": {
+      "leaveWithUploads": "You have uploaded images that will be deleted if you leave this page. Continue?",
+      "leaveWithChanges": "You have unsaved changes. Newly uploaded images will be deleted if you leave. Continue?",
+      "cancelUploads": "Cancel and delete uploaded images?",
+      "discardChanges": "Discard changes? Newly uploaded images will be deleted."
+    },
+    "errors": {
+      "mediaUrlEmpty": "Media URL cannot be empty",
+      "mediaUrlInvalid": "Media URL must be a valid YouTube or Instagram link",
+      "contentEmpty": "Content cannot be empty",
+      "firstMediaMustBeImage": "First media must be an image",
+      "createFailed": "Failed to create post",
+      "updateFailed": "Failed to update post",
+      "uploadFailed": "Failed to upload image",
+      "fileTooLarge": "File \"{name}\" is too large. Maximum size is {size}MB.",
+      "tooManyFiles": "You can select up to {max} files only.",
+      "notAuthenticated": "Not authenticated",
+      "errorUploadingFiles": "Error uploading files",
+      "errorDeletingPost": "Error deleting post"
+    },
+    "success": {
+      "created": "Post created successfully",
+      "updated": "Post updated successfully",
+      "deleted": "Post deleted successfully"
+    },
+    "modalTitles": {
+      "success": "Success!",
+      "warning": "Warning",
+      "error": "Error"
+    },
+    "buttons": {
+      "createPost": "Create Post",
+      "updatePost": "Update Post",
+      "deletePost": "Delete Post",
+      "cancel": "Cancel"
+    },
+    "deleteModal": {
+      "message": "Are you sure you want to delete this post? This action cannot be undone.",
+      "delete": "Delete",
+      "close": "Close"
+    },
+    "editModal": {
+      "successTitle": "Success",
+      "errorTitle": "Error"
+    }
+  },
+  "AllMembersPage": {
+    "title": "All Members",
+    "noMembers": "No members found"
+  },
+  "AllUsersPage": {
+    "title": "All Users",
+    "noUsers": "No users found"
+  },
+  "PasswordRequestsPage": {
+    "title": "Password Reset Requests",
+    "subtitle": "Manage password reset requests from users"
+  },
+  "EditCubePage": {
+    "title": "Edit Cube",
+    "previewTitle": "Preview",
+    "toggleLabel": "Show cube on homepage",
+    "saveButton": "Save",
+    "inCubeTitle": "In the Cube",
+    "noCubePosts": "No posts in the cube.",
+    "availableNewsTitle": "Available News",
+    "noAvailablePosts": "No more posts available.",
+    "noImage": "No image"
+  },
+  "RefreshNotifications": {
+    "title": "Refresh notifications",
+    "label": "Refresh"
+  },
+  "PasswordRequestsList": {
+    "emailNotFound": "Email not found",
+    "pendingButton": "Pending ({count})",
+    "showAllButton": "Show all ({count})",
+    "noRequestsPending": "No pending requests",
+    "noRequestsArchived": "No requests found",
+    "labels": {
+      "created": "Created",
+      "reset": "Reset",
+      "archived": "Archived"
+    },
+    "tooltips": {
+      "resetPassword": "Reset password",
+      "archive": "Archive",
+      "unarchive": "Restore",
+      "delete": "Delete"
+    },
+    "buttons": {
+      "resetPassword": "Reset",
+      "unarchive": "Restore",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "close": "Close",
+      "copy": "Copy",
+      "copied": "Copied!",
+      "understood": "Got it",
+      "ok": "OK"
+    },
+    "modals": {
+      "resetTitle": "Reset password?",
+      "archiveTitle": "Archive request?",
+      "unarchiveTitle": "Restore request?",
+      "deleteTitle": "Delete request?",
+      "resetMessage": "A new random password will be generated and assigned to the user.",
+      "archiveMessage": "The request will be archived but remain in the database.",
+      "unarchiveMessage": "The request will be restored and appear again in active notifications.",
+      "deleteMessage": "The request will be permanently deleted. This action cannot be undone."
+    },
+    "success": {
+      "title": "Password successfully reset!",
+      "newPasswordLabel": "New password:",
+      "warningNote": "Please note or copy this password. It will only be shown once!",
+      "shareNote": "Share this password with the user. The user should change the password after logging in."
+    },
+    "error": {
+      "title": "Error",
+      "emailExtractFailed": "Email could not be extracted from the message",
+      "resetFailed": "Error resetting password",
+      "archiveFailed": "Error archiving request",
+      "unarchiveFailed": "Error restoring request",
+      "deleteFailed": "Error deleting request",
+      "genericError": "An error occurred"
+    }
+  },
+  "CreatePostPage": {
+    "title": "New Post"
+  },
+  "EditPostIdPage": {
+    "postNotFound": "Post not found",
+    "goToHome": "Go to Home",
+    "goToDashboard": "Go to Dashboard"
+  },
+  "EditMySmartHealthPage": {
+    "title": "Edit My Smart Health Information"
+  },
+  "EditMemberPage": {
+    "title": "Edit Member Profile"
+  },
+  "MemberProfilePage": {
+    "title": "Member Profile",
+    "editButton": "Edit Member Profile"
+  },
+  "EditProfilePage": {
+    "title": "Edit Profile"
+  },
+  "DashboardPage": {
+    "title": "Dashboard",
+    "userNotFound": "User not found",
+    "editMemberProfile": "Edit Member Profile",
+    "allPosts": "All Posts",
+    "mySmartHealthContacts": "My Smart Health Contacts",
+    "editProfile": "Edit Profile",
+    "newPost": "New Post",
+    "adminOnly": "Admin Only",
+    "allUsers": "All Users",
+    "allMembers": "All Members",
+    "editCube": "Edit Cube",
+    "editMySmartHealth": "Edit My Smart Health",
+    "createNewAccount": "Create new account"
+  },
+  "MyContactsPage": {
+    "title": "My Contacts",
+    "subtitle": "Members who have added you to their contacts list",
+    "unnamedMember": "Unnamed Member",
+    "inactive": "Inactive",
+    "bornLabel": "Born",
+    "viewProfile": "View Profile →",
+    "totalContacts": "Total Contacts",
+    "empty": {
+      "title": "No Contacts Yet",
+      "description": "You don't have any member contacts yet. Members can add you to their contacts list to share their health information with you."
+    }
+  },
+  "TheHealthBarPage": {
+    "editButton": "Edit The Health Bar"
+  },
+  "AppLoading": {
+    "label": "Loading..."
+  },
+  "NewsPostNotFoundPage": {
+    "title": "Post Not Found",
+    "description": "The news post you're looking for doesn't exist or has been removed.",
+    "backButton": "Back to All News"
+  },
+  "BackToTop": {
+    "ariaLabel": "Back to top"
+  },
+  "CubePreview": {
+    "empty": "The cube is empty. Add news to see the preview.",
+    "noImage": "No image"
+  },
+  "TheHealthBarInfo": {
+    "address": "Musterstrasse 125, 12345 Musterstadt",
+    "openingHours": "Opening hours:",
+    "open": "open",
+    "closed": "closed",
+    "mondayToFriday": "Monday - Friday:",
+    "weekdayHours": "10:00 - 20:00",
+    "saturday": "Saturday:",
+    "saturdayHours": "10:00 - 16:00"
+  },
+  "DeletionProgressContext": {
+    "starting": "Starting deletion..."
+  },
+  "YoutubeEmbed": {
+    "invalidUrl": "Invalid YouTube URL",
+    "blocked": "YouTube video blocked",
+    "embedTitle": "YouTube Embed",
+    "cookieBefore": "Please accept Social Media Cookies in the ",
+    "cookieSettings": "Cookie Settings",
+    "cookieAfter": " to view this video."
+  },
+  "InstagramEmbed": {
+    "invalidUrl": "Invalid Instagram URL",
+    "blocked": "Instagram content blocked",
+    "embedTitle": "Instagram Embed",
+    "cookieBefore": "Please accept Social Media Cookies in the ",
+    "cookieSettings": "Cookie Settings",
+    "cookieAfter": " to view this content."
+  },
+  "ShortPosts": {
+    "noActivePosts": "No active posts",
+    "viewPost": "View Post",
+    "editPost": "Edit Post"
+  },
+  "NewsList": {
+    "noPostsFound": "No news posts found."
+  },
+  "MemberDashboard": {
+    "myProfile": "My Profile"
+  },
+  "MySmartHealthForm": {
+    "updateButton": "Update",
+    "autoSaveError": "Failed to auto-save paragraphs. Your changes may not be saved.",
+    "saveParagraphsError": "Error saving paragraphs. Please try again or contact support.",
+    "locationAddressError": "Each location must include an address.",
+    "updateError": "Failed to update information",
+    "resolveRecordError": "Unable to resolve My Smart Health record. Please try again.",
+    "updateSuccess": "Information updated successfully",
+    "genericError": "An error occurred while updating the information"
+  },
+  "MSHGeneralTitle": {
+    "label": "General Title:"
+  },
+  "MSHParagraph": {
+    "paragraphTitle": "Paragraph Title:",
+    "paragraphContent": "Paragraph Content:",
+    "contentPlaceholder": "Write your paragraph content with rich formatting...",
+    "resizeHint": "You can resize the text area by dragging the corner.",
+    "videoLabel": "Add YouTube or Instagram Video:",
+    "videoPlaceholder": "Enter YouTube or Instagram video URL",
+    "addVideoButton": "Add",
+    "imagesLabel": "Paragraph Images:",
+    "maxFileSize": "Maximum file size: {size}MB per file",
+    "uploadingImages": "Uploading images...",
+    "filesLabel": "Paragraph Files:",
+    "uploadingFiles": "Uploading files...",
+    "filesHeading": "Files:",
+    "deleteFileConfirm": "Delete file \"{name}\"?",
+    "socialLinksHeading": "Social Links:",
+    "urlPlaceholder": "URL",
+    "pickPlatform": "Pick a platform",
+    "platform": {
+      "email": "Email",
+      "website": "Website",
+      "facebook": "Facebook",
+      "linkedin": "Linkedin",
+      "x": "X.com",
+      "youtube": "Youtube",
+      "tiktok": "TikTok",
+      "instagram": "Instagram"
+    },
+    "removeSocialLink": "Remove",
+    "addSocialLink": "Add Social Link",
+    "deleteParagraph": "Delete Paragraph",
+    "addParagraph": "Add Paragraph"
+  },
+  "MSHLocationSection": {
+    "removeLocation": "Remove Location",
+    "addLocation": "Add Location"
+  },
+  "CategoryAccordion": {
+    "addNewCategory": "Add new category",
+    "removeFromCategory": "Remove from category",
+    "missingCategoryId": "Missing category id for this path",
+    "addSubcategory": "Add Subcategory",
+    "addUserToCategory": "Add User To Category",
+    "renameCategory": "Rename Category",
+    "deleteCategory": "Delete Category",
+    "modalAddRootTitle": "Add New Root Category",
+    "modalAddSubTitle": "Add New Subcategory",
+    "modalRenameTitle": "Rename Category",
+    "createCategoryFailed": "Failed to create category",
+    "createSubcategoryFailed": "Failed to create subcategory",
+    "addUserFailed": "Failed to add user to category",
+    "renameCategoryFailed": "Failed to rename category",
+    "confirmDeleteCategoryTree": "Delete this category and all subcategories? This cannot be undone.",
+    "deleteCategoryFailed": "Failed to delete category",
+    "confirmRemoveUser": "Remove this user from the category?",
+    "removeUserFailed": "Failed to remove user"
+  },
+  "TheHealthBarLink": {
+    "title": "The Health Bar"
+  },
+  "MySmartHealth": {
+    "filesHeading": "Files:",
+    "xAlt": "X icon",
+    "tiktokAlt": "TikTok icon"
+  },
+  "ProfileNewsCarousel": {
+    "noProfilesFound": "No profiles found",
+    "loading": "Loading..."
+  },
+  "ProfilePictureCarousel": {
+    "invalidUrl": "Invalid URL",
+    "close": "Close"
+  },
+  "FadeCarousel": {
+    "loading": "Loading...",
+    "close": "Close"
+  },
+  "MSHLocations": {
+    "addressHeading": "Address",
+    "planRoute": "Plan Route"
+  },
+  "RichTextEditor": {
+    "toolbar": {
+      "undo": "Undo (Ctrl+Z)",
+      "redo": "Redo (Ctrl+Y)",
+      "heading1": "Heading 1",
+      "heading2": "Heading 2",
+      "heading3": "Heading 3",
+      "paragraph": "Paragraph",
+      "bold": "Bold (Ctrl+B)",
+      "italic": "Italic (Ctrl+I)",
+      "underline": "Underline (Ctrl+U)",
+      "strikethrough": "Strikethrough",
+      "textColor": "Text Color",
+      "resetColor": "Reset",
+      "bulletList": "Bullet List",
+      "numberedList": "Numbered List",
+      "blockquote": "Blockquote",
+      "lineBreak": "Line Break (Shift+Enter)",
+      "alignLeft": "Align Left",
+      "alignCenter": "Align Center",
+      "alignRight": "Align Right"
+    }
   }
 }

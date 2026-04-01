@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Suspense, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Scrollbar, EffectCards, Navigation, Pagination } from "swiper/modules";
@@ -12,6 +13,7 @@ import { PAGINATION_BULLET_QUANTITY } from "@/utils/constants";
 
 
 export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArray?: string[] }) {
+  const t = useTranslations('ProfilePictureCarousel');
   const [zoomedIdx, setZoomedIdx] = useState<number | null>(null);
 
   if (!imageSrcArray || imageSrcArray.length === 0) {
@@ -101,7 +103,7 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
             <SwiperSlide key={idx} className={slideHeight}>
               <div className={`flex justify-center items-center w-full ${slideHeight}`}>
                 <div className="skeleton animate-pulse h-40 sm:h-64 w-40 sm:w-64 bg-gray-200 rounded-lg flex items-center justify-center">
-                  <span className="text-gray-500 text-sm">Invalid URL</span>
+                  <span className="text-gray-500 text-sm">{t('invalidUrl')}</span>
                 </div>
               </div>
             </SwiperSlide>
@@ -121,7 +123,7 @@ export default function ProfilePictureCarousel({ imageSrcArray }: { imageSrcArra
             <button
               className="absolute top-4 right-4 text-white text-3xl font-bold cursor-pointer"
               onClick={() => setZoomedIdx(null)}
-              aria-label="Close"
+              aria-label={t('close')}
             >
               &times;
             </button>

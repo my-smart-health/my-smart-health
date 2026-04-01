@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Triangle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { CategoryNodeSH, ProfileType } from "@/utils/types";
 
@@ -28,6 +29,7 @@ export default function CategoryAccordion({
   isAdmin?: boolean;
   pathToCategoryId?: Record<string, string>;
 }) {
+  const t = useTranslations('CategoryAccordion');
   const router = useRouter();
   const collator = useMemo(() => new Intl.Collator('de', { sensitivity: 'base', ignorePunctuation: true }), []);
   const [open, setOpen] = useState<Record<string, boolean>>({});
@@ -54,11 +56,11 @@ export default function CategoryAccordion({
       if (response.ok) {
         router.refresh();
       } else {
-        alert('Failed to create category');
+        alert(t('createCategoryFailed'));
       }
     } catch (error) {
       console.error('Error creating category:', error);
-      alert('Failed to create category');
+      alert(t('createCategoryFailed'));
     }
   };
 
@@ -73,11 +75,11 @@ export default function CategoryAccordion({
       if (response.ok) {
         router.refresh();
       } else {
-        alert('Failed to create subcategory');
+        alert(t('createSubcategoryFailed'));
       }
     } catch (error) {
       console.error('Error creating subcategory:', error);
-      alert('Failed to create subcategory');
+      alert(t('createSubcategoryFailed'));
     }
   };
 
@@ -92,11 +94,11 @@ export default function CategoryAccordion({
       if (response.ok) {
         router.refresh();
       } else {
-        alert('Failed to add user to category');
+        alert(t('addUserFailed'));
       }
     } catch (error) {
       console.error('Error adding user:', error);
-      alert('Failed to add user to category');
+      alert(t('addUserFailed'));
     }
   };
 
@@ -110,36 +112,36 @@ export default function CategoryAccordion({
       if (response.ok) {
         router.refresh();
       } else {
-        alert('Failed to rename category');
+        alert(t('renameCategoryFailed'));
       }
     } catch (error) {
       console.error('Error renaming category:', error);
-      alert('Failed to rename category');
+      alert(t('renameCategoryFailed'));
     }
   };
 
   const handleDeleteCategory = async (categoryId: string) => {
-    if (!categoryId) return alert('Missing category id');
-    if (!confirm('Delete this category and all subcategories? This cannot be undone.')) return;
+    if (!categoryId) return alert(t('missingCategoryId'));
+    if (!confirm(t('confirmDeleteCategoryTree'))) return;
     try {
       const res = await fetch(`/api/category/delete-tree?id=${categoryId}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Failed');
       router.refresh();
     } catch (e) {
       console.error(e);
-      alert('Failed to delete category');
+      alert(t('deleteCategoryFailed'));
     }
   };
 
   const handleRemoveUserFromCategory = async (categoryId: string, userId: string) => {
-    if (!confirm('Remove this user from the category?')) return;
+    if (!confirm(t('confirmRemoveUser'))) return;
     try {
       const res = await fetch(`/api/category/remove-profile?categoryId=${categoryId}&userId=${userId}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Failed');
       router.refresh();
     } catch (e) {
       console.error(e);
-      alert('Failed to remove user');
+      alert(t('removeUserFailed'));
     }
   };
 
@@ -167,7 +169,7 @@ export default function CategoryAccordion({
           className="flex items-center gap-2 p-4 font-bold text-xl border border-gray-400 rounded-2xl shadow-xl transition-all cursor-pointer bg-base-100 my-2 w-full text-left"
           onClick={() => setShowAddRootModal(true)}
         >
-          Add new category
+          {t('addNewCategory')}
         </button>
       )}
 
@@ -231,11 +233,11 @@ export default function CategoryAccordion({
                                   type="button"
                                   className="btn btn-xs btn-outline btn-error"
                                   onClick={() => {
-                                    if (!currentCategoryId) return alert('Missing category id for this path');
+                                    if (!currentCategoryId) return alert(t('missingCategoryId'));
                                     handleRemoveUserFromCategory(currentCategoryId, id);
                                   }}
                                 >
-                                  Remove from category
+                                  {t('removeFromCategory')}
                                 </button>
                               </div>
                             )}
@@ -252,23 +254,23 @@ export default function CategoryAccordion({
                         type="button"
                         className="btn btn-sm btn-primary border-black/60"
                         onClick={() => {
-                          if (!currentCategoryId) return alert('Missing category id for this path');
+                          if (!currentCategoryId) return alert(t('missingCategoryId'));
                           setActiveParentId(currentCategoryId);
                           setShowAddSubModal(true);
                         }}
                       >
-                        Add Subcategory
+                        {t('addSubcategory')}
                       </button>
                       <button
                         type="button"
                         className="btn btn-sm btn-primary border-black/60"
                         onClick={() => {
-                          if (!currentCategoryId) return alert('Missing category id for this path');
+                          if (!currentCategoryId) return alert(t('missingCategoryId'));
                           setActiveParentId(currentCategoryId);
                           setShowAddUserModal(true);
                         }}
                       >
-                        Add User To Category
+                        {t('addUserToCategory')}
                       </button>
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -276,23 +278,23 @@ export default function CategoryAccordion({
                         type="button"
                         className="btn btn-sm btn-warning text-white border-black/60"
                         onClick={() => {
-                          if (!currentCategoryId) return alert('Missing category id for this path');
+                          if (!currentCategoryId) return alert(t('missingCategoryId'));
                           setRenameCategoryId(currentCategoryId);
                           setRenameInitial(catName);
                           setShowRenameModal(true);
                         }}
                       >
-                        Rename Category
+                        {t('renameCategory')}
                       </button>
                       <button
                         type="button"
                         className="btn btn-sm btn-error text-white border-black/60"
                         onClick={() => {
-                          if (!currentCategoryId) return alert('Missing category id for this path');
+                          if (!currentCategoryId) return alert(t('missingCategoryId'));
                           handleDeleteCategory(currentCategoryId);
                         }}
                       >
-                        Delete Category
+                        {t('deleteCategory')}
                       </button>
                     </div>
                   </div>
@@ -331,14 +333,14 @@ export default function CategoryAccordion({
         isOpen={showAddRootModal}
         onClose={() => setShowAddRootModal(false)}
         onSubmit={handleAddRootCategory}
-        title="Add New Root Category"
+        title={t('modalAddRootTitle')}
       />
 
       <AddCategoryModal
         isOpen={showAddSubModal}
         onClose={() => setShowAddSubModal(false)}
         onSubmit={handleAddSubcategory}
-        title="Add New Subcategory"
+        title={t('modalAddSubTitle')}
       />
 
       <AddUserModal
@@ -352,7 +354,7 @@ export default function CategoryAccordion({
         initialName={renameInitial}
         onClose={() => setShowRenameModal(false)}
         onSubmit={handleRenameCategory}
-        title="Rename Category"
+        title={t('modalRenameTitle')}
       />
     </>
   );

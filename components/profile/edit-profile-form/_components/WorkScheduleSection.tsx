@@ -1,8 +1,11 @@
+'use client';
+
 import Divider from "@/components/divider/Divider";
 import { ArrowUp, ArrowUpRight, CalendarCheck } from "lucide-react";
 import { Schedule } from "@/utils/types";
 import { ScheduleSection } from "../../profile-full/_components";
 import { useState } from "react";
+import { useTranslations } from 'next-intl';
 
 type WorkScheduleSectionProps = {
   schedule: Schedule[];
@@ -11,24 +14,25 @@ type WorkScheduleSectionProps = {
   setScheduleTime: (id: string, openClose: keyof Schedule, value: string) => void;
 };
 
-const dayTranslations: Record<string, string> = {
-  Monday: "Montag",
-  Tuesday: "Dienstag",
-  Wednesday: "Mittwoch",
-  Thursday: "Donnerstag",
-  Friday: "Freitag",
-  Saturday: "Samstag",
-  Sunday: "Sonntag",
-};
-
 export function WorkScheduleSection({
   schedule,
   setSchedule,
   toggleScheduleDay,
   setScheduleTime,
 }: WorkScheduleSectionProps) {
+  const t = useTranslations('EditProfileForm');
   const [nonStopState, setNonStopState] = useState<{ [id: string]: boolean }>({});
   const [prevValues, setPrevValues] = useState<{ [id: string]: Schedule | null }>({});
+
+  const dayLabels: Record<string, string> = {
+    Monday: t('schedule.days.Monday'),
+    Tuesday: t('schedule.days.Tuesday'),
+    Wednesday: t('schedule.days.Wednesday'),
+    Thursday: t('schedule.days.Thursday'),
+    Friday: t('schedule.days.Friday'),
+    Saturday: t('schedule.days.Saturday'),
+    Sunday: t('schedule.days.Sunday'),
+  };
 
   function handleNonStopToggle(id: string, checked: boolean, item: Schedule) {
     if (checked) {
@@ -97,13 +101,13 @@ export function WorkScheduleSection({
             key={item.id}
             className="fieldset grid-cols-2 max-w-[99.9%]"
           >
-            <legend className="fieldset-legend">Work Schedule</legend>
+            <legend className="fieldset-legend">{t('schedule.legend')}</legend>
 
             <div
               className="mx-auto  rounded p-4 col-span-2 w-full max-w-[99.9%] flex flex-col justify-center"
               style={{ minHeight: '120px', height: 'auto', boxSizing: 'border-box' }}
             >
-              <label htmlFor="location" className="label">Schedule Preview</label>
+              <label htmlFor="location" className="label">{t('schedule.previewLabel')}</label>
               <div style={{ minHeight: '48px' }}>
                 <ScheduleSection schedule={[item]} />
               </div>
@@ -117,13 +121,13 @@ export function WorkScheduleSection({
                 style={{ opacity: isNonStop(item) ? 0.5 : 1, pointerEvents: isNonStop(item) ? 'none' : 'auto' }}>
                 <div className="mb-2">
                   <label className="label flex flex-col">
-                    <span className="label-text">Title (optional)</span>
+                    <span className="label-text">{t('schedule.titleLabel')}</span>
                     <input
                       type="text"
                       value={item.title ?? ''}
                       onChange={(e) => setSchedule(schedule.map(s => s.id === item.id ? { ...s, title: e.target.value } : s))}
                       className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
-                      placeholder="e.g. Monday - Friday"
+                      placeholder={t('schedule.titlePlaceholder')}
                     />
                   </label>
                 </div>
@@ -138,7 +142,7 @@ export function WorkScheduleSection({
                       checked={item.day[day as keyof Schedule['day']]}
                       onChange={() => toggleScheduleDay(item.id, day as keyof Schedule['day'])}
                     />
-                    {dayTranslations[day] || day}
+                    {dayLabels[day] || day}
                   </label>
                 ))}
               </div>
@@ -146,7 +150,7 @@ export function WorkScheduleSection({
                 className="grid grid-rows-2 gap-3 justify-baseline mt-4 w-full max-w-[99.9%]"
                 style={{ opacity: isNonStop(item) ? 0.5 : 1, pointerEvents: isNonStop(item) ? 'none' : 'auto' }}>
                 <label htmlFor="time" className="label text-center flex-col">
-                  <span className="label-text">Time start</span>
+                  <span className="label-text">{t('schedule.timeStart')}</span>
                   <div className="flex flex-col">
                     <input
                       type="time"
@@ -157,12 +161,12 @@ export function WorkScheduleSection({
                       disabled={isNonStop(item)}
                     />
                     <span className="text-xs text-gray-500 w-fit flex flex-nowrap">
-                      click here to set <ArrowUpRight />
+                      {t('schedule.clickToSet')} <ArrowUpRight />
                     </span>
                   </div>
                 </label>
                 <label htmlFor="time-end" className="label text-center flex-col">
-                  <span className="label-text">Time end</span>
+                  <span className="label-text">{t('schedule.timeEnd')}</span>
                   <div className="flex flex-col">
                     <input
                       type="time"
@@ -175,7 +179,7 @@ export function WorkScheduleSection({
                       disabled={isNonStop(item)}
                     />
                     <span className="text-xs text-gray-500 w-fit flex flex-nowrap">
-                      click here to set <ArrowUpRight />
+                      {t('schedule.clickToSet')} <ArrowUpRight />
                     </span>
                   </div>
                 </label>
@@ -187,7 +191,7 @@ export function WorkScheduleSection({
 
           <div>
             <fieldset className="fieldset border-primary flex justify-center rounded-box w-full border p-2 md:p-4">
-              <legend className="fieldset-legend">Non-stop</legend>
+              <legend className="fieldset-legend">{t('schedule.nonStopLegend')}</legend>
               <label className="label">
                 <input
                   type="checkbox"
@@ -195,7 +199,7 @@ export function WorkScheduleSection({
                   className="toggle"
                   onChange={e => handleNonStopToggle(item.id, e.target.checked, item)}
                 />
-                <span className="label-text">Open 24 hours / 7 days</span>
+                <span className="label-text">{t('schedule.open24h')}</span>
               </label>
             </fieldset>
 
@@ -204,12 +208,12 @@ export function WorkScheduleSection({
             <button
               type="button"
               onClick={() => {
-                if (!confirm("Are you sure you want to remove this schedule?")) return;
+                if (!confirm(t('schedule.confirmRemove'))) return;
                 setSchedule(schedule.filter((_, i) => i !== idx));
               }}
               className="btn btn-outline w-full text-red-500 self-end"
             >
-              <ArrowUp /> Remove
+              <ArrowUp /> {t('schedule.removeButton')}
             </button>
 
             <Divider addClass="my-4 col-span-2" />
@@ -241,7 +245,7 @@ export function WorkScheduleSection({
         }
         className="btn btn-outline btn-primary w-full mt-2 px-3 py-1 rounded"
       >
-        <CalendarCheck />  Add Schedule
+        <CalendarCheck />  {t('schedule.addButton')}
       </button>
     </section>
   );

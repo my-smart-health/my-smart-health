@@ -1,13 +1,18 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 type NameSectionProps = {
   name: string;
   onChange?: (value: string) => void;
 };
 
 export function NameSection({ name, onChange }: NameSectionProps) {
+  const t = useTranslations('EditProfileForm');
   return (
     <section>
       <label className="flex flex-col gap-2">
-        <span className="font-semibold text-gray-700">Name</span>
+        <span className="font-semibold text-gray-700">{t('name.label')}</span>
         <input
           type="text"
           name="name"

@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { Anamneses, Illnesses, HospitalStays, MedicationPlanTable, AllergiesIntolerances, FamilyHistoryOfIllness, Lifestyle, VaccinationStatus } from '@/utils/types';
 import {
   IllnessesSection,
@@ -48,7 +49,7 @@ const createDefaultAnamnesis = (): Anamneses => ({
     pollen: null,
     petHair: null,
     other: null,
-    typeOfReaction: '',
+    typeOfReaction: null,
   },
   familyHistoryOfIllnesses: {
     cardiovascularDisease: null,
@@ -59,7 +60,7 @@ const createDefaultAnamnesis = (): Anamneses => ({
     noKnownRelevantIllnesses: null,
   },
   lifestyle: {
-    isSmoking: false,
+    isSmoking: null,
     cigarettesPerDay: null,
     alcohol: 'NO',
     exercise: 'NO',
@@ -82,6 +83,8 @@ export function AnamnesesSection({
   anamneses,
   setAnamneses,
 }: AnamnesesSectionProps) {
+  const t = useTranslations('EditMemberForm.anamneses');
+
   const handleAdd = () => {
     setAnamneses([...anamneses, createDefaultAnamnesis()]);
   };
@@ -133,13 +136,13 @@ export function AnamnesesSection({
       if (!response.ok) {
         const payload = await response.json().catch(() => null);
         setAnamneses(currentAnamneses);
-        window.alert(payload?.message || 'Failed to remove anamnesis entry');
+        window.alert(payload?.message || t('errors.failedRemoveAnamnesis'));
       }
     } catch (error) {
       window.alert(
         error instanceof Error
           ? error.message
-          : 'Failed to remove medication files before deleting anamnesis entry',
+          : t('errors.failedRemoveMedicationFiles'),
       );
     }
   };
@@ -246,13 +249,13 @@ export function AnamnesesSection({
       if (!response.ok) {
         const payload = await response.json().catch(() => null);
         setAnamneses(currentAnamneses);
-        window.alert(payload?.message || 'Failed to update medication plan');
+        window.alert(payload?.message || t('errors.failedUpdateMedicationPlan'));
       }
     } catch (error) {
       window.alert(
         error instanceof Error
           ? error.message
-          : 'Failed to remove medication files',
+          : t('errors.failedRemoveMedicationFiles'),
       );
     }
   };
@@ -345,38 +348,38 @@ export function AnamnesesSection({
     <section>
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <span className="font-semibold text-gray-700">Anamneses (Medical History)</span>
+          <span className="font-semibold text-gray-700">{t('title')}</span>
           <button
             type="button"
             onClick={handleAdd}
             className="btn btn-sm btn-primary text-white"
           >
-            + Add Anamnesis
+            {t('addAnamnesis')}
           </button>
         </div>
         <div className="space-y-6">
           {anamneses.length === 0 ? (
-            <p className="text-gray-500 italic text-sm">No anamneses added yet</p>
+            <p className="text-gray-500 italic text-sm">{t('empty')}</p>
           ) : (
             anamneses.map((anamnesis, index) => (
               <div key={index} className="border-2 odd:border-green-300 even:border-green-500 rounded-lg p-4">
                 <div className="flex justify-between items-center mb-4">
-                  <h4 className="font-bold text-primary">Anamnesis #{index + 1}</h4>
+                  <h4 className="font-bold text-primary">{t('anamnesisItem', { index: index + 1 })}</h4>
                   <button
                     type="button"
                     onClick={() => void handleRemove(index)}
                     className="btn btn-sm btn-error text-white"
                   >
-                    Remove Entry
+                    {t('removeEntry')}
                   </button>
                 </div>
 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Medical History Notes</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('medicalHistoryNotes')}</label>
                   <textarea
                     value={anamnesis.text}
                     onChange={e => handleTextChange(index, e.target.value)}
-                    placeholder="Enter detailed medical history notes..."
+                    placeholder={t('medicalHistoryPlaceholder')}
                     rows={4}
                     className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full resize-none"
                   />

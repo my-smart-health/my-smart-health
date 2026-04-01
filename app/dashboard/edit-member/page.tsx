@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { CACHE_STRATEGY } from "@/utils/constants";
 import EditMemberForm from "@/components/profile/edit-member-form/EditMemberForm";
 import { HealthInsurances, MyDoctors, Anamneses, FamilyMember, FileWithDescription, TelMedicinePhoneNumber } from "@/utils/types";
+import { getTranslations } from "next-intl/server";
 
 async function getMember(id: string) {
   const member = await prisma.memberProfile.findUnique({
@@ -37,6 +38,7 @@ async function getMember(id: string) {
 }
 
 export default async function EditMemberPage() {
+  const t = await getTranslations("EditMemberPage");
   const session = await auth();
 
   if (!session || !session.user) {
@@ -79,7 +81,7 @@ export default async function EditMemberPage() {
 
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-primary mb-2">Edit Member Profile</h1>
+      <h1 className="text-4xl font-extrabold text-primary mb-2">{t('title')}</h1>
       <EditMemberForm member={safeMember} afterCloseHref="/dashboard" />
     </>
   );

@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import {
   PersonalInfoSection,
@@ -32,6 +33,7 @@ export default function ProfileFullMember({
   member: MemberProfileDashboardProps | null;
   isAdmin?: boolean;
 }) {
+  const t = useTranslations("MemberProfileFull");
   const [mounted, setMounted] = useState(false);
   const [contacts, setContacts] = useState<ContactDoctor[]>([]);
 
@@ -62,7 +64,7 @@ export default function ProfileFullMember({
   if (!member) {
     return (
       <div className="flex flex-col gap-4 p-4 w-full">
-        <p className="text-red-500 text-center">Member profile not found</p>
+        <p className="text-red-500 text-center">{t("profileNotFound")}</p>
       </div>
     );
   }
@@ -123,7 +125,7 @@ export default function ProfileFullMember({
       <section className="flex flex-col gap-2 w-full">
         <div className="flex justify-between items-center w-full gap-2">
           <h2 className="font-bold self-end text-primary text-xl break-words">
-            {name || "Member Profile"}
+            {name || t("defaultTitle")}
           </h2>
           <GoBack />
         </div>
@@ -140,7 +142,7 @@ export default function ProfileFullMember({
                   name="member_profile_tabs"
                   role="tab"
                   className={tabClassName}
-                  aria-label="Admin"
+                  aria-label={t("tabs.admin")}
                   defaultChecked={firstTab === 'admin'}
                 />
                 <div role="tabpanel" className={tabPanelClassName}>
@@ -162,7 +164,7 @@ export default function ProfileFullMember({
                   name="member_profile_tabs"
                   role="tab"
                   className={tabClassName}
-                  aria-label="Personal Info"
+                  aria-label={t("tabs.personalInfo")}
                   defaultChecked={firstTab === 'personal'}
                 />
                 <div role="tabpanel" className={tabPanelClassName}>
@@ -185,7 +187,7 @@ export default function ProfileFullMember({
                   name="member_profile_tabs"
                   role="tab"
                   className={tabClassName}
-                  aria-label="Anamneses"
+                  aria-label={t("tabs.anamneses")}
                   defaultChecked={firstTab === 'anamneses'}
                 />
                 <div role="tabpanel" className={tabPanelClassName}>
@@ -204,7 +206,7 @@ export default function ProfileFullMember({
                   name="member_profile_tabs"
                   role="tab"
                   className={tabClassName}
-                  aria-label="Blood Type"
+                  aria-label={t("tabs.bloodType")}
                   defaultChecked={firstTab === 'blood'}
                 />
                 <div role="tabpanel" className={tabPanelClassName}>
@@ -224,7 +226,7 @@ export default function ProfileFullMember({
                   name="member_profile_tabs"
                   role="tab"
                   className={tabClassName}
-                  aria-label="Doctors"
+                  aria-label={t("tabs.doctors")}
                   defaultChecked={firstTab === 'doctors'}
                 />
                 <div role="tabpanel" className={tabPanelClassName}>
@@ -240,7 +242,7 @@ export default function ProfileFullMember({
                   name="member_profile_tabs"
                   role="tab"
                   className={tabClassName}
-                  aria-label="Documents"
+                  aria-label={t("tabs.documents")}
                   defaultChecked={firstTab === 'documents'}
                 />
                 <div role="tabpanel" className={tabPanelClassName}>
@@ -259,7 +261,7 @@ export default function ProfileFullMember({
                   name="member_profile_tabs"
                   role="tab"
                   className={tabClassName}
-                  aria-label="My Smart Health Contacts"
+                  aria-label={t("tabs.contacts")}
                   defaultChecked={firstTab === 'contacts'}
                 />
                 <div role="tabpanel" className={tabPanelClassName}>
@@ -275,7 +277,7 @@ export default function ProfileFullMember({
                   name="member_profile_tabs"
                   role="tab"
                   className={tabClassName}
-                  aria-label="Telemedizin"
+                  aria-label={t("tabs.telemedicine")}
                   defaultChecked={firstTab === 'special'}
                 />
                 <div role="tabpanel" className={tabPanelClassName}>
@@ -297,8 +299,8 @@ export default function ProfileFullMember({
           <>
             <Divider addClass="my-1" />
             <div className="p-8 text-center text-gray-500">
-              <p>No medical information available yet.</p>
-              <p className="text-sm mt-2">Please update your profile to add details.</p>
+              <p>{t("noMedicalInfoTitle")}</p>
+              <p className="text-sm mt-2">{t("noMedicalInfoSubtitle")}</p>
             </div>
           </>
         )}

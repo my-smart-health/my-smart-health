@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { CACHE_STRATEGY } from "@/utils/constants";
 import EditMemberForm from "@/components/profile/edit-member-form/EditMemberForm";
 import { HealthInsurances, MyDoctors, Anamneses, FamilyMember, FileWithDescription, TelMedicinePhoneNumber } from "@/utils/types";
+import { getTranslations } from "next-intl/server";
 
 
 async function getMember(id: string) {
@@ -42,6 +43,7 @@ export default async function EditMemberByIdPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const t = await getTranslations("EditMemberPage");
   const session = await auth();
   const { id } = await params;
 
@@ -126,7 +128,7 @@ export default async function EditMemberByIdPage({
 
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-primary mb-2">Edit Member Profile</h1>
+      <h1 className="text-4xl font-extrabold text-primary mb-2">{t('title')}</h1>
       <EditMemberForm
         member={safeMember}
         afterCloseHref={isAdmin ? `/dashboard/member/${id}` : "/dashboard"}

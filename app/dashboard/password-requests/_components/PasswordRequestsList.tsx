@@ -3,6 +3,7 @@
 import { AdminNotification } from '@/utils/types';
 import { useState, useRef, useEffect } from 'react';
 import { Archive, Trash2, Key, Clock, CheckCheck } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type Props = {
   initialNotifications: AdminNotification[];
@@ -22,6 +23,7 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
   const modalRef = useRef<HTMLDialogElement>(null);
   const successModalRef = useRef<HTMLDialogElement>(null);
   const errorModalRef = useRef<HTMLDialogElement>(null);
+  const t = useTranslations('PasswordRequestsList');
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | null = null;
@@ -90,7 +92,7 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
 
     const email = extractEmailFromMessage(selectedNotification.message);
     if (!email) {
-      setMessage('E-Mail konnte nicht aus der Nachricht extrahiert werden');
+      setMessage(t('error.emailExtractFailed'));
       closeModal();
       errorModalRef.current?.showModal();
       return;
@@ -127,7 +129,7 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
           successModalRef.current?.showModal();
         }, 150);
       } else {
-        setMessage(data.message || 'Fehler beim Zurücksetzen des Passworts');
+        setMessage(data.message || t('error.resetFailed'));
         setIsProcessing(false);
         closeModal();
         setTimeout(() => {
@@ -135,7 +137,7 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
         }, 150);
       }
     } catch {
-      setMessage('Ein Fehler ist aufgetreten');
+      setMessage(t('error.genericError'));
       setIsProcessing(false);
       closeModal();
       setTimeout(() => {
@@ -166,7 +168,7 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
         closeModal();
       } else {
         const data = await response.json();
-        setMessage(data.message || 'Fehler beim Archivieren');
+        setMessage(data.message || t('error.archiveFailed'));
         setIsProcessing(false);
         closeModal();
         setTimeout(() => {
@@ -174,7 +176,7 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
         }, 150);
       }
     } catch {
-      setMessage('Ein Fehler ist aufgetreten');
+      setMessage(t('error.genericError'));
       setIsProcessing(false);
       closeModal();
       setTimeout(() => {
@@ -205,7 +207,7 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
         closeModal();
       } else {
         const data = await response.json();
-        setMessage(data.message || 'Fehler beim Wiederherstellen');
+        setMessage(data.message || t('error.unarchiveFailed'));
         setIsProcessing(false);
         closeModal();
         setTimeout(() => {
@@ -213,7 +215,7 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
         }, 150);
       }
     } catch {
-      setMessage('Ein Fehler ist aufgetreten');
+      setMessage(t('error.genericError'));
       setIsProcessing(false);
       closeModal();
       setTimeout(() => {
@@ -240,7 +242,7 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
         closeModal();
       } else {
         const data = await response.json();
-        setMessage(data.message || 'Fehler beim Löschen');
+        setMessage(data.message || t('error.deleteFailed'));
         setIsProcessing(false);
         closeModal();
         setTimeout(() => {
@@ -248,7 +250,7 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
         }, 150);
       }
     } catch {
-      setMessage('Ein Fehler ist aufgetreten');
+      setMessage(t('error.genericError'));
       setIsProcessing(false);
       closeModal();
       setTimeout(() => {
@@ -270,20 +272,20 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
           onClick={() => setShowArchived(false)}
           className={`btn ${!showArchived ? 'btn-primary' : 'btn-outline'}`}
         >
-          Ausstehend ({pendingCount})
+          {t('pendingButton', { count: pendingCount })}
         </button>
         <button
           onClick={() => setShowArchived(true)}
           className={`btn ${showArchived ? 'btn-primary' : 'btn-outline'}`}
         >
-          Alle anzeigen ({notifications.length})
+          {t('showAllButton', { count: notifications.length })}
         </button>
       </div>
 
       {filteredNotifications.length === 0 ? (
         <div className="text-center p-12 bg-base-200 rounded-lg">
           <p className="text-gray-600">
-            {showArchived ? 'Keine Anfragen vorhanden' : 'Keine ausstehenden Anfragen'}
+            {showArchived ? t('noRequestsArchived') : t('noRequestsPending')}
           </p>
         </div>
       ) : (
@@ -305,16 +307,16 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
                         ) : (
                           <Clock className="text-warning" size={20} />
                         )}
-                        <h3 className="font-semibold text-lg">{email || 'E-Mail nicht gefunden'}</h3>
+                        <h3 className="font-semibold text-lg">{email || t('emailNotFound')}</h3>
                       </div>
                       <p className="text-sm text-gray-600 mb-2">{notification.message}</p>
                       <div className="text-xs text-gray-500 space-y-1">
-                        <p>Erstellt: {new Date(notification.createdAt).toLocaleString('de-DE')}</p>
+                        <p>{t('labels.created')}: {new Date(notification.createdAt).toLocaleString('de-DE')}</p>
                         {notification.resetReadAt && (
-                          <p>Zurückgesetzt: {new Date(notification.resetReadAt).toLocaleString('de-DE')}</p>
+                          <p>{t('labels.reset')}: {new Date(notification.resetReadAt).toLocaleString('de-DE')}</p>
                         )}
                         {notification.archivedAt && (
-                          <p>Archiviert: {new Date(notification.archivedAt).toLocaleString('de-DE')}</p>
+                          <p>{t('labels.archived')}: {new Date(notification.archivedAt).toLocaleString('de-DE')}</p>
                         )}
                       </div>
                     </div>
@@ -325,15 +327,15 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
                           <button
                             onClick={() => openModal(notification, 'reset')}
                             className="btn btn-sm btn-primary"
-                            title="Passwort zurücksetzen"
+                            title={t('tooltips.resetPassword')}
                           >
                             <Key size={16} />
-                            Zurücksetzen
+                            {t('buttons.resetPassword')}
                           </button>
                           <button
                             onClick={() => openModal(notification, 'archive')}
                             className="btn btn-sm btn-outline"
-                            title="Archivieren"
+                            title={t('tooltips.archive')}
                           >
                             <Archive size={16} />
                           </button>
@@ -342,16 +344,16 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
                         <button
                           onClick={() => openModal(notification, 'unarchive')}
                           className="btn btn-sm btn-success btn-outline"
-                          title="Wiederherstellen"
+                          title={t('tooltips.unarchive')}
                         >
                           <Archive size={16} />
-                          Wiederherstellen
+                          {t('buttons.unarchive')}
                         </button>
                       )}
                       <button
                         onClick={() => openModal(notification, 'delete')}
                         className="btn btn-sm btn-error btn-outline"
-                        title="Löschen"
+                        title={t('tooltips.delete')}
                       >
                         <Trash2 size={16} />
                       </button>
@@ -367,22 +369,22 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
       <dialog ref={modalRef} className="modal modal-bottom sm:modal-middle fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 z-50">
         <div className="modal-box">
           <h3 className="font-bold text-lg mb-4">
-            {modalType === 'reset' && 'Passwort zurücksetzen?'}
-            {modalType === 'archive' && 'Anfrage archivieren?'}
-            {modalType === 'unarchive' && 'Anfrage wiederherstellen?'}
-            {modalType === 'delete' && 'Anfrage löschen?'}
+            {modalType === 'reset' && t('modals.resetTitle')}
+            {modalType === 'archive' && t('modals.archiveTitle')}
+            {modalType === 'unarchive' && t('modals.unarchiveTitle')}
+            {modalType === 'delete' && t('modals.deleteTitle')}
           </h3>
           <p className="py-4">
             {modalType === 'reset' &&
-              'Ein neues zufälliges Passwort wird generiert und dem Benutzer zugewiesen.'}
-            {modalType === 'archive' && 'Die Anfrage wird archiviert, bleibt aber in der Datenbank.'}
-            {modalType === 'unarchive' && 'Die Anfrage wird wiederhergestellt und erscheint wieder bei den aktiven Benachrichtigungen.'}
+              t('modals.resetMessage')}
+            {modalType === 'archive' && t('modals.archiveMessage')}
+            {modalType === 'unarchive' && t('modals.unarchiveMessage')}
             {modalType === 'delete' &&
-              'Die Anfrage wird dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.'}
+              t('modals.deleteMessage')}
           </p>
           <div className="modal-action">
             <button onClick={closeModal} className="btn btn-outline" disabled={isProcessing}>
-              Abbrechen
+              {t('buttons.cancel')}
             </button>
             <button
               onClick={
@@ -400,21 +402,21 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
               {isProcessing ? (
                 <span className="loading loading-spinner loading-sm"></span>
               ) : (
-                'Bestätigen'
+                t('buttons.confirm')
               )}
             </button>
           </div>
         </div>
         <form method="dialog" className="modal-backdrop">
-          <button type="button" onClick={closeModal}>close</button>
+          <button type="button" onClick={closeModal}>{t('buttons.close')}</button>
         </form>
       </dialog>
 
       <dialog ref={successModalRef} className="modal modal-bottom sm:modal-middle fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 z-50">
         <div className="modal-box">
-          <h3 className="font-bold text-lg mb-4 text-success">Passwort erfolgreich zurückgesetzt!</h3>
+          <h3 className="font-bold text-lg mb-4 text-success">{t('success.title')}</h3>
           <div className="bg-base-200 p-4 rounded-lg mb-4">
-            <p className="text-sm text-gray-600 mb-2">Neues Passwort:</p>
+            <p className="text-sm text-gray-600 mb-2">{t('success.newPasswordLabel')}</p>
             <div className="flex items-center gap-2">
               <code className="text-2xl font-mono font-bold text-primary bg-white px-4 py-2 rounded flex-1 text-center">
                 {newPassword}
@@ -429,43 +431,43 @@ export default function PasswordRequestsList({ initialNotifications }: Props) {
                 }}
                 className="btn btn-sm btn-outline"
               >
-                {copySuccess ? '✓ Kopiert!' : 'Kopieren'}
+                {copySuccess ? t('buttons.copied') : t('buttons.copy')}
               </button>
             </div>
           </div>
           <p className="text-sm text-warning mb-4">
-            ⚠️ Bitte notieren oder kopieren Sie dieses Passwort. Es wird nur einmal angezeigt!
+            {t('success.warningNote')}
           </p>
           <p className="text-sm text-gray-600">
-            Teilen Sie dieses Passwort dem Benutzer mit. Der Benutzer sollte das Passwort nach der Anmeldung ändern.
+            {t('success.shareNote')}
           </p>
           <div className="modal-action">
             <form method="dialog">
               <button type="button" onClick={closeSuccessModal} className="btn btn-primary">
-                Verstanden
+                {t('buttons.understood')}
               </button>
             </form>
           </div>
         </div>
         <form method="dialog" className="modal-backdrop">
-          <button type="button" onClick={closeSuccessModal}>close</button>
+          <button type="button" onClick={closeSuccessModal}>{t('buttons.close')}</button>
         </form>
       </dialog>
 
       <dialog ref={errorModalRef} className="modal modal-bottom sm:modal-middle fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 z-50">
         <div className="modal-box">
-          <h3 className="font-bold text-lg mb-4 text-error">Fehler</h3>
+          <h3 className="font-bold text-lg mb-4 text-error">{t('error.title')}</h3>
           <p className="py-4">{message}</p>
           <div className="modal-action">
             <form method="dialog">
               <button type="button" onClick={() => errorModalRef.current?.close()} className="btn btn-primary">
-                OK
+                {t('buttons.ok')}
               </button>
             </form>
           </div>
         </div>
         <form method="dialog" className="modal-backdrop">
-          <button type="button" onClick={() => errorModalRef.current?.close()}>close</button>
+          <button type="button" onClick={() => errorModalRef.current?.close()}>{t('buttons.close')}</button>
         </form>
       </dialog>
     </>

@@ -1,4 +1,7 @@
+'use client';
+
 import React from "react";
+import { useTranslations } from 'next-intl';
 
 type WebsiteSectionProps = {
   website: string;
@@ -7,11 +10,12 @@ type WebsiteSectionProps = {
 };
 
 export function WebsiteSection({ website, setWebsite, icon }: WebsiteSectionProps) {
+  const t = useTranslations('EditProfileForm');
   return (
     <section>
       <label className="flex flex-col gap-2">
         <span className="font-semibold text-gray-700">
-          {icon}Website
+          {icon}{t('website.label')}
         </span>
         <input
           type="url"

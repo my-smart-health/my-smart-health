@@ -23,37 +23,30 @@ export const PROFILE_TYPE_THE_LEADING_DOCTORS = 'THE_LEADING_DOCTORS';
 export const PROFILE_TYPE_MY_SMART_HEALTH_TERMINE_KURZFRISTIG =
   'MY_SMART_HEALTH_TERMINE_KURZFRISTIG';
 
-/**
- * Category names and links used throughout the app
- *
- * Easily extendable for future categories
- *
- * Helps avoid hardcoding strings in multiple places
- */
-export const CATEGORY_NAMES = {
+export const CATEGORY_LINKS = {
   news: {
-    name: 'News für meine Gesundheit',
     link: '/news',
+    image: '/news.png',
   },
   theLeadingDoctors: {
-    name: 'The Leading Doctors',
     link: '/the-leading-doctors',
+    image: '/the-leading-doctors.png',
   },
   mySmartHealthTermineKurzfristig: {
-    name: 'My Smart Health Termine Kurzfristig',
     link: '/my-smart-health-termine-kurzfristig',
+    image: '/the-leading-hospitals.png',
   },
   smartHealth: {
-    name: 'Lebensqualität & Prävention',
     link: '/smart-health',
+    image: '/icon3.png',
   },
   medizinUndPflege: {
-    name: 'Medizin & Pflege',
     link: '/medizin-und-pflege',
+    image: '/icon4.png',
   },
   notfalle: {
-    name: 'Notfälle',
     link: '/notfalle',
+    image: '/icon5.png',
   },
 };
 

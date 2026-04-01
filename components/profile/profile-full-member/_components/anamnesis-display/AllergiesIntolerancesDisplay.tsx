@@ -1,23 +1,27 @@
+'use client';
+
 import { AlertCircle } from 'lucide-react';
 import { AllergiesIntolerances } from '@/utils/types';
+import { useTranslations } from 'next-intl';
 
 type AllergiesIntolerancesDisplayProps = {
   allergiesIntolerances: AllergiesIntolerances;
 };
 
 export function AllergiesIntolerancesDisplay({ allergiesIntolerances }: AllergiesIntolerancesDisplayProps) {
+  const t = useTranslations('MemberProfileFull');
   if (allergiesIntolerances.noneKnown) {
     return null;
   }
 
   const allergies: string[] = [];
 
-  if (allergiesIntolerances.medications) allergies.push('Medications');
-  if (allergiesIntolerances.foods) allergies.push('Foods');
-  if (allergiesIntolerances.pollen) allergies.push('Pollen');
-  if (allergiesIntolerances.petHair) allergies.push('Pet Hair');
+  if (allergiesIntolerances.medications) allergies.push(t('anamnesisDisplay.allergies.medications'));
+  if (allergiesIntolerances.foods) allergies.push(t('anamnesisDisplay.allergies.foods'));
+  if (allergiesIntolerances.pollen) allergies.push(t('anamnesisDisplay.allergies.pollen'));
+  if (allergiesIntolerances.petHair) allergies.push(t('anamnesisDisplay.allergies.petHair'));
   if (allergiesIntolerances.other && allergiesIntolerances.other.trim() !== '') {
-    allergies.push(`Other: ${allergiesIntolerances.other}`);
+    allergies.push(`${t('anamnesisDisplay.otherPrefix')}: ${allergiesIntolerances.other}`);
   }
 
   if (allergies.length === 0 && !allergiesIntolerances.typeOfReaction) {
@@ -28,7 +32,7 @@ export function AllergiesIntolerancesDisplay({ allergiesIntolerances }: Allergie
     <div className="mb-4 p-3 rounded border border-primary">
       <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
         <AlertCircle className="text-primary" size={16} />
-        Allergies & Intolerances
+        {t('anamnesisDisplay.allergies.title')}
       </h4>
 
       {allergies.length > 0 && (
@@ -45,7 +49,7 @@ export function AllergiesIntolerancesDisplay({ allergiesIntolerances }: Allergie
       {allergiesIntolerances.typeOfReaction && allergiesIntolerances.typeOfReaction.trim() !== '' && (
         <div className="pt-2">
           <p className="text-xs text-gray-700">
-            <span className="font-semibold">Type of Reaction:</span> {allergiesIntolerances.typeOfReaction}
+            <span className="font-semibold">{t('anamnesisDisplay.allergies.typeOfReaction')}:</span> {allergiesIntolerances.typeOfReaction}
           </p>
         </div>
       )}

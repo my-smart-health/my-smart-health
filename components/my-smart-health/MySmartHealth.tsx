@@ -2,6 +2,7 @@ import prisma from '@/lib/db';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { ReactNode } from 'react';
+import { getTranslations } from 'next-intl/server';
 
 import { MySmartHealthInfo } from '@/utils/types';
 import { CACHE_STRATEGY } from '@/utils/constants';
@@ -44,6 +45,7 @@ function getLocations() {
 }
 
 export default async function MySmartHealth() {
+  const t = await getTranslations('MySmartHealth');
   const mySmartHealthInfo = (await getMySmartHealthInfo()) as MySmartHealthInfo | null;
   const locations = await getLocations();
   const session = await auth();
@@ -58,9 +60,9 @@ export default async function MySmartHealth() {
     Phone: <Phone className="inline-block mr-1" size={20} />,
     Facebook: <Facebook className="inline-block mr-1" size={30} />,
     Linkedin: <Linkedin className="inline-block mr-1" size={30} />,
-    X: <Image src={Xlogo} width={30} height={30} alt="X.com" className="w-6 mr-1" />,
+    X: <Image src={Xlogo} width={30} height={30} alt={t('xAlt')} className="w-6 mr-1" />,
     Youtube: <Youtube className="inline-block mr-1" size={30} />,
-    TikTok: <Image src={TikTokLogo} width={30} height={30} alt="TikTok" className="w-8 -ml-1" />,
+    TikTok: <Image src={TikTokLogo} width={30} height={30} alt={t('tiktokAlt')} className="w-8 -ml-1" />,
     Instagram: <Instagram className="inline-block mr-1" size={30} />,
   };
 
@@ -147,7 +149,7 @@ export default async function MySmartHealth() {
               {para.files && para.files.length > 0 && (
                 <div>
                   <Divider addClass="my-1" />
-                  <h4 className="font-semibold mb-1">Dateien:</h4>
+                  <h4 className="font-semibold mb-1">{t('filesHeading')}</h4>
                   <ul className="list-none">
                     <section className="grid grid-cols-1 gap-3">
                       {para.files.map((fileUrl, fileIndex) => {

@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Search as SearchIcon } from 'lucide-react';
 
 import ProfileShort from '@/components/profile/profile-short/ProfileShort';
@@ -28,6 +29,7 @@ export default function ProfileSearch({
   className,
   minQueryLength = DEFAULT_MIN_QUERY,
 }: ProfileSearchProps) {
+  const t = useTranslations('ProfileSearch');
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [loading, setLoading] = useState(false);
@@ -42,7 +44,7 @@ export default function ProfileSearch({
   const runSearch = async (value: string) => {
     const trimmed = value.trim();
     if (trimmed.length < minQueryLength) {
-      setError(`Bitte mindestens ${minQueryLength} Zeichen eingeben.`);
+      setError(t('errors.minChars', { count: minQueryLength }));
       setResults([]);
       setHasSearched(false);
       return;
@@ -56,14 +58,14 @@ export default function ProfileSearch({
         method: 'GET',
         cache: 'no-store',
       });
-      if (!response.ok) throw new Error('Search request failed');
+      if (!response.ok) throw new Error(t('errors.searchRequestFailed'));
       const payload = (await response.json()) as { users?: SearchResult[] };
       setResults(Array.isArray(payload.users) ? payload.users : []);
     } catch (err) {
       if (process.env.NODE_ENV === 'development') {
         console.error('ProfileSearch fetch error', err);
       }
-      setError('Die Suche konnte nicht ausgeführt werden. Bitte erneut versuchen.');
+      setError(t('errors.searchFailed'));
     } finally {
       setLoading(false);
       setHasSearched(true);
@@ -83,25 +85,25 @@ export default function ProfileSearch({
                 setQuery(event.target.value);
                 setError(null);
               }}
-              placeholder="Nach Namen, Text..."
+              placeholder={t('placeholder')}
               className="py-3 px-4 pl-14 text-base focus:outline-none w-full bg-white border-none"
-              aria-label="Profile search"
+              aria-label={t('ariaLabel')}
             />
           </div>
           <button
             type="submit"
             className="bg-primary hover:bg-primary/90 text-white font-semibold px-8 py-3 transition-colors duration-200 border-none rounded-none"
           >
-            Suchen
+            {t('search')}
           </button>
         </div>
       </form>
 
       <div className="min-h-[1.5rem] mt-2 text-sm">
-        {loading && <p className="text-gray-500"><Spinner label='Suche läuft...' /></p>}
+        {loading && <p className="text-gray-500"><Spinner label={t('loading')} /></p>}
         {!loading && error && <p className="text-error">{error}</p>}
         {!loading && !error && hasSearched && results.length === 0 && (
-          <p className="text-gray-500">Keine Profile gefunden.</p>
+          <p className="text-gray-500">{t('noResults')}</p>
         )}
       </div>
 

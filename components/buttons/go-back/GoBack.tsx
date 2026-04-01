@@ -2,8 +2,10 @@
 
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 export default function GoBack() {
+  const t = useTranslations('GoBack');
   const router = useRouter();
 
   const handleGoBack = () => {
@@ -19,7 +21,7 @@ export default function GoBack() {
       className="flex items-center text-primary btn btn-dash font-bold active:bg-primary active:text-white"
       type="button"
     >
-      <ArrowLeft /> <span className="pl-2">Zurück</span>
+      <ArrowLeft /> <span className="pl-2">{t('back')}</span>
     </button>
   );
 }

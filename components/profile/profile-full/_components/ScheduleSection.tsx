@@ -1,20 +1,12 @@
 'use client'
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 import { Schedule } from "@/utils/types";
 import Divider from "@/components/divider/Divider";
 
-const daysDe = { Monday: "Montag", Tuesday: "Dienstag", Wednesday: "Mittwoch", Thursday: "Donnerstag", Friday: "Freitag", Saturday: "Samstag", Sunday: "Sonntag", SundayIso: "Sonntag" } as const;
-
 const enWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-function formatRange(open: string, close: string) {
-  if (open === "00:00" && close === "00:00") return "24 Stunden geöffnet";
-  const start = open || "";
-  const end = close || "";
-  return `${start} - ${end}`;
-}
 
 function isScheduleOpen(schedule: Schedule, now: Date) {
   const currentDay = now.getDay(); // 0 (Sunday) - 6 (Saturday)
@@ -37,7 +29,13 @@ function isScheduleOpen(schedule: Schedule, now: Date) {
   return nowMinutes >= openMinutes && nowMinutes < closeMinutes;
 }
 
-function timeLeftCalc(schedules: Schedule[], now: Date) {
+function timeLeftCalc(
+  schedules: Schedule[],
+  now: Date,
+  open24hLabel: string,
+  closesInHoursMinutes: (hours: number, minutes: number) => string,
+  closesInMinutes: (minutes: number) => string,
+) {
   const currentDay = now.getDay();
   const todayEn = enWeek[currentDay];
 
@@ -46,7 +44,7 @@ function timeLeftCalc(schedules: Schedule[], now: Date) {
     if (!schedule.open || !schedule.close) continue;
 
     if (schedule.open === "00:00" && schedule.close === "00:00") {
-      return "24 Stunden geöffnet";
+      return open24hLabel;
     }
 
     const [openH, openM] = schedule.open.split(":").map(Number);
@@ -65,9 +63,9 @@ function timeLeftCalc(schedules: Schedule[], now: Date) {
       const minsLeft = minutesLeft % 60;
 
       if (hoursLeft > 0) {
-        return `schließt in ${hoursLeft}h ${minsLeft}min`;
+        return closesInHoursMinutes(hoursLeft, minsLeft);
       } else {
-        return `schließt in ${minsLeft}min`;
+        return closesInMinutes(minsLeft);
       }
     }
   }
@@ -76,8 +74,26 @@ function timeLeftCalc(schedules: Schedule[], now: Date) {
 }
 
 export default function ScheduleSection({ schedule, displayIsOpen = true }: { schedule: Schedule[]; displayIsOpen?: boolean }) {
+  const t = useTranslations("ProfileFull");
   const [currentTime, setCurrentTime] = useState<Date | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+
+  const daysLabel = {
+    Monday: t("schedule.days.monday"),
+    Tuesday: t("schedule.days.tuesday"),
+    Wednesday: t("schedule.days.wednesday"),
+    Thursday: t("schedule.days.thursday"),
+    Friday: t("schedule.days.friday"),
+    Saturday: t("schedule.days.saturday"),
+    Sunday: t("schedule.days.sunday"),
+  } as const;
+
+  const formatRange = (open: string, close: string) => {
+    if (open === "00:00" && close === "00:00") return t("schedule.open24h");
+    const start = open || "";
+    const end = close || "";
+    return `${start} - ${end}`;
+  };
 
   useEffect(() => {
     setCurrentTime(new Date());
@@ -99,18 +115,26 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
     return is247 || isScheduleOpen(sch, now);
   }) : false;
 
-  const timeLeft = isMounted && anyBlockOpen ? timeLeftCalc(schedule, now) : null;
+  const timeLeft = isMounted && anyBlockOpen
+    ? timeLeftCalc(
+      schedule,
+      now,
+      t("schedule.open24h"),
+      (hours, minutes) => t("schedule.closesInHoursMinutes", { hours, minutes }),
+      (minutes) => t("schedule.closesInMinutes", { minutes }),
+    )
+    : null;
 
   return (
     <>
       <div className="p-3">
         <h2 className="font-bold text-primary text-lg mb-3">
-          Öffnungszeiten
+          {t("schedule.title")}
           {displayIsOpen && (
             <>
               {" · "}
               <span className={anyBlockOpen ? "font-semibold text-green-600" : "font-semibold text-red-600"}>
-                {anyBlockOpen ? "Geöffnet" : "Geschlossen"}
+                {anyBlockOpen ? t("schedule.open") : t("schedule.closed")}
               </span>
               {anyBlockOpen && timeLeft && (
                 <span className="text-gray-500 text-sm font-normal"> · {timeLeft}</span>
@@ -129,22 +153,22 @@ export default function ScheduleSection({ schedule, displayIsOpen = true }: { sc
             if (blockIs247) {
               renderDays = (
                 <div className="flex justify-between items-center py-1.5 px-2 rounded bg-green-50">
-                  <span className="font-medium text-sm">{`${daysDe.Monday} - ${daysDe.SundayIso}`}</span>
-                  <span className="text-green-600 font-semibold text-sm">24h geöffnet</span>
+                  <span className="font-medium text-sm">{`${daysLabel.Monday} - ${daysLabel.Sunday}`}</span>
+                  <span className="text-green-600 font-semibold text-sm">{t("schedule.open24h")}</span>
                 </div>
               );
             } else {
               renderDays = activeDays.length === 0
-                ? <p className="text-gray-400 text-sm py-1.5">Keine Öffnungszeiten angegeben</p>
+                ? <p className="text-gray-400 text-sm py-1.5">{t("schedule.noHoursSpecified")}</p>
                 : activeDays.map(dayEn => {
-                  const dayLabel = dayEn === "Sunday" ? daysDe["SundayIso"] : (daysDe[dayEn as keyof typeof daysDe] || dayEn);
+                  const dayLabel = daysLabel[dayEn as keyof typeof daysLabel] || dayEn;
                   const isToday = dayEn === currentDayEn;
-                  let rightContent: React.ReactNode = <span className="text-gray-400 text-sm">Geschlossen</span>;
+                  let rightContent: React.ReactNode = <span className="text-gray-400 text-sm">{t("schedule.closed")}</span>;
 
                   if (!schBlock.open || !schBlock.close) {
-                    rightContent = <span className="text-gray-400 text-sm">Geschlossen</span>;
+                    rightContent = <span className="text-gray-400 text-sm">{t("schedule.closed")}</span>;
                   } else if (schBlock.open === "00:00" && schBlock.close === "00:00") {
-                    rightContent = <span className="text-green-600 font-semibold text-sm">24h geöffnet</span>;
+                    rightContent = <span className="text-green-600 font-semibold text-sm">{t("schedule.open24h")}</span>;
                   } else {
                     rightContent = <span className="text-sm">{formatRange(schBlock.open, schBlock.close)}</span>;
                   }

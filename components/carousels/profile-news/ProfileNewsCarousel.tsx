@@ -1,5 +1,6 @@
 'use client'
 import { Suspense } from "react";
+import { useTranslations } from "next-intl";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 
@@ -14,15 +15,16 @@ type ProfileNewsCarouselItemProps = {
 };
 
 export default function ProfileNewsCarousel({ carouselItems, disableOnInteraction = false }: ProfileNewsCarouselItemProps) {
+  const t = useTranslations('ProfileNewsCarousel');
 
   if (!carouselItems || carouselItems.length === 0) {
-    return <div>No profiles found</div>;
+    return <div>{t('noProfilesFound')}</div>;
   }
 
   const isBulletsNeeded = carouselItems.length > 4;
 
   return (
-    <Suspense fallback={<div className="text-center w-full">Loading...</div>}>
+    <Suspense fallback={<div className="text-center w-full">{t('loading')}</div>}>
       <div draggable={false}>
         <Swiper
           modules={[Pagination, Autoplay]}

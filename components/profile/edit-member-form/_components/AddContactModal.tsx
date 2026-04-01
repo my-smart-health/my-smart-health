@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { X, Search, UserPlus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type UserSearchResult = {
   id: string;
@@ -30,6 +31,7 @@ export function AddContactModal({
   existingContactIds,
   isAdmin,
 }: AddContactModalProps) {
+  const t = useTranslations('EditMemberForm.addContactModal');
   const [searchQuery, setSearchQuery] = useState('');
   const [users, setUsers] = useState<UserSearchResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,15 +45,15 @@ export function AddContactModal({
         await fetch('/api/users/all-doctors') :
         await fetch('/api/users/all-contactable-doctors');
 
-      if (!response.ok) throw new Error('Failed to fetch users');
+      if (!response.ok) throw new Error(t('errors.fetchUsers'));
       const data = await response.json();
       setUsers(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch users');
+      setError(err instanceof Error ? err.message : t('errors.fetchUsers'));
     } finally {
       setIsLoading(false);
     }
-  }, [isAdmin]);
+  }, [isAdmin, t]);
 
   useEffect(() => {
     if (isOpen) {
@@ -67,7 +69,7 @@ export function AddContactModal({
         body: JSON.stringify({ memberId, doctorId }),
       });
 
-      if (!response.ok) throw new Error('Failed to add contact');
+      if (!response.ok) throw new Error(t('errors.addContact'));
 
       const addedContact = users.find(u => u.id === doctorId);
       if (addedContact) {
@@ -75,7 +77,7 @@ export function AddContactModal({
       }
       onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add contact');
+      setError(err instanceof Error ? err.message : t('errors.addContact'));
     }
   };
 
@@ -100,7 +102,7 @@ export function AddContactModal({
     <dialog open className="modal modal-open">
       <div className="modal-box max-w-4xl w-full">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="font-bold text-lg">Add Contact</h3>
+          <h3 className="font-bold text-lg">{t('title')}</h3>
           <button
             type="button"
             onClick={onClose}
@@ -117,7 +119,7 @@ export function AddContactModal({
             </span>
             <input
               type="text"
-              placeholder="Search by name, email or specialty..."
+              placeholder={t('searchPlaceholder')}
               className="p-2 rounded border border-primary text-xs focus:outline-none focus:ring-2 focus:ring-primary w-full"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -138,7 +140,7 @@ export function AddContactModal({
             </div>
           ) : filteredUsers.length === 0 ? (
             <div className="text-center py-8 text-gray-500">
-              {searchQuery ? 'No users found' : 'No available users'}
+              {searchQuery ? t('noUsersFound') : t('noAvailableUsers')}
             </div>
           ) : (
             <div className="space-y-2">
@@ -154,14 +156,14 @@ export function AddContactModal({
                           {user.profileImages && user.profileImages[0] ? (
                             <Image
                               src={user.profileImages[0]}
-                              alt={user.name || 'Profile'}
+                              alt={user.name || t('profileAlt')}
                               width={64}
                               height={64}
                               className="object-cover"
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-400 text-xs">
-                              N/A
+                              {t('notAvailable')}
                             </div>
                           )}
                         </div>
@@ -169,7 +171,7 @@ export function AddContactModal({
 
                       <div className="flex-1 min-w-0">
                         <h4 className="font-bold truncate">
-                          {user.name || 'Unnamed'}
+                          {user.name || t('unnamed')}
                         </h4>
                         {user.fieldOfExpertise && user.fieldOfExpertise.length > 0 && (
                           <p className="text-sm text-gray-600 truncate">
@@ -197,7 +199,7 @@ export function AddContactModal({
                         className="btn btn-primary btn-sm gap-1"
                       >
                         <UserPlus className="w-4 h-4" />
-                        Add
+                        {t('addButton')}
                       </button>
                     </div>
                   </div>
@@ -209,7 +211,7 @@ export function AddContactModal({
 
         <div className="modal-action">
           <button type="button" onClick={onClose} className="btn">
-            Close
+            {t('closeButton')}
           </button>
         </div>
       </div>

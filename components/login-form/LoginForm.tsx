@@ -1,12 +1,14 @@
 'use client'
 
 import { signIn } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { FormEvent, useState } from "react";
 import StatusModal from "../modals/status-modal/StatusModal";
 import { ErrorState } from "@/utils/types";
 import Link from "next/link";
 
 export default function LoginForm() {
+  const t = useTranslations('LoginForm');
   const [error, setError] = useState<ErrorState>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -25,7 +27,7 @@ export default function LoginForm() {
       return response;
     }
 
-    setError({ type: "error", message: "Falsche E-Mail oder Passwort." });
+    setError({ type: "error", message: t('errors.invalidCredentials') });
   };
 
   return (
@@ -40,20 +42,21 @@ export default function LoginForm() {
         onSubmit={handleSubmit}
         className="flex flex-col gap-4 p-8 rounded-lg bg-white shadow-md max-w-[90%]"
       >
+        <label htmlFor="email">{t('emailLabel')}</label>
         <input
           type="email"
           name="email"
-          placeholder="Email"
+          placeholder={t('emailPlaceholder')}
           required
           className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">{t('passwordLabel')}</label>
         <div className="relative">
           <input
             id="password"
             name="password"
             autoComplete="on"
-            placeholder="Password"
+            placeholder={t('passwordPlaceholder')}
             type={showPassword ? "text" : "password"}
             required
             className="input validator p-3 pr-12 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
@@ -63,9 +66,9 @@ export default function LoginForm() {
             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 z-10 bg-transparent"
             onClick={() => setShowPassword((prev) => !prev)}
             tabIndex={-1}
-            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-label={showPassword ? t('hidePasswordAria') : t('showPasswordAria')}
           >
-            {showPassword ? "Hide" : "Show"}
+            {showPassword ? t('hide') : t('show')}
           </button>
         </div>
 
@@ -73,13 +76,13 @@ export default function LoginForm() {
           type="submit"
           className="p-2 rounded bg-primary text-white font-bold text-base hover:bg-primary/80 transition-colors"
         >
-          Login
+          {t('login')}
         </button>
         <Link
           href="/forgot-password"
           className="text-sm text-blue-600 hover:underline"
         >
-          Forgot Password?
+          {t('forgotPassword')}
         </Link>
       </form>
     </>

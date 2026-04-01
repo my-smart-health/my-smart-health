@@ -1,7 +1,10 @@
+'use client';
+
 import { FileText, ExternalLink } from 'lucide-react';
 import { MemberDocument } from '@/utils/types';
 import { getFileNameFromUrl } from '@/utils/common';
 import { getMemberFileDownloadUrl } from '@/utils/member-files-client';
+import { useTranslations } from 'next-intl';
 
 type DocumentsSectionProps = {
   memberId: string;
@@ -12,15 +15,16 @@ export function DocumentsSection({
   memberId,
   documents,
 }: DocumentsSectionProps) {
+  const t = useTranslations('MemberProfileFull');
   return (
     <div className="w-full">
-      <h3 className="text-lg font-semibold text-primary mb-3">Documents</h3>
+      <h3 className="text-lg font-semibold text-primary mb-3">{t('documents.title')}</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {documents.map((doc, index) => {
           const fileName = getFileNameFromUrl(doc.url);
           const description = doc.description && doc.description.trim() !== ''
             ? doc.description
-            : `Document ${index + 1}`;
+            : t('documents.documentFallback', { index: index + 1 });
 
           return (
             <a

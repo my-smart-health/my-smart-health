@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { MapPin } from "lucide-react";
 import { Location } from "@/utils/types";
+import { useTranslations } from "next-intl";
 
 import { ReservationLink, Schedule } from "@/utils/types";
 import ScheduleSection from "./ScheduleSection";
@@ -15,6 +16,7 @@ export default function ContactSection({
   locations: Location[];
   platformIcons: Record<string, React.ReactNode>;
 }) {
+  const t = useTranslations("ProfileFull");
 
   return (
     <>
@@ -44,7 +46,7 @@ export default function ContactSection({
                       rel="noreferrer noopener"
                       className="btn btn-primary btn-sm rounded-full px-5 text-white hover:bg-primary/75 transition-colors duration-200 whitespace-nowrap flex-shrink-0"
                     >
-                      <MapPin size={16} /> Route
+                      <MapPin size={16} /> {t("contact.route")}
                     </Link>
                   </div>
                 )}

@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import { getEditorExtensions } from '@/utils/tiptap-extensions';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 type RichTextEditorProps = {
   value: string;
@@ -14,6 +15,7 @@ type RichTextEditorProps = {
 export default function RichTextEditor({ value, onChange, placeholder }: RichTextEditorProps) {
   const [showColorPicker, setShowColorPicker] = useState(false);
   const isSettingFromParent = useRef(false);
+  const t = useTranslations('RichTextEditor');
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -98,14 +100,14 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         <ToolbarButton
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().undo()}
-          title="Undo (Ctrl+Z)"
+          title={t('toolbar.undo')}
         >
           ↶
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().redo().run()}
           disabled={!editor.can().redo()}
-          title="Redo (Ctrl+Y)"
+          title={t('toolbar.redo')}
         >
           ↷
         </ToolbarButton>
@@ -115,28 +117,28 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
           isActive={editor.isActive('heading', { level: 1 })}
-          title="Heading 1"
+          title={t('toolbar.heading1')}
         >
           H1
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           isActive={editor.isActive('heading', { level: 2 })}
-          title="Heading 2"
+          title={t('toolbar.heading2')}
         >
           H2
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           isActive={editor.isActive('heading', { level: 3 })}
-          title="Heading 3"
+          title={t('toolbar.heading3')}
         >
           H3
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().setParagraph().run()}
           isActive={editor.isActive('paragraph')}
-          title="Paragraph"
+          title={t('toolbar.paragraph')}
         >
           P
         </ToolbarButton>
@@ -146,28 +148,28 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
           isActive={editor.isActive('bold')}
-          title="Bold (Ctrl+B)"
+          title={t('toolbar.bold')}
         >
           <strong>B</strong>
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleItalic().run()}
           isActive={editor.isActive('italic')}
-          title="Italic (Ctrl+I)"
+          title={t('toolbar.italic')}
         >
           <em>I</em>
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleUnderline().run()}
           isActive={editor.isActive('underline')}
-          title="Underline (Ctrl+U)"
+          title={t('toolbar.underline')}
         >
           <u>U</u>
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleStrike().run()}
           isActive={editor.isActive('strike')}
-          title="Strikethrough"
+          title={t('toolbar.strikethrough')}
         >
           <s>S</s>
         </ToolbarButton>
@@ -182,7 +184,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
               setShowColorPicker(!showColorPicker);
             }}
             className="btn btn-xs btn-ghost"
-            title="Text Color"
+            title={t('toolbar.textColor')}
           >
             <span style={{ color: editor.getAttributes('textStyle').color || '#000000' }}>
               A
@@ -219,7 +221,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
                     setShowColorPicker(false);
                   }}
                 >
-                  Reset
+                  {t('toolbar.resetColor')}
                 </button>
               </div>
             </>
@@ -231,14 +233,14 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           isActive={editor.isActive('bulletList')}
-          title="Bullet List"
+          title={t('toolbar.bulletList')}
         >
           • List
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           isActive={editor.isActive('orderedList')}
-          title="Numbered List"
+          title={t('toolbar.numberedList')}
         >
           1. List
         </ToolbarButton>
@@ -248,13 +250,13 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           isActive={editor.isActive('blockquote')}
-          title="Blockquote"
+          title={t('toolbar.blockquote')}
         >
           ❝❞
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().setHardBreak().run()}
-          title="Line Break (Shift+Enter)"
+          title={t('toolbar.lineBreak')}
         >
           ↵
         </ToolbarButton>
@@ -264,21 +266,21 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         <ToolbarButton
           onClick={() => editor.chain().focus().setTextAlign('left').run()}
           isActive={editor.isActive({ textAlign: 'left' })}
-          title="Align Left"
+          title={t('toolbar.alignLeft')}
         >
           ⇤
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().setTextAlign('center').run()}
           isActive={editor.isActive({ textAlign: 'center' })}
-          title="Align Center"
+          title={t('toolbar.alignCenter')}
         >
           ⇔
         </ToolbarButton>
         <ToolbarButton
           onClick={() => editor.chain().focus().setTextAlign('right').run()}
           isActive={editor.isActive({ textAlign: 'right' })}
-          title="Align Right"
+          title={t('toolbar.alignRight')}
         >
           ⇥
         </ToolbarButton>

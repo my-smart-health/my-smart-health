@@ -2,6 +2,7 @@
 
 import { Session } from "next-auth";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { NewsCardType } from "@/utils/types";
 
@@ -14,6 +15,7 @@ type PostCardProps = {
 
 export default function PostCard({ posts, session }: PostCardProps) {
   const [postsState, setPostsState] = useState<NewsCardType[]>([]);
+  const t = useTranslations('PostCard');
 
   useEffect(() => {
     setPostsState(posts);
@@ -24,7 +26,7 @@ export default function PostCard({ posts, session }: PostCardProps) {
   };
 
   if (!postsState.length) {
-    return <div className="text-gray-400 text-center">No active posts</div>;
+    return <div className="text-gray-400 text-center">{t('noPosts')}</div>;
   }
 
   return (

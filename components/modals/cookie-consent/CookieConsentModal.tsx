@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Cookie } from "lucide-react";
+import { useTranslations } from "next-intl";
 import CookieActionButtons from "./CookieActionButtons";
 
 const STORAGE_KEY = "msh_cookie_consent_v2";
@@ -17,6 +18,7 @@ export interface CookiePreferences {
 }
 
 export default function CookieConsentModal() {
+  const t = useTranslations("CookieConsent");
   const [open, setOpen] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
   const [preferences, setPreferences] = useState<CookiePreferences>({
@@ -139,27 +141,27 @@ export default function CookieConsentModal() {
 
   const buttons = [
     {
-      label: "Ablehnen",
+      label: t("buttons.decline"),
       onClick: decline,
-      className: "btn btn-outline btn-error flex-1 min-w-[100px]",
-      ariaLabel: "Nur technisch notwendige Cookies",
+      className: "btn btn-outline btn-error hover:text-white flex-1 min-w-[100px] py-6",
+      ariaLabel: t("buttons.declineAria"),
     },
     {
-      label: "Später entscheiden",
+      label: t("buttons.decideLater"),
       onClick: close,
-      className: "btn btn-outline flex-1 min-w-[100px] py-6",
-      ariaLabel: "Meldung für 30 Tage ausblenden",
+      className: "btn btn-outline hover:border hover:border-black flex-1 min-w-[100px] py-6",
+      ariaLabel: t("buttons.decideLaterAria"),
     },
     {
-      label: "Auswahl speichern",
+      label: t("buttons.saveSelection"),
       onClick: saveCustomPreferences,
-      className: "btn btn-outline btn-success flex-1 min-w-[100px] py-6",
-      ariaLabel: "Ausgewählte Cookie-Kategorien speichern",
+      className: "btn btn-outline btn-success hover:text-white flex-1 min-w-[100px] py-6",
+      ariaLabel: t("buttons.saveSelectionAria"),
     },
     {
-      label: "Alle akzeptieren",
+      label: t("buttons.acceptAll"),
       onClick: accept,
-      className: "btn btn-primary flex-1 min-w-[100px] py-6",
+      className: "btn btn-primary hover:text-white flex-1 min-w-[100px] py-6",
       ref: acceptBtnRef,
     },
   ];
@@ -182,23 +184,16 @@ export default function CookieConsentModal() {
         <div className="flex items-center gap-2 mb-4">
           <Cookie className="text-primary w-6 h-6" />
           <h2 id="cookie-consent-title" className="font-semibold text-lg">
-            Cookies & Lokal Speicherung
+            {t("title")}
           </h2>
         </div>
 
         <div id="cookie-consent-desc" className="text-sm leading-relaxed space-y-3 mb-6">
-          <p>
-            Diese Website verwendet technisch notwendige Cookies und lokale Speicherung (LocalStorage),
-            um die Funktionalität der Website zu gewährleisten und Ihre Nutzererfahrung zu verbessern.
-          </p>
-          <p>
-            Zusätzlich können Drittanbieter-Inhalte wie <strong>YouTube-Videos (Google)</strong> und{" "}
-            <strong>Instagram-Reels (Meta)</strong> eingebettet werden, die eigene Cookies setzen und
-            Daten erfassen können.
-          </p>
+          <p>{t("description.line1")}</p>
+          <p>{t("description.line2")}</p>
 
           {showDetails && (
-            <div className="border border-gray-300 rounded-lg p-3 space-y-3 bg-gray-50">
+            <div className="border border-gray-300 rounded-lg p-3 space-y-3">
               <div className="flex items-start gap-2">
                 <input
                   type="checkbox"
@@ -208,9 +203,9 @@ export default function CookieConsentModal() {
                   className="checkbox checkbox-sm checkbox-primary mt-0.5"
                 />
                 <label htmlFor="cookie-technical" className="cursor-not-allowed">
-                  <div className="font-semibold text-gray-700">Technisch notwendig</div>
+                  <div className="font-semibold text-gray-700">{t("categories.technical.title")}</div>
                   <div className="text-xs text-gray-600">
-                    Erforderlich für grundlegende Funktionen (z.B. Session, Login). Kann nicht deaktiviert werden.
+                    {t("categories.technical.description")}
                   </div>
                 </label>
               </div>
@@ -224,9 +219,9 @@ export default function CookieConsentModal() {
                   className="checkbox checkbox-sm checkbox-primary mt-0.5"
                 />
                 <label htmlFor="cookie-analytics" className="cursor-pointer">
-                  <div className="font-semibold text-gray-700">Analyse & Statistik</div>
+                  <div className="font-semibold text-gray-700">{t("categories.analytics.title")}</div>
                   <div className="text-xs text-gray-600">
-                    Hilft uns, die Website-Nutzung zu verstehen und zu verbessern.
+                    {t("categories.analytics.description")}
                   </div>
                 </label>
               </div>
@@ -240,10 +235,9 @@ export default function CookieConsentModal() {
                   className="checkbox checkbox-sm checkbox-primary mt-0.5"
                 />
                 <label htmlFor="cookie-social" className="cursor-pointer">
-                  <div className="font-semibold text-gray-700">Social Media & Externe Inhalte</div>
+                  <div className="font-semibold text-gray-700">{t("categories.social.title")}</div>
                   <div className="text-xs text-gray-600">
-                    YouTube-Videos (Google), Instagram-Reels (Meta). Diese Dienste setzen eigene Cookies
-                    und können Ihr Nutzungsverhalten tracken.
+                    {t("categories.social.description")}
                   </div>
                 </label>
               </div>
@@ -254,15 +248,15 @@ export default function CookieConsentModal() {
             onClick={() => setShowDetails(!showDetails)}
             className="text-primary underline text-xs font-medium hover:opacity-80"
           >
-            {showDetails ? "Weniger anzeigen" : "Cookie-Kategorien anzeigen"}
+            {showDetails ? t("toggle.less") : t("toggle.more")}
           </button>
 
           <p className="text-xs pt-2 border-t border-gray-200 mt-3">
-            Weitere Informationen finden Sie in unserer{" "}
-            <a href="/datenschutz" className="link link-primary underline font-medium">Datenschutzerklärung</a>,{" "}
-            <a href="/agb" className="link link-primary underline font-medium">AGB</a>,{" "}
-            <a href="/impressum" className="link link-primary underline font-medium">Impressum</a> und{" "}
-            <a href="/kontakt" className="link link-primary underline font-medium">Kontakt</a>.
+            {t("links.prefix")} {" "}
+            <a href="/datenschutz" className="link link-primary underline font-medium">{t("links.privacy")}</a>,{" "}
+            <a href="/agb" className="link link-primary underline font-medium">{t("links.terms")}</a>,{" "}
+            <a href="/impressum" className="link link-primary underline font-medium">{t("links.legalNotice")}</a> {t("links.and")} {" "}
+            <a href="/kontakt" className="link link-primary underline font-medium">{t("links.contact")}</a>.
           </p>
         </div>
         <CookieActionButtons buttons={buttons} />

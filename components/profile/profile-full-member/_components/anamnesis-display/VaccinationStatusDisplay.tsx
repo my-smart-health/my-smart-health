@@ -1,20 +1,23 @@
+'use client';
+
 import { Syringe } from 'lucide-react';
 import { VaccinationStatus } from '@/utils/types';
+import { useTranslations } from 'next-intl';
 
 type VaccinationStatusDisplayProps = {
   vaccinationStatus: VaccinationStatus;
 };
 
-const vaccinationLabels: Record<keyof Omit<VaccinationStatus, 'other'>, string> = {
-  tetanus: 'Tetanus',
-  measles: 'Measles',
-  hepatitisB: 'Hepatitis B',
-  influenza: 'Influenza',
-  covid19: 'COVID-19',
-  unknown: 'Unknown',
-};
-
 export function VaccinationStatusDisplay({ vaccinationStatus }: VaccinationStatusDisplayProps) {
+  const t = useTranslations('MemberProfileFull');
+  const vaccinationLabels: Record<keyof Omit<VaccinationStatus, 'other'>, string> = {
+    tetanus: t('anamnesisDisplay.vaccination.tetanus'),
+    measles: t('anamnesisDisplay.vaccination.measles'),
+    hepatitisB: t('anamnesisDisplay.vaccination.hepatitisB'),
+    influenza: t('anamnesisDisplay.vaccination.influenza'),
+    covid19: t('anamnesisDisplay.vaccination.covid19'),
+    unknown: t('anamnesisDisplay.vaccination.unknown'),
+  };
   const checkedVaccinations = Object.entries(vaccinationStatus)
     .filter(([key, value]) => key !== 'other' && value === true)
     .map(([key]) => vaccinationLabels[key as keyof typeof vaccinationLabels]);
@@ -30,7 +33,7 @@ export function VaccinationStatusDisplay({ vaccinationStatus }: VaccinationStatu
     <div className="mb-4 p-3 rounded border border-primary">
       <h4 className="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
         <Syringe className="text-primary" size={16} />
-        Vaccination Status
+        {t('anamnesisDisplay.vaccination.title')}
       </h4>
       <ul className="grid grid-cols-1 gap-2">
         {checkedVaccinations.map((vaccination, index) => (
@@ -42,7 +45,7 @@ export function VaccinationStatusDisplay({ vaccinationStatus }: VaccinationStatu
         {hasOther && (
           <li className="flex items-center gap-2 border-t border-primary pt-1" >
             <span className="text-primary">✓</span>
-            Other: {vaccinationStatus.other}
+            {t('anamnesisDisplay.otherPrefix')}: {vaccinationStatus.other}
           </li>
         )}
       </ul>

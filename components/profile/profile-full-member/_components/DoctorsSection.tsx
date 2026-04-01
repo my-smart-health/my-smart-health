@@ -1,15 +1,19 @@
+'use client';
+
 import { Stethoscope, Mail, Phone } from 'lucide-react';
 import { MyDoctors } from '@/utils/types';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 type DoctorsSectionProps = {
   doctors: MyDoctors[];
 };
 
 export function DoctorsSection({ doctors }: DoctorsSectionProps) {
+  const t = useTranslations('MemberProfileFull');
   return (
     <div className="w-full">
-      <h3 className="text-lg font-semibold text-primary mb-3">My Doctors</h3>
+      <h3 className="text-lg font-semibold text-primary mb-3">{t('doctors.title')}</h3>
       <div className="flex flex-col gap-3">
         {doctors.map((doctor, index) => (
           <div key={index} className="p-4 border border-primary rounded-lg">
@@ -28,7 +32,7 @@ export function DoctorsSection({ doctors }: DoctorsSectionProps) {
                     <div className="mt-2 pt-2 border-t border-gray-300 space-y-2">
                       {doctor.phones && doctor.phones.filter(p => p?.trim()).length > 0 && (
                         <div>
-                          <p className="text-xs text-gray-500 uppercase mb-2">Phone</p>
+                          <p className="text-xs text-gray-500 uppercase mb-2">{t('doctors.phone')}</p>
                           <div className="flex flex-wrap gap-2">
                             {doctor.phones.filter(phone => phone?.trim()).map((phone, phoneIdx) => (
                               <Link
@@ -46,7 +50,7 @@ export function DoctorsSection({ doctors }: DoctorsSectionProps) {
 
                       {doctor.emails && doctor.emails.filter(e => e?.trim()).length > 0 && (
                         <div>
-                          <p className="text-xs text-gray-500 uppercase mb-2">Email</p>
+                          <p className="text-xs text-gray-500 uppercase mb-2">{t('doctors.email')}</p>
                           <div className="flex flex-wrap gap-2">
                             {doctor.emails.filter(email => email?.trim()).map((email, emailIdx) => (
                               <Link

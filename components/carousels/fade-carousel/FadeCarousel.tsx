@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Suspense, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Mousewheel, Navigation, Pagination, Scrollbar } from "swiper/modules";
@@ -11,10 +12,11 @@ import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
 import { PAGINATION_BULLET_QUANTITY } from "@/utils/constants";
 
 export default function FadeCarousel({ photos }: { photos: string[] }) {
+  const t = useTranslations('FadeCarousel');
   const [zoomedIdx, setZoomedIdx] = useState<number | null>(null);
 
   return (
-    <Suspense fallback={<div className="text-center skeleton min-h-[352px]">Loading...</div>}>
+    <Suspense fallback={<div className="text-center skeleton min-h-[352px]">{t('loading')}</div>}>
       <div className="w-full flex flex-col items-center">
         <div className="w-full max-w-[450px] md:max-w-[600px] aspect-video">
           <Swiper
@@ -89,7 +91,7 @@ export default function FadeCarousel({ photos }: { photos: string[] }) {
             <button
               className="absolute top-4 right-4 btn btn-circle place-content-around text-3xl font-bold z-10 cursor-pointer"
               onClick={() => setZoomedIdx(null)}
-              aria-label="Close"
+              aria-label={t('close')}
             >
               &times;
             </button>

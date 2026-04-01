@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SaveAll } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 import Divider from "@/components/divider/Divider";
 import { MemberProfileDashboardProps, HealthInsurances, MyDoctors, Anamneses, FamilyMember, FileWithDescription, TelMedicinePhoneNumber } from "@/utils/types";
@@ -61,6 +62,7 @@ export default function EditMemberForm({
   isAdmin?: boolean;
 }) {
   const router = useRouter();
+  const t = useTranslations('EditMemberForm');
   const statusModalRef = useRef<HTMLDialogElement>(null);
 
   const [name, setName] = useState(member?.name ?? "");
@@ -129,8 +131,8 @@ export default function EditMemberForm({
   }, [error, success]);
 
   const successCtaLabel = afterCloseHref.startsWith("/dashboard/member/")
-    ? "Zum Mitgliederprofil"
-    : "Zum Dashboard";
+    ? t('cta.toMemberProfile')
+    : t('cta.toDashboard');
 
   const handleSave = async () => {
     setError(null);
@@ -166,11 +168,11 @@ export default function EditMemberForm({
       const json = await res.json().catch(() => null);
 
       if (!res.ok) {
-        setError(json?.message || "Failed to update member profile");
+        setError(json?.message || t('errors.failedUpdateMemberProfile'));
         return;
       }
 
-      setSuccess("Member profile updated successfully");
+      setSuccess(t('messages.profileUpdatedSuccess'));
       router.refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
@@ -187,7 +189,7 @@ export default function EditMemberForm({
   if (!member) {
     return (
       <div className="w-full text-center p-8">
-        <p className="text-red-500">Member not found</p>
+        <p className="text-red-500">{t('errors.memberNotFound')}</p>
       </div>
     );
   }
@@ -225,7 +227,7 @@ export default function EditMemberForm({
                 ✕
               </button>
             </form>
-            <h3 className="font-bold text-lg">{success ? "Erfolg" : "Fehler"}</h3>
+            <h3 className="font-bold text-lg">{success ? t('modal.successTitle') : t('modal.errorTitle')}</h3>
             <p className="py-4 text-center">{success || error}</p>
             {success && (
               <div className="flex justify-center">
@@ -246,7 +248,7 @@ export default function EditMemberForm({
         <Divider addClass="mb-4" />
 
         <div className="tabs tabs-lift m-2 w-full mx-auto max-w-[96%]">
-          <input type="radio" name="member_tabs" className="tab" aria-label="Personal Info" defaultChecked />
+          <input type="radio" name="member_tabs" className="tab" aria-label={t('tabs.personalInfo')} defaultChecked />
           <div className="tab-content border-primary p-3 md:p-10">
             <BasicInfoSection
               name={name}
@@ -279,7 +281,7 @@ export default function EditMemberForm({
 
           {isAdmin && (
             <>
-              <input type="radio" name="member_tabs" className="tab" aria-label="Status / Telemedizin" />
+              <input type="radio" name="member_tabs" className="tab" aria-label={t('tabs.statusTelemedicine')} />
               <div className="tab-content border-primary p-3 md:p-10">
                 <StatusSection
                   isActive={isActive}
@@ -298,7 +300,7 @@ export default function EditMemberForm({
             </>
           )}
 
-          <input type="radio" name="member_tabs" className="tab" aria-label="Personal" />
+          <input type="radio" name="member_tabs" className="tab" aria-label={t('tabs.personal')} />
           <div className="tab-content border-primary p-3 md:p-10">
             <PersonalInfoSection
               birthday={birthday}
@@ -311,7 +313,7 @@ export default function EditMemberForm({
 
           </div>
 
-          <input type="radio" name="member_tabs" className="tab" aria-label="Anamneses / Medication Plan" />
+          <input type="radio" name="member_tabs" className="tab" aria-label={t('tabs.anamnesesMedicationPlan')} />
           <div className="tab-content border-primary p-3 md:p-10">
 
             <AnamnesesSection
@@ -321,7 +323,7 @@ export default function EditMemberForm({
             />
           </div>
 
-          <input type="radio" name="member_tabs" className="tab" aria-label="Blood Type" />
+          <input type="radio" name="member_tabs" className="tab" aria-label={t('tabs.bloodType')} />
           <div className="tab-content border-primary p-3 md:p-10">
             <BloodTypeSection
               memberId={member.id}
@@ -332,7 +334,7 @@ export default function EditMemberForm({
             />
           </div>
 
-          <input type="radio" name="member_tabs" className="tab" aria-label="Doctors" />
+          <input type="radio" name="member_tabs" className="tab" aria-label={t('tabs.doctors')} />
           <div className="tab-content border-primary p-3 md:p-10">
             <DoctorsSection
               doctors={doctors}
@@ -340,7 +342,7 @@ export default function EditMemberForm({
             />
           </div>
 
-          <input type="radio" name="member_tabs" className="tab" aria-label="Documents" />
+          <input type="radio" name="member_tabs" className="tab" aria-label={t('tabs.documents')} />
           <div className="tab-content border-primary p-3 md:p-10">
             <DocumentsSection
               memberId={member.id}
@@ -349,7 +351,7 @@ export default function EditMemberForm({
             />
           </div>
 
-          <input type="radio" name="member_tabs" className="tab" aria-label="My Smart Health Contacts" />
+          <input type="radio" name="member_tabs" className="tab" aria-label={t('tabs.contacts')} />
           <div className="tab-content border-primary p-3 md:p-10">
             <ContactsSection
               memberId={member.id}
@@ -366,7 +368,7 @@ export default function EditMemberForm({
             className="btn btn-success m-4 text-white rounded-lg font-semibold hover:bg-primary-dark transition-colors duration-300 ease-in-out"
             disabled={isSaving}
           >
-            <SaveAll /> {isSaving ? "Saving..." : "Save Changes"}
+            <SaveAll /> {isSaving ? t('save.saving') : t('save.saveChanges')}
           </button>
         </div>
       </form>

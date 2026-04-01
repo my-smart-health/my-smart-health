@@ -1,12 +1,18 @@
 import {
   Anamneses,
   ErrorState,
+  Locale,
   Social,
   MedicationPlanTable,
   HospitalStays,
   FileWithDescription,
   TelMedicinePhoneNumber,
 } from './types';
+
+export function resolveLocale(request: Request | { headers: Headers }): Locale {
+  const requested = request.headers.get('accept-language')?.toLowerCase() ?? '';
+  return requested.startsWith('de') ? 'de' : 'en';
+}
 
 export function parseSocials(socials: string[]): Social[] {
   return socials

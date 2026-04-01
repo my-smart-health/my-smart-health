@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { CACHE_STRATEGY } from "@/utils/constants";
+import { getTranslations } from "next-intl/server";
 
 async function getMyContacts(userId: string) {
   const contacts = await prisma.memberDoctor.findMany({
@@ -40,6 +41,7 @@ async function getMyContacts(userId: string) {
 }
 
 export default async function MyContactsPage() {
+  const t = await getTranslations("MyContactsPage");
   const session = await auth();
 
   if (!session || !session.user) {
@@ -55,9 +57,9 @@ export default async function MyContactsPage() {
   return (
     <div className="flex flex-col gap-6 p-4 w-full max-w-6xl mx-auto">
       <div className="flex flex-col gap-2">
-        <h1 className="text-4xl font-extrabold text-primary">My Contacts</h1>
+        <h1 className="text-4xl font-extrabold text-primary">{t('title')}</h1>
         <p className="text-gray-600">
-          Members who have added you to their contacts list
+          {t('subtitle')}
         </p>
       </div>
 
@@ -78,11 +80,10 @@ export default async function MyContactsPage() {
             />
           </svg>
           <h3 className="text-xl font-semibold text-gray-700 mb-2">
-            No Contacts Yet
+            {t('empty.title')}
           </h3>
           <p className="text-gray-500 text-center max-w-md">
-            You don&apos;t have any member contacts yet. Members can add you to their
-            contacts list to share their health information with you.
+            {t('empty.description')}
           </p>
         </div>
       ) : (
@@ -97,10 +98,10 @@ export default async function MyContactsPage() {
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex-1 min-w-0">
                     <h2 className="card-title text-lg truncate">
-                      {contact.name || "Unnamed Member"}
+                      {contact.name || t('unnamedMember')}
                     </h2>
                     {!contact.isActive && (
-                      <span className="badge badge-error badge-sm">Inactive</span>
+                      <span className="badge badge-error badge-sm">{t('inactive')}</span>
                     )}
                   </div>
                   <svg
@@ -121,12 +122,12 @@ export default async function MyContactsPage() {
                 <p className="text-sm text-gray-500 truncate">{contact.email}</p>
                 {contact.birthday && (
                   <p className="text-xs text-gray-400">
-                    Born: {new Date(contact.birthday).toLocaleDateString()}
+                    {t('bornLabel')}: {new Date(contact.birthday).toLocaleDateString()}
                   </p>
                 )}
                 <div className="card-actions justify-end mt-2">
                   <span className="text-xs text-primary font-semibold">
-                    View Profile →
+                    {t('viewProfile')}
                   </span>
                 </div>
               </div>
@@ -153,7 +154,7 @@ export default async function MyContactsPage() {
               />
             </svg>
           </div>
-          <div className="stat-title">Total Contacts</div>
+          <div className="stat-title">{t('totalContacts')}</div>
           <div className="stat-value text-primary">{contacts.length}</div>
 
         </div>

@@ -18,7 +18,29 @@ type ContactTemplateProps = {
   email: string;
   phoneNumber: string;
   message: string;
+  locale?: 'de' | 'en';
 };
+
+const copy = {
+  de: {
+    heading: 'Neue Kontaktformular-Nachricht',
+    lastName: 'Name',
+    firstName: 'Vorname',
+    email: 'E-Mail',
+    phone: 'Telefon',
+    messageHeading: 'Nachricht',
+    footer: 'Diese Nachricht wurde ueber das Kontaktformular auf My Smart Health gesendet.',
+  },
+  en: {
+    heading: 'New contact form message',
+    lastName: 'Last name',
+    firstName: 'First name',
+    email: 'Email',
+    phone: 'Phone',
+    messageHeading: 'Message',
+    footer: 'This message was sent via the My Smart Health contact form.',
+  },
+} as const;
 
 export function ContactTemplate({
   name,
@@ -26,18 +48,21 @@ export function ContactTemplate({
   email,
   phoneNumber,
   message,
+  locale = 'de',
 }: ContactTemplateProps) {
+  const t = copy[locale];
+
   return (
     <Html>
       <Head />
       <Body style={styles.body}>
         <Container style={styles.container}>
-          <Heading style={styles.heading}>Neue Kontaktformular-Nachricht</Heading>
+          <Heading style={styles.heading}>{t.heading}</Heading>
 
           <Section style={styles.infoBox}>
             <Row style={styles.row}>
               <Column style={styles.labelColumn}>
-                <Text style={styles.label}>Name</Text>
+                <Text style={styles.label}>{t.lastName}</Text>
               </Column>
               <Column style={styles.valueColumn}>
                 <Text style={styles.value}>{name}</Text>
@@ -46,7 +71,7 @@ export function ContactTemplate({
 
             <Row style={styles.row}>
               <Column style={styles.labelColumn}>
-                <Text style={styles.label}>Vorname</Text>
+                <Text style={styles.label}>{t.firstName}</Text>
               </Column>
               <Column style={styles.valueColumn}>
                 <Text style={styles.value}>{surname}</Text>
@@ -55,7 +80,7 @@ export function ContactTemplate({
 
             <Row style={styles.row}>
               <Column style={styles.labelColumn}>
-                <Text style={styles.label}>Email</Text>
+                <Text style={styles.label}>{t.email}</Text>
               </Column>
               <Column style={styles.valueColumn}>
                 <Link href={`mailto:${email}`} style={styles.link}>
@@ -66,7 +91,7 @@ export function ContactTemplate({
 
             <Row style={styles.row}>
               <Column style={styles.labelColumn}>
-                <Text style={styles.label}>Telefon</Text>
+                <Text style={styles.label}>{t.phone}</Text>
               </Column>
               <Column style={styles.valueColumn}>
                 <Text style={styles.value}>{phoneNumber}</Text>
@@ -76,7 +101,7 @@ export function ContactTemplate({
 
           <Section style={styles.messageSection}>
             <Heading as="h3" style={styles.subHeading}>
-              Nachricht
+              {t.messageHeading}
             </Heading>
             <Text style={styles.messageText}>{message}</Text>
           </Section>
@@ -84,7 +109,7 @@ export function ContactTemplate({
           <Hr style={styles.hr} />
 
           <Text style={styles.footer}>
-            Diese Nachricht wurde über das Kontaktformular auf My Smart Health gesendet.
+            {t.footer}
           </Text>
         </Container>
       </Body>

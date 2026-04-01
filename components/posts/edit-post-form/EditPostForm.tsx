@@ -11,6 +11,7 @@ import { ArrowUpRight, XIcon, AtSign, Facebook, Globe, Instagram, Linkedin, Yout
 import Spinner from "@/components/common/Spinner";
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
+import { useTranslations } from 'next-intl';
 
 import { MAX_FILES_PER_POST, MAX_IMAGE_SIZE_MB, MAX_IMAGE_SIZE_BYTES } from "@/utils/constants";
 import { isInstagramLink, isYoutubeLink } from "@/utils/common";
@@ -42,6 +43,7 @@ type EditPostFormProps = {
 export default function EditPostForm({ session, post }: EditPostFormProps) {
   const router = useRouter();
   const { startUpload, updateProgress, finishUpload } = useUploadProgress();
+  const t = useTranslations('PostForm');
   useEffect(() => {
     if (!session) {
       router.replace('/login');
@@ -73,9 +75,9 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
     Website: <Globe className="inline-block mr-1" size={30} />,
     Facebook: <Facebook className="inline-block mr-1" size={30} />,
     Linkedin: <Linkedin className="inline-block mr-1" size={30} />,
-    X: <Image src={Xlogo} width={30} height={30} alt="X.com" className="w-6 mr-1" />,
+    X: <Image src={Xlogo} width={30} height={30} alt={t('platform.x')} className="w-6 mr-1" />,
     Youtube: <Youtube className="inline-block mr-1" size={30} />,
-    TikTok: <Image src={TikTokLogo} width={30} height={30} alt="TikTok" className="w-8 -ml-1" />,
+    TikTok: <Image src={TikTokLogo} width={30} height={30} alt={t('platform.tiktok')} className="w-8 -ml-1" />,
     Instagram: <Instagram className="inline-block mr-1" size={30} />,
   };
 
@@ -144,7 +146,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
     const onPopState = () => {
       if (hasSavedRef.current) return;
       if (!hasPendingNew() && !photosChanged()) return;
-      const ok = window.confirm('You have unsaved changes. Newly uploaded images will be deleted if you leave. Continue?');
+      const ok = window.confirm(t('confirm.leaveWithChanges'));
       if (!ok) {
         history.go(1);
         return;
@@ -163,7 +165,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       if (!hasPendingNew() && !photosChanged()) return;
       evt.preventDefault();
       evt.stopPropagation();
-      const ok = window.confirm('You have unsaved changes. Newly uploaded images will be deleted if you leave. Continue?');
+      const ok = window.confirm(t('confirm.leaveWithChanges'));
       if (!ok) return;
       await Promise.resolve(cleanupNewUploads(false));
       if (anchor.origin === window.location.origin) {
@@ -196,12 +198,12 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
     const mediaUrl = formData.get(`media`)?.toString().trim();
 
     if (!mediaUrl || mediaUrl.length === 0) {
-      setStatus({ message: 'Media URL cannot be empty', type: 'error' });
+      setStatus({ message: t('errors.mediaUrlEmpty'), type: 'error' });
       return;
     }
 
     if (!isYoutubeLink(mediaUrl) && !isInstagramLink(mediaUrl)) {
-      setStatus({ message: "Media URL must be a valid YouTube or Instagram link", type: 'error' });
+      setStatus({ message: t('errors.mediaUrlInvalid'), type: 'error' });
       return;
     }
 
@@ -221,7 +223,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
 
       if (file.size > MAX_IMAGE_SIZE_BYTES) {
         setStatus({
-          message: `File "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`,
+          message: t('errors.fileTooLarge', { name: file.name, size: MAX_IMAGE_SIZE_MB }),
           type: 'error'
         });
         return undefined;
@@ -230,7 +232,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       setIsDisabled(true);
       const userId = session?.user.id;
       if (!userId) {
-        setStatus({ message: 'Not authenticated', type: 'error' });
+        setStatus({ message: t('errors.notAuthenticated'), type: 'error' });
         setIsDisabled(false);
         return undefined;
       }
@@ -243,7 +245,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       );
 
       if (!response.ok) {
-        setStatus({ message: 'Failed to upload image', type: 'error' });
+        setStatus({ message: t('errors.uploadFailed'), type: 'error' });
         setIsDisabled(false);
         return undefined;
       }
@@ -254,7 +256,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       }
       return result.url;
     } catch (error) {
-      let message = 'Error uploading files';
+      let message = t('errors.errorUploadingFiles');
       if (error instanceof Error) {
         message = error.message;
       }
@@ -306,7 +308,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
 
       const stripped = content.replace(/<[^>]*>/g, "").trim();
       if (!stripped) {
-        setStatus({ message: "Content cannot be empty", type: 'error' });
+        setStatus({ message: t('errors.contentEmpty'), type: 'error' });
         setIsDisabled(false);
         return;
       }
@@ -329,7 +331,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       }
 
       if (!isImageFirst) {
-        setStatus({ message: "First media must be an image", type: 'error' });
+        setStatus({ message: t('errors.firstMediaMustBeImage'), type: 'error' });
         setIsDisabled(false);
         return;
       }
@@ -353,7 +355,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       });
 
       if (!result.ok) {
-        setStatus({ message: 'Failed to update post', type: 'error' });
+        setStatus({ message: t('errors.updateFailed'), type: 'error' });
         setIsDisabled(false);
         return;
       }
@@ -377,11 +379,11 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       uploadedNewRef.current = [];
       hasSavedRef.current = true;
 
-      setStatus({ message: "Post updated successfully", type: 'success' });
+      setStatus({ message: t('success.updated'), type: 'success' });
       setIsDisabled(true);
       router.push(`/news/${post.id}`);
     } catch (error) {
-      let message = 'Error uploading files';
+      let message = t('errors.errorUploadingFiles');
       if (error instanceof Error) {
         message = error.message;
       }
@@ -412,12 +414,12 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         throw new Error('Failed to delete post');
       }
 
-      setStatus({ message: 'Post deleted successfully', type: 'success' });
+      setStatus({ message: t('success.deleted'), type: 'success' });
       const next = session?.user.id ? `/profile/${session.user.id}/news` : '/login';
       router.push(next);
 
     } catch (error) {
-      let message = 'Error deleting post';
+      let message = t('errors.errorDeletingPost');
       if (error instanceof Error) {
         message = error.message;
         console.error(message);
@@ -459,7 +461,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                 type="button"
               >✕</button>
             </form>
-            <h3 className="font-bold text-lg">{status.type === 'success' ? 'Erfolg' : 'Fehler'}</h3>
+            <h3 className="font-bold text-lg">{status.type === 'success' ? t('editModal.successTitle') : t('editModal.errorTitle')}</h3>
             <p className="py-4 text-center">{status.message}</p>
           </div>
         </dialog>
@@ -467,7 +469,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
 
       <dialog id="delete_modal" className="modal modal-bottom sm:modal-middle fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 z-50">
         <div className="modal-box">
-          <p className="py-4">Are you sure you want to delete this post? This action cannot be undone.</p>
+          <p className="py-4">{t('deleteModal.message')}</p>
           <div className="modal-action">
             <form method="dialog" className="space-x-4">
               <button
@@ -475,7 +477,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                 className="btn btn-outline btn-error hover:text-white hover:bg-error/80 transition-colors p-2 rounded font-bold text-base"
                 onClick={(e) => { handleDeletePost(e, post.id) }}
               >
-                Delete
+                {t('deleteModal.delete')}
               </button>
               <button
                 type="button"
@@ -488,7 +490,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                   }
                 }}
               >
-                Close
+                {t('deleteModal.close')}
               </button>
             </form>
           </div>
@@ -497,10 +499,10 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
 
       {isDefaultLogo && <div className="flex flex-col items-center">
         <p className="text-yellow-500 bg-secondary/10 border-2 border-primary rounded-2xl p-2 text-center break-all">
-          No image file was selected, default logo will be used
+          {t('noImageDefault')}
         </p>
         <p className="text-sm text-gray-500 italic">
-          You can change it later in the edit post section
+          {t('noImageDefaultHint')}
         </p>
       </div>}
       <form
@@ -508,7 +510,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
         className={`flex flex-col gap-4 ${isDisabled ? 'opacity-50 pointer-events-none' : ''}`}>
         <fieldset className="fieldset text-lg">
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-            Title
+            {t('titleLabel')}
           </label>
           <textarea
             id="title"
@@ -522,21 +524,21 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
             style={{ overflow: "hidden" }}
           />
           <div className="label pt-1 text-xs flex flex-row justify-end">
-            You can pull the right corner to resize it <ArrowUpRight />
+            {t('titleResize')} <ArrowUpRight />
           </div>
         </fieldset>
 
         <Divider />
 
         <fieldset className="fieldset">
-          <span className="block text-sm font-medium text-gray-700 mb-1">Content</span>
-          <RichTextEditor value={content} onChange={setContent} placeholder="Write your post..." />
+          <span className="block text-sm font-medium text-gray-700 mb-1">{t('contentLabel')}</span>
+          <RichTextEditor value={content} onChange={setContent} placeholder={t('contentPlaceholder')} />
         </fieldset>
 
         <Divider />
 
         <fieldset className="fieldset">
-          <legend className="fieldset-legend">Post Tags</legend>
+          <legend className="fieldset-legend">{t('tagsLegend')}</legend>
           {tags.length > 0 && (
             <div className="flex flex-col flex-wrap gap-2 mb-2">
               {tags.map((tag, index) => (
@@ -544,7 +546,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                   <input
                     type="text"
                     name={`tag-${index}`}
-                    placeholder="Tag"
+                    placeholder={t('tagPlaceholder')}
                     value={tags[index]}
                     onChange={(e) => handleTagsChange(e, index)}
                     className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
@@ -561,20 +563,20 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
               ))}
             </div>
           )}
-          <button type="button" onClick={handleAddTag} className="btn btn-primary mt-2">Add Tag</button>
+          <button type="button" onClick={handleAddTag} className="btn btn-primary mt-2">{t('addTag')}</button>
         </fieldset>
 
         <Divider />
 
         <fieldset className="fieldset">
-          <legend className="fieldset-legend">Social Links</legend>
+          <legend className="fieldset-legend">{t('socialLinksLegend')}</legend>
           {socialLinks.length > 0 && (
             <div className="flex flex-col gap-4 mb-4">
               {socialLinks.map((link, index) => (
                 <div key={index} className="flex flex-row flex-wrap gap-4 items-center">
                   <input
                     type="text"
-                    placeholder="URL"
+                    placeholder={t('urlPlaceholder')}
                     value={link.url}
                     onChange={(e) => handleSocialLinkChange(index, 'url', e.target.value)}
                     className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary flex-1 min-w-[200px]"
@@ -589,15 +591,15 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                         value={link.platform}
                         onChange={(e) => handleSocialLinkChange(index, 'platform', e.target.value)}
                       >
-                        <option disabled value="">Pick a platform</option>
-                        <option value="Email">Email</option>
-                        <option value="Website">Website</option>
-                        <option value="Facebook">Facebook</option>
-                        <option value="Linkedin">Linkedin</option>
-                        <option value="X">X.com</option>
-                        <option value="Youtube">Youtube</option>
-                        <option value="TikTok">TikTok</option>
-                        <option value="Instagram">Instagram</option>
+                        <option disabled value="">{t('pickPlatform')}</option>
+                        <option value="Email">{t('platform.email')}</option>
+                        <option value="Website">{t('platform.website')}</option>
+                        <option value="Facebook">{t('platform.facebook')}</option>
+                        <option value="Linkedin">{t('platform.linkedin')}</option>
+                        <option value="X">{t('platform.x')}</option>
+                        <option value="Youtube">{t('platform.youtube')}</option>
+                        <option value="TikTok">{t('platform.tiktok')}</option>
+                        <option value="Instagram">{t('platform.instagram')}</option>
                       </select>
                     </div>
                     <button
@@ -605,7 +607,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                       onClick={(e) => handleRemoveSocialLink(e, index)}
                       className="btn btn-outline text-red-500 self-end"
                     >
-                      Remove
+                      {t('removeLink')}
                     </button>
                   </div>
                 </div>
@@ -613,7 +615,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
             </div>
           )}
           <button type="button" onClick={handleAddSocialLink} className="btn btn-outline btn-primary px-3 py-1 w-full rounded">
-            <Globe className="inline-block mr-1" size={30} />  Add Social Link
+            <Globe className="inline-block mr-1" size={30} />  {t('addSocialLink')}
           </button>
         </fieldset>
 
@@ -621,13 +623,13 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
 
         <div className={blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''}>
           <fieldset>
-            <legend className="fieldset-legend text-base">Add Media URL</legend>
+            <legend className="fieldset-legend text-base">{t('addMediaLegend')}</legend>
             <div className="flex flex-col gap-4 text-base  w-full">
-              <label htmlFor={`media`} className="">Media URL must be a valid URL from YouTube or Instagram</label>
+              <label htmlFor={`media`} className="">{t('mediaUrlLabel')}</label>
               <input
                 type="text"
                 name={`media`}
-                placeholder="https://"
+                placeholder={t('mediaUrlPlaceholder')}
                 className="p-3 rounded border border-primary focus:outline-none focus:ring-2 focus:ring-primary w-full"
               />
               <button
@@ -637,7 +639,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                 }}
                 className="btn w-full btn-primary mt-2"
               >
-                <Youtube className="inline-block mr-1" size={30} /> Upload Media URL
+                <Youtube className="inline-block mr-1" size={30} /> {t('uploadMediaUrl')}
               </button>
             </div>
           </fieldset>
@@ -645,9 +647,9 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
           <Divider />
 
           <fieldset className="fieldset mb-5 w-full">
-            <legend className="fieldset-legend text-base">Select Image Files</legend>
+            <legend className="fieldset-legend text-base">{t('selectImageFileLegend')}</legend>
             <div className="flex flex-wrap gap-4 w-full">
-              <label htmlFor="image" className="">The image file must be a valid image format</label>
+              <label htmlFor="image" className="">{t('imageFileLabel')}</label>
               <input
                 type="file"
                 ref={inputFileRef}
@@ -660,7 +662,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                 onChange={async e => {
                   if (e.target.files && e.target.files.length + blobResult.length > MAX_FILES_PER_POST) {
                     window.scrollTo({ top: 0, behavior: "smooth" });
-                    setStatus({ message: `You can select up to ${MAX_FILES_PER_POST} files only.`, type: 'error' });
+                    setStatus({ message: t('errors.tooManyFiles', { max: MAX_FILES_PER_POST }), type: 'error' });
                     e.target.value = "";
                   } else {
                     inputFileRef.current = e.target;
@@ -669,7 +671,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                       for (const file of Array.from(e.target.files)) {
                         if (file.size > MAX_IMAGE_SIZE_BYTES) {
                           window.scrollTo({ top: 0, behavior: "smooth" });
-                          setStatus({ message: `File "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`, type: 'error' });
+                          setStatus({ message: t('errors.fileTooLarge', { name: file.name, size: MAX_IMAGE_SIZE_MB }), type: 'error' });
                           e.target.value = "";
                           setUploadingImages(false);
                           return;
@@ -696,7 +698,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                   }
                 }} />
               {uploadingImages && (
-                <div className="mt-2"><Spinner size="sm" label="Uploading images..." /></div>
+                <div className="mt-2"><Spinner size="sm" label={t('uploadingImages')} /></div>
               )}
             </div>
           </fieldset>
@@ -713,7 +715,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
                 ? <InstagramEmbed embedHtml={image} width={200} height={200} />
                 : <Image
                   src={image}
-                  alt={`Photo ${idx + 1}`}
+                  alt={t('photoAlt', { number: idx + 1 })}
                   width={200}
                   height={200}
                   style={{ objectFit: "contain" }}
@@ -747,8 +749,8 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
 
         {blobResult && blobResult.length > 0 && (
           <div className="space-y-2">
-            <div className="text-sm">You can add up to {MAX_FILES_PER_POST} media files (images, Instagram videos, or YouTube videos)</div>
-            <p className="text-wrap text-warning">NB: Please ensure that the first media is image.</p>
+            <div className="text-sm">{t('mediaInfo', { max: MAX_FILES_PER_POST })}</div>
+            <p className="text-wrap text-warning">{t('firstMediaWarning')}</p>
           </div>
         )}
 
@@ -762,13 +764,13 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
             }
           }}
         >
-          Delete Post
+          {t('buttons.deletePost')}
         </button>
 
         <button
           type="submit"
           className={`btn btn-outline btn-success p-2 rounded font-bold text-base hover:text-white hover:bg-success/80 transition-colors ${isImageFirst ? '' : 'opacity-50 pointer-events-none'}`}>
-          Update Post
+          {t('buttons.updatePost')}
         </button>
 
         <button
@@ -777,7 +779,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
             const hasPendingNew = uploadedNewRef.current.length > 0;
             const photosChanged = JSON.stringify(baselinePhotosRef.current) !== JSON.stringify(blobResult);
             if (hasPendingNew || photosChanged) {
-              const ok = window.confirm('Discard changes? Newly uploaded images will be deleted.');
+              const ok = window.confirm(t('confirm.discardChanges'));
               if (!ok) return;
               const deletions = uploadedNewRef.current
                 .filter((u) => !isYoutubeLink(u) && !isInstagramLink(u))
@@ -788,7 +790,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
             router.push(`/news/${post.id}`);
           }}
           className="btn btn-outline btn-primary p-2 rounded font-bold text-base hover:bg-primary/80 transition-colors">
-          Cancel
+          {t('buttons.cancel')}
         </button>
       </form >
     </>

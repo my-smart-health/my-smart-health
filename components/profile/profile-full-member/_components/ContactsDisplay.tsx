@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Mail, Phone } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type ContactDoctor = {
   id: string;
@@ -18,17 +19,18 @@ type ContactsDisplayProps = {
 };
 
 export function ContactsDisplay({ contacts }: ContactsDisplayProps) {
+  const t = useTranslations('MemberProfileFull');
   if (!contacts || contacts.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
-        No contacts available
+        {t('contacts.noneAvailable')}
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <h3 className="text-primary font-bold text-lg">My Contacts</h3>
+      <h3 className="text-primary font-bold text-lg">{t('contacts.title')}</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {contacts.map((contact) => (
           <div
@@ -42,14 +44,14 @@ export function ContactsDisplay({ contacts }: ContactsDisplayProps) {
                     {contact.profileImages && contact.profileImages[0] ? (
                       <Image
                         src={contact.profileImages[0]}
-                        alt={contact.name || 'Profile'}
+                        alt={contact.name || t('contacts.profileAlt')}
                         width={80}
                         height={80}
                         className="object-cover"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-400">
-                        N/A
+                        {t('contacts.notAvailable')}
                       </div>
                     )}
                   </div>
@@ -57,7 +59,7 @@ export function ContactsDisplay({ contacts }: ContactsDisplayProps) {
 
                 <div className="flex-1 min-w-0">
                   <h3 className="font-bold text-lg truncate">
-                    {contact.name || 'Unnamed'}
+                    {contact.name || t('contacts.unnamed')}
                   </h3>
 
                   {contact.fieldOfExpertise && contact.fieldOfExpertise.length > 0 && (
@@ -98,7 +100,7 @@ export function ContactsDisplay({ contacts }: ContactsDisplayProps) {
                   className="btn btn-primary btn-sm"
                   target="_blank"
                 >
-                  View Profile
+                  {t('contacts.viewProfile')}
                 </Link>
               </div>
             </div>

@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { getTranslations } from "next-intl/server";
 import ChangeEmailForm from "@/components/forms/change-email/ChangeEmailForm";
 import prisma from "@/lib/db";
 import { redirect } from "next/navigation";
@@ -14,6 +15,7 @@ async function getUserEmail(id: string) {
 }
 
 export default async function ChangeEmailPage() {
+  const t = await getTranslations('ChangeEmailPage');
   const session = await auth();
 
   if (!session) {
@@ -28,7 +30,7 @@ export default async function ChangeEmailPage() {
 
   return (
     <div>
-      <h1 className="text-4xl font-extrabold text-primary mb-6">Change Email</h1>
+      <h1 className="text-4xl font-extrabold text-primary mb-6">{t('title')}</h1>
       <ChangeEmailForm currentEmail={currentUser.email} />
     </div>
   );

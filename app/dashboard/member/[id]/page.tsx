@@ -5,6 +5,7 @@ import { CACHE_STRATEGY } from "@/utils/constants";
 
 import ProfileFullMember from "@/components/profile/profile-full-member/ProfileFullMember";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import {
   HealthInsurances,
   MyDoctors,
@@ -85,6 +86,7 @@ export default async function MemberProfilePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const t = await getTranslations("MemberProfilePage");
   const session = await auth();
   const { id } = await params;
 
@@ -112,12 +114,12 @@ export default async function MemberProfilePage({
   return (
     <>
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-4xl font-extrabold text-primary mb-2">Member Profile</h1>
+        <h1 className="text-4xl font-extrabold text-primary mb-2">{t('title')}</h1>
         <Link
           href={`/dashboard/edit-member/${id}`}
           className="btn btn-wide btn-warning self-center rounded-xl underline"
         >
-          Edit Member Profile
+          {t('editButton')}
         </Link>
       </div>
       <ProfileFullMember member={member} isAdmin={isAdmin} />

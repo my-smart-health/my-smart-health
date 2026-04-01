@@ -4,6 +4,7 @@ import { MemberProfileDashboardProps } from '@/utils/types';
 import Image from 'next/image';
 import { Info } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import ProfileFullMember from '../profile/profile-full-member/ProfileFullMember';
 
 type ContactDoctor = {
@@ -20,6 +21,7 @@ type MemberDashboardProps = {
 };
 
 export default function MemberDashboard({ member }: MemberDashboardProps) {
+  const t = useTranslations('MemberDashboard');
   const [contacts, setContacts] = useState<ContactDoctor[]>([]);
 
   useEffect(() => {
@@ -74,7 +76,7 @@ export default function MemberDashboard({ member }: MemberDashboardProps) {
             style={{ objectFit: 'contain', width: 'auto', height: 'auto' }}
             className="mx-auto"
           />
-          My Profile
+          {t('myProfile')}
         </div>
         <span className="absolute top-3 right-3">
           <Info className="text-primary" size={40} />

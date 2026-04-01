@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import Link from "next/link";
 import Image from "next/image";
 import ParagraphContent from "@/components/common/ParagraphContent";
@@ -20,6 +21,7 @@ type ProfileShortProps = {
 };
 
 export default function ProfileShort({ id, name, bio, image, membership, ratingStars, ratingLink }: ProfileShortProps) {
+  const t = useTranslations('ProfileShort');
   const hasImage = Boolean(image);
 
   return (
@@ -64,12 +66,12 @@ export default function ProfileShort({ id, name, bio, image, membership, ratingS
           >
             <Image
               src="/android-chrome-192x192.png"
-              alt="Profil Icon"
+              alt={t('profileIconAlt')}
               width={27}
               height={27}
               className="inline-block h-9 w-9"
             />
-            <span> zum Profil</span>
+            <span> {t('toProfile')}</span>
           </Link>
         </div>
       </div>

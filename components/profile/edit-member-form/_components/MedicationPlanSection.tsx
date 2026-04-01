@@ -1,4 +1,5 @@
 import { MedicationPlanTable, FileWithDescription } from '@/utils/types';
+import { useTranslations } from 'next-intl';
 
 type MedicationPlanSectionProps = {
   medicationPlan: MedicationPlanTable[];
@@ -9,6 +10,7 @@ export function MedicationPlanSection({
   medicationPlan,
   setMedicationPlan,
 }: MedicationPlanSectionProps) {
+  const t = useTranslations('EditMemberForm.medicationPlan');
   const handleAdd = () => {
     setMedicationPlan([
       ...medicationPlan,
@@ -59,55 +61,55 @@ export function MedicationPlanSection({
     <section>
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <span className="font-semibold text-gray-700">Medication Plan</span>
+          <span className="font-semibold text-gray-700">{t('title')}</span>
           <button
             type="button"
             onClick={handleAdd}
             className="btn btn-sm btn-primary text-white"
           >
-            + Add Medication
+            {t('addMedication')}
           </button>
         </div>
         <div className="space-y-4">
           {medicationPlan.length === 0 ? (
-            <p className="text-gray-500 italic text-sm">No medications added yet</p>
+            <p className="text-gray-500 italic text-sm">{t('empty')}</p>
           ) : (
             medicationPlan.map((med, medIndex) => (
               <div key={medIndex} className="p-4 border border-gray-300 rounded-lg space-y-3">
                 <div className="flex justify-between items-center">
-                  <h4 className="font-semibold text-sm text-gray-600">Medication #{medIndex + 1}</h4>
+                  <h4 className="font-semibold text-sm text-gray-600">{t('medicationItem', { index: medIndex + 1 })}</h4>
                   <button
                     type="button"
                     onClick={() => handleRemove(medIndex)}
                     className="btn btn-xs btn-error text-white"
                   >
-                    Remove
+                    {t('remove')}
                   </button>
                 </div>
                 <input
                   type="text"
                   value={med.medication}
                   onChange={e => handleChange(medIndex, 'medication', e.target.value)}
-                  placeholder="Medication Name"
+                  placeholder={t('medicationNamePlaceholder')}
                   className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
                 />
                 <input
                   type="date"
                   value={med.sinceWhen}
                   onChange={e => handleChange(medIndex, 'sinceWhen', e.target.value)}
-                  placeholder="Since when"
+                  placeholder={t('sinceWhenPlaceholder')}
                   className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
                   style={{ colorScheme: 'light' }}
                 />
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-600">File URLs</span>
+                    <span className="text-sm font-medium text-gray-600">{t('fileUrls')}</span>
                     <button
                       type="button"
                       onClick={() => handleAddFileUrl(medIndex)}
                       className="btn btn-xs btn-primary text-white"
                     >
-                      + Add URL
+                      {t('addUrl')}
                     </button>
                   </div>
                   {(med.fileUrl ?? []).map((file, fileIndex) => (
@@ -117,7 +119,7 @@ export function MedicationPlanSection({
                           type="url"
                           value={file.url}
                           onChange={e => handleFileUrlChange(medIndex, fileIndex, 'url', e.target.value)}
-                          placeholder="Enter file URL"
+                          placeholder={t('fileUrlPlaceholder')}
                           className="p-2 rounded border border-gray-300 text-xs focus:outline-none focus:ring-1 focus:ring-primary flex-1"
                         />
                         <button
@@ -132,7 +134,7 @@ export function MedicationPlanSection({
                         type="text"
                         value={file.description || ''}
                         onChange={e => handleFileUrlChange(medIndex, fileIndex, 'description', e.target.value)}
-                        placeholder="Description (optional)"
+                        placeholder={t('descriptionPlaceholder')}
                         className="p-2 rounded border border-gray-300 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
                       />
                     </div>

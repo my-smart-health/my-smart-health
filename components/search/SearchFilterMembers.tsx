@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import UserTableMembers from "../user/UserTableMembers";
 
 
@@ -17,6 +18,7 @@ type SearchFilterProps = {
 };
 
 export default function SearchFilterMembers({ members }: SearchFilterProps) {
+  const t = useTranslations('SearchFilterMembers');
   const [query, setQuery] = useState("");
 
   const filteredMembers = useMemo(() => {
@@ -33,7 +35,7 @@ export default function SearchFilterMembers({ members }: SearchFilterProps) {
     <>
       <input
         type="search"
-        placeholder="Search members by name or email..."
+        placeholder={t('placeholder')}
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         className="p-3 rounded border border-gray-300 text-base focus:outline-none focus:ring-2 focus:ring-blue-400 w-[90%] max-w-md mb-4"

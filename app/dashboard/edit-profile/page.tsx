@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { CACHE_STRATEGY } from "@/utils/constants";
+import { getTranslations } from "next-intl/server";
 
 import EditProfileForm from "@/components/profile/edit-profile-form/EditProfileForm";
 import { FieldOfExpertise, Membership, ReservationLink, Schedule } from "@/utils/types";
@@ -36,6 +37,7 @@ async function getData(sessionId: string) {
 }
 
 export default async function EditProfile() {
+  const t = await getTranslations("EditProfilePage");
   const session: Session | null = await auth();
 
   if (!session) {
@@ -112,7 +114,7 @@ export default async function EditProfile() {
 
   return (
     <>
-      <h1 className="text-4xl font-extrabold text-primary mb-2">Edit Profile</h1>
+      <h1 className="text-4xl font-extrabold text-primary mb-2">{t('title')}</h1>
       <EditProfileForm user={safeUser} />
     </>
   );

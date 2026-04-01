@@ -1,13 +1,19 @@
 {
   "HomePage": {
-    "search": "Suche",
-    "categories": {
-      "theLeadingDoctors": "The Leading Doctors",
-      "mySmartHealthTermineKurzfristig": "My Smart Health Termine Kurzfristig",
-      "smartHealth": "Lebensqualität & Prävention",
-      "medizinUndPflege": "Medizin & Pflege",
-      "notfalle": "Notfälle"
-    }
+    "errorPost": "Fehler beim Abrufen der News-Beiträge:",
+    "errorCube": "Fehler beim Abrufen des Cubes:",
+    "errorCubePosts": "Fehler beim Abrufen der Cube-Beiträge:",
+    "errorData": "Fehler beim Abrufen der Daten:",
+    "errorMemberProfile": "Fehler beim Abrufen des Mitgliederprofils:"
+  },
+  "Categories": {
+    "news": "News für meine Gesundheit",
+    "theLeadingDoctors": "The Leading Doctors",
+    "mySmartHealthTermineKurzfristig": "My Smart Health Termine Kurzfristig",
+    "smartHealth": "Lebensqualität & Prävention",
+    "medizinUndPflege": "Medizin & Pflege",
+    "notfalle": "Notfälle",
+    "search": "Suche"
   },
   "Footer": {
     "legalNotice": "Impressum",
@@ -15,5 +21,1753 @@
     "termsAndConditions": "AGB",
     "contact": "Kontakt",
     "cookieSettings": "Cookie-Einstellungen"
+  },
+  "AGBPage": {
+    "title": "Nutzungsvertrag - Allgemeine Geschäftsbedingungen (AGB) über die Plattform mysmart.health",
+
+    "section1": {
+      "title": "§ 1 Vertragsgegenstand",
+      "text1": "Der Anbieter „Future Health GmbH, Wildenbruchstr. 13, 40545 Düsseldorf - Amtsgericht Düsseldorf, HRB / 72666 vertreten durch den Geschäftsführer Dr. Ferdinand Jeute, Email jeute@future-health.de“ betreibt die digitale Plattform mysmart.health, die Unternehmen und Organisationen eine Präsentation sowie digitale Gesundheitsleistungen zur Verfügung stellt.",
+      "text2": "Gegenstand dieses Vertrages ist die zeitlich beschränkte Integration und Nutzung der Plattform durch den Partner für folgende Zwecke:",
+      "list": [
+        "Digitale Darstellung und Marketingpräsenz des Partnerunternehmens auf der Plattform,",
+        "Zugriff auf digitale Inhalte und Gesundheitsangebote von mysmart.health,",
+        "Teilnahme an mysmart.health-Initiativen und digitalen Events."
+      ]
+    },
+
+    "section2": {
+      "title": "§ 2 Vertragsbeginn und Laufzeit",
+      "text": [
+        "Der Vertrag tritt mit der Registrierung des Teilnehmers durch beide Parteien in Kraft.",
+        "Er wird auf unbestimmte Zeit geschlossen und ist monatlich kündbar.",
+        "Die Kündigung muss schriftlich oder in Textform (E-Mail genügt) bis spätestens 14 Tage vor Monatsende erfolgen.",
+        "Zur Einrichtung eines Administrator-Accounts werden folgende Angaben benötigt:"
+      ],
+      "list": [
+        "Name des Lizenznehmers",
+        "Anschrift des Lizenznehmers",
+        "E-Mail-Adresse",
+        "Einrichtung eines Zahlungsmittels"
+      ],
+      "text2": [
+        "Durch Registrierung gelangt der Administrator des Teilnehmers in den Administrationsbereich von Future Health bzw. eigener Future Health Seiten. Die Daten des Administrator-Accounts können über die Account-Einstellung jederzeit geändert werden.",
+        "Bei darauffolgenden Anmeldevorgängen ist die Eingabe der hinterlegten E-Mail-Adresse sowie des Passwortes erforderlich. Ein Ändern des Passwortes ist ausschließlich in den Account-Einstellungen möglich.",
+        "Der Inhaber bzw. Administrator des Teilnehmers ist für die sichere Aufbewahrung der Account-Zugangsdaten verantwortlich. Durch einen etwaigen Verlust entstehenden Schaden kommt der Lizenzgeber nicht auf."
+      ]
+    },
+
+    "section3": {
+      "title": "§ 3 Vergütung",
+      "text": [
+        "Die Nutzung der Plattform ist ab Vertragsbeginn kostenfrei.",
+        "Zusätzliche Angebote werden vergütet nach der jeweils gültigen Preisliste bzw. dem individuell vereinbarten monatlichen Nutzungsentgelt.",
+        "Zahlungen sind jährlich im Voraus ohne Abzug fällig.",
+        "Der Anbieter ist berechtigt, Preise mit einer Frist von 30 Tagen zum Monatsende anzupassen."
+      ]
+    },
+
+    "section4": {
+      "title": "§ 4 Leistungen des Anbieters",
+      "text": "Der Anbieter stellt dem Partner Zugang zur Plattform mysmart.health bereit und ermöglicht die Nutzung der angebotenen Funktionen. Der Anbieter sorgt für eine technische Verfügbarkeit der Plattform von mindestens 95 % im Monatsmittel. Inhaltliche und technische Änderungen, die der Weiterentwicklung der Plattform dienen, bleiben vorbehalten."
+    },
+
+    "section5": {
+      "title": "§ 5 Pflichten des Partners",
+      "text": "Der Partner verpflichtet sich, die Plattform ausschließlich im Rahmen des vertraglichen Zwecks zu nutzen. Der Partner ist für die von ihm veröffentlichten Inhalte selbst verantwortlich. Der Partner darf keine rechtswidrigen oder diskriminierenden Inhalte veröffentlichen. Marken, Logos und Materialien von mysmart.health dürfen nur im Rahmen dieser Kooperation genutzt werden."
+    },
+
+    "section6": {
+      "title": "§ 6 Nutzungsrechte",
+      "text": "Der Anbieter räumt dem Partner ein einfaches, nicht übertragbares Nutzungsrecht an der Plattform für die Vertragsdauer ein. Eine Weitergabe von Zugängen oder Inhalten an Dritte ist untersagt. Alle Rechte an der Plattform, den Inhalten und Designs verbleiben beim Anbieter."
+    },
+
+    "section7": {
+      "title": "§ 7 Haftung",
+      "text": "Der Anbieter haftet nur bei Vorsatz und grober Fahrlässigkeit. Für Datenverluste oder indirekte Schäden wird keine Haftung übernommen. Die Haftung nach dem Produkthaftungsgesetz bleibt unberührt."
+    },
+
+    "section8": {
+      "title": "§ 8 Datenschutz",
+      "text": "Beide Parteien verpflichten sich zur Einhaltung der Datenschutzbestimmungen gemäß DSGVO. Personenbezogene Daten werden ausschließlich zum Zwecke der Vertragserfüllung verarbeitet. Näheres regelt eine gesonderte Datenschutzvereinbarung (AV-Vertrag), sofern erforderlich."
+    },
+
+    "section9": {
+      "title": "§ 9 Vertraulichkeit",
+      "text": "Beide Parteien verpflichten sich, alle im Rahmen dieses Vertrages erlangten vertraulichen Informationen streng vertraulich zu behandeln und Dritten nicht zugänglich zu machen."
+    },
+
+    "section10": {
+      "title": "§ 10 Schlussbestimmungen",
+      "text": [
+        "Änderungen und Ergänzungen dieses Vertrages bedürfen der Schriftform.",
+        "Sollten einzelne Bestimmungen unwirksam sein, bleibt die Wirksamkeit der übrigen Bestimmungen unberührt.",
+        "Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts.",
+        "Gerichtsstand ist Düsseldorf."
+      ]
+    },
+
+    "footer": {
+      "company": "Future Health GmbH · Wildenbruchstr. 13 · 40545 Düsseldorf · www.mysmart.health · info@mysmart.health",
+      "date": "Stand:"
+    }
+  },
+  "LegalNotice": {
+    "title": "Impressum",
+
+    "company": "Future Health GmbH",
+
+    "address": {
+      "street": "Wildenbruchstr. 13",
+      "city": "40545 Düsseldorf",
+      "country": "Deutschland",
+      "email": "info@future-health.de"
+    },
+
+    "ceo": {
+      "title": "GF",
+      "name": "Dr. Ferdinand Jeute (CEO)"
+    },
+
+    "register": {
+      "title": "Handelsregister",
+      "value": "Amtsgericht Düsseldorf, HRB / 72666"
+    },
+
+    "vat": {
+      "title": "USt-IdNr. (VAT-ID):",
+      "value": "DE 295913675"
+    },
+
+    "responsible": {
+      "title": "Inhaltlich verantwortlich nach § 18 Abs. 2 MStV:",
+      "name": "Dr. Ferdinand Jeute",
+      "address": "Wildenbruchstr. 13, 40545 Düsseldorf, Deutschland"
+    },
+
+    "eu": {
+      "text1": "Die EU-Kommission stellt eine Plattform für die Online-Streitbeilegung zur Verfügung. Sie finden sie unter",
+      "text2": "Future Health ist weder bereit noch verpflichtet, an einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen."
+    }
+  },
+  "PrivacyPolicy": {
+    "title": "Datenschutzerklärung",
+
+    "intro": "Wir freuen uns über Ihr Interesse an unserem Unternehmen und unserer Website. Der Schutz Ihrer personenbezogenen Daten ist uns sehr wichtig. Nachfolgend informieren wir Sie über die Verarbeitung personenbezogener Daten im Rahmen der Nutzung unserer Website.",
+
+    "section1": {
+      "title": "1. Verantwortlicher",
+      "company": "Future Health GmbH",
+      "address": "Wildenbruchstr. 13, 40545 Düsseldorf, Deutschland",
+      "phone": "Tel.: +49 (0) 211 9241 1744",
+      "email": "info@future-health.de",
+      "website": "https://www.future-health.de/"
+    },
+
+    "section2": {
+      "title": "2. Datenschutzbeauftragter",
+      "name": "Dr. Ferdinand Jeute",
+      "email": "info@future-health.de"
+    },
+
+    "section3": {
+      "title": "3. Rechtsgrundlagen",
+      "text": "Wir verarbeiten personenbezogene Daten ausschließlich im Einklang mit den Vorgaben der Datenschutz-Grundverordnung (DSGVO), dem Bundesdatenschutzgesetz (BDSG) sowie dem Telekommunikation-Telemedien-Datenschutz-Gesetz (TTDSG)."
+    },
+
+    "section4": {
+      "title": "4. Verarbeitung personenbezogener Daten beim Besuch der Website",
+      "intro": "Beim Aufrufen unserer Website werden automatisch folgende Daten durch den Browser an unseren Server übermittelt und in Logfiles gespeichert:",
+      "list": [
+        "IP-Adresse",
+        "Datum und Uhrzeit des Zugriffs",
+        "aufgerufene Seite/Datei",
+        "verwendeter Browser und Betriebssystem",
+        "Referrer-URL (zuvor besuchte Seite)"
+      ],
+      "text": "Zwecke: Sicherstellung der Funktionsfähigkeit, Systemsicherheit, Fehleranalyse. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse). Die Daten werden nach spätestens 14 Tagen gelöscht."
+    },
+
+    "section5": {
+      "title": "5. Cookies und Consent-Management",
+      "text1": "Unsere Website verwendet Cookies und ähnliche Technologien.",
+      "text2": "Essenzielle Cookies: notwendig für den Betrieb der Website (z. B. Warenkorb, Login).",
+      "text3": "Statistik-, Marketing- oder Komfort-Cookies werden nur mit Ihrer ausdrücklichen Einwilligung gesetzt (§ 25 Abs. 1 TTDSG i. V. m. Art. 6 Abs. 1 lit. a DSGVO).",
+      "text4": "Beim ersten Besuch unserer Website zeigen wir Ihnen ein Consent-Banner, über das Sie auswählen können, welche Cookies Sie erlauben möchten. Diese Auswahl können Sie jederzeit in den Cookie-Einstellungen ändern."
+    },
+
+    "section6": {
+      "title": "6. Eingesetzte Dienste und Tools",
+      "list": [
+        "a) Hosting: [Hosting-Provider]",
+        "b) Webanalyse: [Google Analytics / Matomo]",
+        "c) Newsletter: [Mailchimp / CleverReach]",
+        "d) Social Media Plugins: [Facebook, LinkedIn, Instagram]",
+        "e) Videos / Karten: [YouTube, Google Maps]"
+      ]
+    },
+
+    "section7": {
+      "title": "7. Kontaktaufnahme",
+      "text1": "Wenn Sie uns per Kontaktformular oder E-Mail kontaktieren, werden Ihre Angaben (z. B. Name, E-Mail-Adresse, Anfrageinhalt) zur Bearbeitung gespeichert.",
+      "text2": "Grundlage für die Datenverarbeitung ist Art. 6 Abs. 1 lit. a DSGVO (Einwilligung) für freiwillig aktivierte Cookies sowie Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse) für essenzielle Cookies.",
+      "text3": "Ihre Einwilligung können Sie jederzeit in den Cookie-Einstellungen widerrufen."
+    },
+
+    "section8": {
+      "title": "8. Speicherdauer",
+      "text": "Wir speichern personenbezogene Daten nur so lange, wie es zur Erfüllung des jeweiligen Zwecks erforderlich ist oder wie es gesetzliche Aufbewahrungsfristen vorsehen."
+    },
+
+    "section9": {
+      "title": "9. Rechte der betroffenen Personen",
+      "text": "Sie haben jederzeit folgende Rechte: Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch, Widerruf, Beschwerde bei der Aufsichtsbehörde."
+    },
+
+    "section10": {
+      "title": "10. Automatisierte Entscheidungsfindung",
+      "text": "Eine automatisierte Entscheidungsfindung oder ein Profiling findet nicht statt."
+    },
+
+    "section11": {
+      "title": "11. Aktualität dieser Datenschutzerklärung",
+      "text": "Stand: September 2025"
+    }
+  },
+  "Contact": {
+    "title": "Kontakt",
+
+    "intro": "Falls Sie Fragen haben, senden Sie uns gern eine E-Mail. Füllen Sie dazu das Formular aus und klicken Sie auf Senden. Alle Felder sind Pflichtfelder.",
+
+    "form": {
+      "name": "Name *",
+      "surname": "Vorname *",
+      "email": "Email *",
+      "phone": "Telefon *",
+      "message": "Nachricht *",
+
+      "submit": "Senden",
+      "sending": "Wird gesendet..."
+    },
+
+    "messages": {
+      "success": "Ihre Nachricht wurde erfolgreich gesendet!",
+      "error": "Ein Fehler ist aufgetreten.",
+      "networkError": "Netzwerkfehler. Bitte versuchen Sie es später erneut."
+    }
+  },
+  "CookieConsent": {
+    "title": "Cookies & Lokale Speicherung",
+    "description": {
+      "line1": "Diese Website verwendet technisch notwendige Cookies und lokale Speicherung (LocalStorage), um die Funktionalität der Website zu gewährleisten und Ihre Nutzererfahrung zu verbessern.",
+      "line2": "Zusätzlich können Drittanbieter-Inhalte wie YouTube-Videos (Google) und Instagram-Reels (Meta) eingebettet werden, die eigene Cookies setzen und Daten erfassen können."
+    },
+    "categories": {
+      "technical": {
+        "title": "Technisch notwendig",
+        "description": "Erforderlich für grundlegende Funktionen (z.B. Session, Login). Kann nicht deaktiviert werden."
+      },
+      "analytics": {
+        "title": "Analyse & Statistik",
+        "description": "Hilft uns, die Website-Nutzung zu verstehen und zu verbessern."
+      },
+      "social": {
+        "title": "Social Media & Externe Inhalte",
+        "description": "YouTube-Videos (Google), Instagram-Reels (Meta). Diese Dienste setzen eigene Cookies und können Ihr Nutzungsverhalten tracken."
+      }
+    },
+    "toggle": {
+      "more": "Cookie-Kategorien anzeigen",
+      "less": "Weniger anzeigen"
+    },
+    "buttons": {
+      "decline": "Ablehnen",
+      "declineAria": "Nur technisch notwendige Cookies",
+      "decideLater": "Später entscheiden",
+      "decideLaterAria": "Meldung für 30 Tage ausblenden",
+      "saveSelection": "Auswahl speichern",
+      "saveSelectionAria": "Ausgewählte Cookie-Kategorien speichern",
+      "acceptAll": "Alle akzeptieren"
+    },
+    "links": {
+      "prefix": "Weitere Informationen finden Sie in unserer",
+      "privacy": "Datenschutzerklärung",
+      "terms": "AGB",
+      "legalNotice": "Impressum",
+      "and": "und",
+      "contact": "Kontakt"
+    }
+  },
+  "ForgotPassword": {
+    "title": "Passwort vergessen?",
+    "subtitle": "Nur der Administrator kann Ihr Passwort zurücksetzen",
+
+    "notice": {
+      "title": "Hinweis:",
+      "text": "Aus Sicherheitsgründen können nur Administratoren Passwörter zurücksetzen. Geben Sie Ihre E-Mail-Adresse ein, um eine Anfrage zu senden. Der Administrator wird sich mit Ihnen in Verbindung setzen."
+    },
+
+    "form": {
+      "emailLabel": "E-Mail-Adresse",
+      "emailPlaceholder": "abc@email.de",
+      "submit": "Passwort-Anfrage senden",
+      "submitting": "Sende Anfrage..."
+    },
+
+    "links": {
+      "backToLogin": "Zurück zur Anmeldung",
+      "contactText": "Sie können auch direkt",
+      "contactLink": "über die Kontaktseite",
+      "contactEnd": "eine Nachricht hinterlassen."
+    },
+
+    "validation": {
+      "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+    },
+
+    "messages": {
+      "success": "Anfrage erfolgreich gesendet. Der Administrator wird sich mit Ihnen in Verbindung setzen.",
+      "notFound": "Die E-Mail-Adresse existiert nicht in unserem System.",
+      "conflict": "Es gibt bereits eine ausstehende Anfrage für diese E-Mail-Adresse.",
+      "error": "Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Administrator direkt oder hinterlassen Sie eine Nachricht auf der Kontaktseite."
+    },
+
+    "modal": {
+      "successTitle": "Erfolgreich!",
+      "notFoundTitle": "E-Mail nicht gefunden",
+      "errorTitle": "Fehler",
+      "confirm": "OK",
+      "close": "Schließen"
+    }
+  },
+  "ProfilePage": {
+    "userNotFound": "Benutzer nicht gefunden",
+    "editProfile": "Profil bearbeiten"
+  },
+  "ProfileNewsPage": {
+    "unknownAuthor": "Unbekannter Author",
+    "newsSuffix": "News",
+    "fetchError": "Fehler beim Abrufen der News-Artikel"
+  },
+  "MemberProfileFull": {
+    "profileNotFound": "Mitgliederprofil nicht gefunden",
+    "defaultTitle": "Mitgliederprofil",
+    "tabs": {
+      "admin": "Admin",
+      "personalInfo": "Persönliche Daten",
+      "anamneses": "Anamnesen",
+      "bloodType": "Blutgruppe",
+      "doctors": "Ärzte",
+      "documents": "Dokumente",
+      "contacts": "My Smart Health Kontakte",
+      "telemedicine": "Telemedizin"
+    },
+    "noMedicalInfoTitle": "Noch keine medizinischen Informationen verfügbar.",
+    "noMedicalInfoSubtitle": "Bitte aktualisieren Sie Ihr Profil, um Details hinzuzufügen.",
+    "admin": {
+      "title": "Admin-Informationen",
+      "email": "E-Mail",
+      "status": "Status",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "activeUntil": "Aktiv bis",
+      "created": "Erstellt",
+      "updated": "Aktualisiert"
+    },
+    "anamneses": {
+      "title": "Krankengeschichte (Anamnesen)"
+    },
+    "bloodType": {
+      "title": "Blutgruppe",
+      "label": "Blutgruppe",
+      "relatedDocuments": "Zugehörige Dokumente"
+    },
+    "contacts": {
+      "noneAvailable": "Keine Kontakte verfügbar",
+      "title": "Meine Kontakte",
+      "profileAlt": "Profil",
+      "notAvailable": "k.A.",
+      "unnamed": "Unbenannt",
+      "viewProfile": "Profil anzeigen"
+    },
+    "doctors": {
+      "title": "Meine Ärzte",
+      "phone": "Telefon",
+      "email": "E-Mail"
+    },
+    "documents": {
+      "title": "Dokumente",
+      "documentFallback": "Dokument {index}"
+    },
+    "attachments": {
+      "title": "Anhänge",
+      "documentFallback": "Dokument {index}"
+    },
+    "insurance": {
+      "title": "Krankenversicherung",
+      "provider": "Anbieter",
+      "insuranceName": "Versicherungsname",
+      "insuranceNumber": "Versicherungsnummer"
+    },
+    "personal": {
+      "title": "Persönliche Informationen",
+      "birthday": "Geburtstag",
+      "yearsOld": "Jahre alt",
+      "height": "Größe",
+      "weight": "Gewicht",
+      "bmi": "Body-Mass-Index (BMI)",
+      "bmiUnderweight": "Untergewicht",
+      "bmiNormal": "Normalgewicht",
+      "bmiOverweight": "Übergewicht",
+      "bmiObese": "Adipositas",
+      "familyMembers": "Familienmitglieder",
+      "myPhoneNumbers": "Meine Telefonnummern",
+      "phoneNumber": "Telefonnummer {index}"
+    },
+    "special": {
+      "title": "Telemedizin-Nummern",
+      "specialNumber": "Spezialnummer"
+    },
+    "anamnesisDisplay": {
+      "otherPrefix": "Sonstiges",
+      "illnesses": {
+        "title": "Vorerkrankungen",
+        "highBloodPressure": "Bluthochdruck",
+        "diabetes": "Diabetes",
+        "heartDisease": "Herzerkrankung",
+        "stroke": "Schlaganfall",
+        "asthma": "Asthma",
+        "allergies": "Allergien",
+        "thyroidDisorders": "Schilddrüsenerkrankungen",
+        "gastrointestinalDiseases": "Magen-Darm-Erkrankungen",
+        "liverDisorders": "Lebererkrankungen",
+        "kidneyDiseases": "Nierenerkrankungen",
+        "rheumatism": "Rheuma",
+        "autoimmuneDiseases": "Autoimmunerkrankungen",
+        "cancer": "Krebs",
+        "mentalHealthDisorders": "Psychische Erkrankungen",
+        "infectiousDiseases": "Infektionskrankheiten"
+      },
+      "hospitalStays": {
+        "title": "Krankenhausaufenthalte",
+        "year": "Jahr",
+        "treatment": "Behandlung",
+        "hospital": "Krankenhaus"
+      },
+      "medicationPlan": {
+        "title": "Medikationsplan",
+        "noRegularMedications": "Keine regelmäßigen Medikamente",
+        "medication": "Medikament",
+        "dosage": "Dosierung",
+        "sinceWhen": "Seit wann",
+        "reason": "Grund",
+        "attachments": "Anhänge:"
+      },
+      "allergies": {
+        "title": "Allergien & Unverträglichkeiten",
+        "medications": "Medikamente",
+        "foods": "Lebensmittel",
+        "pollen": "Pollen",
+        "petHair": "Tierhaare",
+        "typeOfReaction": "Art der Reaktion"
+      },
+      "familyHistory": {
+        "title": "Familiäre Krankheitsgeschichte",
+        "cardiovascularDisease": "Herz-Kreislauf-Erkrankungen",
+        "diabetes": "Diabetes",
+        "cancer": "Krebs",
+        "hereditaryDiseases": "Erbkrankheiten",
+        "mentalHealthConditions": "Psychische Erkrankungen"
+      },
+      "lifestyle": {
+        "title": "Lebensstil",
+        "smoking": "Rauchen",
+        "alcohol": "Alkohol",
+        "exercise": "Bewegung",
+        "diet": "Ernährung",
+        "stressLevel": "Stresslevel",
+        "yes": "Ja",
+        "no": "Nein",
+        "cigarettesPerDay": "{count} Zigaretten/Tag"
+      },
+      "vaccination": {
+        "title": "Impfstatus",
+        "tetanus": "Tetanus",
+        "measles": "Masern",
+        "hepatitisB": "Hepatitis B",
+        "influenza": "Influenza",
+        "covid19": "COVID-19",
+        "unknown": "Unbekannt"
+      }
+    }
+  },
+  "ProfileFull": {
+    "newsTitle": "News",
+    "uploadedFiles": {
+      "defaultHeading": "Dokumente & Dateien"
+    },
+    "contact": {
+      "route": "Route"
+    },
+    "reservation": {
+      "onlineAppointments": "Online Termine",
+      "onlineReservation": "Online Reservierung",
+      "onlinePrescription": "Online Rezept",
+      "onlineShop": "Online Shop",
+      "email": "E-Mail"
+    },
+    "certificates": {
+      "title": "Zertifikate",
+      "issuedBy": "Ausgestellt von",
+      "issueDate": "Ausstellungsdatum",
+      "expiryDate": "Ablaufdatum",
+      "credentialId": "Zertifikats-ID",
+      "close": "Schließen",
+      "notAvailable": "k.A.",
+      "imageAlt": "Zertifikatsbild {index}",
+      "zoomedAlt": "Vergrößertes Zertifikatsbild"
+    },
+    "schedule": {
+      "title": "Öffnungszeiten",
+      "open": "Geöffnet",
+      "closed": "Geschlossen",
+      "open24h": "24h geöffnet",
+      "noHoursSpecified": "Keine Öffnungszeiten angegeben",
+      "closesInHoursMinutes": "schließt in {hours}h {minutes}min",
+      "closesInMinutes": "schließt in {minutes}min",
+      "days": {
+        "monday": "Montag",
+        "tuesday": "Dienstag",
+        "wednesday": "Mittwoch",
+        "thursday": "Donnerstag",
+        "friday": "Freitag",
+        "saturday": "Samstag",
+        "sunday": "Sonntag"
+      }
+    }
+  },
+  "MemberPublicProfile": {
+    "accessDenied": {
+      "title": "Zugriff verweigert",
+      "description": "Sie haben keine Berechtigung, dieses Mitgliederprofil anzusehen.",
+      "reason": "Dieses Mitglied hat Sie nicht zu seiner Kontaktliste hinzugefügt."
+    },
+    "profile": {
+      "title": "Mitgliederprofil"
+    }
+  },
+  "EditMemberForm": {
+    "modal": {
+      "successTitle": "Erfolg",
+      "errorTitle": "Fehler"
+    },
+    "cta": {
+      "toMemberProfile": "Zum Mitgliederprofil",
+      "toDashboard": "Zum Dashboard"
+    },
+    "errors": {
+      "failedUpdateMemberProfile": "Mitgliederprofil konnte nicht aktualisiert werden",
+      "memberNotFound": "Mitglied nicht gefunden"
+    },
+    "messages": {
+      "profileUpdatedSuccess": "Mitgliederprofil erfolgreich aktualisiert"
+    },
+    "tabs": {
+      "personalInfo": "Persönliche Infos",
+      "statusTelemedicine": "Status / Telemedizin",
+      "personal": "Persönlich",
+      "anamnesesMedicationPlan": "Anamnesen / Medikamentenplan",
+      "bloodType": "Blutgruppe",
+      "doctors": "Ärzte",
+      "documents": "Dokumente",
+      "contacts": "My Smart Health Kontakte"
+    },
+    "save": {
+      "saving": "Speichern...",
+      "saveChanges": "Änderungen speichern"
+    },
+    "addContactModal": {
+      "title": "Kontakt hinzufügen",
+      "searchPlaceholder": "Nach Name, E-Mail oder Fachgebiet suchen...",
+      "noUsersFound": "Keine Benutzer gefunden",
+      "noAvailableUsers": "Keine verfügbaren Benutzer",
+      "profileAlt": "Profil",
+      "notAvailable": "k. A.",
+      "unnamed": "Ohne Namen",
+      "addButton": "Hinzufügen",
+      "closeButton": "Schließen",
+      "errors": {
+        "fetchUsers": "Benutzer konnten nicht geladen werden",
+        "addContact": "Kontakt konnte nicht hinzugefügt werden"
+      }
+    },
+    "basicInfo": {
+      "memberId": "Mitglieds-ID",
+      "role": "Rolle",
+      "email": "E-Mail",
+      "name": "Name",
+      "phoneNumbers": "Telefonnummern",
+      "phonePlaceholder": "+1234567890",
+      "removePhone": "Entfernen",
+      "addPhone": "+ Telefonnummer hinzufügen",
+      "createdAt": "Erstellt am",
+      "updatedAt": "Aktualisiert am"
+    },
+    "status": {
+      "active": "Aktiv",
+      "activeUntil": "Aktiv bis"
+    },
+    "personalInfo": {
+      "birthday": "Geburtstag",
+      "heightCm": "Größe (cm)",
+      "heightPlaceholder": "z. B. 175",
+      "weightKg": "Gewicht (kg)",
+      "weightPlaceholder": "z. B. 70"
+    },
+    "healthInsurances": {
+      "title": "Krankenversicherungen",
+      "addInsurance": "+ Versicherung hinzufügen",
+      "empty": "Noch keine Krankenversicherungen hinzugefügt",
+      "insuranceItem": "Versicherung #{index}",
+      "remove": "Entfernen",
+      "providerPlaceholder": "Anbieter",
+      "insuranceNamePlaceholder": "Name der Versicherung",
+      "insuranceNumberPlaceholder": "Versicherungsnummer",
+      "phonePlaceholder": "Telefon"
+    },
+    "doctors": {
+      "title": "Meine Ärzte",
+      "addDoctor": "+ Arzt hinzufügen",
+      "empty": "Noch keine Ärzte hinzugefügt",
+      "doctorItem": "Arzt #{index}",
+      "remove": "Entfernen",
+      "namePlaceholder": "Name des Arztes",
+      "specialtyPlaceholder": "Fachgebiet (z. B. Kardiologie)",
+      "emails": "E-Mails",
+      "addEmail": "+ E-Mail hinzufügen",
+      "emailPlaceholder": "arzt@beispiel.de",
+      "phones": "Telefonnummern",
+      "addPhone": "+ Telefon hinzufügen",
+      "phonePlaceholder": "+49 123 456789"
+    },
+    "documents": {
+      "title": "Dokumente",
+      "addDocument": "+ Dokument hinzufügen",
+      "empty": "Noch keine Dokumente hinzugefügt",
+      "download": "Herunterladen",
+      "remove": "Entfernen",
+      "descriptionPlaceholder": "Dokumentbeschreibung (optional)",
+      "errors": {
+        "failedRemoveDocument": "Dokument konnte nicht entfernt werden",
+        "failedUploadDocument": "Dokument konnte nicht hochgeladen werden"
+      }
+    },
+    "familyMembers": {
+      "title": "Familienmitglieder",
+      "addFamilyMember": "+ Familienmitglied hinzufügen",
+      "empty": "Noch keine Familienmitglieder hinzugefügt",
+      "familyMemberItem": "Familienmitglied #{index}",
+      "remove": "Entfernen",
+      "namePlaceholder": "Name des Familienmitglieds",
+      "phoneNumbers": "Telefonnummern",
+      "addPhone": "+ Telefon hinzufügen",
+      "phonePlaceholder": "+49 123 456789"
+    },
+    "specialNumbers": {
+      "title": "Telemedizin",
+      "addNumber": "+ Nummer hinzufügen",
+      "empty": "Noch keine Sondernummern hinzugefügt",
+      "numberItem": "Nummer #{index}",
+      "remove": "Entfernen",
+      "typePlaceholder": "Typ (z. B. Videoarzt, Notfall-Hotline)",
+      "phonePlaceholder": "Telefonnummer",
+      "descriptionPlaceholder": "Beschreibung (optional)"
+    },
+    "contacts": {
+      "title": "My Smart Health Kontakte",
+      "addContact": "Kontakt hinzufügen",
+      "empty": "Noch keine Kontakte hinzugefügt",
+      "profileAlt": "Profil",
+      "notAvailable": "k. A.",
+      "unnamed": "Ohne Namen",
+      "viewProfile": "Profil anzeigen",
+      "remove": "Entfernen"
+    },
+    "bloodType": {
+      "label": "Blutgruppe (optional)",
+      "selectPlaceholder": "Blutgruppe auswählen...",
+      "filesTitle": "Blutgruppen-Dateien",
+      "addFile": "+ Datei hinzufügen",
+      "emptyFiles": "Noch keine Dateien hinzugefügt",
+      "download": "Herunterladen",
+      "remove": "Entfernen",
+      "descriptionPlaceholder": "Beschreibung (optional)",
+      "errors": {
+        "failedRemoveBloodTypeFile": "Blutgruppen-Datei konnte nicht entfernt werden",
+        "failedUploadFile": "Datei konnte nicht hochgeladen werden"
+      }
+    },
+    "allergies": {
+      "title": "Allergien",
+      "addAllergy": "+ Allergie hinzufügen",
+      "empty": "Noch keine Allergien hinzugefügt",
+      "allergyItem": "Allergie #{index}",
+      "remove": "Entfernen",
+      "namePlaceholder": "Allergiename (z. B. Pollen)",
+      "selectSeverity": "Schweregrad auswählen",
+      "severityMild": "Leicht",
+      "severityModerate": "Mittel",
+      "severitySevere": "Stark"
+    },
+    "intolerances": {
+      "title": "Unverträglichkeiten",
+      "addIntolerance": "+ Unverträglichkeit hinzufügen",
+      "empty": "Noch keine Unverträglichkeiten hinzugefügt",
+      "intoleranceItem": "Unverträglichkeit #{index}",
+      "remove": "Entfernen",
+      "namePlaceholder": "Name der Unverträglichkeit (z. B. Laktose)",
+      "selectSeverity": "Schweregrad auswählen",
+      "severityMild": "Leicht",
+      "severityModerate": "Mittel",
+      "severitySevere": "Stark"
+    },
+    "medicationPlan": {
+      "title": "Medikationsplan",
+      "addMedication": "+ Medikament hinzufügen",
+      "empty": "Noch keine Medikamente hinzugefügt",
+      "medicationItem": "Medikament #{index}",
+      "remove": "Entfernen",
+      "medicationNamePlaceholder": "Name des Medikaments",
+      "sinceWhenPlaceholder": "Seit wann",
+      "fileUrls": "Datei-URLs",
+      "addUrl": "+ URL hinzufügen",
+      "fileUrlPlaceholder": "Datei-URL eingeben",
+      "descriptionPlaceholder": "Beschreibung (optional)"
+    },
+    "anamneses": {
+      "title": "Anamnesen (Krankengeschichte)",
+      "addAnamnesis": "+ Anamnese hinzufügen",
+      "empty": "Noch keine Anamnesen hinzugefügt",
+      "anamnesisItem": "Anamnese #{index}",
+      "removeEntry": "Eintrag entfernen",
+      "medicalHistoryNotes": "Notizen zur Krankengeschichte",
+      "medicalHistoryPlaceholder": "Detaillierte Notizen zur Krankengeschichte eingeben...",
+      "errors": {
+        "failedRemoveAnamnesis": "Anamnese-Eintrag konnte nicht entfernt werden",
+        "failedRemoveMedicationFiles": "Medikamentendateien konnten vor dem Löschen des Anamnese-Eintrags nicht entfernt werden",
+        "failedUpdateMedicationPlan": "Medikationsplan konnte nicht aktualisiert werden"
+      }
+    },
+    "anamnesisSections": {
+      "allergiesIntolerances": {
+        "title": "Allergien & Unverträglichkeiten",
+        "noneKnown": "Keine bekannt",
+        "medications": "Medikamente",
+        "foods": "Lebensmittel",
+        "pollen": "Pollen",
+        "petHair": "Tierhaare",
+        "otherPlaceholder": "Weitere Allergien/Unverträglichkeiten...",
+        "reactionPlaceholder": "Art der Reaktion..."
+      },
+      "familyHistory": {
+        "title": "Familiäre Krankheitsgeschichte",
+        "cardiovascularDisease": "Herz-Kreislauf-Erkrankungen",
+        "diabetes": "Diabetes",
+        "cancer": "Krebs",
+        "hereditaryDiseases": "Erbkrankheiten",
+        "mentalHealthConditions": "Psychische Erkrankungen",
+        "noKnownRelevantIllnesses": "Keine bekannten relevanten Erkrankungen"
+      },
+      "illnesses": {
+        "title": "Erkrankungen",
+        "highBloodPressure": "Bluthochdruck",
+        "diabetes": "Diabetes",
+        "heartDisease": "Herzerkrankung",
+        "stroke": "Schlaganfall",
+        "asthma": "Asthma",
+        "allergies": "Allergien",
+        "thyroidDisorders": "Schilddrüsenerkrankungen",
+        "gastrointestinalDiseases": "Magen-Darm-Erkrankungen",
+        "liverDisorders": "Lebererkrankungen",
+        "kidneyDiseases": "Nierenerkrankungen",
+        "rheumatism": "Rheuma",
+        "autoimmuneDiseases": "Autoimmunerkrankungen",
+        "cancer": "Krebs",
+        "mentalHealthDisorders": "Psychische Störungen",
+        "infectiousDiseases": "Infektionskrankheiten",
+        "otherLabel": "Sonstiges",
+        "otherPlaceholder": "Weitere Erkrankungen..."
+      },
+      "vaccinationStatus": {
+        "title": "Impfstatus",
+        "unknown": "Unbekannt",
+        "tetanus": "Tetanus",
+        "measles": "Masern",
+        "hepatitisB": "Hepatitis B",
+        "influenza": "Influenza",
+        "covid19": "COVID-19",
+        "otherPlaceholder": "Weitere Impfungen..."
+      },
+      "hospitalStays": {
+        "title": "Krankenhausaufenthalte",
+        "addHospitalStay": "+ Krankenhausaufenthalt hinzufügen",
+        "stayItem": "Aufenthalt #{index}",
+        "remove": "Entfernen",
+        "yearPlaceholder": "Jahr",
+        "treatmentPlaceholder": "Behandlung",
+        "hospitalPlaceholder": "Krankenhaus"
+      },
+      "fileAttachments": {
+        "title": "Dateianhänge",
+        "addFileUrl": "+ Datei-URL hinzufügen",
+        "fileUrlPlaceholder": "Datei-URL",
+        "descriptionPlaceholder": "Beschreibung (optional)",
+        "remove": "Entfernen"
+      },
+      "lifestyle": {
+        "title": "Lebensstil",
+        "smoking": "Rauchen",
+        "cigarettesPerDayPlaceholder": "Zigaretten/Tag",
+        "alcohol": "Alkohol",
+        "exercise": "Bewegung",
+        "diet": "Ernährung",
+        "stressLevel": "Stressniveau",
+        "no": "Nein",
+        "occasionally": "Gelegentlich",
+        "regularly": "Regelmäßig",
+        "little": "Wenig",
+        "moderate": "Mittel",
+        "balanced": "Ausgewogen",
+        "vegetarian": "Vegetarisch",
+        "vegan": "Vegan",
+        "unbalanced": "Unausgewogen",
+        "low": "Niedrig",
+        "high": "Hoch"
+      },
+      "medicationPlan": {
+        "title": "Medikationsplan",
+        "noRegularMedications": "Keine regelmäßigen Medikamente",
+        "addMedication": "+ Medikament hinzufügen",
+        "medicationItem": "Medikament #{index}",
+        "remove": "Entfernen",
+        "medicationPlaceholder": "Medikament",
+        "dosagePlaceholder": "Dosierung",
+        "sinceWhenPlaceholder": "Seit wann",
+        "reasonPlaceholder": "Grund",
+        "fileAttachments": "Dateianhänge",
+        "addFile": "+ Datei hinzufügen",
+        "download": "Herunterladen",
+        "descriptionPlaceholder": "Beschreibung (optional)",
+        "errors": {
+          "failedUploadFile": "Datei konnte nicht hochgeladen werden",
+          "failedRemoveFile": "Datei konnte nicht entfernt werden"
+        }
+      }
+    }
+  },
+  "EditProfileForm": {
+    "tabs": {
+      "nameExpertise": "Name/Fachgebiet",
+      "text": "Text",
+      "uploadFiles": "Dateien hochladen",
+      "address": "Adresse",
+      "phoneEmail": "Telefon/E-Mail",
+      "socialLinks": "Weitere soziale Links",
+      "imageVideo": "Bild/Video",
+      "certificates": "Zertifikate",
+      "globalSchedule": "Globaler Zeitplan",
+      "reservations": "Reservierungen/Termine",
+      "memberStatus": "Mitgliedsstatus",
+      "ratingStars": "Bewertungssterne"
+    },
+    "modal": {
+      "successTitle": "Erfolg",
+      "errorTitle": "Fehler",
+      "toProfile": "Zum Profil"
+    },
+    "saveButton": "Änderungen speichern und zum Dashboard",
+    "errors": {
+      "firstMediaMustBeImage": "Das erste Medium muss ein Bild sein. Bitte die Medien neu anordnen.",
+      "profileUpdateFailed": "Profil konnte nicht aktualisiert werden. Bitte versuchen Sie es erneut.",
+      "profileUpdateSuccess": "Profil wurde erfolgreich aktualisiert!",
+      "autoSaveImagesFailed": "Automatisches Speichern der Profilbilder fehlgeschlagen.",
+      "autoSaveImagesError": "Fehler beim Speichern der Profilbilder. Bitte erneut versuchen oder Support kontaktieren.",
+      "autoSaveFilesFailed": "Automatisches Speichern der Profildateien fehlgeschlagen. Bitte erneut versuchen.",
+      "autoSaveFilesError": "Fehler beim Speichern der Profildateien. Bitte Support kontaktieren.",
+      "mediaUrlEmpty": "Medien-URL darf nicht leer sein",
+      "noFilesSelected": "Keine Dateien ausgewählt",
+      "failedToUploadImage": "Bild konnte nicht hochgeladen werden",
+      "errorUploadingFiles": "Fehler beim Hochladen der Dateien",
+      "noCertificateFileSelected": "Keine Zertifikatsdatei ausgewählt",
+      "failedToUploadCertificate": "Zertifikat konnte nicht hochgeladen werden",
+      "failedToRemoveImage": "Bild konnte nicht entfernt werden",
+      "errorRemovingImage": "Fehler beim Entfernen des Bildes",
+      "imageTooLarge": "Bild \"{name}\" ist zu groß. Maximale Größe ist {maxMB} MB.",
+      "certificateImageTooLarge": "Zertifikatsbild \"{name}\" ist zu groß. Maximale Größe ist {maxMB} MB.",
+      "noStateUpdateFunction": "Interne Aktualisierungsfunktion für entfernte Medien fehlt."
+    },
+    "name": {
+      "label": "Name"
+    },
+    "address": {
+      "label": "Adresse"
+    },
+    "email": {
+      "label": "E-Mail (Anzeige)"
+    },
+    "bio": {
+      "label": "Bio",
+      "placeholder": "Schreiben Sie Ihre Bio mit Rich-Text-Formatierung..."
+    },
+    "website": {
+      "label": "Website"
+    },
+    "phones": {
+      "emptyLabel": "Telefonnummern",
+      "label": "Telefonnummer",
+      "addButton": "Telefonnummer hinzufügen",
+      "removeButton": "Entfernen",
+      "confirmRemove": "Möchten Sie diese Telefonnummer wirklich entfernen?"
+    },
+    "socials": {
+      "label": "Soziale Netzwerke",
+      "urlPlaceholder": "URL",
+      "pickPlatform": "Plattform auswählen",
+      "platform": {
+        "email": "E-Mail",
+        "website": "Webseite",
+        "facebook": "Facebook",
+        "linkedin": "Linkedin",
+        "x": "X.com",
+        "youtube": "Youtube",
+        "tiktok": "TikTok",
+        "instagram": "Instagram"
+      },
+      "removeButton": "Entfernen",
+      "addButton": "Sozialen Link hinzufügen",
+      "confirmRemove": "Möchten Sie diesen sozialen Link wirklich entfernen?"
+    },
+    "expertise": {
+      "emptyLabel": "Fachgebiet",
+      "itemLabel": "Fachgebiet {index}",
+      "descriptionPlaceholder": "Beschreibung (optional)",
+      "removeButton": "Entfernen",
+      "addButton": "+ Fachgebiet"
+    },
+    "reservationLinks": {
+      "emptyLabel": "Reservierungen/Rezepte",
+      "linkLabel": "Link",
+      "typeLabel": "Typ",
+      "emailLabel": "E-Mail",
+      "urlLabel": "URL",
+      "removeButton": "Entfernen",
+      "addButton": "Link Reservierungen/Rezepte hinzufügen",
+      "confirmRemove": "Diesen Link wirklich entfernen?"
+    },
+    "certificates": {
+      "legend": "Zertifikate",
+      "nameLabel": "Zertifikatsname",
+      "namePlaceholder": "z.B. Zertifikat für ...",
+      "issuerLabel": "Aussteller",
+      "issuerPlaceholder": "z.B. Ausgestellt von ...",
+      "issueDateLabel": "Ausstellungsdatum",
+      "expiryDateLabel": "Ablaufdatum",
+      "enableCheckbox": "Aktivieren",
+      "credentialIdLabel": "Zertifikats-ID",
+      "credentialIdPlaceholder": "z.B. 123-ABC-456",
+      "credentialUrlLabel": "Zertifikats-URL",
+      "imagesLabel": "Zertifikatsbilder",
+      "noImages": "Keine Bilder angehängt",
+      "uploadingImages": "Zertifikatsbilder werden hochgeladen...",
+      "addButton": "+ Zertifikat hinzufügen",
+      "removeAriaLabel": "Zertifikat entfernen",
+      "removeTitle": "Zertifikat entfernen",
+      "confirmDelete": "Zertifikat \"{name}\" und seine Bilder löschen?"
+    },
+    "schedule": {
+      "legend": "Arbeitszeiten",
+      "previewLabel": "Vorschau",
+      "titleLabel": "Titel (optional)",
+      "titlePlaceholder": "z.B. Montag - Freitag",
+      "timeStart": "Öffnungszeit",
+      "timeEnd": "Schließzeit",
+      "clickToSet": "hier klicken zum Einstellen",
+      "nonStopLegend": "Nonstop",
+      "open24h": "24 Stunden / 7 Tage geöffnet",
+      "removeButton": "Entfernen",
+      "addButton": "Arbeitszeit hinzufügen",
+      "confirmRemove": "Möchten Sie diesen Zeitplan wirklich entfernen?",
+      "days": {
+        "Monday": "Montag",
+        "Tuesday": "Dienstag",
+        "Wednesday": "Mittwoch",
+        "Thursday": "Donnerstag",
+        "Friday": "Freitag",
+        "Saturday": "Samstag",
+        "Sunday": "Sonntag"
+      }
+    },
+    "location": {
+      "removeButton": "Standort entfernen",
+      "addButton": "Standort hinzufügen",
+      "confirmRemove": "Möchten Sie diesen Standort wirklich entfernen?"
+    },
+    "membership": {
+      "statusHeading": "Mitgliedsstatus",
+      "displayBadgeLabel": "Mitgliedschaftsabzeichen anzeigen",
+      "urlExamplesText": "Hier sind Beispiele für gültige URLs für den Mitgliedschaftslink:",
+      "urlLabel": "URL",
+      "phoneLabel": "Telefon",
+      "emailLabel": "E-Mail",
+      "linkLabel": "Mitgliedschaftslink",
+      "linkPlaceholder": "schnelle Termine - mysmart.health",
+      "badgeActive": "✓ Mitgliedschaftsabzeichen aktiv",
+      "badgeDisabled": "Mitgliedschaftsabzeichen deaktiviert"
+    },
+    "rating": {
+      "heading": "Bewertungssterne",
+      "selectLabel": "Bewertung auswählen (0 - 5 Sterne)",
+      "noRating": "Keine Bewertung",
+      "starSingular": "{value} Stern",
+      "starPlural": "{value} Sterne",
+      "googleLinkHeading": "Google-Bewertungslink",
+      "removeButton": "Entfernen",
+      "ratingSet": "Bewertung: {rating} von 5 Sternen",
+      "noRatingSet": "Keine Bewertung gesetzt"
+    },
+    "uploadFiles": {
+      "legend": "Dateien hochladen",
+      "description": "Laden Sie zusätzliche Dokumente für Ihr Profil hoch. Jede Datei kann bis zu {maxMB} MB groß sein.",
+      "supportedTypes": "Unterstützte Dateitypen: jedes Dokument oder Bildformat bis zu {maxMB} MB.",
+      "uploadingSpinner": "Dateien werden hochgeladen...",
+      "uploadedFilesHeading": "Hochgeladene Dateien",
+      "deleteAriaLabel": "Datei löschen",
+      "errors": {
+        "selectAtLeastOne": "Bitte mindestens eine Datei auswählen.",
+        "missingUserId": "Benutzer-ID fehlt. Bitte Seite neu laden.",
+        "fileTooLarge": "Die Datei \"{name}\" ist zu groß. Maximal erlaubt sind {maxMB} MB.",
+        "uploadFailed": "Beim Hochladen der Dateien ist ein Fehler aufgetreten.",
+        "deleteFailed": "Datei konnte nicht gelöscht werden",
+        "deleteError": "Beim Löschen der Datei ist ein Fehler aufgetreten."
+      }
+    },
+    "mediaUpload": {
+      "legend": "Bilder auswählen",
+      "maxImagesError": "Sie können nur bis zu {max} Bilder auswählen.",
+      "imageTooLarge": "Bild \"{name}\" ist zu groß. Maximale Größe ist {maxMB} MB.",
+      "maxSizeLabel": "Maximale Bildgröße: {maxMB} MB pro Bild",
+      "uploadingSpinner": "Bilder werden hochgeladen..."
+    },
+    "mediaCarousel": {
+      "noImages": "Keine Bilder"
+    },
+    "mediaUrl": {
+      "legend": "Medien-URL hinzufügen",
+      "instruction": "Die Medien-URL muss eine gültige URL von YouTube oder Instagram sein",
+      "placeholder": "https://",
+      "button": "Medien-URL hochladen",
+      "countInfo": "Sie können bis zu {max} Mediendateien hinzufügen (Bilder, Instagram-Videos oder YouTube-Videos)",
+      "firstMediaWarning": "Hinweis: Bitte sicherstellen, dass das erste Medium ein Bild ist."
+    },
+    "photoAlt": "Foto {index}"
+  },
+  "StatusModal": {
+    "success": "Erfolg",
+    "error": "Fehler",
+    "warning": "Warnung",
+    "close": "Schließen"
+  },
+  "TimeoutModal": {
+    "title": "Sitzung abgelaufen",
+    "message": "Aus Sicherheitsgründen wurden Sie nach 10 Minuten Inaktivität automatisch abgemeldet.",
+    "ok": "OK"
+  },
+  "UploadProgressModal": {
+    "title": "Dateien werden hochgeladen...",
+    "progress": "Fortschritt",
+    "files": "Dateien",
+    "currentFile": "Aktuelle Datei:",
+    "pleaseWait": "Bitte warten..."
+  },
+  "DeletionProgressModal": {
+    "title": "Profil wird gelöscht...",
+    "user": "Benutzer:",
+    "pleaseWait": "Bitte warten..."
+  },
+  "Navbar": {
+    "login": "Login",
+    "srOnly": "My Smart Health"
+  },
+  "ProfileMenu": {
+    "welcome": "Willkommen,",
+    "home": "Startseite",
+    "dashboard": "Dashboard",
+    "myContacts": "Meine Kontakte",
+    "allPosts": "Alle Beiträge",
+    "createPost": "Beitrag erstellen",
+    "editProfile": "Profil bearbeiten",
+    "changeEmail": "E-Mail ändern",
+    "changePassword": "Passwort ändern",
+    "adminOnly": "Nur Admin",
+    "allUsers": "Alle Benutzer",
+    "allMembers": "Alle Mitglieder",
+    "editCube": "Cube bearbeiten",
+    "editMySmartHealth": "My Smart Health bearbeiten",
+    "createNewUser": "Neuen Benutzer erstellen"
+  },
+  "LogOut": {
+    "logout": "Abmelden"
+  },
+  "GoBack": {
+    "back": "Zurück"
+  },
+  "ProfileShort": {
+    "toProfile": "zum Profil",
+    "profileIconAlt": "Profil Icon"
+  },
+  "LoginPage": {
+    "title": "Melden Sie sich bei Ihrem Konto an"
+  },
+  "LoginForm": {
+    "emailLabel": "E-Mail",
+    "emailPlaceholder": "E-Mail",
+    "passwordLabel": "Passwort",
+    "passwordPlaceholder": "Passwort",
+    "hidePasswordAria": "Passwort ausblenden",
+    "showPasswordAria": "Passwort anzeigen",
+    "hide": "Ausblenden",
+    "show": "Anzeigen",
+    "login": "Anmelden",
+    "forgotPassword": "Passwort vergessen?",
+    "errors": {
+      "invalidCredentials": "Falsche E-Mail oder Passwort."
+    }
+  },
+  "RegisterPage": {
+    "title": "Neuen Benutzer erstellen"
+  },
+  "RegisterForm": {
+    "nameLabel": "Name",
+    "namePlaceholder": "Name",
+    "emailLabel": "E-Mail",
+    "emailPlaceholder": "E-Mail",
+    "passwordLabel": "Passwort",
+    "passwordPlaceholder": "Passwort",
+    "passwordConfirmationLabel": "Passwortbestätigung",
+    "passwordConfirmationPlaceholder": "Passwortbestätigung",
+    "hidePasswordAria": "Passwort ausblenden",
+    "showPasswordAria": "Passwort anzeigen",
+    "hidePasswordConfirmationAria": "Passwortbestätigung ausblenden",
+    "showPasswordConfirmationAria": "Passwortbestätigung anzeigen",
+    "hide": "Ausblenden",
+    "show": "Anzeigen",
+    "roleLabel": "Rolle",
+    "userRole": "Benutzer",
+    "memberRole": "Mitglied",
+    "register": "Registrieren",
+    "messages": {
+      "userCreated": "Benutzer erfolgreich erstellt"
+    },
+    "errors": {
+      "nameRequired": "Bitte geben Sie Ihren Namen ein",
+      "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein",
+      "fillAllFields": "Bitte füllen Sie alle Felder aus",
+      "passwordsMismatch": "Passwörter stimmen nicht überein",
+      "emailExists": "E-Mail existiert bereits",
+      "generic": "Ein Fehler ist aufgetreten"
+    },
+    "errorModal": {
+      "success": "Erfolg",
+      "warning": "Warnung",
+      "error": "Fehler"
+    }
+  },
+  "ChangeEmailPage": {
+    "title": "E-Mail ändern"
+  },
+  "ChangeEmailForm": {
+    "currentEmailLabel": "Aktuelle E-Mail:",
+    "passwordLabel": "Passwort:",
+    "passwordPlaceholder": "Passwort eingeben",
+    "hidePasswordAria": "Passwort ausblenden",
+    "showPasswordAria": "Passwort anzeigen",
+    "hide": "Ausblenden",
+    "show": "Anzeigen",
+    "newEmailLabel": "Neue E-Mail:",
+    "newEmailPlaceholder": "Neue E-Mail",
+    "confirmNewEmailLabel": "Neue E-Mail bestätigen:",
+    "confirmNewEmailPlaceholder": "Neue E-Mail bestätigen",
+    "newEmailStatusLabel": "Status neue E-Mail:",
+    "updateEmail": "E-Mail aktualisieren",
+    "status": {
+      "notEntered": "Nicht eingegeben",
+      "invalidFormat": "Ungültiges Format",
+      "sameAsCurrent": "Entspricht der aktuellen",
+      "valid": "Gültig"
+    },
+    "messages": {
+      "emailChanged": "E-Mail erfolgreich geändert! Bitte melden Sie sich erneut mit Ihrer neuen E-Mail an."
+    },
+    "errors": {
+      "enterPassword": "Bitte geben Sie Ihr Passwort ein.",
+      "enterNewEmail": "Bitte geben Sie eine neue E-Mail ein.",
+      "validEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+      "emailMismatch": "E-Mail-Adressen stimmen nicht überein.",
+      "newMustDiffer": "Die neue E-Mail muss sich von der aktuellen E-Mail unterscheiden.",
+      "failedChangeEmail": "E-Mail konnte nicht geändert werden.",
+      "generic": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+    }
+  },
+  "ChangePasswordPage": {
+    "title": "Passwort ändern"
+  },
+  "ChangePasswordForm": {
+    "currentPasswordLabel": "Aktuelles Passwort:",
+    "currentPasswordPlaceholder": "Aktuelles Passwort",
+    "newPasswordLabel": "Neues Passwort:",
+    "newPasswordPlaceholder": "Neues Passwort",
+    "confirmNewPasswordLabel": "Neues Passwort bestätigen:",
+    "confirmNewPasswordPlaceholder": "Neues Passwort bestätigen",
+    "hidePasswordAria": "Passwort ausblenden",
+    "showPasswordAria": "Passwort anzeigen",
+    "hide": "Ausblenden",
+    "show": "Anzeigen",
+    "newPasswordStrengthLabel": "Stärke neues Passwort:",
+    "updatePassword": "Passwort aktualisieren",
+    "strength": {
+      "notEntered": "Nicht eingegeben",
+      "weak": "Schwach",
+      "medium": "Mittel",
+      "strong": "Stark"
+    },
+    "messages": {
+      "passwordChanged": "Passwort erfolgreich geändert!"
+    },
+    "errors": {
+      "enterCurrentPassword": "Bitte geben Sie Ihr aktuelles Passwort ein.",
+      "enterNewPassword": "Bitte geben Sie ein neues Passwort ein.",
+      "minLength": "Das neue Passwort muss mindestens 8 Zeichen lang sein.",
+      "passwordMismatch": "Neues Passwort und Bestätigung stimmen nicht überein.",
+      "newMustDiffer": "Das neue Passwort muss sich vom aktuellen Passwort unterscheiden.",
+      "failedChangePassword": "Passwort konnte nicht geändert werden.",
+      "generic": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+    }
+  },
+  "AppError": {
+    "connectionErrorTitle": "Verbindungsfehler",
+    "genericErrorTitle": "Etwas ist schiefgelaufen",
+    "connectionErrorMessage": "Wir haben Probleme, die Daten zu laden. Bitte versuchen Sie es erneut.",
+    "genericErrorMessage": "Ein unerwarteter Fehler ist aufgetreten.",
+    "tryAgain": "Erneut versuchen",
+    "toHomepage": "Zur Startseite",
+    "errorId": "Fehler-ID:"
+  },
+  "NotFoundPage": {
+    "title": "404 - Nicht gefunden",
+    "description": "Entschuldigung, aber die Seite, die Sie suchen, existiert nicht.",
+    "goBack": "Zurück"
+  },
+  "ProfileSearch": {
+    "placeholder": "Nach Namen, Text...",
+    "ariaLabel": "Profilsuche",
+    "search": "Suchen",
+    "loading": "Suche läuft...",
+    "noResults": "Keine Profile gefunden.",
+    "errors": {
+      "minChars": "Bitte mindestens {count} Zeichen eingeben.",
+      "searchRequestFailed": "Suchanfrage fehlgeschlagen",
+      "searchFailed": "Die Suche konnte nicht ausgeführt werden. Bitte erneut versuchen."
+    }
+  },
+  "SearchFilter": {
+    "placeholder": "Benutzer nach Name oder E-Mail suchen..."
+  },
+  "SearchFilterMembers": {
+    "placeholder": "Mitglieder nach Name oder E-Mail suchen..."
+  },
+  "UserTable": {
+    "columns": {
+      "name": "Name",
+      "email": "E-Mail",
+      "category": "Kategorie",
+      "createdAt": "Erstellt am",
+      "profileImage": "Profilbild",
+      "contactable": "Kontaktierbar",
+      "role": "Rolle",
+      "view": "Ansehen",
+      "editUser": "Benutzer bearbeiten",
+      "deleteUser": "Benutzer löschen"
+    },
+    "actions": {
+      "view": "Ansehen",
+      "editUser": "Benutzer bearbeiten",
+      "deleteUser": "Benutzer löschen",
+      "deleting": "Wird gelöscht..."
+    },
+    "confirm": {
+      "deleteUser": "Möchten Sie diesen Benutzer wirklich löschen?"
+    },
+    "messages": {
+      "deleting": "Benutzerdaten werden gelöscht...",
+      "deleted": "Benutzer erfolgreich gelöscht!",
+      "deleteFailed": "Fehler beim Löschen des Benutzers"
+    },
+    "noName": "Kein Name",
+    "noCategories": "Keine Kategorien zugewiesen",
+    "noImage": "Kein Bild",
+    "yes": "Ja",
+    "no": "Nein",
+    "currentUser": "Aktueller Benutzer",
+    "unknownUser": "Unbekannter Benutzer"
+  },
+  "UserTableMembers": {
+    "columns": {
+      "name": "Name",
+      "email": "E-Mail",
+      "createdAt": "Erstellt am",
+      "role": "Rolle",
+      "view": "Ansehen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen"
+    },
+    "actions": {
+      "view": "Ansehen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "deleting": "Wird gelöscht..."
+    },
+    "confirm": {
+      "deleteMember": "Warnung: Sie sind dabei, das Mitglied \"{name}\" einschließlich aller Dateien dauerhaft zu löschen. Dies kann nicht rückgängig gemacht werden. Fortfahren?"
+    },
+    "errors": {
+      "deleteFailed": "Mitglied konnte nicht gelöscht werden"
+    },
+    "noName": "Kein Name"
+  },
+  "AddCategoryModal": {
+    "label": "Kategoriename",
+    "placeholder": "Kategorienamen eingeben",
+    "cancel": "Abbrechen",
+    "submit": "Kategorie hinzufügen"
+  },
+  "EditCategoryModal": {
+    "defaultTitle": "Kategorie umbenennen",
+    "label": "Name",
+    "cancel": "Abbrechen",
+    "save": "Speichern"
+  },
+  "AddUserModal": {
+    "title": "Benutzer zur Kategorie hinzufügen",
+    "searchLabel": "Benutzer suchen",
+    "searchPlaceholder": "Nach Name oder E-Mail suchen",
+    "loading": "Benutzer werden geladen...",
+    "noUsersFound": "Keine Benutzer gefunden",
+    "noName": "Kein Name",
+    "cancel": "Abbrechen",
+    "submit": "Benutzer hinzufügen"
+  },
+  "PostCard": {
+    "noPosts": "Keine aktiven Beiträge"
+  },
+  "PostCardDetails": {
+    "noData": "Fehler: Keine Daten gefunden",
+    "links": "Links",
+    "deleteError": "Fehler beim Löschen des Beitrags. Bitte versuchen Sie es erneut.",
+    "xAlt": "X-Icon",
+    "tiktokAlt": "TikTok-Icon"
+  },
+  "DeletePostModal": {
+    "title": "Beitrag löschen?",
+    "defaultMessage": "Möchten Sie diesen Beitrag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "confirm": "Löschen",
+    "cancel": "Abbrechen"
+  },
+  "PostForm": {
+    "titleLabel": "Titel",
+    "titleResize": "Sie können die rechte Ecke zum Vergrößern ziehen",
+    "contentLabel": "Inhalt",
+    "contentPlaceholder": "Schreiben Sie Ihren Beitrag...",
+    "tagsLegend": "Beitrags-Tags",
+    "tagPlaceholder": "Tag",
+    "addTag": "Tag hinzufügen",
+    "socialLinksLegend": "Social Links",
+    "urlPlaceholder": "URL",
+    "pickPlatform": "Plattform auswählen",
+    "platform": {
+      "email": "E-Mail",
+      "website": "Webseite",
+      "facebook": "Facebook",
+      "linkedin": "Linkedin",
+      "x": "X.com",
+      "youtube": "Youtube",
+      "tiktok": "TikTok",
+      "instagram": "Instagram"
+    },
+    "removeLink": "Entfernen",
+    "addSocialLink": "Social Link hinzufügen",
+    "addMediaLegend": "Medien-URL hinzufügen",
+    "mediaUrlLabel": "Die Medien-URL muss eine gültige YouTube- oder Instagram-URL sein",
+    "mediaUrlPlaceholder": "https://",
+    "uploadMediaUrl": "Medien-URL hochladen",
+    "selectFileLegend": "Datei auswählen",
+    "selectImageFileLegend": "Bilddateien auswählen",
+    "imageFileLabel": "Die Bilddatei muss ein gültiges Bildformat sein",
+    "maxFileSize": "Maximale Dateigröße: {size}MB pro Datei",
+    "uploadingImages": "Bilder werden hochgeladen...",
+    "photoAlt": "Foto {number}",
+    "mediaInfo": "Sie können bis zu {max} Mediendateien hinzufügen (Bilder, Instagram-Videos oder YouTube-Videos)",
+    "firstMediaWarning": "Hinweis: Bitte stellen Sie sicher, dass das erste Medium ein Bild ist.",
+    "noImageDefault": "Keine Bilddatei ausgewählt, Standard-Logo wird verwendet",
+    "noImageDefaultHint": "Sie können dies später im Bereich 'Beitrag bearbeiten' ändern",
+    "confirm": {
+      "leaveWithUploads": "Sie haben Bilder hochgeladen, die beim Verlassen der Seite gelöscht werden. Fortfahren?",
+      "leaveWithChanges": "Sie haben ungespeicherte Änderungen. Neu hochgeladene Bilder werden beim Verlassen gelöscht. Fortfahren?",
+      "cancelUploads": "Abbrechen und hochgeladene Bilder löschen?",
+      "discardChanges": "Änderungen verwerfen? Neu hochgeladene Bilder werden gelöscht."
+    },
+    "errors": {
+      "mediaUrlEmpty": "Medien-URL darf nicht leer sein",
+      "mediaUrlInvalid": "Medien-URL muss eine gültige YouTube- oder Instagram-URL sein",
+      "contentEmpty": "Inhalt darf nicht leer sein",
+      "firstMediaMustBeImage": "Das erste Medium muss ein Bild sein",
+      "createFailed": "Beitrag konnte nicht erstellt werden",
+      "updateFailed": "Beitrag konnte nicht aktualisiert werden",
+      "uploadFailed": "Bild konnte nicht hochgeladen werden",
+      "fileTooLarge": "Datei \"{name}\" ist zu groß. Maximale Größe ist {size}MB.",
+      "tooManyFiles": "Sie können nur bis zu {max} Dateien auswählen.",
+      "notAuthenticated": "Nicht authentifiziert",
+      "errorUploadingFiles": "Fehler beim Hochladen der Dateien",
+      "errorDeletingPost": "Fehler beim Löschen des Beitrags"
+    },
+    "success": {
+      "created": "Beitrag erfolgreich erstellt",
+      "updated": "Beitrag erfolgreich aktualisiert",
+      "deleted": "Beitrag erfolgreich gelöscht"
+    },
+    "modalTitles": {
+      "success": "Erfolg!",
+      "warning": "Warnung",
+      "error": "Fehler"
+    },
+    "buttons": {
+      "createPost": "Beitrag erstellen",
+      "updatePost": "Beitrag aktualisieren",
+      "deletePost": "Beitrag löschen",
+      "cancel": "Abbrechen"
+    },
+    "deleteModal": {
+      "message": "Möchten Sie diesen Beitrag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+      "delete": "Löschen",
+      "close": "Schließen"
+    },
+    "editModal": {
+      "successTitle": "Erfolg",
+      "errorTitle": "Fehler"
+    }
+  },
+  "AllMembersPage": {
+    "title": "Alle Mitglieder",
+    "noMembers": "Keine Mitglieder gefunden"
+  },
+  "AllUsersPage": {
+    "title": "Alle Benutzer",
+    "noUsers": "Keine Benutzer gefunden"
+  },
+  "PasswordRequestsPage": {
+    "title": "Passwort-Anfragen",
+    "subtitle": "Passwort-Anfragen der Benutzer verwalten"
+  },
+  "EditCubePage": {
+    "title": "Cube bearbeiten",
+    "previewTitle": "Vorschau",
+    "toggleLabel": "Cube auf der Startseite anzeigen",
+    "saveButton": "Speichern",
+    "inCubeTitle": "Im Cube",
+    "noCubePosts": "Keine Beiträge im Cube.",
+    "availableNewsTitle": "Verfügbare News",
+    "noAvailablePosts": "Keine weiteren Beiträge verfügbar.",
+    "noImage": "Kein Bild"
+  },
+  "RefreshNotifications": {
+    "title": "Benachrichtigungen aktualisieren",
+    "label": "Aktualisieren"
+  },
+  "PasswordRequestsList": {
+    "emailNotFound": "E-Mail nicht gefunden",
+    "pendingButton": "Ausstehend ({count})",
+    "showAllButton": "Alle anzeigen ({count})",
+    "noRequestsPending": "Keine ausstehenden Anfragen",
+    "noRequestsArchived": "Keine Anfragen vorhanden",
+    "labels": {
+      "created": "Erstellt",
+      "reset": "Zurückgesetzt",
+      "archived": "Archiviert"
+    },
+    "tooltips": {
+      "resetPassword": "Passwort zurücksetzen",
+      "archive": "Archivieren",
+      "unarchive": "Wiederherstellen",
+      "delete": "Löschen"
+    },
+    "buttons": {
+      "resetPassword": "Zurücksetzen",
+      "unarchive": "Wiederherstellen",
+      "cancel": "Abbrechen",
+      "confirm": "Bestätigen",
+      "close": "Schließen",
+      "copy": "Kopieren",
+      "copied": "Kopiert!",
+      "understood": "Verstanden",
+      "ok": "OK"
+    },
+    "modals": {
+      "resetTitle": "Passwort zurücksetzen?",
+      "archiveTitle": "Anfrage archivieren?",
+      "unarchiveTitle": "Anfrage wiederherstellen?",
+      "deleteTitle": "Anfrage löschen?",
+      "resetMessage": "Ein neues zufälliges Passwort wird generiert und dem Benutzer zugewiesen.",
+      "archiveMessage": "Die Anfrage wird archiviert, bleibt aber in der Datenbank.",
+      "unarchiveMessage": "Die Anfrage wird wiederhergestellt und erscheint wieder bei den aktiven Benachrichtigungen.",
+      "deleteMessage": "Die Anfrage wird dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden."
+    },
+    "success": {
+      "title": "Passwort erfolgreich zurückgesetzt!",
+      "newPasswordLabel": "Neues Passwort:",
+      "warningNote": "Bitte notieren oder kopieren Sie dieses Passwort. Es wird nur einmal angezeigt!",
+      "shareNote": "Teilen Sie dieses Passwort dem Benutzer mit. Der Benutzer sollte das Passwort nach der Anmeldung ändern."
+    },
+    "error": {
+      "title": "Fehler",
+      "emailExtractFailed": "E-Mail konnte nicht aus der Nachricht extrahiert werden",
+      "resetFailed": "Fehler beim Zurücksetzen des Passworts",
+      "archiveFailed": "Fehler beim Archivieren",
+      "unarchiveFailed": "Fehler beim Wiederherstellen",
+      "deleteFailed": "Fehler beim Löschen",
+      "genericError": "Ein Fehler ist aufgetreten"
+    }
+  },
+  "CreatePostPage": {
+    "title": "Neuer Beitrag"
+  },
+  "EditPostIdPage": {
+    "postNotFound": "Beitrag nicht gefunden",
+    "goToHome": "Zur Startseite",
+    "goToDashboard": "Zum Dashboard"
+  },
+  "EditMySmartHealthPage": {
+    "title": "My Smart Health Informationen bearbeiten"
+  },
+  "EditMemberPage": {
+    "title": "Mitgliederprofil bearbeiten"
+  },
+  "MemberProfilePage": {
+    "title": "Mitgliederprofil",
+    "editButton": "Mitgliederprofil bearbeiten"
+  },
+  "EditProfilePage": {
+    "title": "Profil bearbeiten"
+  },
+  "DashboardPage": {
+    "title": "Dashboard",
+    "userNotFound": "Benutzer nicht gefunden",
+    "editMemberProfile": "Mitgliederprofil bearbeiten",
+    "allPosts": "Alle Beiträge",
+    "mySmartHealthContacts": "My Smart Health Kontakte",
+    "editProfile": "Profil bearbeiten",
+    "newPost": "Neuer Beitrag",
+    "adminOnly": "Nur für Admins",
+    "allUsers": "Alle Benutzer",
+    "allMembers": "Alle Mitglieder",
+    "editCube": "Cube bearbeiten",
+    "editMySmartHealth": "My Smart Health bearbeiten",
+    "createNewAccount": "Neues Konto erstellen"
+  },
+  "MyContactsPage": {
+    "title": "Meine Kontakte",
+    "subtitle": "Mitglieder, die Sie zu ihrer Kontaktliste hinzugefügt haben",
+    "unnamedMember": "Unbenanntes Mitglied",
+    "inactive": "Inaktiv",
+    "bornLabel": "Geboren",
+    "viewProfile": "Profil ansehen →",
+    "totalContacts": "Kontakte gesamt",
+    "empty": {
+      "title": "Noch keine Kontakte",
+      "description": "Sie haben noch keine Mitgliedskontakte. Mitglieder können Sie zu ihrer Kontaktliste hinzufügen, um ihre Gesundheitsinformationen mit Ihnen zu teilen."
+    }
+  },
+  "TheHealthBarPage": {
+    "editButton": "The Health Bar bearbeiten"
+  },
+  "AppLoading": {
+    "label": "Laden..."
+  },
+  "NewsPostNotFoundPage": {
+    "title": "Beitrag nicht gefunden",
+    "description": "Der gesuchte News-Beitrag existiert nicht oder wurde entfernt.",
+    "backButton": "Zurück zu allen News"
+  },
+  "BackToTop": {
+    "ariaLabel": "Nach oben"
+  },
+  "CubePreview": {
+    "empty": "Der Cube ist leer. Fügen Sie News hinzu, um die Vorschau zu sehen.",
+    "noImage": "Kein Bild"
+  },
+  "TheHealthBarInfo": {
+    "address": "Musterstrasse 125, 12345 Musterstadt",
+    "openingHours": "Oeffnungszeiten:",
+    "open": "geoeffnet",
+    "closed": "geschlossen",
+    "mondayToFriday": "Montag - Freitag:",
+    "weekdayHours": "10:00 - 20:00 Uhr",
+    "saturday": "Samstag:",
+    "saturdayHours": "10:00 - 16:00 Uhr"
+  },
+  "DeletionProgressContext": {
+    "starting": "Loeschvorgang wird gestartet..."
+  },
+  "YoutubeEmbed": {
+    "invalidUrl": "Ungültige YouTube-URL",
+    "blocked": "YouTube-Video blockiert",
+    "embedTitle": "YouTube-Einbettung",
+    "cookieBefore": "Bitte akzeptieren Sie Social Media Cookies in den ",
+    "cookieSettings": "Cookie-Einstellungen",
+    "cookieAfter": ", um dieses Video anzuzeigen."
+  },
+  "InstagramEmbed": {
+    "invalidUrl": "Ungültige Instagram-URL",
+    "blocked": "Instagram-Inhalt blockiert",
+    "embedTitle": "Instagram-Einbettung",
+    "cookieBefore": "Bitte akzeptieren Sie Social Media Cookies in den ",
+    "cookieSettings": "Cookie-Einstellungen",
+    "cookieAfter": ", um diesen Inhalt anzuzeigen."
+  },
+  "ShortPosts": {
+    "noActivePosts": "Keine aktiven Beiträge",
+    "viewPost": "Beitrag ansehen",
+    "editPost": "Beitrag bearbeiten"
+  },
+  "NewsList": {
+    "noPostsFound": "Keine Neuigkeiten gefunden."
+  },
+  "MemberDashboard": {
+    "myProfile": "Mein Profil"
+  },
+  "MySmartHealthForm": {
+    "updateButton": "Aktualisieren",
+    "autoSaveError": "Automatisches Speichern fehlgeschlagen. Ihre Änderungen wurden möglicherweise nicht gespeichert.",
+    "saveParagraphsError": "Fehler beim Speichern der Absätze. Bitte versuchen Sie es erneut oder kontaktieren Sie den Support.",
+    "locationAddressError": "Jeder Standort muss eine Adresse enthalten.",
+    "updateError": "Aktualisierung fehlgeschlagen",
+    "resolveRecordError": "My Smart Health Eintrag konnte nicht gefunden werden. Bitte versuchen Sie es erneut.",
+    "updateSuccess": "Informationen erfolgreich aktualisiert",
+    "genericError": "Beim Aktualisieren der Informationen ist ein Fehler aufgetreten"
+  },
+  "MSHGeneralTitle": {
+    "label": "Allgemeiner Titel:"
+  },
+  "MSHParagraph": {
+    "paragraphTitle": "Absatztitel:",
+    "paragraphContent": "Absatzinhalt:",
+    "contentPlaceholder": "Schreiben Sie Ihren Absatzinhalt mit Rich-Text-Formatierung...",
+    "resizeHint": "Sie können die Textfläche durch Ziehen an der Ecke vergrößern.",
+    "videoLabel": "YouTube- oder Instagram-Video hinzufügen:",
+    "videoPlaceholder": "YouTube- oder Instagram-Video-URL eingeben",
+    "addVideoButton": "Hinzufügen",
+    "imagesLabel": "Absatzbilder:",
+    "maxFileSize": "Maximale Dateigröße: {size} MB pro Datei",
+    "uploadingImages": "Bilder werden hochgeladen...",
+    "filesLabel": "Absatzdateien:",
+    "uploadingFiles": "Dateien werden hochgeladen...",
+    "filesHeading": "Dateien:",
+    "deleteFileConfirm": "Datei \"{name}\" löschen?",
+    "socialLinksHeading": "Social Links:",
+    "urlPlaceholder": "URL",
+    "pickPlatform": "Plattform auswählen",
+    "platform": {
+      "email": "E-Mail",
+      "website": "Webseite",
+      "facebook": "Facebook",
+      "linkedin": "Linkedin",
+      "x": "X.com",
+      "youtube": "Youtube",
+      "tiktok": "TikTok",
+      "instagram": "Instagram"
+    },
+    "removeSocialLink": "Entfernen",
+    "addSocialLink": "Social Link hinzufügen",
+    "deleteParagraph": "Absatz löschen",
+    "addParagraph": "Absatz hinzufügen"
+  },
+  "MSHLocationSection": {
+    "removeLocation": "Standort entfernen",
+    "addLocation": "Standort hinzufügen"
+  },
+  "CategoryAccordion": {
+    "addNewCategory": "Neue Kategorie hinzufügen",
+    "removeFromCategory": "Aus Kategorie entfernen",
+    "missingCategoryId": "Fehlende Kategorie-ID für diesen Pfad",
+    "addSubcategory": "Unterkategorie hinzufügen",
+    "addUserToCategory": "Benutzer zur Kategorie hinzufügen",
+    "renameCategory": "Kategorie umbenennen",
+    "deleteCategory": "Kategorie löschen",
+    "modalAddRootTitle": "Neue Hauptkategorie hinzufügen",
+    "modalAddSubTitle": "Neue Unterkategorie hinzufügen",
+    "modalRenameTitle": "Kategorie umbenennen",
+    "createCategoryFailed": "Kategorie konnte nicht erstellt werden",
+    "createSubcategoryFailed": "Unterkategorie konnte nicht erstellt werden",
+    "addUserFailed": "Benutzer konnte nicht zur Kategorie hinzugefügt werden",
+    "renameCategoryFailed": "Kategorie konnte nicht umbenannt werden",
+    "confirmDeleteCategoryTree": "Diese Kategorie und alle Unterkategorien löschen? Dies kann nicht rückgängig gemacht werden.",
+    "deleteCategoryFailed": "Kategorie konnte nicht gelöscht werden",
+    "confirmRemoveUser": "Diesen Benutzer aus der Kategorie entfernen?",
+    "removeUserFailed": "Benutzer konnte nicht entfernt werden"
+  },
+  "TheHealthBarLink": {
+    "title": "The Health Bar"
+  },
+  "MySmartHealth": {
+    "filesHeading": "Dateien:",
+    "xAlt": "X-Icon",
+    "tiktokAlt": "TikTok-Icon"
+  },
+  "ProfileNewsCarousel": {
+    "noProfilesFound": "Keine Profile gefunden",
+    "loading": "Laden..."
+  },
+  "ProfilePictureCarousel": {
+    "invalidUrl": "Ungültige URL",
+    "close": "Schließen"
+  },
+  "FadeCarousel": {
+    "loading": "Laden...",
+    "close": "Schließen"
+  },
+  "MSHLocations": {
+    "addressHeading": "Adresse",
+    "planRoute": "Route planen"
+  },
+  "RichTextEditor": {
+    "toolbar": {
+      "undo": "Rückgängig (Ctrl+Z)",
+      "redo": "Wiederholen (Ctrl+Y)",
+      "heading1": "Überschrift 1",
+      "heading2": "Überschrift 2",
+      "heading3": "Überschrift 3",
+      "paragraph": "Absatz",
+      "bold": "Fett (Ctrl+B)",
+      "italic": "Kursiv (Ctrl+I)",
+      "underline": "Unterstrichen (Ctrl+U)",
+      "strikethrough": "Durchgestrichen",
+      "textColor": "Textfarbe",
+      "resetColor": "Zurücksetzen",
+      "bulletList": "Aufzählungsliste",
+      "numberedList": "Nummerierte Liste",
+      "blockquote": "Blockzitat",
+      "lineBreak": "Zeilenumbruch (Shift+Enter)",
+      "alignLeft": "Linksbündig",
+      "alignCenter": "Zentriert",
+      "alignRight": "Rechtsbündig"
+    }
   }
 }

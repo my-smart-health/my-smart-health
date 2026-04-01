@@ -1,11 +1,15 @@
+'use client';
+
 import { Heart } from 'lucide-react';
 import { Lifestyle } from '@/utils/types';
+import { useTranslations } from 'next-intl';
 
 type LifestyleDisplayProps = {
   lifestyle: Lifestyle;
 };
 
 export function LifestyleDisplay({ lifestyle }: LifestyleDisplayProps) {
+  const t = useTranslations('MemberProfileFull');
   const hasAnyData =
     lifestyle.isSmoking !== null ||
     lifestyle.alcohol ||
@@ -21,10 +25,10 @@ export function LifestyleDisplay({ lifestyle }: LifestyleDisplayProps) {
     if (lifestyle.isSmoking === null) return null;
     if (lifestyle.isSmoking) {
       return lifestyle.cigarettesPerDay
-        ? `Yes (${lifestyle.cigarettesPerDay} cigarettes/day)`
-        : 'Yes';
+        ? `${t('anamnesisDisplay.lifestyle.yes')} (${t('anamnesisDisplay.lifestyle.cigarettesPerDay', { count: lifestyle.cigarettesPerDay })})`
+        : t('anamnesisDisplay.lifestyle.yes');
     }
-    return 'No';
+    return t('anamnesisDisplay.lifestyle.no');
   };
 
   const formatValue = (value: string) => {
@@ -38,36 +42,36 @@ export function LifestyleDisplay({ lifestyle }: LifestyleDisplayProps) {
     <div className="mb-4 p-3 rounded border border-primary">
       <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
         <Heart className="text-primary" size={16} />
-        Lifestyle
+        {t('anamnesisDisplay.lifestyle.title')}
       </h4>
       <div className="space-y-2">
         {getSmokingText() && (
           <div className="flex p-2 border-b border-primary">
-            <span className="pr-2">Smoking:</span>
+            <span className="pr-2">{t('anamnesisDisplay.lifestyle.smoking')}:</span>
             <span>{getSmokingText()}</span>
           </div>
         )}
         {lifestyle.alcohol && (
           <div className="flex p-2 border-b border-primary">
-            <span className="pr-2">Alcohol:</span>
+            <span className="pr-2">{t('anamnesisDisplay.lifestyle.alcohol')}:</span>
             <span>{formatValue(lifestyle.alcohol)}</span>
           </div>
         )}
         {lifestyle.exercise && (
           <div className="flex p-2 border-b border-primary">
-            <span className="pr-2">Exercise:</span>
+            <span className="pr-2">{t('anamnesisDisplay.lifestyle.exercise')}:</span>
             <span>{formatValue(lifestyle.exercise)}</span>
           </div>
         )}
         {lifestyle.diet && (
           <div className="flex p-2 border-b border-primary">
-            <span className="pr-2">Diet:</span>
+            <span className="pr-2">{t('anamnesisDisplay.lifestyle.diet')}:</span>
             <span>{formatValue(lifestyle.diet)}</span>
           </div>
         )}
         {lifestyle.stressLevel && (
           <div className="flex p-2 border-b border-primary last:border-b-0">
-            <span className="pr-2">Stress Level:</span>
+            <span className="pr-2">{t('anamnesisDisplay.lifestyle.stressLevel')}:</span>
             <span>{formatValue(lifestyle.stressLevel)}</span>
           </div>
         )}

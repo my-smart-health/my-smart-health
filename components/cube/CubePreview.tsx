@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 type CubePost = {
   id: string;
@@ -10,10 +11,12 @@ type CubePost = {
 };
 
 export default function CubePreview({ posts }: { posts: CubePost[] }) {
+  const t = useTranslations('CubePreview');
+
   if (!posts || posts.length === 0) {
     return (
       <div className="border border-primary rounded-xl p-4 text-center text-sm text-gray-500">
-        The cube is empty. Add news to see the preview.
+        {t('empty')}
       </div>
     );
   }
@@ -33,7 +36,7 @@ export default function CubePreview({ posts }: { posts: CubePost[] }) {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-gray-400">
-                No image
+                {t('noImage')}
               </div>
             )}
           </div>

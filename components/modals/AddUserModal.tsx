@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface User {
   id: string;
@@ -19,6 +20,7 @@ export default function AddUserModal({ isOpen, onClose, onSubmit }: AddUserModal
   const [selectedUserId, setSelectedUserId] = useState('');
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
+  const t = useTranslations('AddUserModal');
 
   useEffect(() => {
     if (isOpen) {
@@ -67,12 +69,12 @@ export default function AddUserModal({ isOpen, onClose, onSubmit }: AddUserModal
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm bg-opacity-50 z-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4 max-h-[80vh] overflow-hidden flex flex-col">
-        <h3 className="text-lg font-semibold mb-4">Add User to Category</h3>
+        <h3 className="text-lg font-semibold mb-4">{t('title')}</h3>
 
         <form onSubmit={handleSubmit} className="flex flex-col h-full">
           <div className="mb-4">
             <label htmlFor="userSearch" className="block text-sm font-medium text-gray-700 mb-2">
-              Search Users
+              {t('searchLabel')}
             </label>
             <input
               type="text"
@@ -80,16 +82,16 @@ export default function AddUserModal({ isOpen, onClose, onSubmit }: AddUserModal
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Search by name or email"
+              placeholder={t('searchPlaceholder')}
               autoFocus
             />
           </div>
 
           <div className="flex-1 overflow-y-auto mb-4 border border-gray-200 rounded-md">
             {loading ? (
-              <div className="p-4 text-center">Loading users...</div>
+              <div className="p-4 text-center">{t('loading')}</div>
             ) : filteredUsers.length === 0 ? (
-              <div className="p-4 text-center text-gray-500">No users found</div>
+              <div className="p-4 text-center text-gray-500">{t('noUsersFound')}</div>
             ) : (
               <div className="max-h-60 overflow-y-auto">
                 {filteredUsers.map(user => (
@@ -106,7 +108,7 @@ export default function AddUserModal({ isOpen, onClose, onSubmit }: AddUserModal
                       className="mr-3"
                     />
                     <div>
-                      <div className="font-medium">{user.name || 'No Name'}</div>
+                      <div className="font-medium">{user.name || t('noName')}</div>
                       <div className="text-sm text-gray-500">{user.email}</div>
                     </div>
                   </label>
@@ -121,14 +123,14 @@ export default function AddUserModal({ isOpen, onClose, onSubmit }: AddUserModal
               onClick={handleClose}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
             >
-              Cancel
+              {t('cancel')}
             </button>
             <button
               type="submit"
               disabled={!selectedUserId}
               className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              Add User
+              {t('submit')}
             </button>
           </div>
         </form>

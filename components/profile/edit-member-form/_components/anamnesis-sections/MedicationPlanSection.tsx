@@ -1,5 +1,6 @@
 import { MedicationPlan, MedicationPlanTable, FileWithDescription } from '@/utils/types';
 import { getFileNameFromUrl } from '@/utils/common';
+import { useTranslations } from 'next-intl';
 import {
   getMemberFileDownloadUrl,
   deleteMemberFile,
@@ -31,6 +32,7 @@ export function MedicationPlanSection({
   onRemoveFile,
   onFileChange,
 }: MedicationPlanSectionProps) {
+  const t = useTranslations('EditMemberForm.anamnesisSections.medicationPlan');
 
   const handleUploadFile = async (
     medIndex: number,
@@ -50,7 +52,7 @@ export function MedicationPlanSection({
       onFileChange(medIndex, fileIndex, 'url', uploaded.file.url);
     } catch (error) {
       window.alert(
-        error instanceof Error ? error.message : 'Failed to upload file',
+        error instanceof Error ? error.message : t('errors.failedUploadFile'),
       );
     }
   };
@@ -70,7 +72,7 @@ export function MedicationPlanSection({
         });
       } catch (error) {
         window.alert(
-          error instanceof Error ? error.message : 'Failed to remove file',
+          error instanceof Error ? error.message : t('errors.failedRemoveFile'),
         );
         return;
       }
@@ -81,7 +83,7 @@ export function MedicationPlanSection({
 
   return (
     <details className="rounded border-2 border-primary p-3">
-      <summary className="cursor-pointer font-semibold text-primary">Medication Plan</summary>
+      <summary className="cursor-pointer font-semibold text-primary">{t('title')}</summary>
       <div className="mt-3 space-y-2">
         <label className="flex items-center gap-2 text-sm">
           <input
@@ -90,25 +92,25 @@ export function MedicationPlanSection({
             onChange={e => onNoRegularMedicationsChange(e.target.checked ? true : null)}
             className="checkbox checkbox-sm checkbox-primary"
           />
-          No Regular Medications
+          {t('noRegularMedications')}
         </label>
         <button
           type="button"
           onClick={onAddMedication}
           className="btn btn-xs btn-primary text-white"
         >
-          + Add Medication
+          {t('addMedication')}
         </button>
         {medicationPlan.medicationPlanTable.map((med, medIndex) => (
           <div key={medIndex} className="p-3 rounded space-y-2">
             <div className="flex justify-between items-center">
-              <span className="text-xs font-semibold">Medication #{medIndex + 1}</span>
+              <span className="text-xs font-semibold">{t('medicationItem', { index: medIndex + 1 })}</span>
               <button
                 type="button"
                 onClick={() => void onRemoveMedication(medIndex)}
                 className="btn btn-xs btn-error text-white"
               >
-                Remove
+                {t('remove')}
               </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -116,41 +118,41 @@ export function MedicationPlanSection({
                 type="text"
                 value={med.medication}
                 onChange={e => onMedicationChange(medIndex, 'medication', e.target.value)}
-                placeholder="Medication"
+                placeholder={t('medicationPlaceholder')}
                 className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
               />
               <input
                 type="text"
                 value={med.dosage}
                 onChange={e => onMedicationChange(medIndex, 'dosage', e.target.value)}
-                placeholder="Dosage"
+                placeholder={t('dosagePlaceholder')}
                 className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
               />
               <input
                 type="text"
                 value={med.sinceWhen}
                 onChange={e => onMedicationChange(medIndex, 'sinceWhen', e.target.value)}
-                placeholder="Since when"
+                placeholder={t('sinceWhenPlaceholder')}
                 className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
               />
               <input
                 type="text"
                 value={med.reason}
                 onChange={e => onMedicationChange(medIndex, 'reason', e.target.value)}
-                placeholder="Reason"
+                placeholder={t('reasonPlaceholder')}
                 className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
               />
             </div>
 
             <div className="mt-2 pt-2 border-t border-gray-200">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-medium text-gray-600">File Attachments</span>
+                <span className="text-xs font-medium text-gray-600">{t('fileAttachments')}</span>
                 <button
                   type="button"
                   onClick={() => onAddFile(medIndex)}
                   className="btn btn-xs btn-primary text-white"
                 >
-                  + Add File
+                  {t('addFile')}
                 </button>
               </div>
               {med.fileUrl && med.fileUrl.length > 0 && (
@@ -168,14 +170,14 @@ export function MedicationPlanSection({
                                 href={getMemberFileDownloadUrl(memberId, file.url)}
                                 className="btn btn-xs btn-outline btn-primary"
                               >
-                                Download
+                                {t('download')}
                               </a>
                               <button
                                 type="button"
                                 onClick={() => void handleRemoveFileWithApi(medIndex, fileIndex)}
                                 className="btn btn-xs btn-error text-white"
                               >
-                                Remove
+                                {t('remove')}
                               </button>
                             </div>
                           </>
@@ -197,7 +199,7 @@ export function MedicationPlanSection({
                               onClick={() => void handleRemoveFileWithApi(medIndex, fileIndex)}
                               className="btn btn-xs btn-error text-white"
                             >
-                              Remove
+                              {t('remove')}
                             </button>
                           </>
                         )}
@@ -206,7 +208,7 @@ export function MedicationPlanSection({
                         type="text"
                         value={file.description || ''}
                         onChange={e => onFileChange(medIndex, fileIndex, 'description', e.target.value)}
-                        placeholder="Description (optional)"
+                        placeholder={t('descriptionPlaceholder')}
                         className="p-2 rounded border border-gray-300 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
                       />
                     </div>

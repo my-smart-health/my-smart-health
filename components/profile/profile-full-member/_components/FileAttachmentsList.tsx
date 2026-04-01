@@ -1,7 +1,10 @@
+'use client';
+
 import { FileText, ExternalLink } from 'lucide-react';
 import { MemberDocument, FileWithDescription } from '@/utils/types';
 import { getFileNameFromUrl } from '@/utils/common';
 import { getMemberFileDownloadUrl } from '@/utils/member-files-client';
+import { useTranslations } from 'next-intl';
 
 type FileAttachmentsListProps = {
   memberId: string;
@@ -12,9 +15,11 @@ type FileAttachmentsListProps = {
 export function FileAttachmentsList({
   memberId,
   files,
-  title = 'Attachments',
+  title,
 }: FileAttachmentsListProps) {
-  const hasTitle = title.trim().length > 0;
+  const t = useTranslations('MemberProfileFull');
+  const effectiveTitle = title ?? t('attachments.title');
+  const hasTitle = effectiveTitle.trim().length > 0;
 
   const validFiles = files.filter(file => {
     if (typeof file === 'string') {
@@ -32,7 +37,7 @@ export function FileAttachmentsList({
       {hasTitle && (
         <p className="text-xs font-medium text-gray-700 mb-2 flex items-center gap-1">
           <FileText size={14} />
-          {title}
+          {effectiveTitle}
         </p>
       )}
       <div className="grid grid-cols-1 gap-2">
@@ -43,7 +48,7 @@ export function FileAttachmentsList({
           const description = isStringFormat ? null : file.description;
           const displayDescription = description && description.trim() !== ''
             ? description
-            : `Document ${fileIndex + 1}`;
+            : t('attachments.documentFallback', { index: fileIndex + 1 });
 
           return (
             <a

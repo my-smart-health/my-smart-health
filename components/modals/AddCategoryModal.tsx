@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface AddCategoryModalProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface AddCategoryModalProps {
 
 export default function AddCategoryModal({ isOpen, onClose, onSubmit, title }: AddCategoryModalProps) {
   const [name, setName] = useState('');
+  const t = useTranslations('AddCategoryModal');
 
   if (!isOpen) return null;
 
@@ -35,7 +37,7 @@ export default function AddCategoryModal({ isOpen, onClose, onSubmit, title }: A
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="categoryName" className="block text-sm font-medium text-gray-700 mb-2">
-              Category Name
+              {t('label')}
             </label>
             <input
               type="text"
@@ -43,7 +45,7 @@ export default function AddCategoryModal({ isOpen, onClose, onSubmit, title }: A
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter category name"
+              placeholder={t('placeholder')}
               autoFocus
             />
           </div>
@@ -53,13 +55,13 @@ export default function AddCategoryModal({ isOpen, onClose, onSubmit, title }: A
               onClick={handleClose}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
             >
-              Cancel
+              {t('cancel')}
             </button>
             <button
               type="submit"
               className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
             >
-              Add Category
+              {t('submit')}
             </button>
           </div>
         </form>

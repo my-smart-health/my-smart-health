@@ -1,9 +1,11 @@
 import Image from "next/image";
 import { Suspense, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { Certificate } from "@/utils/types";
 
 export default function CertificatesSection({ certificates }: { certificates: Certificate[] }) {
+  const t = useTranslations("ProfileFull");
   const [zoomedSrc, setZoomedSrc] = useState<string | null>(null);
 
   if (!certificates || certificates.length === 0) {
@@ -13,14 +15,14 @@ export default function CertificatesSection({ certificates }: { certificates: Ce
   return (
     <>
       <section className="rounded-lg">
-        <h2 className="font-bold text-primary text-2xl text-center">Zertifikate</h2>
+        <h2 className="font-bold text-primary text-2xl text-center">{t("certificates.title")}</h2>
         <Suspense fallback={<div className="skeleton animate-pulse h-[350px] w-full mb-6 bg-gray-200 rounded-lg"></div>}>
           <div className="grid grid-cols-1 gap-8">
             {certificates.map((cert) => {
               if (!cert) return null;
               const { id, name, issuer, issueDate, expiryDate, credentialId, images } = cert;
               const formattedIssueDate = new Date(issueDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
-              const formattedExpiryDate = expiryDate ? new Date(expiryDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) : 'N/A';
+              const formattedExpiryDate = expiryDate ? new Date(expiryDate).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) : t("certificates.notAvailable");
 
               return (
 
@@ -34,7 +36,7 @@ export default function CertificatesSection({ certificates }: { certificates: Ce
                         <Image
                           key={idx}
                           src={image}
-                          alt={`Certificate Image ${idx}`}
+                          alt={t("certificates.imageAlt", { index: idx })}
                           width={180}
                           height={180}
                           style={{ objectFit: "contain", width: "180px", height: "180px" }}
@@ -50,11 +52,11 @@ export default function CertificatesSection({ certificates }: { certificates: Ce
                     </div>
                   )}
                   <h3 className="font-semibold text-lg text-primary mb-1 text-center">{name}</h3>
-                  <p className="mb-1 text-gray-700 text-center"><span className="font-medium">Ausgestellt von:</span> {issuer}</p>
-                  <p className="mb-1 text-gray-700 text-center"><span className="font-medium">Ausstellungsdatum:</span> {formattedIssueDate}</p>
-                  <p className="mb-1 text-gray-700 text-center"><span className="font-medium">Ablaufdatum:</span> {formattedExpiryDate}</p>
+                  <p className="mb-1 text-gray-700 text-center"><span className="font-medium">{t("certificates.issuedBy")}:</span> {issuer}</p>
+                  <p className="mb-1 text-gray-700 text-center"><span className="font-medium">{t("certificates.issueDate")}:</span> {formattedIssueDate}</p>
+                  <p className="mb-1 text-gray-700 text-center"><span className="font-medium">{t("certificates.expiryDate")}:</span> {formattedExpiryDate}</p>
                   {credentialId && (
-                    <p className="mb-1 text-gray-700 text-center"><span className="font-medium">Zertifikats-ID:</span> {credentialId}</p>
+                    <p className="mb-1 text-gray-700 text-center"><span className="font-medium">{t("certificates.credentialId")}:</span> {credentialId}</p>
                   )}
                 </div>
 
@@ -75,7 +77,7 @@ export default function CertificatesSection({ certificates }: { certificates: Ce
             <button
               className="absolute top-4 right-4 text-white text-3xl font-bold z-10 cursor-pointer"
               onClick={() => setZoomedSrc(null)}
-              aria-label="Close"
+              aria-label={t("certificates.close")}
             >
               &times;
             </button>
@@ -84,7 +86,7 @@ export default function CertificatesSection({ certificates }: { certificates: Ce
                 loading="eager"
                 placeholder="empty"
                 src={zoomedSrc}
-                alt={`Zoomed photo ${zoomedSrc}`}
+                alt={t("certificates.zoomedAlt")}
                 fill
                 style={{ objectFit: "contain" }}
                 className="rounded-lg shadow-lg"

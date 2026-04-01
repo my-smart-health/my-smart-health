@@ -1,11 +1,13 @@
 'use client';
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { ErrorState } from "@/utils/types";
 import StatusModal from "@/components/modals/status-modal/StatusModal";
 
 export default function ChangePasswordForm() {
+  const t = useTranslations('ChangePasswordForm');
   const { data: session } = useSession();
 
   const [error, setError] = useState<ErrorState>(null);
@@ -36,27 +38,27 @@ export default function ChangePasswordForm() {
     e.preventDefault();
 
     if (!password) {
-      setError({ type: "error", message: "Please enter your current password." });
+      setError({ type: "error", message: t('errors.enterCurrentPassword') });
       return;
     }
 
     if (!newPassword) {
-      setError({ type: "error", message: "Please enter a new password." });
+      setError({ type: "error", message: t('errors.enterNewPassword') });
       return;
     }
 
     if (newPassword.length < 8) {
-      setError({ type: "error", message: "New password must be at least 8 characters long." });
+      setError({ type: "error", message: t('errors.minLength') });
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError({ type: "error", message: "New password and confirmation do not match." });
+      setError({ type: "error", message: t('errors.passwordMismatch') });
       return;
     }
 
     if (password === newPassword) {
-      setError({ type: "error", message: "New password must be different from current password." });
+      setError({ type: "error", message: t('errors.newMustDiffer') });
       return;
     }
 
@@ -79,11 +81,11 @@ export default function ChangePasswordForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        setError({ type: "error", message: data.error || "Failed to change password." });
+        setError({ type: "error", message: data.error || t('errors.failedChangePassword') });
         return;
       }
 
-      setError({ type: "success", message: "Password changed successfully!" });
+      setError({ type: "success", message: t('messages.passwordChanged') });
 
       setTimeout(() => {
         setPassword("");
@@ -95,7 +97,7 @@ export default function ChangePasswordForm() {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error changing password:', err);
       }
-      setError({ type: "error", message: "An error occurred. Please try again." });
+      setError({ type: "error", message: t('errors.generic') });
     }
   };
 
@@ -104,13 +106,13 @@ export default function ChangePasswordForm() {
       <StatusModal isOpen={!!error} onCloseAction={() => setError(null)} message={error?.message || ""} type={error?.type || "success"} />
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 border border-primary p-4 rounded">
         <section className="flex flex-col gap-2">
-          <label>Current Password:</label>
+          <label>{t('currentPasswordLabel')}</label>
           <div className="relative">
             <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
-              placeholder="Current Password"
+              placeholder={t('currentPasswordPlaceholder')}
               type={showPassword ? "text" : "password"}
               required
               className="input validator p-3 pr-12 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
@@ -123,21 +125,21 @@ export default function ChangePasswordForm() {
                 setShowPassword((prev) => !prev);
               }}
               tabIndex={-1}
-              aria-label={showPassword ? "Hide password" : "Show password"}
+              aria-label={showPassword ? t('hidePasswordAria') : t('showPasswordAria')}
             >
-              {showPassword ? 'Hide' : 'Show'}
+              {showPassword ? t('hide') : t('show')}
             </button>
           </div>
         </section>
 
         <section className="flex flex-col gap-2">
-          <label>New Password:</label>
+          <label>{t('newPasswordLabel')}</label>
           <div className="relative">
             <input
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               autoComplete="new-password"
-              placeholder="New Password"
+              placeholder={t('newPasswordPlaceholder')}
               type={showNewPassword ? "text" : "password"}
               required
               className="input validator p-3 pr-12 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
@@ -150,21 +152,21 @@ export default function ChangePasswordForm() {
                 setShowNewPassword((prev) => !prev);
               }}
               tabIndex={-1}
-              aria-label={showNewPassword ? "Hide password" : "Show password"}
+              aria-label={showNewPassword ? t('hidePasswordAria') : t('showPasswordAria')}
             >
-              {showNewPassword ? 'Hide' : 'Show'}
+              {showNewPassword ? t('hide') : t('show')}
             </button>
           </div>
         </section>
 
         <section className="flex flex-col gap-2">
-          <label>Confirm New Password:</label>
+          <label>{t('confirmNewPasswordLabel')}</label>
           <div className="relative">
             <input
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               autoComplete="new-password"
-              placeholder="Confirm New Password"
+              placeholder={t('confirmNewPasswordPlaceholder')}
               type={showConfirmPassword ? "text" : "password"}
               required
               className="input validator p-3 pr-12 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
@@ -177,16 +179,16 @@ export default function ChangePasswordForm() {
                 setShowConfirmPassword((prev) => !prev);
               }}
               tabIndex={-1}
-              aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+              aria-label={showConfirmPassword ? t('hidePasswordAria') : t('showPasswordAria')}
             >
-              {showConfirmPassword ? 'Hide' : 'Show'}
+              {showConfirmPassword ? t('hide') : t('show')}
             </button>
           </div>
         </section>
 
         <section className="flex flex-col items-start">
           <div className={`text-sm ${newPassword.length === 0 ? "text-gray-400" : getPasswordStrength(newPassword) === "weak" ? "text-red-500" : getPasswordStrength(newPassword) === "medium" ? "text-yellow-500" : "text-green-500"}`}>
-            New Password Strength: {newPassword.length === 0 ? "Not entered" : getPasswordStrength(newPassword)[0].toUpperCase() + getPasswordStrength(newPassword).slice(1)}
+            {t('newPasswordStrengthLabel')} {newPassword.length === 0 ? t('strength.notEntered') : t(`strength.${getPasswordStrength(newPassword)}`)}
           </div>
         </section>
 
@@ -194,7 +196,7 @@ export default function ChangePasswordForm() {
           type="submit"
           className="btn btn-primary p-2 rounded mt-4"
         >
-          Update Password
+          {t('updatePassword')}
         </button>
       </form>
     </>

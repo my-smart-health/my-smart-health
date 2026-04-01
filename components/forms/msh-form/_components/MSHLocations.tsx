@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { MapPin } from "lucide-react";
 import type { ReactNode } from "react";
-
+import { getTranslations } from "next-intl/server";
 import Divider from "@/components/divider/Divider";
 import { Schedule } from "@/utils/types";
 import ScheduleSection from "@/components/profile/profile-full/_components/ScheduleSection";
@@ -12,7 +12,7 @@ type MSHLocation = {
   schedule: unknown;
 };
 
-export default function MSHLocations({
+export default async function MSHLocations({
   phoneNumbers,
   locations,
   parsedSocials,
@@ -23,6 +23,8 @@ export default function MSHLocations({
   parsedSocials: { platform: string; url: string }[];
   platformIcons: Record<string, ReactNode>;
 }) {
+
+  const t = await getTranslations('MSHLocations');
 
   return (
     <>
@@ -41,13 +43,13 @@ export default function MSHLocations({
               <div key={idx} className="flex flex-col gap-1 border border-primary rounded p-4">
                 {address && (
                   <div className="flex flex-col">
-                    <h2 className="font-bold text-primary text-lg">Adresse | <Link
+                    <h2 className="font-bold text-primary text-lg">{t('addressHeading')} | <Link
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`}
                       target="_blank"
                       rel="noreferrer noopener"
                       className="indent-7 text-primary font-bold text-lg hover:text-primary transition-colors duration-200"
                     >
-                      Route planen
+                      {t('planRoute')}
                     </Link></h2>
                     <Divider addClass="my-1" />
                     <div><MapPin className="inline-block mr-1" size={20} />{address}</div>

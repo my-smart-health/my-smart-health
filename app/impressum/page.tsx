@@ -1,50 +1,47 @@
+import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 
-export default function ImpressumPage() {
+export default async function ImpressumPage() {
+  const t = await getTranslations('LegalNotice');
+
   return (
     <main className="mx-auto max-w-3xl p-6">
       <header className="flex justify-center items-center p-2 mb-6 bg-primary">
-        <h1 className="text-white text-2xl font-bold">Impressum</h1>
+        <h1 className="text-white text-2xl font-bold">{t('title')}</h1>
       </header>
 
       <section className="prose prose-lg">
-        <p className="font-bold">Future Health GmbH</p>
+        <p className="font-bold">{t('company')}</p>
 
         <p>
-          Wildenbruchstr.13<br />
-          40545 Düsseldorf<br />
-          Deutschland<br />
-          <Link href="mailto:info@future-health.de" className="link text-primary">info@future-health.de</Link>
+          {t('address.street')}<br />
+          {t('address.city')}<br />
+          {t('address.country')}<br />
+          <Link href={`mailto:${t('address.email')}`} className="link text-primary">{t('address.email')}</Link>
         </p>
 
-        <h3 className="mt-4 font-bold">GF</h3>
-        <p>Dr. Ferdinand Jeute (CEO)</p>
+        <h3 className="mt-4 font-bold">{t('ceo.title')}</h3>
+        <p>{t('ceo.name')}</p>
 
-        <h3 className="mt-4 font-bold">Handelsregister</h3>
-        <p>Amtsgericht Düsseldorf, HRB / 72666</p>
+        <h3 className="mt-4 font-bold">{t('register.title')}</h3>
+        <p>{t('register.value')}</p>
 
-        <h3 className="mt-4 font-bold">USt-IdNr. (VAT-ID):</h3>
-        <p>DE 295913675</p>
+        <h3 className="mt-4 font-bold">{t('vat.title')}</h3>
+        <p>{t('vat.value')}</p>
 
-        <h3 className="mt-4 font-bold">Inhaltlich verantwortlich nach § 18 Abs. 2 MStV:</h3>
+        <h3 className="mt-4 font-bold">{t('responsible.title')}</h3>
         <p>
-          Dr. Ferdinand Jeute<br />
-          Wildenbruchstr.13<br />
-          40545 Düsseldorf<br />
-          Deutschland
+          {t('responsible.name')}<br />
+          {t('responsible.address')}
         </p>
 
         <br />
 
         <p>
-          Die EU-Kommission stellt eine Plattform für die Online-Streitbeilegung zur Verfügung. Sie finden
-          sie unter{' '}
+          {t('eu.text1')} {' '}
           <Link href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noreferrer noopener" className="link text-primary">https://ec.europa.eu/consumers/odr/</Link>.
         </p>
-        <p>
-          Future Health  ist weder bereit noch verpflichtet, an
-          einem Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.
-        </p>
+        <p>{t('eu.text2')}</p>
       </section>
     </main>
   );

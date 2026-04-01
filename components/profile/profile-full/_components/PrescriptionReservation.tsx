@@ -3,6 +3,7 @@ import { CalendarPlus2, ClipboardPlus, NotebookTabs, ShoppingCart, AtSign } from
 import Link from "next/link";
 import { RESERVATION_LINK_TYPES, ReservationLink, Membership } from "@/utils/types";
 import { MembershipSection } from ".";
+import { useTranslations } from "next-intl";
 
 type Props = {
   reservationLinks?: ReservationLink[] | null;
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export default function PrescriptionReservation({ reservationLinks, membership = null }: Props) {
+  const t = useTranslations("ProfileFull");
   const links = (reservationLinks || []).filter((linkItem) => typeof linkItem.url === "string" && linkItem.url.trim().length > 0);
 
   if (links.length === 0 && !membership?.status) return null;
@@ -32,24 +34,24 @@ export default function PrescriptionReservation({ reservationLinks, membership =
         {nonEmailLinks.map((item, idx) => {
           type LucideIcon = typeof CalendarPlus2;
           let Icon: LucideIcon = CalendarPlus2;
-          let label = "online Termine";
+          let label = t("reservation.onlineAppointments");
           const href = item.url;
           switch (item.type) {
             case RESERVATION_LINK_TYPES.OnlineTermine:
               Icon = CalendarPlus2;
-              label = "online Termine";
+              label = t("reservation.onlineAppointments");
               break;
             case RESERVATION_LINK_TYPES.OnlineReservierungen:
               Icon = NotebookTabs;
-              label = "online Reservierung";
+              label = t("reservation.onlineReservation");
               break;
             case RESERVATION_LINK_TYPES.Rezeptbestellung:
               Icon = ClipboardPlus;
-              label = "online Rezept";
+              label = t("reservation.onlinePrescription");
               break;
             case RESERVATION_LINK_TYPES.OnlineShop:
               Icon = ShoppingCart;
-              label = "Online Shop";
+              label = t("reservation.onlineShop");
               break;
           }
 
@@ -71,7 +73,7 @@ export default function PrescriptionReservation({ reservationLinks, membership =
             <React.Fragment key={item.id ?? `${item.type}-${item.url}-${idx}`}>
               <div className="flex align-middle justify-center place-items-center w-full">
                 <Link href={item.url} target="_self" className="btn btn-primary text-lg flex gap-2 rounded">
-                  <AtSign /> <span>Email</span>
+                  <AtSign /> <span>{t("reservation.email")}</span>
                 </Link>
               </div>
             </ React.Fragment>

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { FileText } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type UploadedFilesSectionProps = {
   profileFiles: string[];
@@ -22,10 +23,12 @@ const getFileNameFromUrl = (fileUrl: string) => {
 
 export default function UploadedFilesSection({
   profileFiles,
-  heading = 'Documents & Files',
+  heading,
   showUrl = false,
   className = '',
 }: UploadedFilesSectionProps) {
+  const t = useTranslations('ProfileFull');
+  const effectiveHeading = heading ?? t('uploadedFiles.defaultHeading');
   if (!Array.isArray(profileFiles) || profileFiles.length === 0) {
     return null;
   }
@@ -44,8 +47,8 @@ export default function UploadedFilesSection({
 
   return (
     <section className={sectionClassName}>
-      {heading && (
-        <h3 className="text-lg font-semibold text-primary mb-3">{heading}</h3>
+      {effectiveHeading && (
+        <h3 className="text-lg font-semibold text-primary mb-3">{effectiveHeading}</h3>
       )}
       <div className="flex flex-wrap gap-3">
         {profileFiles.map((fileUrl) => {

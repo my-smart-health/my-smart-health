@@ -6,7 +6,7 @@ import prisma from "@/lib/db";
 import { CirclePlus } from "lucide-react";
 import MySmartHealth from "@/components/my-smart-health/MySmartHealth";
 import ProfileSearchToggle from "@/components/search/ProfileSearchToggle";
-import { CATEGORY_NAMES, CACHE_STRATEGY } from "@/utils/constants";
+import { CATEGORY_LINKS, CACHE_STRATEGY } from "@/utils/constants";
 import { Suspense } from "react";
 import TopCarouselSkeleton from "@/components/carousels/topCarousel/TopCarouselSkeleton";
 import NewsCarouselSkeleton from "@/components/carousels/newsCarousel/NewsCarouselSkeleton";
@@ -46,7 +46,9 @@ type HomeCubePostItem = {
   photos: string[];
 };
 
-async function getHomePageData(isLogged: boolean) {
+type HomePageTranslator = (key: string) => string;
+
+async function getHomePageData(isLogged: boolean, t: HomePageTranslator) {
   const cacheStrategy = isLogged ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.SHORT;
   const cubeCacheStrategy = isLogged ? CACHE_STRATEGY.NONE : CACHE_STRATEGY.MEDIUM;
 
@@ -66,7 +68,7 @@ async function getHomePageData(isLogged: boolean) {
           cacheStrategy,
         })
       ).catch((error) => {
-        console.error('Error fetching news posts:', error);
+        console.error(t('errorPost'), error);
         return [];
       }),
       withRetry<HomeCube | null>(() =>
@@ -74,7 +76,7 @@ async function getHomePageData(isLogged: boolean) {
           cacheStrategy: cubeCacheStrategy,
         })
       ).catch((error) => {
-        console.error('Error fetching cube:', error);
+        console.error(t('errorCube'), error);
         return null;
       }),
     ]);
@@ -91,19 +93,19 @@ async function getHomePageData(isLogged: boolean) {
           cacheStrategy: cubeCacheStrategy,
         })
       ).catch((error) => {
-        console.error('Error fetching cube posts:', error);
+        console.error(t('errorCubePosts'), error);
         return [];
       })
       : [];
 
     return { news, cube, cubePosts };
   } catch (error) {
-    console.error('Critical error in getHomePageData:', error);
+    console.error(t('errorData'), error);
     return { news: [], cube: null, cubePosts: [] };
   }
 }
 
-async function getMemberByUserId(userId: string) {
+async function getMemberByUserId(userId: string, t: HomePageTranslator) {
   try {
     const member = await prisma.memberProfile.findUnique({
       where: { id: userId },
@@ -168,7 +170,7 @@ async function getMemberByUserId(userId: string) {
 
     return safeMember;
   } catch (error) {
-    console.error('Error fetching member profile:', error);
+    console.error(t('errorMemberProfile'), error);
     return null;
   }
 }
@@ -176,13 +178,14 @@ async function getMemberByUserId(userId: string) {
 export default async function Home() {
   const session = await auth();
   const t = await getTranslations('HomePage');
+  const tCategories = await getTranslations('Categories');
 
   const isLogged = !!session?.user;
-  const { news, cube, cubePosts } = await getHomePageData(isLogged);
+  const { news, cube, cubePosts } = await getHomePageData(isLogged, t);
 
   let memberData: MemberProfileDashboardProps = null;
   if (session?.user?.id) {
-    memberData = await getMemberByUserId(session.user.id);
+    memberData = await getMemberByUserId(session.user.id, t);
   }
 
 
@@ -223,13 +226,13 @@ export default async function Home() {
 
         {memberData && <MemberDashboard member={memberData} />}
         <MySmartHealth />
-        <CategoryButton name={t('categories.theLeadingDoctors')} goTo={CATEGORY_NAMES.theLeadingDoctors.link} imageAsTitle="/the-leading-doctors.png" />
-        <CategoryButton name={t('categories.mySmartHealthTermineKurzfristig')} goTo={CATEGORY_NAMES.mySmartHealthTermineKurzfristig.link} imageAsTitle="/the-leading-hospitals.png" />
-        <ProfileSearchToggle label={t('search')} />
+        <CategoryButton name={tCategories('theLeadingDoctors')} goTo={CATEGORY_LINKS.theLeadingDoctors.link} imageAsTitle={CATEGORY_LINKS.theLeadingDoctors.image} />
+        <CategoryButton name={tCategories('mySmartHealthTermineKurzfristig')} goTo={CATEGORY_LINKS.mySmartHealthTermineKurzfristig.link} imageAsTitle={CATEGORY_LINKS.mySmartHealthTermineKurzfristig.image} />
+        <ProfileSearchToggle label={tCategories('search')} />
 
-        <CategoryButton name={t('categories.smartHealth')} icon="/icon3.png" goTo={CATEGORY_NAMES.smartHealth.link} />
-        <CategoryButton name={t('categories.medizinUndPflege')} icon="/icon4.png" goTo={CATEGORY_NAMES.medizinUndPflege.link} />
-        <CategoryButton name={t('categories.notfalle')} icon={<CirclePlus size={34} color="red" />} goTo={CATEGORY_NAMES.notfalle.link} />
+        <CategoryButton name={tCategories('smartHealth')} icon={CATEGORY_LINKS.smartHealth.image} goTo={CATEGORY_LINKS.smartHealth.link} />
+        <CategoryButton name={tCategories('medizinUndPflege')} icon={CATEGORY_LINKS.medizinUndPflege.image} goTo={CATEGORY_LINKS.medizinUndPflege.link} />
+        <CategoryButton name={tCategories('notfalle')} icon={<CirclePlus size={34} color="red" />} goTo={CATEGORY_LINKS.notfalle.link} />
         <TheHealthBarLink />
       </div>
     </>

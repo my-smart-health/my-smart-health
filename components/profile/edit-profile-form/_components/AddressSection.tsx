@@ -1,4 +1,7 @@
+'use client';
+
 import React, { RefObject } from "react";
+import { useTranslations } from 'next-intl';
 
 type AddressSectionProps = {
   address: string;
@@ -7,10 +10,11 @@ type AddressSectionProps = {
 };
 
 export function AddressSection({ address, setAddressAction, addressRef }: AddressSectionProps) {
+  const t = useTranslations('EditProfileForm');
   return (
     <section className="space-y-4">
       <label className="flex flex-col gap-2">
-        <span className="font-semibold text-gray-700">Address</span>
+        <span className="font-semibold text-gray-700">{t('address.label')}</span>
         <textarea
           name="address"
           ref={addressRef}

@@ -1,14 +1,18 @@
+'use client';
+
 import { Shield, Phone } from 'lucide-react';
 import { HealthInsurances } from '@/utils/types';
+import { useTranslations } from 'next-intl';
 
 type HealthInsurancesSectionProps = {
   healthInsurances: HealthInsurances[];
 };
 
 export function HealthInsurancesSection({ healthInsurances }: HealthInsurancesSectionProps) {
+  const t = useTranslations('MemberProfileFull');
   return (
     <div className="w-full">
-      <h3 className="text-lg font-semibold text-primary mb-3">Health Insurance</h3>
+      <h3 className="text-lg font-semibold text-primary mb-3">{t('insurance.title')}</h3>
       <div className="space-y-3">
         {healthInsurances.map((insurance, index) => (
           <div key={index} className="p-4 border border-primary rounded-lg">
@@ -17,20 +21,20 @@ export function HealthInsurancesSection({ healthInsurances }: HealthInsurancesSe
               <div className="flex-1 space-y-2">
                 {insurance.provider && (
                   <div>
-                    <p className="text-xs text-gray-500 uppercase">Provider</p>
+                    <p className="text-xs text-gray-500 uppercase">{t('insurance.provider')}</p>
                     <p className="text-sm font-semibold text-gray-900">{insurance.provider}</p>
                   </div>
                 )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {insurance.insuranceName && (
                     <div>
-                      <p className="text-xs text-gray-500 uppercase">Insurance Name</p>
+                      <p className="text-xs text-gray-500 uppercase">{t('insurance.insuranceName')}</p>
                       <p className="text-sm text-gray-900">{insurance.insuranceName}</p>
                     </div>
                   )}
                   {insurance.insuranceNumber && (
                     <div>
-                      <p className="text-xs text-gray-500 uppercase">Insurance Number</p>
+                      <p className="text-xs text-gray-500 uppercase">{t('insurance.insuranceNumber')}</p>
                       <p className="text-sm font-mono text-gray-900">{insurance.insuranceNumber}</p>
                     </div>
                   )}

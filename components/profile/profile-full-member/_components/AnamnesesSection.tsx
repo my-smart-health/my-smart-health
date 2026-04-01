@@ -1,5 +1,8 @@
+'use client';
+
 import { FileText } from 'lucide-react';
 import { Anamneses } from '@/utils/types';
+import { useTranslations } from 'next-intl';
 import {
   IllnessesDisplay,
   HospitalStaysDisplay,
@@ -19,13 +22,14 @@ export function AnamnesesSection({
   memberId,
   anamneses,
 }: AnamnesesSectionProps) {
+  const t = useTranslations('MemberProfileFull');
   if (!anamneses || anamneses.length === 0) {
     return null;
   }
 
   return (
     <div className="w-full">
-      <h3 className="text-lg font-semibold text-primary mb-3">Medical History (Anamneses)</h3>
+      <h3 className="text-lg font-semibold text-primary mb-3">{t('anamneses.title')}</h3>
       <div className="space-y-6">
         {anamneses.map((anamnesis, index) => (
           <div key={index} className="p-4 rounded-lg">

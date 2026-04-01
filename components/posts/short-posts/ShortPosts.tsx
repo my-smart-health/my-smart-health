@@ -1,4 +1,5 @@
 import { Session } from "next-auth";
+import { getTranslations } from "next-intl/server";
 
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import FadeCarousel from "@/components/carousels/fade-carousel/FadeCarousel";
@@ -15,7 +16,8 @@ type Posts = {
   updatedAt: Date | null;
 }
 
-export default function ShortPosts({ posts, session = null }: { posts: Posts[]; session?: Session | null }) {
+export default async function ShortPosts({ posts, session = null }: { posts: Posts[]; session?: Session | null }) {
+  const t = await getTranslations('ShortPosts');
   return (
     <div className="flex flex-col gap-2">
       {posts && posts.length > 0 ? (
@@ -45,19 +47,19 @@ export default function ShortPosts({ posts, session = null }: { posts: Posts[]; 
               className="flex flex-row-reverse gap-2 mt-4 mb-2">
               <GoToButton
                 src={`/news/${post.id}`}
-                name="View Post"
+                name={t('viewPost')}
                 className="btn btn-primary shadow" />
               {session?.user.id === post.authorId || session?.user.role === "ADMIN" ? (
                 <GoToButton
                   src={`/dashboard/edit-post/${post.id}`}
-                  name="Edit Post"
+                  name={t('editPost')}
                   className="btn btn-dash shadow" />
               ) : null}
             </div>
           </div>
         ))
       ) : (
-        <span className="text-gray-400">No active posts</span>
+        <span className="text-gray-400">{t('noActivePosts')}</span>
       )}
     </div>
   );

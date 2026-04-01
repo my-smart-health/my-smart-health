@@ -1,8 +1,10 @@
 'use client'
 
 import { signOut } from "next-auth/react";
+import { useTranslations } from "next-intl";
 
 export default function LogOut({ addClasses }: { addClasses?: string }) {
+  const t = useTranslations('LogOut');
   const clearAccessibleCookies = () => {
     if (typeof document === 'undefined') return;
 
@@ -53,7 +55,7 @@ export default function LogOut({ addClasses }: { addClasses?: string }) {
     <button
       className={` ${addClasses}`}
       onClick={handleLogout}>
-      Logout
+      {t('logout')}
     </button>
   );
 }

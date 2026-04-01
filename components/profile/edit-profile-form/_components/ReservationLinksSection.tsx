@@ -3,6 +3,7 @@
 import { ReservationLink, RESERVATION_LINK_TYPES, ReservationLinkType } from "@/utils/types";
 import Divider from "@/components/divider/Divider";
 import { NotebookTabs } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 type Props = {
   reservationLinks: ReservationLink[];
@@ -10,6 +11,7 @@ type Props = {
 };
 
 export default function ReservationLinksSection({ reservationLinks, onChange }: Props) {
+  const t = useTranslations('EditProfileForm');
 
   const handleAdd = () => {
     const next: ReservationLink = {
@@ -26,23 +28,23 @@ export default function ReservationLinksSection({ reservationLinks, onChange }: 
   };
 
   const handleRemove = (id: string) => {
-    if (!confirm("Diesen Link wirklich entfernen?")) return;
+    if (!confirm(t('reservationLinks.confirmRemove'))) return;
     onChange((reservationLinks || []).filter((link) => link.id !== id));
   };
 
   return (
     <section className="space-y-4">
       {!reservationLinks.length && (
-        <span className="font-semibold text-gray-700">Reservierungen/Rezepte</span>
+        <span className="font-semibold text-gray-700">{t('reservationLinks.emptyLabel')}</span>
       )}
 
       {(reservationLinks || []).map((link) => (
         <div className="flex flex-col gap-2" key={link.id}>
-          <span className="font-semibold text-gray-700">Link</span>
+          <span className="font-semibold text-gray-700">{t('reservationLinks.linkLabel')}</span>
           <div className="flex flex-col md:flex-row gap-2">
             <label className="form-control w-full md:w-60">
               <div className="label">
-                <span className="label-text">Type</span>
+                <span className="label-text">{t('reservationLinks.typeLabel')}</span>
               </div>
               <select
                 className="select select-lg select-bordered select-primary w-full max-w-xs border-primary"
@@ -59,7 +61,7 @@ export default function ReservationLinksSection({ reservationLinks, onChange }: 
 
             <label className="form-control w-full">
               <div className="label">
-                <span className="label-text">{link.type === RESERVATION_LINK_TYPES.Email ? "E-Mail" : "URL"}</span>
+                <span className="label-text">{link.type === RESERVATION_LINK_TYPES.Email ? t('reservationLinks.emailLabel') : t('reservationLinks.urlLabel')}</span>
               </div>
               <input
                 type={link.type === RESERVATION_LINK_TYPES.Email ? "email" : "url"}
@@ -78,7 +80,7 @@ export default function ReservationLinksSection({ reservationLinks, onChange }: 
             className="btn btn-outline flex place-self-end mt-2 w-fit align-bottom text-red-500"
             onClick={() => handleRemove(link.id)}
           >
-            Remove
+            {t('reservationLinks.removeButton')}
           </button>
           <Divider addClass="my-1" />
         </div>
@@ -89,7 +91,7 @@ export default function ReservationLinksSection({ reservationLinks, onChange }: 
         onClick={handleAdd}
         className="btn btn-outline btn-primary px-3 py-1 h-auto w-full"
       >
-        <NotebookTabs /> Add Link Reservierungen/Rezepte
+        <NotebookTabs /> {t('reservationLinks.addButton')}
       </button>
     </section>
   );

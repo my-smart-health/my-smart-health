@@ -1,4 +1,5 @@
 import { FamilyHistoryOfIllness } from '@/utils/types';
+import { useTranslations } from 'next-intl';
 
 type FamilyHistorySectionProps = {
   familyHistory: FamilyHistoryOfIllness;
@@ -9,18 +10,19 @@ export function FamilyHistorySection({
   familyHistory,
   onChange,
 }: FamilyHistorySectionProps) {
+  const t = useTranslations('EditMemberForm.anamnesisSections.familyHistory');
   return (
     <details className="rounded border-2 border-primary p-3">
-      <summary className="cursor-pointer font-semibold text-primary">Family History of Illnesses</summary>
+      <summary className="cursor-pointer font-semibold text-primary">{t('title')}</summary>
       <div className="mt-3">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {[
-            { key: 'cardiovascularDisease', label: 'Cardiovascular Disease' },
-            { key: 'diabetes', label: 'Diabetes' },
-            { key: 'cancer', label: 'Cancer' },
-            { key: 'hereditaryDiseases', label: 'Hereditary Diseases' },
-            { key: 'mentalHealthConditions', label: 'Mental Health Conditions' },
-            { key: 'noKnownRelevantIllnesses', label: 'No Known Relevant Illnesses' },
+            { key: 'cardiovascularDisease', label: t('cardiovascularDisease') },
+            { key: 'diabetes', label: t('diabetes') },
+            { key: 'cancer', label: t('cancer') },
+            { key: 'hereditaryDiseases', label: t('hereditaryDiseases') },
+            { key: 'mentalHealthConditions', label: t('mentalHealthConditions') },
+            { key: 'noKnownRelevantIllnesses', label: t('noKnownRelevantIllnesses') },
           ].map(({ key, label }) => (
             <label key={key} className="flex items-center gap-2 text-sm">
               <input

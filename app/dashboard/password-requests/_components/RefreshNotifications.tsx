@@ -3,10 +3,12 @@
 import { useRouter } from 'next/navigation';
 import { RefreshCw } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 export default function RefreshNotifications() {
   const router = useRouter();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const t = useTranslations('RefreshNotifications');
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
@@ -19,10 +21,10 @@ export default function RefreshNotifications() {
       onClick={handleRefresh}
       disabled={isRefreshing}
       className="btn btn-outline btn-sm gap-2"
-      title="Benachrichtigungen aktualisieren"
+      title={t('title')}
     >
       <RefreshCw size={16} className={isRefreshing ? 'animate-spin' : ''} />
-      Aktualisieren
+      {t('label')}
     </button>
   );
 }

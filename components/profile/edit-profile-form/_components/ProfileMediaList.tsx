@@ -1,7 +1,10 @@
+'use client';
+
 import Image from "next/image";
 import MoveImageVideo from "@/components/buttons/move-up-down-image-video/MoveImageVideo";
 import YoutubeEmbed from "@/components/embed/youtube/YoutubeEmbed";
 import InstagramEmbed from "@/components/embed/instagram/InstagramEmbed";
+import { useTranslations } from 'next-intl';
 
 type Props = {
   blobResult: string[];
@@ -20,6 +23,7 @@ export function ProfileMediaList({
   onAfterDelete,
   onAfterMove
 }: Props) {
+  const t = useTranslations('EditProfileForm');
   return (
     <section>
       <div className="flex flex-col items-center gap-8 w-full max-w-full">
@@ -44,7 +48,7 @@ export function ProfileMediaList({
                 <div className="relative w-[200px] h-[200px]">
                   <Image
                     src={mediaUrl}
-                    alt={`Photo ${idx + 1}`}
+                    alt={t('photoAlt', { index: idx + 1 })}
                     fill
                     loading="lazy"
                     placeholder="empty"

@@ -23,6 +23,7 @@ import { ArrowUpRight, XIcon, AtSign, Facebook, Globe, Instagram, Linkedin, Yout
 import Spinner from "@/components/common/Spinner";
 import Xlogo from '@/public/x-logo-black.png';
 import TikTokLogo from '@/public/tik-tok-logo.png';
+import { useTranslations } from 'next-intl';
 
 type Social = {
   platform: string;
@@ -48,6 +49,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
   }
   const router = useRouter();
   const { startUpload, updateProgress, finishUpload } = useUploadProgress();
+  const t = useTranslations('PostForm');
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState<ErrorState>(null);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
@@ -74,9 +76,9 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
     Website: <Globe className="inline-block mr-1" size={30} />,
     Facebook: <Facebook className="inline-block mr-1" size={30} />,
     Linkedin: <Linkedin className="inline-block mr-1" size={30} />,
-    X: <Image src={Xlogo} width={30} height={30} alt="X.com" className="w-6 mr-1" />,
+    X: <Image src={Xlogo} width={30} height={30} alt={t('platform.x')} className="w-6 mr-1" />,
     Youtube: <Youtube className="inline-block mr-1" size={30} />,
-    TikTok: <Image src={TikTokLogo} width={30} height={30} alt="TikTok" className="w-8 -ml-1" />,
+    TikTok: <Image src={TikTokLogo} width={30} height={30} alt={t('platform.tiktok')} className="w-8 -ml-1" />,
     Instagram: <Instagram className="inline-block mr-1" size={30} />,
   };
 
@@ -119,7 +121,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       const urls = uploadedImagesRef.current || [];
       const hasPending = urls.some((u) => !isYoutubeLink(u) && !isInstagramLink(u));
       if (!hasPending) return;
-      const ok = window.confirm('You have uploaded images that will be deleted if you leave this page. Continue?');
+      const ok = window.confirm(t('confirm.leaveWithUploads'));
       if (!ok) {
         history.go(1);
         return;
@@ -140,7 +142,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       if (!hasPending) return;
       evt.preventDefault();
       evt.stopPropagation();
-      const ok = window.confirm('You have uploaded images that will be deleted if you leave this page. Continue?');
+      const ok = window.confirm(t('confirm.leaveWithUploads'));
       if (!ok) return;
       await Promise.resolve(cleanupUploads(false));
       if (anchor.origin === window.location.origin) {
@@ -183,7 +185,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
     const mediaUrl = formData.get(`media`)?.toString().trim();
 
     if (!mediaUrl || mediaUrl.length === 0) {
-      setError({ type: "error", message: "Media URL cannot be empty" });
+      setError({ type: "error", message: t('errors.mediaUrlEmpty') });
       setIsDisabled(false);
       return;
     }
@@ -197,7 +199,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       resetMediaInput.value = '';
       setIsDisabled(false);
     } else {
-      setError({ type: "error", message: "Media URL must be a valid YouTube or Instagram link" });
+      setError({ type: "error", message: t('errors.mediaUrlInvalid') });
       setIsDisabled(false);
       return;
     }
@@ -213,7 +215,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       if (file.size > MAX_IMAGE_SIZE_BYTES) {
         setError({
           type: "error",
-          message: `File "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.`
+          message: t('errors.fileTooLarge', { name: file.name, size: MAX_IMAGE_SIZE_MB })
         });
         setIsDisabled(false);
         return undefined;
@@ -228,7 +230,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       );
 
       if (!response.ok) {
-        setError({ type: "error", message: "Failed to upload image" });
+        setError({ type: "error", message: t('errors.uploadFailed') });
         setIsDisabled(false);
         return undefined;
       }
@@ -236,7 +238,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
       return result.url;
     } catch (error) {
-      let message = 'Error uploading files';
+      let message = t('errors.errorUploadingFiles');
       if (error instanceof Error) {
         message = error.message;
       }
@@ -340,7 +342,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
       const stripped = content.replace(/<[^>]*>/g, "").trim();
       if (!stripped) {
-        setError({ type: "warning", message: "Content cannot be empty" });
+        setError({ type: "warning", message: t('errors.contentEmpty') });
         setIsDisabled(false);
         return;
       }
@@ -363,7 +365,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       }
 
       if (!isImageFirst) {
-        setError({ type: "warning", message: "First media must be an image" });
+        setError({ type: "warning", message: t('errors.firstMediaMustBeImage') });
         setIsDisabled(false);
         return;
       }
@@ -386,15 +388,15 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       });
 
       if (!result.ok) {
-        setError({ type: "error", message: "Failed to create post" });
+        setError({ type: "error", message: t('errors.createFailed') });
         setIsDisabled(false);
         return;
       }
       setHasSubmitted(true);
       setIsDisabled(true);
-      setError({ type: "success", message: "Post created successfully" });
+      setError({ type: "success", message: t('success.created') });
     } catch (error) {
-      let message = 'Error uploading files';
+      let message = t('errors.errorUploadingFiles');
       if (error instanceof Error) {
         message = error.message;
       }
@@ -412,7 +414,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
         <fieldset className="fieldset text-lg">
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-            Title
+            {t('titleLabel')}
           </label>
           <textarea
             id="title"
@@ -421,20 +423,20 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
             rows={2}
             className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
           />
-          <div className="label pt-1 text-xs flex flex-row justify-end">You can pull the right corner to resize it <ArrowUpRight /></div>
+          <div className="label pt-1 text-xs flex flex-row justify-end">{t('titleResize')} <ArrowUpRight /></div>
         </fieldset>
 
         <Divider />
 
         <fieldset className="fieldset">
-          <span className="block text-sm font-medium text-gray-700 mb-1">Content</span>
-          <RichTextEditor value={content} onChange={setContent} placeholder="Write your post..." />
+          <span className="block text-sm font-medium text-gray-700 mb-1">{t('contentLabel')}</span>
+          <RichTextEditor value={content} onChange={setContent} placeholder={t('contentPlaceholder')} />
         </fieldset>
 
         <Divider />
 
         <fieldset className="fieldset">
-          <legend className="fieldset-legend">Post Tags</legend>
+          <legend className="fieldset-legend">{t('tagsLegend')}</legend>
           {tags.length > 0 && (
             <div className="flex flex-col flex-wrap gap-2 mb-2">
               {tags.map((tag, index) => (
@@ -442,7 +444,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                   <input
                     type="text"
                     name={`tag-${index}`}
-                    placeholder="Tag"
+                    placeholder={t('tagPlaceholder')}
                     value={tags[index]}
                     onChange={(e) => handleTagsChange(e, index)}
                     className="p-2 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
@@ -459,20 +461,20 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
               ))}
             </div>
           )}
-          <button type="button" onClick={handleAddTag} className="btn btn-primary mt-2">Add Tag</button>
+          <button type="button" onClick={handleAddTag} className="btn btn-primary mt-2">{t('addTag')}</button>
         </fieldset>
 
         <Divider />
 
         <fieldset className="fieldset">
-          <legend className="fieldset-legend">Social Links</legend>
+          <legend className="fieldset-legend">{t('socialLinksLegend')}</legend>
           {socialLinks.length > 0 && (
             <div className="flex flex-col gap-4 mb-4">
               {socialLinks.map((link, index) => (
                 <div key={index} className="flex flex-row flex-wrap gap-4 items-center">
                   <input
                     type="text"
-                    placeholder="URL"
+                    placeholder={t('urlPlaceholder')}
                     value={link.url}
                     onChange={(e) => handleSocialLinkChange(index, 'url', e.target.value)}
                     className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary flex-1 min-w-[200px]"
@@ -487,15 +489,15 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                         value={link.platform}
                         onChange={(e) => handleSocialLinkChange(index, 'platform', e.target.value)}
                       >
-                        <option disabled value="">Pick a platform</option>
-                        <option value="Email">Email</option>
-                        <option value="Website">Website</option>
-                        <option value="Facebook">Facebook</option>
-                        <option value="Linkedin">Linkedin</option>
-                        <option value="X">X.com</option>
-                        <option value="Youtube">Youtube</option>
-                        <option value="TikTok">TikTok</option>
-                        <option value="Instagram">Instagram</option>
+                        <option disabled value="">{t('pickPlatform')}</option>
+                        <option value="Email">{t('platform.email')}</option>
+                        <option value="Website">{t('platform.website')}</option>
+                        <option value="Facebook">{t('platform.facebook')}</option>
+                        <option value="Linkedin">{t('platform.linkedin')}</option>
+                        <option value="X">{t('platform.x')}</option>
+                        <option value="Youtube">{t('platform.youtube')}</option>
+                        <option value="TikTok">{t('platform.tiktok')}</option>
+                        <option value="Instagram">{t('platform.instagram')}</option>
                       </select>
                     </div>
                     <button
@@ -503,7 +505,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                       onClick={(e) => handleRemoveSocialLink(e, index)}
                       className="btn btn-outline text-red-500 self-end"
                     >
-                      Remove
+                      {t('removeLink')}
                     </button>
                   </div>
                 </div>
@@ -511,7 +513,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
             </div>
           )}
           <button type="button" onClick={handleAddSocialLink} className="btn btn-outline btn-primary px-3 py-1 w-full rounded">
-            Add Social Link
+            {t('addSocialLink')}
           </button>
         </fieldset>
 
@@ -519,21 +521,21 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
         <div className={blobResult.length >= MAX_FILES_PER_POST ? 'opacity-50 pointer-events-none' : ''}>
           <fieldset className="fieldset">
-            <legend className="fieldset-legend">Add Media URL</legend>
+            <legend className="fieldset-legend">{t('addMediaLegend')}</legend>
             <div className="flex flex-col gap-4 w-full">
               <input
                 type="text"
                 name={`media`}
-                placeholder="https://"
+                placeholder={t('mediaUrlPlaceholder')}
                 className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
               />
-              <label htmlFor={`media`} className="">Media URL must be a valid URL from YouTube or Instagram</label>
+              <label htmlFor={`media`} className="">{t('mediaUrlLabel')}</label>
               <button
                 type="button"
                 onClick={handleAddURL}
                 className="btn w-full btn-primary mt-2"
               >
-                Upload Media URL
+                {t('uploadMediaUrl')}
               </button>
             </div>
           </fieldset>
@@ -541,7 +543,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
           <Divider addClass="my-2" />
 
           <fieldset className="fieldset">
-            <legend className="fieldset-legend">Select File</legend>
+            <legend className="fieldset-legend">{t('selectFileLegend')}</legend>
             <div className="flex flex-wrap gap-4 w-full">
               <input
                 type="file"
@@ -554,12 +556,12 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                 disabled={uploadingImages}
                 onChange={async e => {
                   if (!e.target.files || e.target.files.length + blobResult.length > MAX_FILES_PER_POST) {
-                    setError({ type: "warning", message: `You can select up to ${MAX_FILES_PER_POST} files only.` });
+                    setError({ type: "warning", message: t('errors.tooManyFiles', { max: MAX_FILES_PER_POST }) });
                     e.target.value = "";
                   } else {
                     for (const file of Array.from(e.target.files)) {
                       if (file.size > MAX_IMAGE_SIZE_BYTES) {
-                        setError({ type: "error", message: `File "${file.name}" is too large. Maximum size is ${MAX_IMAGE_SIZE_MB}MB.` });
+                        setError({ type: "error", message: t('errors.fileTooLarge', { name: file.name, size: MAX_IMAGE_SIZE_MB }) });
                         e.target.value = "";
                         return;
                       }
@@ -577,10 +579,10 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                   }
                 }} />
               <div className="label pt-1">
-                <span className="label-text-alt text-gray-500">Maximum file size: {MAX_IMAGE_SIZE_MB}MB per file</span>
+                <span className="label-text-alt text-gray-500">{t('maxFileSize', { size: MAX_IMAGE_SIZE_MB })}</span>
               </div>
               {uploadingImages && (
-                <Spinner size="sm" label="Uploading images..." />
+                <Spinner size="sm" label={t('uploadingImages')} />
               )}
             </div>
           </fieldset>
@@ -598,7 +600,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
                 ? <InstagramEmbed embedHtml={image} width={WIDTH} height={HEIGHT} />
                 : <Image
                   src={image}
-                  alt={`Photo ${idx + 1}`}
+                  alt={t('photoAlt', { number: idx + 1 })}
                   width={WIDTH}
                   height={HEIGHT}
                   loading="lazy"
@@ -637,20 +639,20 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
 
         {blobResult && blobResult.length > 0 && (
           <div className="space-y-2">
-            <div className="text-sm">You can add up to {MAX_FILES_PER_POST} media files (images, Instagram videos, or YouTube videos)</div>
-            <p className="text-wrap text-warning">NB: Please ensure that the first media is an image.</p>
+            <div className="text-sm">{t('mediaInfo', { max: MAX_FILES_PER_POST })}</div>
+            <p className="text-wrap text-warning">{t('firstMediaWarning')}</p>
           </div>
         )}
 
         <button type="submit" className={`p-2 rounded bg-primary text-white font-bold text-base hover:bg-primary/80 transition-colors ${isImageFirst ? '' : 'opacity-50 pointer-events-none'}`}>
-          Create Post
+          {t('buttons.createPost')}
         </button>
         <button
           type="button"
           className="btn btn-outline btn-error"
           onClick={async () => {
             if (isDisabled) return;
-            const ok = window.confirm('Cancel and delete uploaded images?');
+            const ok = window.confirm(t('confirm.cancelUploads'));
             if (!ok) return;
             setIsDisabled(true);
             const urls = uploadedImagesRef.current || [];
@@ -697,18 +699,18 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
           </form>
           <h3 className="font-bold text-lg">
             {error?.type === 'success'
-              ? 'Success!'
+              ? t('modalTitles.success')
               : error?.type === 'warning'
-                ? 'Warning'
-                : 'Error'}
+                ? t('modalTitles.warning')
+                : t('modalTitles.error')}
           </h3>
           {isDefaultLogo && error?.type === "success" ? (
             <div className="flex flex-col items-center py-4">
               <span className="p-2 text-center break-after-auto">
-                No image file was selected, default logo will be used
+                {t('noImageDefault')}
               </span>
               <span className="text-sm text-white italic">
-                You can change it later in the edit post section
+                {t('noImageDefaultHint')}
               </span>
             </div>
           ) : (

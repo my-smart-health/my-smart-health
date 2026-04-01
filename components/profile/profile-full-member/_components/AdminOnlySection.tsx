@@ -1,4 +1,7 @@
+'use client';
+
 import { Shield, Mail, CheckCircle, XCircle, Calendar } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type AdminOnlySectionProps = {
   email: string;
@@ -15,6 +18,7 @@ export function AdminOnlySection({
   createdAt,
   updatedAt,
 }: AdminOnlySectionProps) {
+  const t = useTranslations('MemberProfileFull');
   const formatDateTime = (dateString: string) => {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat('de-DE', {
@@ -30,14 +34,14 @@ export function AdminOnlySection({
     <div className="w-full p-4 bg-amber-50 rounded-lg border-2 border-primary">
       <div className="flex items-center gap-2 mb-3">
         <Shield className="text-primary" size={20} />
-        <h3 className="text-lg font-semibold text-primary">Admin Information</h3>
+        <h3 className="text-lg font-semibold text-primary">{t('admin.title')}</h3>
       </div>
 
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <Mail size={16} className="text-primary flex-shrink-0" />
           <div>
-            <p className="text-xs text-gray-500 uppercase">Email</p>
+            <p className="text-xs text-gray-500 uppercase">{t('admin.email')}</p>
             <p className="text-sm font-medium text-gray-900">{email}</p>
           </div>
         </div>
@@ -49,9 +53,9 @@ export function AdminOnlySection({
             <XCircle size={16} className="text-red-600 flex-shrink-0" />
           )}
           <div>
-            <p className="text-xs text-gray-500 uppercase">Status</p>
+            <p className="text-xs text-gray-500 uppercase">{t('admin.status')}</p>
             <p className={`text-sm font-semibold ${isActive ? 'text-green-600' : 'text-red-600'}`}>
-              {isActive ? 'Active' : 'Inactive'}
+              {isActive ? t('admin.active') : t('admin.inactive')}
             </p>
           </div>
         </div>
@@ -60,7 +64,7 @@ export function AdminOnlySection({
           <div className="flex items-center gap-2">
             <Calendar size={16} className="text-primary flex-shrink-0" />
             <div>
-              <p className="text-xs text-gray-500 uppercase">Active Until</p>
+              <p className="text-xs text-gray-500 uppercase">{t('admin.activeUntil')}</p>
               <p className="text-sm font-medium text-gray-900">{formatDateTime(activeUntil)}</p>
             </div>
           </div>
@@ -68,11 +72,11 @@ export function AdminOnlySection({
 
         <div className="grid grid-cols-2 gap-3 pt-2 border-t border-primary">
           <div>
-            <p className="text-xs text-gray-500 uppercase">Created</p>
+            <p className="text-xs text-gray-500 uppercase">{t('admin.created')}</p>
             <p className="text-xs text-gray-700">{formatDateTime(createdAt)}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-500 uppercase">Updated</p>
+            <p className="text-xs text-gray-500 uppercase">{t('admin.updated')}</p>
             <p className="text-xs text-gray-700">{formatDateTime(updatedAt)}</p>
           </div>
         </div>

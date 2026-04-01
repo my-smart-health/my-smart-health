@@ -5,9 +5,11 @@ import RefreshNotifications from "./_components/RefreshNotifications";
 import prisma from "@/lib/db";
 import { AdminNotification } from "@/utils/types";
 import { CACHE_STRATEGY } from "@/utils/constants";
+import { getTranslations } from "next-intl/server";
 
 export default async function PasswordRequestsPage() {
   const session = await auth();
+  const t = await getTranslations('PasswordRequestsPage');
 
   if (!session || session?.user.role !== "ADMIN") {
     redirect("/");
@@ -35,9 +37,9 @@ export default async function PasswordRequestsPage() {
     <div className="container mx-auto p-6 max-w-6xl">
       <div className="mb-6 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-primary mb-2">Passwort-Zurücksetzungsanfragen</h1>
+          <h1 className="text-3xl font-bold text-primary mb-2">{t('title')}</h1>
           <p className="text-gray-600">
-            Verwalten Sie Anfragen zum Zurücksetzen von Passwörtern
+            {t('subtitle')}
           </p>
         </div>
         <RefreshNotifications />

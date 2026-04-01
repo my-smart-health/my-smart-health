@@ -1,4 +1,5 @@
 import { FileWithDescription } from '@/utils/types';
+import { useTranslations } from 'next-intl';
 
 type FileAttachmentsSectionProps = {
   fileUrl?: FileWithDescription[];
@@ -13,16 +14,17 @@ export function FileAttachmentsSection({
   onRemove,
   onChange,
 }: FileAttachmentsSectionProps) {
+  const t = useTranslations('EditMemberForm.anamnesisSections.fileAttachments');
   return (
     <details className="rounded border-2 border-primary p-3">
-      <summary className="cursor-pointer font-semibold text-primary">File Attachments</summary>
+      <summary className="cursor-pointer font-semibold text-primary">{t('title')}</summary>
       <div className="mt-3 space-y-2">
         <button
           type="button"
           onClick={onAdd}
           className="btn btn-xs btn-primary text-white"
         >
-          + Add File URL
+          {t('addFileUrl')}
         </button>
         {fileUrl && fileUrl.length > 0 && (
           <div className="space-y-2">
@@ -33,7 +35,7 @@ export function FileAttachmentsSection({
                     type="url"
                     value={file.url}
                     onChange={e => onChange(fileIndex, 'url', e.target.value)}
-                    placeholder="File URL"
+                    placeholder={t('fileUrlPlaceholder')}
                     className="p-2 rounded border border-primary text-xs focus:outline-none focus:ring-2 focus:ring-primary flex-1"
                   />
                 </div>
@@ -41,7 +43,7 @@ export function FileAttachmentsSection({
                   type="text"
                   value={file.description || ''}
                   onChange={e => onChange(fileIndex, 'description', e.target.value)}
-                  placeholder="Description (optional)"
+                  placeholder={t('descriptionPlaceholder')}
                   className="p-2 rounded border border-primary text-xs focus:outline-none focus:ring-2 focus:ring-primary"
                 />
                 <button
@@ -49,7 +51,7 @@ export function FileAttachmentsSection({
                   onClick={() => onRemove(fileIndex)}
                   className="btn btn-xs btn-error text-white sm:w-auto w-full"
                 >
-                  Remove
+                  {t('remove')}
                 </button>
               </div>
             ))}

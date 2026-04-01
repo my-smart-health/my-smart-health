@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 type StatusSectionProps = {
   isActive: boolean;
   setIsActive: (val: boolean) => void;
@@ -11,11 +13,12 @@ export function StatusSection({
   activeUntil,
   setActiveUntil,
 }: StatusSectionProps) {
+  const t = useTranslations('EditMemberForm.status');
   return (
     <div className="space-y-4">
       <section>
         <label className="flex items-center gap-4 cursor-pointer">
-          <span className="font-semibold text-gray-700 flex-1">Active</span>
+          <span className="font-semibold text-gray-700 flex-1">{t('active')}</span>
           <input
             type="checkbox"
             checked={isActive}
@@ -27,7 +30,7 @@ export function StatusSection({
 
       <section>
         <label className="flex flex-col gap-2">
-          <span className="font-semibold text-gray-700">Active Until</span>
+          <span className="font-semibold text-gray-700">{t('activeUntil')}</span>
           <input
             type="date"
             value={activeUntil}

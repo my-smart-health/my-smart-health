@@ -1,5 +1,6 @@
 import prisma from "@/lib/db";
 import { auth } from "@/auth";
+import { getTranslations } from "next-intl/server";
 
 import { NewsCardType, Social } from "@/utils/types";
 
@@ -39,7 +40,7 @@ async function getAllPostsByUserId(userId: string, isOwnProfile: boolean, isLogg
   })) as NewsCardType[];
 }
 
-async function getAuthorNameById(authorId: string) {
+async function getAuthorNameById(authorId: string, fallbackName: string) {
   const author = await prisma.user.findUnique({
     where: { id: authorId },
     select: {
@@ -47,10 +48,11 @@ async function getAuthorNameById(authorId: string) {
     },
     cacheStrategy: CACHE_STRATEGY.NONE,
   });
-  return author?.name || "Unknown Author";
+  return author?.name || fallbackName;
 }
 
 export default async function ProfileNewsPage({ params }: { params: Promise<{ id: string }> }) {
+  const t = await getTranslations("ProfileNewsPage");
 
   const session = await auth();
 
@@ -60,17 +62,17 @@ export default async function ProfileNewsPage({ params }: { params: Promise<{ id
   const isLogged = !!session?.user;
 
   const posts = await getAllPostsByUserId(profileId, isOwnProfile, isLogged);
-  const authorName = await getAuthorNameById(profileId);
+  const authorName = await getAuthorNameById(profileId, t("unknownAuthor"));
 
   if (posts) {
     return (
       <div className="flex flex-col gap-4 mb-8">
-        <h1 className="flex flex-wrap mx-auto text-xl font-bold text-primary text-center">{authorName} News</h1>
+        <h1 className="flex flex-wrap mx-auto text-xl font-bold text-primary text-center">{authorName} {t("newsSuffix")}</h1>
         <PostCard posts={posts} session={session} />
       </div>
     );
 
   }
 
-  return <div>Error fetching news articles</div>;
+  return <div>{t("fetchError")}</div>;
 }

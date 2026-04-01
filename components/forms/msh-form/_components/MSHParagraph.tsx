@@ -5,6 +5,7 @@ import Divider from "@/components/divider/Divider";
 import { PutBlobResult } from "@vercel/blob";
 import { useRef, useState } from "react";
 import type { ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import Spinner from "@/components/common/Spinner";
 import RichTextEditor from '@/components/forms/rich-text-editor/RichTextEditor';
 import Image from "next/image";
@@ -32,6 +33,8 @@ export default function MSHParagraph({
   onAfterChange?: (updatedParagraphs: MySmartHealthParagraph[]) => Promise<void> | void;
 }) {
 
+  const t = useTranslations('MSHParagraph');
+
   const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [youtubeUrls, setYoutubeUrls] = useState<string[]>([]);
   const [uploadingImages, setUploadingImages] = useState<Record<number, boolean>>({});
@@ -44,9 +47,9 @@ export default function MSHParagraph({
     Website: <Globe className="inline-block mr-1" size={30} />,
     Facebook: <Facebook className="inline-block mr-1" size={30} />,
     Linkedin: <Linkedin className="inline-block mr-1" size={30} />,
-    X: <Image src={Xlogo} width={30} height={30} alt="X.com" className="w-6 mr-1" />,
+    X: <Image src={Xlogo} width={30} height={30} alt={t('platform.x')} className="w-6 mr-1" />,
     Youtube: <Youtube className="inline-block mr-1" size={30} />,
-    TikTok: <Image src={TikTokLogo} width={30} height={30} alt="TikTok" className="w-8 -ml-1" />,
+    TikTok: <Image src={TikTokLogo} width={30} height={30} alt={t('platform.tiktok')} className="w-8 -ml-1" />,
     Instagram: <Instagram className="inline-block mr-1" size={30} />,
   };
 
@@ -274,7 +277,7 @@ export default function MSHParagraph({
       {paragraphs.map((paragraph, index) => (
         <div key={paragraph.id} className="mb-6">
           <label>
-            Paragraph Title:
+            {t('paragraphTitle')}
             <input
               type="text"
               value={paragraph.title ?? ""}
@@ -286,23 +289,23 @@ export default function MSHParagraph({
           <Divider addClass="my-1" />
 
           <div className="block w-full">
-            <label className="block mb-2">Paragraph Content:</label>
+            <label className="block mb-2">{t('paragraphContent')}</label>
             <RichTextEditor
               value={paragraph.content || ''}
               onChange={(val: string) => handleContentChange(index, val)}
-              placeholder="Write your paragraph content with rich formatting..."
+              placeholder={t('contentPlaceholder')}
             />
           </div>
-          <span className="flex justify-end text-sm text-gray-500">You can resize the text area by dragging the corner. <ArrowUpRight /></span>
+          <span className="flex justify-end text-sm text-gray-500">{t('resizeHint')} <ArrowUpRight /></span>
 
           <Divider addClass="my-1" />
 
           <label>
-            Add YouTube or Instagram Video:
+            {t('videoLabel')}
             <div className="flex gap-2 mt-1">
               <input
                 type="text"
-                placeholder="Enter YouTube or Instagram video URL"
+                placeholder={t('videoPlaceholder')}
                 value={youtubeUrls[index] || ""}
                 onChange={(e) => {
                   const newUrls = [...youtubeUrls];
@@ -333,7 +336,7 @@ export default function MSHParagraph({
                 className="btn btn-primary whitespace-nowrap"
               >
                 <Youtube className="inline-block" size={20} />
-                Add
+                {t('addVideoButton')}
               </button>
             </div>
           </label>
@@ -341,7 +344,7 @@ export default function MSHParagraph({
           <Divider addClass="my-1" />
 
           <label className="flex flex-col gap-1">
-            Paragraph Images:
+            {t('imagesLabel')}
             <input
               ref={el => { fileInputRefs.current[index] = el; }}
               type="file"
@@ -352,10 +355,10 @@ export default function MSHParagraph({
               onChange={(e) => handleUploadImages(index, e.target.files)}
             />
             <div className="label pt-1">
-              <span className="label-text-alt text-gray-500">Maximum file size: {MAX_IMAGE_SIZE_MB}MB per file</span>
+              <span className="label-text-alt text-gray-500">{t('maxFileSize', { size: MAX_IMAGE_SIZE_MB })}</span>
             </div>
             {uploadingImages[index] && (
-              <Spinner size="sm" label="Uploading images..." />
+              <Spinner size="sm" label={t('uploadingImages')} />
             )}
           </label>
           {paragraph.images && paragraph.images.length > 0 && (
@@ -422,7 +425,7 @@ export default function MSHParagraph({
           <Divider addClass="my-1" />
 
           <label className="flex flex-col gap-1">
-            Paragraph Files:
+            {t('filesLabel')}
             <input
               type="file"
               multiple
@@ -432,10 +435,10 @@ export default function MSHParagraph({
               accept="*"
             />
             <div className="label pt-1">
-              <span className="label-text-alt text-gray-500">Maximum file size: {MAX_IMAGE_SIZE_MB}MB per file</span>
+              <span className="label-text-alt text-gray-500">{t('maxFileSize', { size: MAX_IMAGE_SIZE_MB })}</span>
             </div>
             {uploadingFiles[index] && (
-              <Spinner size="sm" label="Uploading files..." />
+              <Spinner size="sm" label={t('uploadingFiles')} />
             )}
           </label>
           {(paragraph.files ?? []).length > 0 && (
@@ -443,7 +446,7 @@ export default function MSHParagraph({
               <section className="grid grid-cols-1 gap-3">
                 {paragraph.files && paragraph.files.length > 0 && (
                   <div className="mt-2">
-                    <h4 className="font-semibold mb-1">Dateien:</h4>
+                    <h4 className="font-semibold mb-1">{t('filesHeading')}</h4>
                     <ul className="list-disc list-inside space-y-1">
                       {paragraph.files.map((fileUrl, fileIndex) => {
                         const fileName = fileUrl.replace(/^.*[\\\/]/, '').replaceAll('?download=1', '');
@@ -468,7 +471,7 @@ export default function MSHParagraph({
                               className="btn btn-circle btn-error text-white hover:bg-error/75 transition-colors duration-200 disabled:opacity-50"
                               disabled={!!deletingFiles[fileUrl]}
                               onClick={async () => {
-                                const confirmDelete = window.confirm(`Delete file "${fileName}"?`);
+                                const confirmDelete = window.confirm(t('deleteFileConfirm', { name: fileName }));
                                 if (!confirmDelete) return;
                                 await handleDeleteFile(fileUrl);
                               }}
@@ -488,12 +491,12 @@ export default function MSHParagraph({
           <Divider addClass="my-1" />
 
           <div className="mb-4">
-            <h4 className="font-semibold mb-2">Social Links:</h4>
+            <h4 className="font-semibold mb-2">{t('socialLinksHeading')}</h4>
             {(paragraph.socialLinks ?? []).map((link, linkIdx) => (
               <div key={linkIdx} className="flex flex-row flex-wrap gap-4 items-center mb-4">
                 <input
                   type="text"
-                  placeholder="URL"
+                  placeholder={t('urlPlaceholder')}
                   value={link.url}
                   onChange={(e) => handleSocialLinkChange(index, linkIdx, 'url', e.target.value)}
                   className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary flex-1 min-w-[200px]"
@@ -508,15 +511,15 @@ export default function MSHParagraph({
                       value={link.platform}
                       onChange={(e) => handleSocialLinkChange(index, linkIdx, 'platform', e.target.value)}
                     >
-                      <option disabled value="">Pick a platform</option>
-                      <option value="Email">Email</option>
-                      <option value="Website">Website</option>
-                      <option value="Facebook">Facebook</option>
-                      <option value="Linkedin">Linkedin</option>
-                      <option value="X">X.com</option>
-                      <option value="Youtube">Youtube</option>
-                      <option value="TikTok">TikTok</option>
-                      <option value="Instagram">Instagram</option>
+                      <option disabled value="">{t('pickPlatform')}</option>
+                      <option value="Email">{t('platform.email')}</option>
+                      <option value="Website">{t('platform.website')}</option>
+                      <option value="Facebook">{t('platform.facebook')}</option>
+                      <option value="Linkedin">{t('platform.linkedin')}</option>
+                      <option value="X">{t('platform.x')}</option>
+                      <option value="Youtube">{t('platform.youtube')}</option>
+                      <option value="TikTok">{t('platform.tiktok')}</option>
+                      <option value="Instagram">{t('platform.instagram')}</option>
                     </select>
                   </div>
                   <button
@@ -524,7 +527,7 @@ export default function MSHParagraph({
                     onClick={() => handleRemoveSocialLink(index, linkIdx)}
                     className="btn btn-outline text-red-500 self-end"
                   >
-                    Remove
+                    {t('removeSocialLink')}
                   </button>
                 </div>
               </div>
@@ -534,7 +537,7 @@ export default function MSHParagraph({
               onClick={() => handleAddSocialLink(index)}
               className="btn btn-outline btn-primary px-3 py-1 w-full rounded"
             >
-              Add Social Link
+              {t('addSocialLink')}
             </button>
           </div>
 
@@ -545,7 +548,7 @@ export default function MSHParagraph({
             onClick={() => handleDelete(index)}
             className="btn btn-outline border-red-500 text-red-500 hover:border-red-500/90 hover:text-white hover:bg-red-400/90 text-lg mx-auto flex gap-2 rounded transition-all ease-in-out duration-300"
           >
-            Delete Paragraph
+            {t('deleteParagraph')}
           </button>
         </div>
       ))}
@@ -557,7 +560,7 @@ export default function MSHParagraph({
         onClick={handleAddParagraph}
         className="btn btn-primary text-lg mx-auto flex gap-2 rounded"
       >
-        Add Paragraph
+        {t('addParagraph')}
       </button>
     </>
   );

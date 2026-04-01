@@ -1,8 +1,10 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useUploadProgress } from './UploadProgressContext';
 
 export default function UploadProgressModal() {
+  const t = useTranslations('UploadProgressModal');
   const { state } = useUploadProgress();
 
   if (!state.isUploading) return null;
@@ -18,14 +20,14 @@ export default function UploadProgressModal() {
     >
       <div className="modal-box bg-white/90 backdrop-blur-md border border-white/20 shadow-xl">
         <h3 className="font-bold text-lg text-primary mb-4">
-          Dateien werden hochgeladen...
+          {t('title')}
         </h3>
 
         <div className="flex flex-col gap-3">
           <div className="flex justify-between text-sm text-gray-700">
-            <span>Fortschritt</span>
+            <span>{t('progress')}</span>
             <span className="font-semibold">
-              {state.completedFiles} / {state.totalFiles} Dateien
+              {state.completedFiles} / {state.totalFiles} {t('files')}
             </span>
           </div>
 
@@ -38,13 +40,13 @@ export default function UploadProgressModal() {
 
           {state.currentFileName && (
             <p className="text-xs text-gray-500 truncate">
-              Aktuelle Datei: <span className="font-medium">{state.currentFileName}</span>
+              {t('currentFile')} <span className="font-medium">{state.currentFileName}</span>
             </p>
           )}
 
           <div className="flex items-center justify-center gap-2 mt-2">
             <span className="loading loading-spinner loading-md text-primary" />
-            <span className="text-sm text-gray-600">Bitte warten...</span>
+            <span className="text-sm text-gray-600">{t('pleaseWait')}</span>
           </div>
         </div>
       </div>

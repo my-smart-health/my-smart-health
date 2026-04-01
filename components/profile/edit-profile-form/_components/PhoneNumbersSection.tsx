@@ -1,6 +1,9 @@
+'use client';
+
 import React from "react";
 import Divider from "@/components/divider/Divider";
 import { Phone } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 type PhoneNumbersSectionProps = {
   phoneNumbers: string[];
@@ -9,18 +12,19 @@ type PhoneNumbersSectionProps = {
 };
 
 export function PhoneNumbersSection({ phoneNumbers, setPhoneNumbers, platformIcon }: PhoneNumbersSectionProps) {
+  const t = useTranslations('EditProfileForm');
   return (
     <section className="space-y-4">
       {!phoneNumbers.length && (
         <span className="font-semibold text-gray-700">
-          {platformIcon} Phone Numbers
+          {platformIcon} {t('phones.emptyLabel')}
         </span>
       )}
       {phoneNumbers.map((phone, idx) => (
         <div className="flex flex-row flex-1 gap-2 items-center" key={idx}>
           <div className="flex flex-col flex-1 gap-2">
             <span className="font-semibold text-gray-700">
-              {platformIcon} Phone Number
+              {platformIcon} {t('phones.label')}
             </span>
             <label htmlFor={`phone[${idx}]`} className="flex flex-row gap-2">
               <input
@@ -38,14 +42,14 @@ export function PhoneNumbersSection({ phoneNumbers, setPhoneNumbers, platformIco
             <button
               type="button"
               onClick={() => {
-                if (!confirm("Are you sure you want to remove this phone number?")) return;
+                if (!confirm(t('phones.confirmRemove'))) return;
                 const updated = [...phoneNumbers];
                 updated.splice(idx, 1);
                 setPhoneNumbers(updated);
               }}
               className="btn btn-outline flex place-self-end mt-4 w-fit align-bottom text-red-500"
             >
-              Remove
+              {t('phones.removeButton')}
             </button>
           </div>
         </div>
@@ -56,7 +60,7 @@ export function PhoneNumbersSection({ phoneNumbers, setPhoneNumbers, platformIco
         onClick={() => setPhoneNumbers([...phoneNumbers, ""])}
         className="btn btn-outline btn-primary px-3 py-1 w-full"
       >
-        <Phone />  Add Phone Number
+        <Phone />  {t('phones.addButton')}
       </button>
     </section>
   );

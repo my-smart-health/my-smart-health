@@ -1,10 +1,12 @@
 'use client';
+import { useTranslations } from 'next-intl';
 
 export default function MSHGeneralTitle({ generalTitle, setGeneralTitleAction }: { generalTitle: string; setGeneralTitleAction: (title: string) => void }) {
+  const t = useTranslations('MSHGeneralTitle');
 
   return (
     <label>
-      General Title:
+      {t('label')}
       <textarea
         name="generalTitle"
         value={generalTitle}

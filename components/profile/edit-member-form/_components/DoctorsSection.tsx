@@ -1,4 +1,5 @@
 import { MyDoctors } from '@/utils/types';
+import { useTranslations } from 'next-intl';
 
 type DoctorsSectionProps = {
   doctors: MyDoctors[];
@@ -9,6 +10,7 @@ export function DoctorsSection({
   doctors,
   setDoctors,
 }: DoctorsSectionProps) {
+  const t = useTranslations('EditMemberForm.doctors');
   const handleAdd = () => {
     setDoctors([...doctors, { name: '', specialty: '', emails: [], phones: [] }]);
   };
@@ -79,55 +81,55 @@ export function DoctorsSection({
     <section>
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <span className="font-semibold text-gray-700">My Doctors</span>
+          <span className="font-semibold text-gray-700">{t('title')}</span>
           <button
             type="button"
             onClick={handleAdd}
             className="btn btn-sm btn-primary text-white"
           >
-            + Add Doctor
+            {t('addDoctor')}
           </button>
         </div>
         <div className="space-y-4">
           {doctors.length === 0 ? (
-            <p className="text-gray-500 italic text-sm">No doctors added yet</p>
+            <p className="text-gray-500 italic text-sm">{t('empty')}</p>
           ) : (
             doctors.map((doctor, index) => (
               <div key={index} className="p-4 border border-gray-300 rounded-lg space-y-3">
                 <div className="flex justify-between items-center">
-                  <h4 className="font-semibold text-sm text-gray-600">Doctor #{index + 1}</h4>
+                  <h4 className="font-semibold text-sm text-gray-600">{t('doctorItem', { index: index + 1 })}</h4>
                   <button
                     type="button"
                     onClick={() => handleRemove(index)}
                     className="btn btn-xs btn-error text-white"
                   >
-                    Remove
+                    {t('remove')}
                   </button>
                 </div>
                 <input
                   type="text"
                   value={doctor.name}
                   onChange={e => handleChange(index, 'name', e.target.value)}
-                  placeholder="Doctor Name"
+                  placeholder={t('namePlaceholder')}
                   className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
                 />
                 <input
                   type="text"
                   value={doctor.specialty}
                   onChange={e => handleChange(index, 'specialty', e.target.value)}
-                  placeholder="Specialty (e.g., Cardiology)"
+                  placeholder={t('specialtyPlaceholder')}
                   className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
                 />
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-600">Emails</span>
+                    <span className="text-sm font-medium text-gray-600">{t('emails')}</span>
                     <button
                       type="button"
                       onClick={() => handleAddEmail(index)}
                       className="btn btn-xs btn-primary text-white"
                     >
-                      + Add Email
+                      {t('addEmail')}
                     </button>
                   </div>
                   {(doctor.emails || []).map((email, emailIndex) => (
@@ -136,7 +138,7 @@ export function DoctorsSection({
                         type="email"
                         value={email}
                         onChange={e => handleEmailChange(index, emailIndex, e.target.value)}
-                        placeholder="doctor@example.com"
+                        placeholder={t('emailPlaceholder')}
                         className="p-2 rounded border border-gray-300 text-xs focus:outline-none focus:ring-1 focus:ring-primary flex-1"
                       />
                       <button
@@ -152,13 +154,13 @@ export function DoctorsSection({
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-600">Phones</span>
+                    <span className="text-sm font-medium text-gray-600">{t('phones')}</span>
                     <button
                       type="button"
                       onClick={() => handleAddPhone(index)}
                       className="btn btn-xs btn-primary text-white"
                     >
-                      + Add Phone
+                      {t('addPhone')}
                     </button>
                   </div>
                   {(doctor.phones || []).map((phone, phoneIndex) => (
@@ -167,7 +169,7 @@ export function DoctorsSection({
                         type="tel"
                         value={phone}
                         onChange={e => handlePhoneChange(index, phoneIndex, e.target.value)}
-                        placeholder="+49 123 456789"
+                        placeholder={t('phonePlaceholder')}
                         className="p-2 rounded border border-gray-300 text-xs focus:outline-none focus:ring-1 focus:ring-primary flex-1"
                       />
                       <button

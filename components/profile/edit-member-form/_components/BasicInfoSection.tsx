@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 type BasicInfoSectionProps = {
   name: string;
   setName: (val: string) => void;
@@ -26,13 +28,14 @@ export function BasicInfoSection({
   phoneNumbers,
   setPhoneNumbers,
 }: BasicInfoSectionProps) {
+  const t = useTranslations('EditMemberForm.basicInfo');
   return (
     <div className="space-y-4">
       {isAdmin && (
         <>
           <section>
             <label className="flex flex-col gap-2">
-              <span className="font-semibold text-gray-700">Member ID</span>
+              <span className="font-semibold text-gray-700">{t('memberId')}</span>
               <input
                 type="text"
                 value={memberId}
@@ -44,7 +47,7 @@ export function BasicInfoSection({
 
           <section>
             <label className="flex flex-col gap-2">
-              <span className="font-semibold text-gray-700">Role</span>
+              <span className="font-semibold text-gray-700">{t('role')}</span>
               <input
                 type="text"
                 value={role}
@@ -58,7 +61,7 @@ export function BasicInfoSection({
 
       <section>
         <label className="flex flex-col gap-2">
-          <span className="font-semibold text-gray-700">Email</span>
+          <span className="font-semibold text-gray-700">{t('email')}</span>
           <input
             type="email"
             name="email"
@@ -71,7 +74,7 @@ export function BasicInfoSection({
 
       <section>
         <label className="flex flex-col gap-2">
-          <span className="font-semibold text-gray-700">Name</span>
+          <span className="font-semibold text-gray-700">{t('name')}</span>
           <input
             type="text"
             name="name"
@@ -85,7 +88,7 @@ export function BasicInfoSection({
 
       <section>
         <label className="flex flex-col gap-2">
-          <span className="font-semibold text-gray-700">Phone Numbers</span>
+          <span className="font-semibold text-gray-700">{t('phoneNumbers')}</span>
 
           <div className="flex flex-col gap-2">
             {phoneNumbers.map((phone, index) => (
@@ -95,7 +98,7 @@ export function BasicInfoSection({
                   key={`phone-${index}`}
                   name={`phoneNumbers[${index}]`}
                   value={phone}
-                  placeholder="+1234567890"
+                  placeholder={t('phonePlaceholder')}
                   onChange={e => {
                     const newPhones = [...phoneNumbers];
                     newPhones[index] = e.target.value;
@@ -108,7 +111,7 @@ export function BasicInfoSection({
                   onClick={() => setPhoneNumbers(phoneNumbers.filter((_, i) => i !== index))}
                   className="btn btn-sm px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
-                  Remove
+                  {t('removePhone')}
                 </button>
               </div>
             ))}
@@ -118,7 +121,7 @@ export function BasicInfoSection({
                 onClick={() => setPhoneNumbers([...phoneNumbers, ""])}
                 className="btn btn-sm px-3 py-1 bg-primary text-white rounded hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary"
               >
-                + Add Phone Number
+                {t('addPhone')}
               </button>
             </div>
           </div>
@@ -130,7 +133,7 @@ export function BasicInfoSection({
         <>
           <section>
             <label className="flex flex-col gap-2">
-              <span className="font-semibold text-gray-700">Created At</span>
+              <span className="font-semibold text-gray-700">{t('createdAt')}</span>
               <input
                 type="text"
                 value={createdAt}
@@ -142,7 +145,7 @@ export function BasicInfoSection({
 
           <section>
             <label className="flex flex-col gap-2">
-              <span className="font-semibold text-gray-700">Updated At</span>
+              <span className="font-semibold text-gray-700">{t('updatedAt')}</span>
               <input
                 type="text"
                 value={updatedAt}

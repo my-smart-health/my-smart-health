@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useDeletionProgress } from "@/components/modals/deletion-progress";
+import { useTranslations } from "next-intl";
 
 type User = {
   id: string;
@@ -36,6 +37,7 @@ export default function UserTable({
   }, [users]);
 
   const { startDeletion, updateMessage, finishDeletion } = useDeletionProgress();
+  const t = useTranslations('UserTable');
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) {
@@ -89,19 +91,19 @@ export default function UserTable({
 
   const handleDeleteUser = async (id: string, userName: string) => {
     if (id === currentUserId) return;
-    if (!confirm("Are you sure you want to delete this user?")) return;
+    if (!confirm(t('confirm.deleteUser'))) return;
 
     setDeletingUserId(id);
-    startDeletion(userName || 'Unbekannter Benutzer');
+    startDeletion(userName || t('unknownUser'));
 
     try {
-      updateMessage('Benutzerdaten werden gelöscht...');
+      updateMessage(t('messages.deleting'));
       const res = await fetch(`/api/delete/delete-user?id=${id}`, {
         method: "DELETE",
       });
       if (!res.ok) throw new Error("Failed to delete user");
 
-      updateMessage('Benutzer erfolgreich gelöscht!');
+      updateMessage(t('messages.deleted'));
       setAllUsers((prev) => prev.filter(user => user.id !== id));
 
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -109,7 +111,7 @@ export default function UserTable({
       if (process.env.NODE_ENV === "development") {
         console.error("Error deleting user:", error);
       }
-      updateMessage('Fehler beim Löschen des Benutzers');
+      updateMessage(t('messages.deleteFailed'));
       await new Promise(resolve => setTimeout(resolve, 1500));
     } finally {
       finishDeletion();
@@ -126,7 +128,7 @@ export default function UserTable({
           onChange={() => handleChangeContactable(user.id, user.isContactable)}
           className={`px-2 py-1 rounded-md text-sm font-semibold ${user.isContactable ? 'checkbox checkbox-primary text-green-800' : 'checkbox checkbox-primary text-gray-600'}`}
         />
-        {user.isContactable ? 'Yes' : 'No'}
+        {user.isContactable ? t('yes') : t('no')}
       </div>
     );
   }
@@ -140,41 +142,41 @@ export default function UserTable({
               className="cursor-pointer select-none"
               onClick={() => handleSort("name")}
             >
-              Name {sortArrow("name")}
+              {t('columns.name')} {sortArrow("name")}
             </th>
             <th
               className="cursor-pointer select-none"
               onClick={() => handleSort("email")}
             >
-              Email {sortArrow("email")}
+              {t('columns.email')} {sortArrow("email")}
             </th>
             <th
               className="cursor-pointer select-none"
               onClick={() => handleSort("category")}
             >
-              Category {sortArrow("category")}
+              {t('columns.category')} {sortArrow("category")}
             </th>
             <th
               className="cursor-pointer select-none"
               onClick={() => handleSort("createdAt")}>
-              Created at {sortArrow("createdAt")}
+              {t('columns.createdAt')} {sortArrow("createdAt")}
             </th>
-            <th>Profile Image</th>
+            <th>{t('columns.profileImage')}</th>
             <th
               className="cursor-pointer select-none"
               onClick={() => handleSort("isContactable")}
             >
-              Contactable {sortArrow("isContactable")}
+              {t('columns.contactable')} {sortArrow("isContactable")}
             </th>
             <th
               className="cursor-pointer select-none"
               onClick={() => handleSort("role")}
             >
-              Role {sortArrow("role")}
+              {t('columns.role')} {sortArrow("role")}
             </th>
-            <th>View</th>
-            <th>Edit User</th>
-            <th className="text-red-500">Delete User</th>
+            <th>{t('columns.view')}</th>
+            <th>{t('columns.editUser')}</th>
+            <th className="text-red-500">{t('columns.deleteUser')}</th>
           </tr>
         </thead>
         <tbody>
@@ -182,7 +184,7 @@ export default function UserTable({
             const createdAtFormatted = new Date(user.createdAt).toLocaleDateString('de-DE');
             return (
               <tr key={user.id || idx} className="hover:bg-primary/50 bg-primary/30">
-                <td className="font-semibold">{user.name || "No Name"}</td>
+                <td className="font-semibold">{user.name || t('noName')}</td>
                 <td>{user.email}</td>
                 <td className="min-w-[200px] max-w-sm">
                   {Array.isArray(user.category) && user.category.length > 0 ? (
@@ -197,7 +199,7 @@ export default function UserTable({
                       ))}
                     </div>
                   ) : (
-                    <span className="text-gray-400 italic">No categories assigned</span>
+                    <span className="text-gray-400 italic">{t('noCategories')}</span>
                   )}
                 </td>
                 <td>{createdAtFormatted}</td>
@@ -212,7 +214,7 @@ export default function UserTable({
                       className="rounded aspect-square border border-primary hover:scale-200 transition-transform duration-200"
                     />
                   ) : (
-                    <span className="text-gray-400">No Image</span>
+                    <span className="text-gray-400">{t('noImage')}</span>
                   )}
                 </td>
                 <td><ToggleContactable user={user} /></td>
@@ -222,7 +224,7 @@ export default function UserTable({
                     href={`/profile/${user.id}`}
                     className="font-semibold text-blue-500 hover:underline flex flex-col justify-center items-center gap-1"
                   >
-                    <UserSearch className="inline-block mr-1" /> View
+                    <UserSearch className="inline-block mr-1" /> {t('actions.view')}
                   </Link>
                 </td>
                 <td>
@@ -230,19 +232,19 @@ export default function UserTable({
                     href={`/dashboard/edit-profile/${user.id}`}
                     className="font-semibold text-yellow-500 hover:underline flex flex-col justify-center items-center gap-1"
                   >
-                    <UserSearch className="inline-block mr-1" /> Edit User
+                    <UserSearch className="inline-block mr-1" /> {t('actions.editUser')}
                   </Link>
                 </td>
                 <td>
                   {user.id === currentUserId && (
-                    <div className="text-xs text-gray-500 text-center mb-1">Current user</div>
+                    <div className="text-xs text-gray-500 text-center mb-1">{t('currentUser')}</div>
                   )}
                   <button
                     onClick={() => handleDeleteUser(user.id, user.name || user.email)}
                     disabled={user.id === currentUserId || deletingUserId === user.id}
                     className="font-semibold text-red-500 hover:underline flex flex-col justify-center items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Trash2 className="inline-block mb-1" /> {deletingUserId === user.id ? "Deleting..." : "Delete User"}
+                    <Trash2 className="inline-block mb-1" /> {deletingUserId === user.id ? t('actions.deleting') : t('actions.deleteUser')}
                   </button>
                 </td>
               </tr>

@@ -16,68 +16,103 @@ type ResetPasswordRequestProps = {
   name?: string | null;
   timestamp: string;
   dashboardUrl: string;
+  locale?: 'de' | 'en';
 };
+
+const copy = {
+  de: {
+    heading: 'Neue Passwort-Zuruecksetzungsanfrage',
+    warning: '⚠️ Eine neue Anfrage zum Zuruecksetzen des Passworts wurde eingereicht.',
+    userEmail: 'Benutzer E-Mail:',
+    name: 'Name:',
+    timestamp: 'Zeitpunkt:',
+    nextSteps: 'Naechste Schritte:',
+    step1: 'Melden Sie sich im Admin-Dashboard an',
+    step2: 'Navigieren Sie zu "Passwort-Zuruecksetzungsanfragen"',
+    step3: 'Ueberpruefen Sie die Anfrage und setzen Sie das Passwort zurueck',
+    step4: 'Teilen Sie das neue Passwort dem Benutzer mit',
+    manageRequests: 'Anfragen verwalten',
+    footer: 'Diese Benachrichtigung wurde automatisch von My Smart Health gesendet.',
+  },
+  en: {
+    heading: 'New password reset request',
+    warning: '⚠️ A new password reset request has been submitted.',
+    userEmail: 'User email:',
+    name: 'Name:',
+    timestamp: 'Timestamp:',
+    nextSteps: 'Next steps:',
+    step1: 'Sign in to the admin dashboard',
+    step2: 'Navigate to "Password reset requests"',
+    step3: 'Review the request and reset the password',
+    step4: 'Share the new password with the user',
+    manageRequests: 'Manage requests',
+    footer: 'This notification was sent automatically by My Smart Health.',
+  },
+} as const;
 
 export function ResetPasswordRequest({
   email,
   name,
   timestamp,
   dashboardUrl,
+  locale = 'de',
 }: ResetPasswordRequestProps) {
+  const t = copy[locale];
+
   return (
     <Html>
       <Head />
       <Body style={styles.body}>
         <Container style={styles.container}>
           <Heading style={styles.heading}>
-            Neue Passwort-Zurücksetzungsanfrage
+            {t.heading}
           </Heading>
 
           <Section style={styles.warningBox}>
             <Text style={styles.warningText}>
-              ⚠️ Eine neue Anfrage zum Zurücksetzen des Passworts wurde eingereicht.
+              {t.warning}
             </Text>
           </Section>
 
           <Section style={styles.infoBox}>
             <Text style={styles.infoRow}>
-              <span style={styles.label}>Benutzer E-Mail:</span>{' '}
+              <span style={styles.label}>{t.userEmail}</span>{' '}
               <Link href={`mailto:${email}`} style={styles.link}>
                 {email}
               </Link>
             </Text>
             {name && (
               <Text style={styles.infoRow}>
-                <span style={styles.label}>Name:</span> {name}
+                <span style={styles.label}>{t.name}</span> {name}
               </Text>
             )}
             <Text style={styles.infoRow}>
-              <span style={styles.label}>Zeitpunkt:</span> {timestamp}
+              <span style={styles.label}>{t.timestamp}</span> {timestamp}
             </Text>
           </Section>
 
           <Section style={styles.stepsBox}>
             <Heading as="h3" style={styles.subHeading}>
-              Nächste Schritte:
+              {t.nextSteps}
             </Heading>
             <ol style={styles.stepsList}>
-              <li>Melden Sie sich im Admin-Dashboard an</li>
-              <li>Navigieren Sie zu &quot;Passwort-Zurücksetzungsanfragen&quot;</li>
-              <li>Überprüfen Sie die Anfrage und setzen Sie das Passwort zurück</li>
-              <li>Teilen Sie das neue Passwort dem Benutzer mit</li>
+              <li>{t.step1}</li>
+              <li>{t.step2}</li>
+              <li>{t.step3}</li>
+              <li>{t.step4}</li>
             </ol>
           </Section>
 
           <Section style={styles.buttonSection}>
             <Button href={dashboardUrl} style={styles.button}>
-              Anfragen verwalten
+              {t.manageRequests}
             </Button>
           </Section>
 
           <Hr style={styles.hr} />
 
           <Text style={styles.footer}>
-            Diese Benachrichtigung wurde automatisch von My Smart Health gesendet.
+            {t.footer}
           </Text>
         </Container>
       </Body>

@@ -1,21 +1,13 @@
 import Link from "next/link";
 import prisma from "@/lib/db";
 import { auth } from "@/auth";
+import { getTranslations } from "next-intl/server";
 
 import { Certificate, FieldOfExpertise, Membership, ReservationLink, Schedule } from "@/utils/types";
 import { CACHE_STRATEGY } from "@/utils/constants";
 
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
 import GoBack from "@/components/buttons/go-back/GoBack";
-
-function UserNotFound() {
-  return (
-    <>
-      <div>User not found</div>
-      <GoBack />
-    </>
-  );
-}
 
 async function getUser(id: string) {
   const user = await prisma.user.findUnique({
@@ -63,13 +55,19 @@ async function getAllPosts(userId: string, isOwnProfile: boolean, isLogged: bool
 }
 
 export default async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
+  const t = await getTranslations("ProfilePage");
   const session = await auth();
 
   const { id } = await params;
   const { user } = await getUser(id);
 
   if (!user) {
-    return <UserNotFound />;
+    return (
+      <>
+        <div>{t("userNotFound")}</div>
+        <GoBack />
+      </>
+    );
   }
 
   const isOwnProfile = session?.user?.id === id;
@@ -79,7 +77,10 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
 
   if (!user || user === null) {
     return (
-      <UserNotFound />
+      <>
+        <div>{t("userNotFound")}</div>
+        <GoBack />
+      </>
     );
   }
   const safeSchedule = user.schedule ? user.schedule as Schedule[] : [];
@@ -144,7 +145,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ id: st
         <Link
           href={`/dashboard/edit-profile/${user.id}`}
           className="btn btn-wide btn-warning self-center rounded-xl underline">
-          Edit profile
+          {t("editProfile")}
         </Link>
       )}
       <ProfileFull user={safeUser} posts={posts} />

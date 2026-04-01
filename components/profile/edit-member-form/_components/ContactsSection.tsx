@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Plus, Trash2, Mail, Phone } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type ContactDoctor = {
   id: string;
@@ -26,6 +27,7 @@ export function ContactsSection({
   setContacts,
   onAddClick
 }: ContactsSectionProps) {
+  const t = useTranslations('EditMemberForm.contacts');
   const handleRemoveContact = async (doctorId: string) => {
     try {
       const response = await fetch(`/api/member/contacts?memberId=${memberId}&doctorId=${doctorId}`, {
@@ -43,20 +45,20 @@ export function ContactsSection({
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-primary font-bold text-xl">My Smart Health Contacts</h2>
+        <h2 className="text-primary font-bold text-xl">{t('title')}</h2>
         <button
           type="button"
           onClick={onAddClick}
           className="btn btn-primary btn-sm gap-2"
         >
           <Plus className="w-4 h-4" />
-          Add Contact
+          {t('addContact')}
         </button>
       </div>
 
       {contacts.length === 0 ? (
         <div className="text-center py-8 text-gray-500">
-          No contacts added yet
+          {t('empty')}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -72,14 +74,14 @@ export function ContactsSection({
                       {contact.profileImages && contact.profileImages[0] ? (
                         <Image
                           src={contact.profileImages[0]}
-                          alt={contact.name || 'Profile'}
+                          alt={contact.name || t('profileAlt')}
                           width={80}
                           height={80}
                           className="object-cover"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-400">
-                          N/A
+                          {t('notAvailable')}
                         </div>
                       )}
                     </div>
@@ -87,7 +89,7 @@ export function ContactsSection({
 
                   <div className="flex-1 min-w-0">
                     <h3 className="font-bold text-lg truncate">
-                      {contact.name || 'Unnamed'}
+                      {contact.name || t('unnamed')}
                     </h3>
 
                     {contact.fieldOfExpertise && contact.fieldOfExpertise.length > 0 && (
@@ -128,7 +130,7 @@ export function ContactsSection({
                     className="btn btn-primary btn-sm"
                     target="_blank"
                   >
-                    View Profile
+                    {t('viewProfile')}
                   </Link>
                   <button
                     type="button"
@@ -136,7 +138,7 @@ export function ContactsSection({
                     className="btn btn-error btn-sm text-white gap-1"
                   >
                     <Trash2 className="w-4 h-4" />
-                    Remove
+                    {t('remove')}
                   </button>
                 </div>
               </div>

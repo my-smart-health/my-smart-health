@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { Settings, Bell, BellRing } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -11,6 +12,7 @@ interface ProfileMenuProps {
 }
 
 export default function ProfileMenu({ unreadNotifications = 0 }: ProfileMenuProps) {
+  const t = useTranslations('ProfileMenu');
   const { data: session } = useSession();
   const [hasContacts, setHasContacts] = useState(false);
 
@@ -37,7 +39,7 @@ export default function ProfileMenu({ unreadNotifications = 0 }: ProfileMenuProp
   return (
     <div className="flex flex-row justify-evenly items-center h-full max-h-fit w-full max-w-[100%] gap-1 sm:gap-2 bg-primary text-white p-2 mb-4">
       <div className="flex text-wrap min-w-0 flex-1 items-center">
-        <span className="hidden sm:inline">Welcome, </span>
+        <span className="hidden sm:inline">{t('welcome')} </span>
         <Link
           href={`/dashboard`}
           className="font-semibold hover:underline sm:ml-1 truncate max-w-[120px] sm:max-w-[200px] md:max-w-none">
@@ -65,44 +67,44 @@ export default function ProfileMenu({ unreadNotifications = 0 }: ProfileMenuProp
       <div className="dropdown dropdown-end flex-shrink-0">
         <div tabIndex={0} role="button" className="btn btn-circle btn-sm sm:btn-md m-1 sm:m-2 border-2 border-white bg-primary"><Settings className="text-white spin-slow w-4 h-4 sm:w-5 sm:h-5" /></div>
         <ul tabIndex={0} className="dropdown-content menu bg-primary border rounded-box z-1 w-52 p-2 shadow-sm transition-opacity ease-in-out">
-          <li><Link href="/" className="flex gap-1">Home</Link></li>
-          <li><Link href="/dashboard" className="flex gap-1">Dashboard</Link></li>
+          <li><Link href="/" className="flex gap-1">{t('home')}</Link></li>
+          <li><Link href="/dashboard" className="flex gap-1">{t('dashboard')}</Link></li>
           {session.user.role === "USER" && hasContacts && (
-            <li><Link href="/dashboard/my-contacts" className="flex gap-1">My Contacts</Link></li>
+            <li><Link href="/dashboard/my-contacts" className="flex gap-1">{t('myContacts')}</Link></li>
           )}
 
 
           {(session.user.role === "USER" || session.user.role === "ADMIN") && (
             <>
               <li className="tab-disabled"></li>
-              <li><Link href="/dashboard/all-posts" className="flex gap-1">All Posts</Link></li>
-              <li><Link href="/dashboard/create-post" className="flex gap-1">Create Post</Link></li>
+              <li><Link href="/dashboard/all-posts" className="flex gap-1">{t('allPosts')}</Link></li>
+              <li><Link href="/dashboard/create-post" className="flex gap-1">{t('createPost')}</Link></li>
               <li className="tab-disabled"></li>
-              <li><Link href="/dashboard/edit-profile" className="flex gap-1">Edit profile</Link></li>
+              <li><Link href="/dashboard/edit-profile" className="flex gap-1">{t('editProfile')}</Link></li>
               <li>
                 <Link href="/dashboard/change-email" className="flex gap-1">
-                  Change Email
+                  {t('changeEmail')}
                 </Link>
               </li>
             </>
           )}
 
           <li className="tab-disabled"></li>
-          {session.user.role === "MEMBER" && <li><Link href="/dashboard/edit-member" className="flex gap-1">Edit profile</Link></li>}
+          {session.user.role === "MEMBER" && <li><Link href="/dashboard/edit-member" className="flex gap-1">{t('editProfile')}</Link></li>}
           <li>
             <Link href="/dashboard/change-password" className="flex gap-1">
-              Change Password
+              {t('changePassword')}
             </Link>
           </li>
           <li className="tab-disabled"></li>
           {session.user.role === "ADMIN" && (
             <>
-              <span className="font-bold self-center">Admin Only</span>
-              <li><Link href="/dashboard/all-users" className="flex gap-1">All Users</Link></li>
-              <li><Link href="/dashboard/all-members" className="flex gap-1">All Members</Link></li>
-              <li><Link href="/dashboard/edit-cube" className="flex gap-1">Edit Cube</Link></li>
-              <li><Link href="/dashboard/edit-my-smart-health" className="flex gap-1">Edit My Smart Health</Link></li>
-              <li><Link href="/register" className="flex gap-1">Create new user</Link></li>
+              <span className="font-bold self-center">{t('adminOnly')}</span>
+              <li><Link href="/dashboard/all-users" className="flex gap-1">{t('allUsers')}</Link></li>
+              <li><Link href="/dashboard/all-members" className="flex gap-1">{t('allMembers')}</Link></li>
+              <li><Link href="/dashboard/edit-cube" className="flex gap-1">{t('editCube')}</Link></li>
+              <li><Link href="/dashboard/edit-my-smart-health" className="flex gap-1">{t('editMySmartHealth')}</Link></li>
+              <li><Link href="/register" className="flex gap-1">{t('createNewUser')}</Link></li>
               <li className="tab-disabled"></li>
             </>
           )

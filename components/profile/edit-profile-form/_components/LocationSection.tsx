@@ -1,3 +1,5 @@
+'use client';
+
 import Divider from "@/components/divider/Divider";
 import { AddressSection } from "./AddressSection";
 import { PhoneNumbersSection } from "./PhoneNumbersSection";
@@ -5,6 +7,7 @@ import { Navigation, NavigationOff, Phone } from "lucide-react";
 import { WorkScheduleSection } from "./WorkScheduleSection";
 import type { Schedule, Location, ReservationLink } from "@/utils/types";
 import ReservationLinksSection from "./ReservationLinksSection";
+import { useTranslations } from 'next-intl';
 
 type LocationProps = {
   locations: Location[] | [];
@@ -14,6 +17,7 @@ type LocationProps = {
 }
 
 export function LocationSection({ locations, setLocationsAction, profileId, addressRef }: LocationProps) {
+  const t = useTranslations('EditProfileForm');
 
   const addLocation = () => {
     setLocationsAction([
@@ -36,7 +40,7 @@ export function LocationSection({ locations, setLocationsAction, profileId, addr
   };
 
   const removeLocation = (index: number) => {
-    if (!confirm("Are you sure you want to remove this location?")) return;
+    if (!confirm(t('location.confirmRemove'))) return;
     const newLocations = locations.filter((_, i) => i !== index);
     setLocationsAction(newLocations);
   };
@@ -113,7 +117,7 @@ export function LocationSection({ locations, setLocationsAction, profileId, addr
             onClick={() => removeLocation(index)}
             className="btn btn-outline w-full flex place-self-end mt-4 align-bottom text-red-500"
           >
-            <NavigationOff />  Remove Location
+            <NavigationOff />  {t('location.removeButton')}
           </button>
         </div>
       ))}
@@ -123,7 +127,7 @@ export function LocationSection({ locations, setLocationsAction, profileId, addr
         onClick={addLocation}
         className="btn btn-primary w-full flex place-self-end mt-4 align-bottom"
       >
-        <Navigation /> Add Location
+        <Navigation /> {t('location.addButton')}
       </button>
 
     </section>

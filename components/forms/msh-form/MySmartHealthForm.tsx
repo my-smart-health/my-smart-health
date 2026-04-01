@@ -1,5 +1,6 @@
 'use client';
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { MySmartHealthInfo } from "@/utils/types";
 
@@ -16,6 +17,7 @@ import {
 } from "./_components/mshFormSanitizers";
 
 export default function MySmartHealthForm({ smartHealthData, initialLocations }: { smartHealthData: MySmartHealthInfo | null; initialLocations: MySmartHealthFormLocation[] }) {
+  const t = useTranslations('MySmartHealthForm');
 
   const [generalTitle, setGeneralTitle] = useState(smartHealthData?.generalTitle || "");
   const [paragraphs, setParagraphs] = useState(smartHealthData?.paragraph || []);
@@ -44,13 +46,13 @@ export default function MySmartHealthForm({ smartHealthData, initialLocations }:
       });
 
       if (!response.ok) {
-        setError({ message: 'Failed to auto-save paragraphs. Your changes may not be saved.', type: 'error' });
+        setError({ message: t('autoSaveError'), type: 'error' });
         if (process.env.NODE_ENV === 'development') {
           console.error('Failed to auto-save paragraphs to database');
         }
       }
     } catch (error) {
-      setError({ message: 'Error saving paragraphs. Please try again or contact support.', type: 'error' });
+      setError({ message: t('saveParagraphsError'), type: 'error' });
       if (process.env.NODE_ENV === 'development') {
         console.error('Error auto-saving paragraphs:', error);
       }
@@ -72,7 +74,7 @@ export default function MySmartHealthForm({ smartHealthData, initialLocations }:
 
       const locationWithMissingAddress = sanitizedLocations.find((location) => !location.address);
       if (locationWithMissingAddress) {
-        setError({ message: 'Each location must include an address.', type: 'error' });
+        setError({ message: t('locationAddressError'), type: 'error' });
         return;
       }
 
@@ -86,7 +88,7 @@ export default function MySmartHealthForm({ smartHealthData, initialLocations }:
 
       if (!response.ok) {
         const errorData = await response.json();
-        setError({ message: errorData.error || "Failed to update information", type: 'error' });
+        setError({ message: errorData.error || t('updateError'), type: 'error' });
         return;
       }
 
@@ -100,7 +102,7 @@ export default function MySmartHealthForm({ smartHealthData, initialLocations }:
       }));
 
       if (!persistedRecordId && resolvedLocations.some((location) => !location.mySmartHealthId)) {
-        setError({ message: 'Unable to resolve My Smart Health record. Please try again.', type: 'error' });
+        setError({ message: t('resolveRecordError'), type: 'error' });
         return;
       }
 
@@ -145,18 +147,18 @@ export default function MySmartHealthForm({ smartHealthData, initialLocations }:
         }
       }
 
-      setError({ message: "Information updated successfully", type: 'success' });
+      setError({ message: t('updateSuccess'), type: 'success' });
       router.push("/smart-health");
       router.refresh();
     } catch (err) {
-      setError({ message: `An error occurred while updating the information ${err}`, type: 'error' });
+      setError({ message: `${t('genericError')} ${err}`, type: 'error' });
     }
   }
 
   return (
     <>
       <form className="flex flex-col gap-4">
-        <button type="button" onClick={handleSubmit} className="mt-4 btn btn-primary bg-green-500 hover:bg-green-500/75">Update</button>
+        <button type="button" onClick={handleSubmit} className="mt-4 btn btn-primary bg-green-500 hover:bg-green-500/75">{t('updateButton')}</button>
         <MSHGeneralTitle generalTitle={generalTitle} setGeneralTitleAction={setGeneralTitle} />
 
         <Divider />
@@ -176,7 +178,7 @@ export default function MySmartHealthForm({ smartHealthData, initialLocations }:
           mySmartHealthId={smartHealthData?.id || ''}
         />
 
-        <button type="button" onClick={handleSubmit} className="mt-4 btn btn-primary bg-green-500 hover:bg-green-500/75">Update</button>
+        <button type="button" onClick={handleSubmit} className="mt-4 btn btn-primary bg-green-500 hover:bg-green-500/75">{t('updateButton')}</button>
       </form>
 
       <StatusModal

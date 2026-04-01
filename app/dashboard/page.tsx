@@ -20,6 +20,7 @@ import {
 import GoToButton from "@/components/buttons/go-to/GoToButton";
 import ProfileFull from "@/components/profile/profile-full/ProfileFull";
 import ProfileFullMember from "@/components/profile/profile-full-member/ProfileFullMember";
+import { getTranslations } from "next-intl/server";
 
 async function getUser(id: string) {
   const user = await prisma.user.findUnique({
@@ -135,6 +136,7 @@ async function getMemberByUserId(userId: string) {
 }
 
 export default async function DashboardPage() {
+  const t = await getTranslations("DashboardPage");
   const session = await auth();
 
   if (!session || !session.user) {
@@ -147,7 +149,7 @@ export default async function DashboardPage() {
   if (!user && !member) {
     return (
       <>
-        <div>User not found</div>
+        <div>{t('userNotFound')}</div>
       </>
     );
   }
@@ -156,11 +158,11 @@ export default async function DashboardPage() {
 
     return (
       <>
-        <h1 className="mx-3 text-4xl font-extrabold text-primary">Dashboard</h1>
+        <h1 className="mx-3 text-4xl font-extrabold text-primary">{t('title')}</h1>
         <div className="flex flex-col sm:flex-row gap-3 mb-2 border border-primary p-4 rounded-lg shadow-lg">
           <GoToButton
             src="/dashboard/edit-member"
-            name="Edit Member Profile"
+            name={t('editMemberProfile')}
             className="btn btn-outline btn-warning hover:text-white shadow"
           />
         </div>
@@ -240,23 +242,23 @@ export default async function DashboardPage() {
 
     return (
       <>
-        <h1 className="mx-3 text-4xl font-extrabold text-primary">Dashboard</h1>
+        <h1 className="mx-3 text-4xl font-extrabold text-primary">{t('title')}</h1>
         <div className="flex flex-col sm:flex-row gap-3 mb-2 border border-primary p-4 rounded-lg shadow-lg">
-          <GoToButton src="/dashboard/all-posts" name="All Posts" className="btn btn-outline btn-info hover:text-white shadow" />
-          <GoToButton src="/dashboard/my-contacts" name="My Smart Health Contacts" className="btn btn-outline btn-info hover:text-white shadow" />
-          <GoToButton src="/dashboard/edit-profile" name="Edit Profile" className="btn btn-outline btn-warning hover:text-white shadow" />
-          <GoToButton src="/dashboard/create-post" name="New Post" className="btn btn-outline btn-success hover:text-white shadow" />
+          <GoToButton src="/dashboard/all-posts" name={t('allPosts')} className="btn btn-outline btn-info hover:text-white shadow" />
+          <GoToButton src="/dashboard/my-contacts" name={t('mySmartHealthContacts')} className="btn btn-outline btn-info hover:text-white shadow" />
+          <GoToButton src="/dashboard/edit-profile" name={t('editProfile')} className="btn btn-outline btn-warning hover:text-white shadow" />
+          <GoToButton src="/dashboard/create-post" name={t('newPost')} className="btn btn-outline btn-success hover:text-white shadow" />
         </div>
 
         {session.user.role === "ADMIN" && (
           <div className="flex flex-col gap-3 mb-2 border border-primary p-4 rounded-lg shadow-lg">
-            <span className="font-bold self-center">Admin Only</span>
+            <span className="font-bold self-center">{t('adminOnly')}</span>
             <div className="flex flex-col sm:flex-row gap-2">
-              <GoToButton src="/dashboard/all-users" name="All Users" className="btn btn-outline btn-info hover:text-white" />
-              <GoToButton src="/dashboard/all-members" name="All Members" className="btn btn-outline btn-info hover:text-white" />
-              <GoToButton src="/dashboard/edit-cube" name="Edit Cube" className="btn btn-outline btn-success hover:text-white shadow" />
-              <GoToButton src="/dashboard/edit-my-smart-health" name="Edit My Smart Health" className="btn btn-outline btn-success hover:text-white shadow" />
-              <GoToButton src="/register" name="Create new account" className="btn btn-outline btn-error hover:text-white" />
+              <GoToButton src="/dashboard/all-users" name={t('allUsers')} className="btn btn-outline btn-info hover:text-white" />
+              <GoToButton src="/dashboard/all-members" name={t('allMembers')} className="btn btn-outline btn-info hover:text-white" />
+              <GoToButton src="/dashboard/edit-cube" name={t('editCube')} className="btn btn-outline btn-success hover:text-white shadow" />
+              <GoToButton src="/dashboard/edit-my-smart-health" name={t('editMySmartHealth')} className="btn btn-outline btn-success hover:text-white shadow" />
+              <GoToButton src="/register" name={t('createNewAccount')} className="btn btn-outline btn-error hover:text-white" />
             </div>
           </div>
         )}

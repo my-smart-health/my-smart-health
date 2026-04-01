@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Session } from "next-auth";
+import { useTranslations } from "next-intl";
 
 import { NewsCardType } from "@/utils/types";
 
@@ -24,9 +25,10 @@ type PostCardDetailsProps = {
 
 export default function PostCardDetails({ postData, session, onDeletePostAction }: PostCardDetailsProps) {
   const [isDeleting, setIsDeleting] = useState(false);
-  const [deleteMessage, setDeleteMessage] = useState<string>("Möchten Sie diesen Beitrag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.");
+  const [deleteError, setDeleteError] = useState(false);
+  const t = useTranslations('PostCardDetails');
 
-  if (!postData) return <div className="text-red-500 border rounded-2xl p-2 text-center">Error: No data found</div>;
+  if (!postData) return <div className="text-red-500 border rounded-2xl p-2 text-center">{t('noData')}</div>;
 
   const { id, title, content, createdAt, photos, author, tags, socialLinks } = postData as NewsCardType;
 
@@ -35,9 +37,9 @@ export default function PostCardDetails({ postData, session, onDeletePostAction 
     Website: <Globe size={18} />,
     Facebook: <Facebook size={18} />,
     Linkedin: <Linkedin size={18} />,
-    X: <Image src={Xlogo} alt="X logo" width={18} height={18} />,
+    X: <Image src={Xlogo} alt={t('xAlt')} width={18} height={18} />,
     Youtube: <Youtube size={18} />,
-    TikTok: <Image src={TikTokLogo} alt="TikTok logo" width={18} height={18} />,
+    TikTok: <Image src={TikTokLogo} alt={t('tiktokAlt')} width={18} height={18} />,
     Instagram: <Instagram size={18} />,
   };
 
@@ -62,10 +64,10 @@ export default function PostCardDetails({ postData, session, onDeletePostAction 
       if (process.env.NODE_ENV === 'development') {
         console.error('Error deleting post:', error);
       }
-      setDeleteMessage("Fehler beim Löschen des Beitrags. Bitte versuchen Sie es erneut.");
+      setDeleteError(true);
       setTimeout(() => {
         setIsDeleting(false);
-        setDeleteMessage("Möchten Sie diesen Beitrag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.");
+        setDeleteError(false);
       }, 3000);
     }
   };
@@ -118,7 +120,7 @@ export default function PostCardDetails({ postData, session, onDeletePostAction 
           {socialLinks && socialLinks.length > 0 && (
             <div className="mb-4">
               <Divider addClass="mb-3" />
-              <h3 className="text-base font-semibold text-primary mb-2">Links</h3>
+              <h3 className="text-base font-semibold text-primary mb-2">{t('links')}</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {socialLinks.map((link, index) => (
                   <Link
@@ -179,7 +181,7 @@ export default function PostCardDetails({ postData, session, onDeletePostAction 
         isOpen={isDeleting}
         onCloseAction={() => setIsDeleting(false)}
         onDeleteAction={handleDeletePost}
-        message={deleteMessage}
+        message={deleteError ? t('deleteError') : undefined}
       />
     </>
   );

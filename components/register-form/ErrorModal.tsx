@@ -1,4 +1,5 @@
 import { ForwardedRef } from "react";
+import { useTranslations } from "next-intl";
 
 type ErrorType = "success" | "warning" | "error";
 type ErrorState = { type: ErrorType; message: string } | null;
@@ -14,6 +15,7 @@ export default function ErrorModal({
   getModalColor: () => string;
   handleError: () => void;
 }) {
+  const t = useTranslations('RegisterForm.errorModal');
   if (!error) return null;
   return (
     <dialog
@@ -48,10 +50,10 @@ export default function ErrorModal({
         </form>
         <h3 className="font-bold text-lg">
           {error.type === "success"
-            ? "Erfolg"
+            ? t('success')
             : error.type === "warning"
-              ? "Warnung"
-              : "Fehler"}
+              ? t('warning')
+              : t('error')}
         </h3>
         <p className="py-4 text-center">{error.message}</p>
       </div>

@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { ErrorState } from "@/utils/types";
 import StatusModal from "@/components/modals/status-modal/StatusModal";
@@ -9,6 +10,7 @@ type Props = {
 };
 
 export default function ChangeEmailForm({ currentEmail }: Props) {
+  const t = useTranslations('ChangeEmailForm');
 
   const [error, setError] = useState<ErrorState>(null);
 
@@ -25,42 +27,42 @@ export default function ChangeEmailForm({ currentEmail }: Props) {
 
   const getEmailStatus = (): { valid: boolean; message: string; color: string } => {
     if (newEmail.length === 0) {
-      return { valid: false, message: "Not entered", color: "text-gray-400" };
+      return { valid: false, message: t('status.notEntered'), color: "text-gray-400" };
     }
     if (!validateEmail(newEmail)) {
-      return { valid: false, message: "Invalid format", color: "text-red-500" };
+      return { valid: false, message: t('status.invalidFormat'), color: "text-red-500" };
     }
     if (newEmail === currentEmail) {
-      return { valid: false, message: "Same as current", color: "text-yellow-500" };
+      return { valid: false, message: t('status.sameAsCurrent'), color: "text-yellow-500" };
     }
-    return { valid: true, message: "Valid", color: "text-green-500" };
+    return { valid: true, message: t('status.valid'), color: "text-green-500" };
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!password) {
-      setError({ type: "error", message: "Please enter your password." });
+      setError({ type: "error", message: t('errors.enterPassword') });
       return;
     }
 
     if (!newEmail) {
-      setError({ type: "error", message: "Please enter a new email." });
+      setError({ type: "error", message: t('errors.enterNewEmail') });
       return;
     }
 
     if (!validateEmail(newEmail)) {
-      setError({ type: "error", message: "Please enter a valid email address." });
+      setError({ type: "error", message: t('errors.validEmail') });
       return;
     }
 
     if (newEmail !== confirmEmail) {
-      setError({ type: "error", message: "Email addresses do not match." });
+      setError({ type: "error", message: t('errors.emailMismatch') });
       return;
     }
 
     if (newEmail === currentEmail) {
-      setError({ type: "error", message: "New email must be different from current email." });
+      setError({ type: "error", message: t('errors.newMustDiffer') });
       return;
     }
 
@@ -79,11 +81,11 @@ export default function ChangeEmailForm({ currentEmail }: Props) {
       const data = await response.json();
 
       if (!response.ok) {
-        setError({ type: "error", message: data.error || "Failed to change email." });
+        setError({ type: "error", message: data.error || t('errors.failedChangeEmail') });
         return;
       }
 
-      setError({ type: "success", message: "Email changed successfully! Please log in again with your new email." });
+      setError({ type: "success", message: t('messages.emailChanged') });
 
       setTimeout(() => {
         setPassword("");
@@ -95,7 +97,7 @@ export default function ChangeEmailForm({ currentEmail }: Props) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Error changing email:', err);
       }
-      setError({ type: "error", message: "An error occurred. Please try again." });
+      setError({ type: "error", message: t('errors.generic') });
     }
   };
 
@@ -104,7 +106,7 @@ export default function ChangeEmailForm({ currentEmail }: Props) {
       <StatusModal isOpen={!!error} onCloseAction={() => setError(null)} message={error?.message || ""} type={error?.type || "success"} />
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 border border-primary p-4 rounded">
         <section className="flex flex-col gap-2">
-          <label>Current Email:</label>
+          <label>{t('currentEmailLabel')}</label>
           <input
             value={currentEmail}
             disabled
@@ -113,13 +115,13 @@ export default function ChangeEmailForm({ currentEmail }: Props) {
         </section>
 
         <section className="flex flex-col gap-2">
-          <label>Password:</label>
+          <label>{t('passwordLabel')}</label>
           <div className="relative">
             <input
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               autoComplete="current-password"
-              placeholder="Enter your password"
+              placeholder={t('passwordPlaceholder')}
               type={showPassword ? "text" : "password"}
               required
               className="input validator p-3 pr-12 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
@@ -132,20 +134,20 @@ export default function ChangeEmailForm({ currentEmail }: Props) {
                 setShowPassword((prev) => !prev);
               }}
               tabIndex={-1}
-              aria-label={showPassword ? "Hide password" : "Show password"}
+              aria-label={showPassword ? t('hidePasswordAria') : t('showPasswordAria')}
             >
-              {showPassword ? 'Hide' : 'Show'}
+              {showPassword ? t('hide') : t('show')}
             </button>
           </div>
         </section>
 
         <section className="flex flex-col gap-2">
-          <label>New Email:</label>
+          <label>{t('newEmailLabel')}</label>
           <input
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
             autoComplete="email"
-            placeholder="New Email"
+            placeholder={t('newEmailPlaceholder')}
             type="email"
             required
             className="input validator p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
@@ -153,12 +155,12 @@ export default function ChangeEmailForm({ currentEmail }: Props) {
         </section>
 
         <section className="flex flex-col gap-2">
-          <label>Confirm New Email:</label>
+          <label>{t('confirmNewEmailLabel')}</label>
           <input
             value={confirmEmail}
             onChange={(e) => setConfirmEmail(e.target.value)}
             autoComplete="email"
-            placeholder="Confirm New Email"
+            placeholder={t('confirmNewEmailPlaceholder')}
             type="email"
             required
             className="input validator p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full max-w-full"
@@ -167,7 +169,7 @@ export default function ChangeEmailForm({ currentEmail }: Props) {
 
         <section className="flex flex-col items-start">
           <div className={`text-sm ${getEmailStatus().color}`}>
-            New Email Status: {getEmailStatus().message}
+            {t('newEmailStatusLabel')} {getEmailStatus().message}
           </div>
         </section>
 
@@ -175,7 +177,7 @@ export default function ChangeEmailForm({ currentEmail }: Props) {
           type="submit"
           className="btn btn-primary p-2 rounded mt-4"
         >
-          Update Email
+          {t('updateEmail')}
         </button>
       </form>
     </>

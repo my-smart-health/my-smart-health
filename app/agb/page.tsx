@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { getLocale, getTranslations } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: "AGB - Allgemeine Geschäftsbedingungen | My Smart Health",
@@ -10,186 +10,107 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AGBPage() {
+export default async function AGBPage() {
+  const t = await getTranslations("AGBPage");
+  const locale = await getLocale();
+
+  const section1List = t.raw("section1.list") as string[];
+  const section2Text = t.raw("section2.text") as string[];
+  const section2List = t.raw("section2.list") as string[];
+  const section2Text2 = t.raw("section2.text2") as string[];
+  const section3Text = t.raw("section3.text") as string[];
+  const section10Text = t.raw("section10.text") as string[];
+
   return (
     <div className="w-full max-w-4xl mx-auto px-4 py-8">
       <div className="text-center mb-8">
-        <h2 className="text-xl font-semibold text-primary mb-6">
-          Nutzungsvertrag - Allgemeine Geschäftsbedingungen (AGB) über die Plattform
-          mysmart.health
-        </h2>
+        <h2 className="text-xl font-semibold text-primary mb-6">{t("title")}</h2>
       </div>
 
       <div className="space-y-6 text-sm leading-relaxed">
-
         <section>
-          <h3 className="text-lg font-bold text-primary mb-3">§ 1 Vertragsgegenstand</h3>
-          <p className="mb-2">
-            Der Anbieter die <strong>„Future Health GmbH Wildenbruchstr. 13 ,40545 Düsseldorf -
-              Amtsgericht Düsseldorf, HRB / 72666 vertreten durch den Geschäftsführer Dr.
-              Ferdinand Jeute Email <Link href="mailto:jeute@future-health.de" className="link text-blue-600">jeute@future-health.de</Link>&quot;</strong> betreibt die digitale Plattform
-            mysmart.health, die Unternehmen und Organisationen eine Präsentation sowie digitale
-            Gesundheitsleistungen zur Verfügung stellt.
-            <br />
-            Gegenstand dieses Vertrages ist die zeitlich beschränkte Integration und Nutzung der
-            Plattform durch den Partner für folgende Zwecke:
-          </p>
+          <h3 className="text-lg font-bold text-primary mb-3">{t("section1.title")}</h3>
+          <p className="mb-2">{t("section1.text1")}</p>
+          <p className="mb-2">{t("section1.text2")}</p>
           <ul className="list-disc pl-6 space-y-1">
-            <li>Digitale Darstellung und Marketingpräsenz des Partnerunternehmens auf der Plattform,</li>
-            <li>Zugriff auf digitale Inhalte und Gesundheitsangebote von mysmart.health,</li>
-            <li>Teilnahme an mysmart.health-Initiativen und digitalen Events.</li>
+            {section1List.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
           </ul>
         </section>
 
         <section>
-          <h3 className="text-lg font-bold text-primary mb-3">§ 2 Vertragsbeginn und Laufzeit</h3>
-          <p className="mb-2">
-            Der Vertrag tritt mit der Registrierung des Teilnehmers durch beide Parteien in Kraft.
-          </p>
-          <p className="mb-2">
-            Er wird auf unbestimmte Zeit geschlossen und ist monatlich kündbar.
-          </p>
-          <p className="mb-2">
-            Die Kündigung muss schriftlich oder in Textform (E-Mail genügt) bis spätestens 14 Tage vor
-            Monatsende erfolgen.
-          </p>
-          <p className="mb-2">
-            Zur Einrichtung eines Administrator-Accounts werden folgende Angaben benötigt:
-          </p>
+          <h3 className="text-lg font-bold text-primary mb-3">{t("section2.title")}</h3>
+          {section2Text.map((line) => (
+            <p key={line} className="mb-2">
+              {line}
+            </p>
+          ))}
           <ul className="list-disc pl-6 space-y-1 mb-2">
-            <li>Name des Lizenznehmers</li>
-            <li>Anschrift des Lizenznehmers</li>
-            <li>E-Mail-Adresse</li>
-            <li>Einrichtung eines Zahlungsmittels</li>
+            {section2List.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
           </ul>
-          <p className="mb-2">
-            Durch Registrierung gelangt der Administrator des Teilnehmers in den
-            Administrationsbereich von Future Health bzw. eigener Future Health Seiten. Die Daten des
-            Administrator-Accounts können über die Account-Einstellung jederzeit geändert werden.
-          </p>
-          <p className="mb-2">
-            Bei darauffolgenden Anmeldevorgängen ist die Eingabe der hinterlegten E-Mail-Adresse
-            sowie des Passwortes erforderlich. Ein Ändern des Passwortes ist ausschließlich in den
-            Account-Einstellungen möglich.
-          </p>
-          <p className="mb-2">
-            Der Inhaber bzw. Administrator des Teilnehmers ist für die sichere Aufbewahrung der
-            Account-Zugangsdaten verantwortlich. Durch einen etwaigen Verlust entstehenden Schaden
-            kommt der Lizenzgeber nicht auf.
-          </p>
+          {section2Text2.map((line) => (
+            <p key={line} className="mb-2">
+              {line}
+            </p>
+          ))}
         </section>
 
         <section>
-          <h3 className="text-lg font-bold text-primary mb-3">§ 3 Vergütung</h3>
-          <p className="mb-2">
-            Die Nutzung der Plattform ist ab Vertragsbeginn kostenfrei.
-          </p>
-          <p className="mb-2">
-            Zusätzliche Angebote werden vergütet nach der jeweils gültigen Preisliste bzw. dem
-            individuell vereinbarten monatlichen Nutzungsentgelt.
-          </p>
-          <p className="mb-2">
-            Zahlungen sind jährlich im Voraus ohne Abzug fällig.
-          </p>
-          <p className="mb-2">
-            Der Anbieter ist berechtigt, Preise mit einer Frist von 30 Tagen zum Monatsende
-            anzupassen.
-          </p>
+          <h3 className="text-lg font-bold text-primary mb-3">{t("section3.title")}</h3>
+          {section3Text.map((line) => (
+            <p key={line} className="mb-2">
+              {line}
+            </p>
+          ))}
         </section>
 
         <section>
-          <h3 className="text-lg font-bold text-primary mb-3">§ 4 Leistungen des Anbieters</h3>
-          <p className="mb-2">
-            Der Anbieter stellt dem Partner Zugang zur Plattform mysmart.health bereit und ermöglicht
-            die Nutzung der angebotenen Funktionen.
-            <br />
-            Der Anbieter sorgt für eine technische Verfügbarkeit der Plattform von mindestens 95 % im
-            Monatsmittel.
-            <br />
-            Inhaltliche und technische Änderungen, die der Weiterentwicklung der Plattform dienen,
-            bleiben vorbehalten.
-          </p>
+          <h3 className="text-lg font-bold text-primary mb-3">{t("section4.title")}</h3>
+          <p className="mb-2">{t("section4.text")}</p>
         </section>
 
         <section>
-          <h3 className="text-lg font-bold text-primary mb-3">§ 5 Pflichten des Partners</h3>
-          <p>
-            Der Partner verpflichtet sich, die Plattform ausschließlich im Rahmen des vertraglichen
-            Zwecks zu nutzen.
-            <br />
-            Der Partner ist für die von ihm veröffentlichten Inhalte selbst verantwortlich.
-            <br />
-            Der Partner darf keine rechtswidrigen oder diskriminierenden Inhalte veröffentlichen.
-            <br />
-            Marken, Logos und Materialien von mysmart.health dürfen nur im Rahmen dieser
-            Kooperation genutzt werden.
-          </p>
+          <h3 className="text-lg font-bold text-primary mb-3">{t("section5.title")}</h3>
+          <p>{t("section5.text")}</p>
         </section>
 
         <section>
-          <h3 className="text-lg font-bold text-primary mb-3">§ 6 Nutzungsrechte</h3>
-          <p className="mb-2">
-            Der Anbieter räumt dem Partner ein einfaches, nicht übertragbares Nutzungsrecht an der
-            Plattform für die Vertragsdauer ein.
-            <br />
-            Eine Weitergabe von Zugängen oder Inhalten an Dritte ist untersagt.
-            <br />
-            Alle Rechte an der Plattform, den Inhalten und Designs verbleiben beim Anbieter.
-          </p>
+          <h3 className="text-lg font-bold text-primary mb-3">{t("section6.title")}</h3>
+          <p className="mb-2">{t("section6.text")}</p>
         </section>
 
         <section>
-          <h3 className="text-lg font-bold text-primary mb-3">§ 7 Haftung</h3>
-          <p className="mb-2">
-            Der Anbieter haftet nur bei Vorsatz und grober Fahrlässigkeit.
-            <br />
-            Für Datenverluste oder indirekte Schäden wird keine Haftung übernommen.
-            <br />
-            Die Haftung nach dem Produkthaftungsgesetz bleibt unberührt.
-          </p>
+          <h3 className="text-lg font-bold text-primary mb-3">{t("section7.title")}</h3>
+          <p className="mb-2">{t("section7.text")}</p>
         </section>
 
         <section>
-          <h3 className="text-lg font-bold text-primary mb-3">§ 8 Datenschutz</h3>
-          <p className="mb-2">
-            Beide Parteien verpflichten sich zur Einhaltung der Datenschutzbestimmungen gemäß
-            DSGVO.
-            <br />
-            Personenbezogene Daten werden ausschließlich zum Zwecke der Vertragserfüllung
-            verarbeitet.
-            <br />
-            Näheres regelt eine gesonderte Datenschutzvereinbarung (AV-Vertrag), sofern erforderlich.
-          </p>
+          <h3 className="text-lg font-bold text-primary mb-3">{t("section8.title")}</h3>
+          <p className="mb-2">{t("section8.text")}</p>
         </section>
 
         <section>
-          <h3 className="text-lg font-bold text-primary mb-3">§ 9 Vertraulichkeit</h3>
-          <p className="mb-2">
-            Beide Parteien verpflichten sich, alle im Rahmen dieses Vertrages erlangten vertraulichen
-            Informationen streng vertraulich zu behandeln und Dritten nicht zugänglich zu machen.
-          </p>
+          <h3 className="text-lg font-bold text-primary mb-3">{t("section9.title")}</h3>
+          <p className="mb-2">{t("section9.text")}</p>
         </section>
 
         <section>
-          <h3 className="text-lg font-bold text-primary mb-3">§ 10 Schlussbestimmungen</h3>
-          <p className="mb-2">
-            Änderungen und Ergänzungen dieses Vertrages bedürfen der Schriftform.
-          </p>
-          <p className="mb-2">
-            Sollten einzelne Bestimmungen unwirksam sein, bleibt die Wirksamkeit der übrigen
-            Bestimmungen unberührt.
-          </p>
-          <p className="mb-2">
-            Es gilt deutsches Recht unter Ausschluss des UN-Kaufrechts.
-          </p>
-          <p className="mb-2">
-            Gerichtsstand ist Düsseldorf.
-          </p>
+          <h3 className="text-lg font-bold text-primary mb-3">{t("section10.title")}</h3>
+          {section10Text.map((line) => (
+            <p key={line} className="mb-2">
+              {line}
+            </p>
+          ))}
         </section>
 
         <section className="mt-8 text-xs text-gray-600 text-center border-t border-gray-200 pt-4">
-          <p>Future Health GmbH · Wildenbruchstr. 13 · 40545 Düsseldorf · www.mysmart.health · info@mysmart.health</p>
-          <p className="mt-2">Stand: {new Date().toLocaleDateString('de-DE', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+          <p>{t("footer.company")}</p>
+          <p className="mt-2">
+            {t("footer.date")} {new Date().toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' })}
+          </p>
         </section>
       </div>
     </div>

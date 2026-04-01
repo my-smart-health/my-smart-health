@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { CACHE_STRATEGY } from "@/utils/constants";
 import SearchFilter from "@/components/search/SearchFilter";
+import { getTranslations } from "next-intl/server";
 
 async function getAllUsersWithCategories() {
   const users = await prisma.user.findMany({
@@ -78,6 +79,7 @@ async function getAllUsersWithCategories() {
 export default async function AllUsersPage() {
 
   const session = await auth();
+  const t = await getTranslations('AllUsersPage');
 
   if (!session || session.user.role !== "ADMIN") {
     return (redirect("/login"));
@@ -88,14 +90,14 @@ export default async function AllUsersPage() {
   if (!users) {
     return (
       <>
-        <div>No users found</div>
+        <div>{t('noUsers')}</div>
       </>
     );
   }
 
   return (
     <>
-      <h1>All Users</h1>
+      <h1>{t('title')}</h1>
       <SearchFilter users={users} currentUserId={session.user.id} />
     </>
   );

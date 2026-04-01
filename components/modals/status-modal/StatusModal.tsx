@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 export default function StatusModal({
   isOpen,
   onCloseAction,
@@ -13,14 +15,15 @@ export default function StatusModal({
 }) {
   if (!isOpen) return null;
 
+  const t = useTranslations('StatusModal');
   let bgClass = "bg-green-500 text-white";
-  let title = "Erfolg";
+  let title = t('success');
   if (type === "error") {
     bgClass = "bg-red-500 text-white";
-    title = "Fehler";
+    title = t('error');
   } else if (type === "warning") {
     bgClass = "bg-yellow-400 text-black";
-    title = "Warnung";
+    title = t('warning');
   }
 
   return (
@@ -35,7 +38,7 @@ export default function StatusModal({
               className="btn btn-primary"
               onClick={onCloseAction}
             >
-              Schließen
+              {t('close')}
             </button>
           </form>
         </div>

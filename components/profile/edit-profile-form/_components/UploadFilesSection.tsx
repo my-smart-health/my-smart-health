@@ -11,6 +11,7 @@ import {
 } from '@/utils/constants';
 import Link from 'next/link';
 import { Trash2, FileText } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type UploadFilesSectionProps = {
   userId: string;
@@ -33,6 +34,7 @@ export function UploadFilesSection({
   isDisabled,
   setIsDisabled,
 }: UploadFilesSectionProps) {
+  const t = useTranslations('EditProfileForm');
   const [uploading, setUploading] = useState(false);
   const [deleting, setDeleting] = useState<string | null>(null);
   const { startUpload, updateProgress, finishUpload } = useUploadProgress();
@@ -65,12 +67,12 @@ export function UploadFilesSection({
     const files = inputEl.files;
 
     if (!files || files.length === 0) {
-      setError('Please select at least one file.');
+      setError(t('uploadFiles.errors.selectAtLeastOne'));
       return;
     }
 
     if (!userId) {
-      setError('Missing user ID. Please reload the page.');
+      setError(t('uploadFiles.errors.missingUserId'));
       inputEl.value = '';
       return;
     }
@@ -78,9 +80,7 @@ export function UploadFilesSection({
     for (const file of Array.from(files)) {
       if (file.size > MAX_PROFILE_FILE_SIZE_BYTES) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        setError(
-          `The file "${file.name}" is too large. Maximum allowed is ${MAX_PROFILE_FILE_SIZE_MB}MB.`
-        );
+        setError(t('uploadFiles.errors.fileTooLarge', { name: file.name, maxMB: MAX_PROFILE_FILE_SIZE_MB }));
         inputEl.value = '';
         return;
       }
@@ -123,7 +123,7 @@ export function UploadFilesSection({
               payload !== null &&
               'error' in payload
               ? String((payload as { error?: string }).error)
-              : 'File upload failed.';
+              : t('uploadFiles.errors.uploadFailed');
           throw new Error(errorMessage);
         }
 
@@ -143,7 +143,7 @@ export function UploadFilesSection({
       const message =
         error instanceof Error
           ? error.message
-          : 'An error occurred while uploading the files.';
+          : t('uploadFiles.errors.uploadFailed');
       setError(message);
     } finally {
       setUploading(false);
@@ -161,7 +161,7 @@ export function UploadFilesSection({
         method: 'DELETE',
       });
       if (!response.ok) {
-        let msg = 'Failed to delete file';
+        let msg = t('uploadFiles.errors.deleteFailed');
         try {
           const payload = await response.json();
           if (payload && typeof payload === 'object' && 'message' in payload) {
@@ -180,7 +180,7 @@ export function UploadFilesSection({
       setError(null);
     } catch (error) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      const message = error instanceof Error ? error.message : 'An error occurred while deleting the file.';
+      const message = error instanceof Error ? error.message : t('uploadFiles.errors.deleteError');
       setError(message);
     } finally {
       setDeleting(null);
@@ -192,10 +192,10 @@ export function UploadFilesSection({
     <section>
       <fieldset className="fieldset space-y-4">
         <legend className="fieldset-legend text-base font-semibold">
-          Upload files
+          {t('uploadFiles.legend')}
         </legend>
         <p className="text-sm text-gray-600">
-          Upload additional documents for your profile. Each file can be up to {MAX_PROFILE_FILE_SIZE_MB}MB.
+          {t('uploadFiles.description', { maxMB: MAX_PROFILE_FILE_SIZE_MB })}
         </p>
         <input
           type="file"
@@ -205,18 +205,18 @@ export function UploadFilesSection({
           onChange={handleUpload}
         />
         <div className="text-xs text-gray-500">
-          Supported file types: any document or image format up to {MAX_PROFILE_FILE_SIZE_MB}MB.
+          {t('uploadFiles.supportedTypes', { maxMB: MAX_PROFILE_FILE_SIZE_MB })}
         </div>
         {uploading && (
           <div className="pt-2">
-            <Spinner size="sm" label="Uploading files..." />
+            <Spinner size="sm" label={t('uploadFiles.uploadingSpinner')} />
           </div>
         )}
       </fieldset>
 
       {profileFiles.length > 0 && (
         <section className="mt-6 w-full">
-          <h3 className="text-lg font-semibold text-primary mb-3">Uploaded files</h3>
+          <h3 className="text-lg font-semibold text-primary mb-3">{t('uploadFiles.uploadedFilesHeading')}</h3>
           <div className="flex flex-wrap gap-3">
             {profileFiles.map(fileUrl => {
               const fileName = getFileNameFromUrl(fileUrl);
@@ -232,7 +232,7 @@ export function UploadFilesSection({
                   </Link>
                   <button
                     type="button"
-                    aria-label="Delete file"
+                    aria-label={t('uploadFiles.deleteAriaLabel')}
                     disabled={isDisabled || deleting === fileUrl}
                     onClick={() => handleDeleteFile(fileUrl)}
                     className="btn btn-circle btn-outline btn-error btn-sm sm:btn-md shrink-0 self-center hover:text-white"

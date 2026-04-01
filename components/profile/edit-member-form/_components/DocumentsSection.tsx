@@ -1,5 +1,6 @@
 import { MemberDocument } from '@/utils/types';
 import { getFileNameFromUrl } from '@/utils/common';
+import { useTranslations } from 'next-intl';
 import {
   getMemberFileDownloadUrl,
   deleteMemberFile,
@@ -17,6 +18,7 @@ export function DocumentsSection({
   documents,
   setDocuments,
 }: DocumentsSectionProps) {
+  const t = useTranslations('EditMemberForm.documents');
   const handleAdd = () => {
     setDocuments([...documents, { url: '', description: '' }]);
   };
@@ -35,7 +37,7 @@ export function DocumentsSection({
         window.alert(
           error instanceof Error
             ? error.message
-            : 'Failed to remove document',
+            : t('errors.failedRemoveDocument'),
         );
         return;
       }
@@ -68,7 +70,7 @@ export function DocumentsSection({
       setDocuments(updated);
     } catch (error) {
       window.alert(
-        error instanceof Error ? error.message : 'Failed to upload document',
+        error instanceof Error ? error.message : t('errors.failedUploadDocument'),
       );
     }
   };
@@ -77,18 +79,18 @@ export function DocumentsSection({
     <section>
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <span className="font-semibold text-gray-700">Documents</span>
+          <span className="font-semibold text-gray-700">{t('title')}</span>
           <button
             type="button"
             onClick={handleAdd}
             className="btn btn-sm btn-primary text-white"
           >
-            + Add Document
+            {t('addDocument')}
           </button>
         </div>
         <div className="space-y-3">
           {documents.length === 0 ? (
-            <p className="text-gray-500 italic text-sm">No documents added yet</p>
+            <p className="text-gray-500 italic text-sm">{t('empty')}</p>
           ) : (
             documents.map((doc, index) => (
               <div key={index} className="flex flex-col gap-2 p-3 border border-gray-200 rounded-lg">
@@ -103,14 +105,14 @@ export function DocumentsSection({
                           href={getMemberFileDownloadUrl(memberId, doc.url)}
                           className="btn btn-sm btn-outline btn-primary"
                         >
-                          Download
+                          {t('download')}
                         </a>
                         <button
                           type="button"
                           onClick={() => void handleRemove(index)}
                           className="btn btn-sm btn-error text-white"
                         >
-                          Remove
+                          {t('remove')}
                         </button>
                       </div>
                     </>
@@ -132,7 +134,7 @@ export function DocumentsSection({
                         onClick={() => void handleRemove(index)}
                         className="btn btn-sm btn-error text-white"
                       >
-                        Remove
+                        {t('remove')}
                       </button>
                     </>
                   )}
@@ -141,7 +143,7 @@ export function DocumentsSection({
                   type="text"
                   value={doc.description || ''}
                   onChange={e => handleChangeDescription(index, e.target.value)}
-                  placeholder="Document description (optional)"
+                  placeholder={t('descriptionPlaceholder')}
                   className="p-2 rounded border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-primary flex-1"
                 />
               </div>

@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { CACHE_STRATEGY } from "@/utils/constants";
 import SearchFilterMembers from "@/components/search/SearchFilterMembers";
+import { getTranslations } from "next-intl/server";
 
 
 async function getAllMembers() {
@@ -25,6 +26,7 @@ async function getAllMembers() {
 
 export default async function AllMembersPage() {
   const session = await auth();
+  const t = await getTranslations('AllMembersPage');
 
   if (!session || session.user.role !== "ADMIN") {
     return redirect("/login");
@@ -35,15 +37,15 @@ export default async function AllMembersPage() {
   if (!members || members.length === 0) {
     return (
       <>
-        <h1>All Members</h1>
-        <div>No members found</div>
+        <h1>{t('title')}</h1>
+        <div>{t('noMembers')}</div>
       </>
     );
   }
 
   return (
     <>
-      <h1>All Members</h1>
+      <h1>{t('title')}</h1>
       <SearchFilterMembers members={members} />
     </>
   );

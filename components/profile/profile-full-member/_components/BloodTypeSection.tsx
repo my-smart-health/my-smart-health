@@ -1,7 +1,10 @@
+'use client';
+
 import { Droplet, FileText, ExternalLink } from 'lucide-react';
 import { FileWithDescription } from '@/utils/types';
 import { getFileNameFromUrl } from '@/utils/common';
 import { getMemberFileDownloadUrl } from '@/utils/member-files-client';
+import { useTranslations } from 'next-intl';
 
 type BloodType =
   | 'A_POSITIVE'
@@ -35,17 +38,18 @@ export function BloodTypeSection({
   bloodType,
   bloodTypeFiles,
 }: BloodTypeSectionProps) {
+  const t = useTranslations('MemberProfileFull');
   const hasFiles = bloodTypeFiles && bloodTypeFiles.length > 0;
 
   return (
     <div className="w-full">
-      <h3 className="text-lg font-semibold text-primary mb-3">Blood Type</h3>
+      <h3 className="text-lg font-semibold text-primary mb-3">{t('bloodType.title')}</h3>
       <div className="space-y-3">
         {bloodType && (
           <div className="flex items-center gap-3 p-4 rounded-lg border border-red-600">
             <Droplet className="text-red-600 flex-shrink-0" size={24} />
             <div>
-              <p className="text-xs text-gray-500 uppercase mb-1">Blood Type</p>
+              <p className="text-xs text-gray-500 uppercase mb-1">{t('bloodType.label')}</p>
               <p className="text-xl font-bold text-red-600">{BLOOD_TYPE_DISPLAY[bloodType]}</p>
             </div>
           </div>
@@ -54,14 +58,14 @@ export function BloodTypeSection({
           <div className="space-y-2">
             <p className="text-sm font-medium text-gray-700 flex items-center gap-2">
               <FileText size={16} />
-              Related Documents
+              {t('bloodType.relatedDocuments')}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {bloodTypeFiles.map((file, index) => {
                 const fileName = getFileNameFromUrl(file.url);
                 const description = file.description && file.description.trim() !== ''
                   ? file.description
-                  : `Document ${index + 1}`;
+                  : t('documents.documentFallback', { index: index + 1 });
                 return (
                   <a
                     key={index}

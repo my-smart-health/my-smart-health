@@ -1,18 +1,32 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 import { ContactTemplate } from '@/components/emails/contact-template/ContactTemplate';
+import { resolveLocale } from '@/utils/common';
 
 const resend = new Resend(process.env.RESEND_EMAIL_API_KEY);
 
+const messages = {
+  de: {
+    required: 'Alle Felder sind erforderlich',
+    subjectPrefix: 'Neue Kontaktanfrage von',
+    genericError:
+      'Fehler beim Senden der Nachricht. Bitte versuchen Sie es spaeter erneut.',
+  },
+  en: {
+    required: 'All fields are required',
+    subjectPrefix: 'New contact request from',
+    genericError: 'Error sending message. Please try again later.',
+  },
+} as const;
+
 export async function POST(req: Request) {
   try {
+    const locale = resolveLocale(req);
+    const t = messages[locale];
     const { name, surname, email, phoneNumber, message } = await req.json();
 
     if (!name || !surname || !email || !phoneNumber || !message) {
-      return NextResponse.json(
-        { error: 'Alle Felder sind erforderlich' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: t.required }, { status: 400 });
     }
 
     const data = await resend.emails.send({
@@ -21,13 +35,14 @@ export async function POST(req: Request) {
         'My Smart Health Kontakt <onboarding@resend.dev>',
       to: process.env.RESEND_TO || 'f.jeute@spitzenmedizin.com',
       replyTo: email,
-      subject: `Neue Kontaktanfrage von ${surname} ${name}`,
+      subject: `${t.subjectPrefix} ${surname} ${name}`,
       react: ContactTemplate({
         name: name,
         surname: surname,
         email: email,
         phoneNumber: phoneNumber,
         message: message,
+        locale,
       }),
     });
 
@@ -38,10 +53,9 @@ export async function POST(req: Request) {
     }
     return NextResponse.json(
       {
-        error:
-          'Fehler beim Senden der Nachricht. Bitte versuchen Sie es später erneut.',
+        error: messages[resolveLocale(req)].genericError,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

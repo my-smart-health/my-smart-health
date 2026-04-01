@@ -1,4 +1,7 @@
+'use client';
+
 import Divider from "@/components/divider/Divider";
+import { useTranslations } from 'next-intl';
 
 type Social = {
   platform: string;
@@ -12,14 +15,15 @@ type SocialsSectionProps = {
 };
 
 export function SocialsSection({ socials, setSocials, platformIcons }: SocialsSectionProps) {
+  const t = useTranslations('EditProfileForm');
   return (
     <section className="flex flex-col gap-2 mt-1">
-      <span className="font-semibold text-gray-700">Socials</span>
+      <span className="font-semibold text-gray-700">{t('socials.label')}</span>
       {socials.map((social, idx) => (
         <div key={idx} className="flex flex-row flex-wrap gap-4 items-center mb-4">
           <input
             type="text"
-            placeholder="URL"
+            placeholder={t('socials.urlPlaceholder')}
             value={social.url}
             onChange={e => {
               const updated = [...socials];
@@ -43,26 +47,26 @@ export function SocialsSection({ socials, setSocials, platformIcons }: SocialsSe
                   setSocials(updated);
                 }}
               >
-                <option disabled value="">Pick a platform</option>
-                <option value="Email">Email</option>
-                <option value="Website">Website</option>
-                <option value="Facebook">Facebook</option>
-                <option value="Linkedin">Linkedin</option>
-                <option value="X">X.com</option>
-                <option value="Youtube">Youtube</option>
-                <option value="TikTok">TikTok</option>
-                <option value="Instagram">Instagram</option>
+                <option disabled value="">{t('socials.pickPlatform')}</option>
+                <option value="Email">{t('socials.platform.email')}</option>
+                <option value="Website">{t('socials.platform.website')}</option>
+                <option value="Facebook">{t('socials.platform.facebook')}</option>
+                <option value="Linkedin">{t('socials.platform.linkedin')}</option>
+                <option value="X">{t('socials.platform.x')}</option>
+                <option value="Youtube">{t('socials.platform.youtube')}</option>
+                <option value="TikTok">{t('socials.platform.tiktok')}</option>
+                <option value="Instagram">{t('socials.platform.instagram')}</option>
               </select>
             </div>
             <button
               type="button"
               onClick={() => {
-                if (!confirm("Are you sure you want to remove this social link?")) return;
+                if (!confirm(t('socials.confirmRemove'))) return;
                 setSocials(socials.filter((_, i) => i !== idx));
               }}
               className="btn btn-outline text-red-500 self-end"
             >
-              Remove
+              {t('socials.removeButton')}
             </button>
           </div>
         </div>
@@ -75,7 +79,7 @@ export function SocialsSection({ socials, setSocials, platformIcons }: SocialsSe
         onClick={() => setSocials([...socials, { platform: '', url: '' }])}
         className="btn btn-outline btn-primary px-3 py-1 w-full rounded"
       >
-        Add Social Link
+        {t('socials.addButton')}
       </button>
     </section>
   );

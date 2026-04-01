@@ -2,6 +2,7 @@ import prisma from "@/lib/db";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { CACHE_STRATEGY } from "@/utils/constants";
+import { getTranslations } from "next-intl/server";
 
 import ProfileFullMember from "@/components/profile/profile-full-member/ProfileFullMember";
 import {
@@ -96,6 +97,7 @@ export default async function MemberPublicProfilePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const t = await getTranslations("MemberPublicProfile");
   const session = await auth();
   const { id } = await params;
 
@@ -120,12 +122,12 @@ export default async function MemberPublicProfilePage({
   if (!member) {
     return (
       <div className="flex flex-col gap-4 p-4 w-full items-center justify-center min-h-[60vh]">
-        <h1 className="text-3xl font-bold text-error">Access Denied</h1>
+        <h1 className="text-3xl font-bold text-error">{t("accessDenied.title")}</h1>
         <p className="text-lg text-center">
-          You don&apos;t have permission to view this member profile.
+          {t("accessDenied.description")}
         </p>
         <p className="text-sm text-center text-gray-600">
-          This member has not added you to their contacts list.
+          {t("accessDenied.reason")}
         </p>
         <GoBack />
       </div>
@@ -135,7 +137,7 @@ export default async function MemberPublicProfilePage({
   return (
     <>
       <div className="flex items-center justify-between gap-3">
-        <h1 className="text-4xl font-extrabold text-primary mb-2">Member Profile</h1>
+        <h1 className="text-4xl font-extrabold text-primary mb-2">{t("profile.title")}</h1>
       </div>
       <ProfileFullMember member={member} isAdmin={false} />
     </>

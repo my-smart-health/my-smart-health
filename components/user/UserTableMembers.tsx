@@ -4,6 +4,7 @@ import Link from "next/link";
 import { UserSearch, Eye, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 type Member = {
   id: string;
@@ -17,6 +18,7 @@ type SortKey = keyof Pick<Member, "name" | "email" | "role" | "createdAt">;
 
 export default function UserTableMembers({ members }: { members: Member[] }) {
   const router = useRouter();
+  const t = useTranslations('UserTableMembers');
   const [sortKey, setSortKey] = useState<SortKey>("name");
   const [sortAsc, setSortAsc] = useState(true);
   const [allMembers, setAllMembers] = useState(members);
@@ -50,7 +52,7 @@ export default function UserTableMembers({ members }: { members: Member[] }) {
   const handleDeleteMember = async (member: Member) => {
     const displayName = member.name?.trim() || member.email;
     const isConfirmed = window.confirm(
-      `Warning: You are about to permanently delete member "${displayName}" including all files. This cannot be undone. Continue?`,
+      t('confirm.deleteMember', { name: displayName }),
     );
 
     if (!isConfirmed) {
@@ -67,14 +69,14 @@ export default function UserTableMembers({ members }: { members: Member[] }) {
       const data = await response.json().catch(() => null);
 
       if (!response.ok) {
-        alert(data?.error || "Failed to delete member");
+        alert(data?.error || t('errors.deleteFailed'));
         return;
       }
 
       setAllMembers((prev) => prev.filter((item) => item.id !== member.id));
       router.refresh();
     } catch {
-      alert("Failed to delete member");
+      alert(t('errors.deleteFailed'));
     } finally {
       setDeletingMemberId(null);
     }
@@ -89,28 +91,28 @@ export default function UserTableMembers({ members }: { members: Member[] }) {
               className="cursor-pointer select-none"
               onClick={() => handleSort("name")}
             >
-              Name {sortArrow("name")}
+              {t('columns.name')} {sortArrow("name")}
             </th>
             <th
               className="cursor-pointer select-none"
               onClick={() => handleSort("email")}
             >
-              Email {sortArrow("email")}
+              {t('columns.email')} {sortArrow("email")}
             </th>
             <th
               className="cursor-pointer select-none"
               onClick={() => handleSort("createdAt")}>
-              Created at {sortArrow("createdAt")}
+              {t('columns.createdAt')} {sortArrow("createdAt")}
             </th>
             <th
               className="cursor-pointer select-none"
               onClick={() => handleSort("role")}
             >
-              Role {sortArrow("role")}
+              {t('columns.role')} {sortArrow("role")}
             </th>
-            <th>View</th>
-            <th>Edit</th>
-            <th>Delete</th>
+            <th>{t('columns.view')}</th>
+            <th>{t('columns.edit')}</th>
+            <th>{t('columns.delete')}</th>
           </tr>
         </thead>
         <tbody>
@@ -118,7 +120,7 @@ export default function UserTableMembers({ members }: { members: Member[] }) {
             const createdAtFormatted = new Date(member.createdAt).toLocaleDateString('de-DE');
             return (
               <tr key={member.id || idx} className="hover:bg-primary/50 bg-primary/30">
-                <td className="font-semibold">{member.name || "No Name"}</td>
+                <td className="font-semibold">{member.name || t('noName')}</td>
                 <td>{member.email}</td>
                 <td>{createdAtFormatted}</td>
                 <td className="uppercase font-bold">{member.role}</td>
@@ -127,7 +129,7 @@ export default function UserTableMembers({ members }: { members: Member[] }) {
                     href={`/dashboard/member/${member.id}`}
                     className="font-semibold text-blue-600 hover:underline flex flex-col justify-center items-center gap-1"
                   >
-                    <Eye className="inline-block mr-1" /> View
+                    <Eye className="inline-block mr-1" /> {t('actions.view')}
                   </Link>
                 </td>
                 <td>
@@ -135,7 +137,7 @@ export default function UserTableMembers({ members }: { members: Member[] }) {
                     href={`/dashboard/edit-member/${member.id}`}
                     className="font-semibold text-yellow-500 hover:underline flex flex-col justify-center items-center gap-1"
                   >
-                    <UserSearch className="inline-block mr-1" /> Edit
+                    <UserSearch className="inline-block mr-1" /> {t('actions.edit')}
                   </Link>
                 </td>
                 <td>
@@ -146,7 +148,7 @@ export default function UserTableMembers({ members }: { members: Member[] }) {
                     className="font-semibold text-red-500 hover:underline flex flex-col justify-center items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Trash2 className="inline-block mr-1" />
-                    {deletingMemberId === member.id ? "Deleting..." : "Delete"}
+                    {deletingMemberId === member.id ? t('actions.deleting') : t('actions.delete')}
                   </button>
                 </td>
               </tr>

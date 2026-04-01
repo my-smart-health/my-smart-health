@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 type PersonalInfoSectionProps = {
   birthday: string;
   setBirthday: (val: string) => void;
@@ -15,11 +17,12 @@ export function PersonalInfoSection({
   weightKg,
   setWeightKg,
 }: PersonalInfoSectionProps) {
+  const t = useTranslations('EditMemberForm.personalInfo');
   return (
     <div className="space-y-4">
       <section>
         <label className="flex flex-col gap-2">
-          <span className="font-semibold text-gray-700">Birthday</span>
+          <span className="font-semibold text-gray-700">{t('birthday')}</span>
           <input
             type="date"
             value={birthday}
@@ -32,12 +35,12 @@ export function PersonalInfoSection({
 
       <section>
         <label className="flex flex-col gap-2">
-          <span className="font-semibold text-gray-700">Height (cm)</span>
+          <span className="font-semibold text-gray-700">{t('heightCm')}</span>
           <input
             type="number"
             value={heightCm}
             onChange={e => setHeightCm(e.target.value)}
-            placeholder="e.g. 175"
+            placeholder={t('heightPlaceholder')}
             className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
           />
         </label>
@@ -45,12 +48,12 @@ export function PersonalInfoSection({
 
       <section>
         <label className="flex flex-col gap-2">
-          <span className="font-semibold text-gray-700">Weight (kg)</span>
+          <span className="font-semibold text-gray-700">{t('weightKg')}</span>
           <input
             type="number"
             value={weightKg}
             onChange={e => setWeightKg(e.target.value)}
-            placeholder="e.g. 70"
+            placeholder={t('weightPlaceholder')}
             className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full"
           />
         </label>

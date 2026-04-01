@@ -1,4 +1,5 @@
 import { TelMedicinePhoneNumber } from '@/utils/types';
+import { useTranslations } from 'next-intl';
 
 type SpecialNumbersSectionProps = {
   specialNumbers: TelMedicinePhoneNumber[];
@@ -9,6 +10,7 @@ export function SpecialNumbersSection({
   specialNumbers,
   setSpecialNumbers,
 }: SpecialNumbersSectionProps) {
+  const t = useTranslations('EditMemberForm.specialNumbers');
   const handleAdd = () => {
     setSpecialNumbers([
       ...specialNumbers,
@@ -34,19 +36,19 @@ export function SpecialNumbersSection({
     <section>
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <span className="font-semibold text-gray-700">Telemedizin</span>
+          <span className="font-semibold text-gray-700">{t('title')}</span>
           <button
             type="button"
             onClick={handleAdd}
             className="btn btn-sm btn-primary text-white"
           >
-            + Add Number
+            {t('addNumber')}
           </button>
         </div>
 
         <div className="space-y-4">
           {specialNumbers.length === 0 ? (
-            <p className="text-gray-500 italic text-sm">No special numbers added yet</p>
+            <p className="text-gray-500 italic text-sm">{t('empty')}</p>
           ) : (
             specialNumbers.map((item, index) => (
               <div
@@ -55,14 +57,14 @@ export function SpecialNumbersSection({
               >
                 <div className="flex justify-between items-center">
                   <h4 className="font-semibold text-sm text-gray-600">
-                    Number #{index + 1}
+                    {t('numberItem', { index: index + 1 })}
                   </h4>
                   <button
                     type="button"
                     onClick={() => handleRemove(index)}
                     className="btn btn-xs btn-error text-white"
                   >
-                    Remove
+                    {t('remove')}
                   </button>
                 </div>
 
@@ -70,7 +72,7 @@ export function SpecialNumbersSection({
                   type="text"
                   value={item.type}
                   onChange={(e) => handleChange(index, 'type', e.target.value)}
-                  placeholder="Type (e.g. Video Doctor, Emergency Hotline)"
+                  placeholder={t('typePlaceholder')}
                   className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
                 />
 
@@ -78,7 +80,7 @@ export function SpecialNumbersSection({
                   type="tel"
                   value={item.phone}
                   onChange={(e) => handleChange(index, 'phone', e.target.value)}
-                  placeholder="Phone number"
+                  placeholder={t('phonePlaceholder')}
                   className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
                 />
 
@@ -88,7 +90,7 @@ export function SpecialNumbersSection({
                   onChange={(e) =>
                     handleChange(index, 'description', e.target.value)
                   }
-                  placeholder="Description (optional)"
+                  placeholder={t('descriptionPlaceholder')}
                   className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary w-full"
                 />
               </div>

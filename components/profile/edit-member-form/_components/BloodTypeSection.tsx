@@ -1,5 +1,6 @@
 import { FileWithDescription } from '@/utils/types';
 import { getFileNameFromUrl } from '@/utils/common';
+import { useTranslations } from 'next-intl';
 import {
   getMemberFileDownloadUrl,
   deleteMemberFile,
@@ -42,6 +43,7 @@ export function BloodTypeSection({
   bloodTypeFiles,
   setBloodTypeFiles,
 }: BloodTypeSectionProps) {
+  const t = useTranslations('EditMemberForm.bloodType');
   const handleAddFile = () => {
     setBloodTypeFiles([...bloodTypeFiles, { url: '', description: '' }]);
   };
@@ -60,7 +62,7 @@ export function BloodTypeSection({
         window.alert(
           error instanceof Error
             ? error.message
-            : 'Failed to remove blood type file',
+            : t('errors.failedRemoveBloodTypeFile'),
         );
         return;
       }
@@ -93,7 +95,7 @@ export function BloodTypeSection({
       setBloodTypeFiles(updated);
     } catch (error) {
       window.alert(
-        error instanceof Error ? error.message : 'Failed to upload file',
+        error instanceof Error ? error.message : t('errors.failedUploadFile'),
       );
     }
   };
@@ -102,13 +104,13 @@ export function BloodTypeSection({
     <div className="space-y-4">
       <section>
         <label className="flex flex-col gap-2">
-          <span className="font-semibold text-gray-700">Blood Type (Optional)</span>
+          <span className="font-semibold text-gray-700">{t('label')}</span>
           <select
             value={bloodType}
             onChange={e => setBloodType(e.target.value)}
             className="p-3 rounded border border-primary text-base focus:outline-none focus:ring-2 focus:ring-primary w-full bg-white"
           >
-            <option value="">Select blood type...</option>
+            <option value="">{t('selectPlaceholder')}</option>
             {BLOOD_TYPE_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -121,18 +123,18 @@ export function BloodTypeSection({
       <section>
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-gray-700">Blood Type Files</span>
+            <span className="font-semibold text-gray-700">{t('filesTitle')}</span>
             <button
               type="button"
               onClick={handleAddFile}
               className="btn btn-sm btn-primary text-white"
             >
-              + Add File
+              {t('addFile')}
             </button>
           </div>
           <div className="space-y-2">
             {bloodTypeFiles.length === 0 ? (
-              <p className="text-gray-500 italic text-sm">No files added yet</p>
+              <p className="text-gray-500 italic text-sm">{t('emptyFiles')}</p>
             ) : (
               bloodTypeFiles.map((file, index) => (
                 <div key={index} className="flex flex-col gap-2 p-2 bg-gray-50 rounded">
@@ -147,14 +149,14 @@ export function BloodTypeSection({
                             href={getMemberFileDownloadUrl(memberId, file.url)}
                             className="btn btn-sm btn-outline btn-primary"
                           >
-                            Download
+                            {t('download')}
                           </a>
                           <button
                             type="button"
                             onClick={() => void handleRemoveFile(index)}
                             className="btn btn-sm btn-error text-white"
                           >
-                            Remove
+                            {t('remove')}
                           </button>
                         </div>
                       </>
@@ -176,7 +178,7 @@ export function BloodTypeSection({
                           onClick={() => void handleRemoveFile(index)}
                           className="btn btn-sm btn-error text-white"
                         >
-                          Remove
+                          {t('remove')}
                         </button>
                       </>
                     )}
@@ -185,7 +187,7 @@ export function BloodTypeSection({
                     type="text"
                     value={file.description || ''}
                     onChange={e => handleFileChange(index, 'description', e.target.value)}
-                    placeholder="Description (optional)"
+                    placeholder={t('descriptionPlaceholder')}
                     className="p-2 rounded border border-primary text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>

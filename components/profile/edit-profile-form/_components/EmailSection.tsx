@@ -1,13 +1,18 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
 type EmailSectionProps = {
   email: string;
   setEmail: (val: string) => void;
 };
 
 export function EmailSection({ email, setEmail }: EmailSectionProps) {
+  const t = useTranslations('EditProfileForm');
   return (
     <section>
       <label className="flex flex-col gap-2">
-        <span className="font-semibold text-gray-700">Email (Display)</span>
+        <span className="font-semibold text-gray-700">{t('email.label')}</span>
         <input
           type="email"
           name="displayEmail"

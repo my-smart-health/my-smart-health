@@ -1,6 +1,7 @@
 'use client';
 
 import { Star } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type RatingStarsSectionProps = {
   ratingStars: number | null;
@@ -10,6 +11,7 @@ type RatingStarsSectionProps = {
 };
 
 export function RatingStarsSection({ ratingStars, ratingLink, setRatingStars, setRatingLink }: RatingStarsSectionProps) {
+  const t = useTranslations('EditProfileForm');
   const currentRating = ratingStars ?? 0;
 
   const handleRatingChange = (value: number) => {
@@ -22,19 +24,19 @@ export function RatingStarsSection({ ratingStars, ratingLink, setRatingStars, se
 
   const getStarLabel = (value: number): string => {
     const starValue = value / 2;
-    return `${starValue} ${starValue === 1 ? 'star' : 'stars'}`;
+    return starValue === 1 ? t('rating.starSingular', { value: starValue }) : t('rating.starPlural', { value: starValue });
   };
 
   return (
     <>
       <h2 className="text-primary font-bold flex items-center gap-2">
         <Star className="w-5 h-5" />
-        Rating Stars
+        {t('rating.heading')}
       </h2>
 
       <div className="form-control mb-4">
         <label className="label">
-          <span className="label-text font-semibold">Bewertung auswählen (0 - 5 Sterne)</span>
+          <span className="label-text font-semibold">{t('rating.selectLabel')}</span>
         </label>
 
         <div className="rating rating-lg rating-half">
@@ -44,7 +46,7 @@ export function RatingStarsSection({ ratingStars, ratingLink, setRatingStars, se
             className="rating-hidden"
             checked={currentRating === 0}
             onChange={() => setRatingStars(null)}
-            aria-label="No rating"
+            aria-label={t('rating.noRating')}
           />
           {Array.from({ length: 10 }, (_, i) => {
             const value = i + 1;
@@ -68,7 +70,7 @@ export function RatingStarsSection({ ratingStars, ratingLink, setRatingStars, se
             <div className="flex flex-col flex-1 gap-2">
               <h2 className="text-primary font-bold flex items-center gap-2">
                 <Star className="w-5 h-5" />
-                Google Rating Link
+                {t('rating.googleLinkHeading')}
               </h2>
               <label className="flex flex-row gap-2">
                 <input
@@ -87,7 +89,7 @@ export function RatingStarsSection({ ratingStars, ratingLink, setRatingStars, se
                 }}
                 className="btn btn-outline flex place-self-end mt-4 w-fit align-bottom text-red-500"
               >
-                Remove
+                {t('rating.removeButton')}
               </button>
             </div>
           </div>
@@ -99,11 +101,11 @@ export function RatingStarsSection({ ratingStars, ratingLink, setRatingStars, se
           <div className="flex items-center justify-center gap-2">
             <Star className="w-5 h-5 text-primary fill-primary" />
             <p className="text-primary font-semibold">
-              Bewertung: {(ratingStars / 2).toFixed(1)} von 5 Sternen
+              {t('rating.ratingSet', { rating: (ratingStars / 2).toFixed(1) })}
             </p>
           </div>
         ) : (
-          <p className="text-gray-700 font-semibold">Keine Bewertung gesetzt</p>
+          <p className="text-gray-700 font-semibold">{t('rating.noRatingSet')}</p>
         )}
       </div>
     </>

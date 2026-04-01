@@ -1,12 +1,13 @@
 'use client';
 
 import { useRef, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 export default function DeletePostModal({
   isOpen,
   onCloseAction,
   onDeleteAction,
-  message = "Möchten Sie diesen Beitrag wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
+  message
 }: {
   isOpen: boolean;
   onCloseAction: () => void;
@@ -14,6 +15,7 @@ export default function DeletePostModal({
   message?: string;
 }) {
   const modalRef = useRef<HTMLDialogElement>(null);
+  const t = useTranslations('DeletePostModal');
 
   useEffect(() => {
     if (isOpen) {
@@ -51,22 +53,22 @@ export default function DeletePostModal({
             type="button"
           >✕</button>
         </form>
-        <h3 className="font-bold text-lg mb-4">Beitrag löschen?</h3>
-        <p className="py-2 text-center">{message}</p>
+        <h3 className="font-bold text-lg mb-4">{t('title')}</h3>
+        <p className="py-2 text-center">{message ?? t('defaultMessage')}</p>
         <div className="flex justify-center gap-4 mt-6">
           <button
             className="btn btn-outline bg-red-500/80 text-white"
             type="button"
             onClick={onDeleteAction}
           >
-            Löschen
+            {t('confirm')}
           </button>
           <button
             className="btn btn-outline bg-green-600 text-white"
             type="button"
             onClick={onCloseAction}
           >
-            Abbrechen
+            {t('cancel')}
           </button>
         </div>
       </div>

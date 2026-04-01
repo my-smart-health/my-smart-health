@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import MySmartHealthForm from "@/components/forms/msh-form/MySmartHealthForm";
 import type { MySmartHealthFormLocation } from "@/components/forms/msh-form/_components/mshFormSanitizers";
 import { MySmartHealthInfo, Schedule } from "@/utils/types";
+import { getTranslations } from "next-intl/server";
 
 async function getMySmartHealthInfo() {
   const mySmartHealthData = await prisma.mySmartHealth.findFirst({
@@ -25,6 +26,7 @@ async function getMySmartHealthLocations(): Promise<MySmartHealthFormLocation[]>
 }
 
 export default async function EditMySmartHealthPage() {
+  const t = await getTranslations("EditMySmartHealthPage");
   const session = await auth();
   if (!session) {
     redirect("/login");
@@ -39,7 +41,7 @@ export default async function EditMySmartHealthPage() {
 
   return (
     <>
-      <h1 className="mb-8 text-center text-wrap text-2xl font-bold text-primary">Edit My Smart Health Information</h1>
+      <h1 className="mb-8 text-center text-wrap text-2xl font-bold text-primary">{t('title')}</h1>
       <MySmartHealthForm smartHealthData={mySmartHealth} initialLocations={locations} />
     </>
   );

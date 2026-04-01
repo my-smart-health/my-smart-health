@@ -3,10 +3,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { Mail } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 type ResponseStatus = 'success' | 'error' | 'not-found' | null;
 
 export default function ForgotPasswordPage() {
+  const t = useTranslations('ForgotPassword');
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<ResponseStatus>(null);
@@ -43,7 +45,7 @@ export default function ForgotPasswordPage() {
 
     if (!isValidEmail(email.trim())) {
       setStatus('error');
-      setMessage('Bitte geben Sie eine gültige E-Mail-Adresse ein.');
+      setMessage(t('validation.invalidEmail'));
       modalRef.current?.showModal();
       return;
     }
@@ -61,29 +63,29 @@ export default function ForgotPasswordPage() {
 
       if (response.ok) {
         setStatus('success');
-        setMessage(data.message || 'Anfrage erfolgreich gesendet. Der Administrator wird sich mit Ihnen in Verbindung setzen.');
+        setMessage(data.message || t('messages.success'));
         setEmail('');
         setIsSubmitting(false);
         modalRef.current?.showModal();
       } else if (response.status === 404) {
         setStatus('not-found');
-        setMessage(data.message || 'Die E-Mail-Adresse existiert nicht in unserem System.');
+        setMessage(data.message || t('messages.notFound'));
         setIsSubmitting(false);
         modalRef.current?.showModal();
       } else if (response.status === 409) {
         setStatus('error');
-        setMessage(data.message || 'Es gibt bereits eine ausstehende Anfrage für diese E-Mail-Adresse.');
+        setMessage(data.message || t('messages.conflict'));
         setIsSubmitting(false);
         modalRef.current?.showModal();
       } else {
         setStatus('error');
-        setMessage(data.message || 'Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Administrator direkt oder hinterlassen Sie eine Nachricht auf der Kontaktseite.');
+        setMessage(data.message || t('messages.error'));
         setIsSubmitting(false);
         modalRef.current?.showModal();
       }
     } catch {
       setStatus('error');
-      setMessage('Ein Fehler ist aufgetreten. Bitte kontaktieren Sie den Administrator direkt oder hinterlassen Sie eine Nachricht auf der Kontaktseite.');
+      setMessage(t('messages.error'));
       setIsSubmitting(false);
       modalRef.current?.showModal();
     }
@@ -98,23 +100,22 @@ export default function ForgotPasswordPage() {
       <div className="w-full max-w-md">
         <div className="bg-white rounded-lg shadow-lg p-3">
           <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold text-primary mb-2">Passwort vergessen?</h1>
+            <h1 className="text-3xl font-bold text-primary mb-2">{t('title')}</h1>
             <p className="text-gray-600">
-              Nur der Administrator kann Ihr Passwort zurücksetzen
+              {t('subtitle')}
             </p>
           </div>
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
             <p className="text-sm text-blue-800">
-              <strong>Hinweis:</strong> Aus Sicherheitsgründen können nur Administratoren Passwörter zurücksetzen.
-              Geben Sie Ihre E-Mail-Adresse ein, um eine Anfrage zu senden. Der Administrator wird sich mit Ihnen in Verbindung setzen.
+              <strong>{t('notice.title')}</strong> {t('notice.text')}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-semibold">E-Mail-Adresse</span>
+                <span className="label-text font-semibold">{t('form.emailLabel')}</span>
               </label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
@@ -122,7 +123,7 @@ export default function ForgotPasswordPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="abc@email.de"
+                  placeholder={t('form.emailPlaceholder')}
                   className="input input-bordered w-full pl-10"
                   required
                   disabled={isSubmitting}
@@ -138,27 +139,27 @@ export default function ForgotPasswordPage() {
               {isSubmitting ? (
                 <>
                   <span className="loading loading-spinner loading-sm"></span>
-                  Sende Anfrage...
+                  {t('form.submitting')}
                 </>
               ) : (
-                'Passwort-Anfrage senden'
+                t('form.submit')
               )}
             </button>
           </form>
 
           <div className="mt-6 text-center">
             <Link href="/login" className="text-primary hover:underline">
-              Zurück zur Anmeldung
+              {t('links.backToLogin')}
             </Link>
           </div>
 
           <div className="mt-4 text-center text-sm text-gray-600">
             <p>
-              Sie können auch direkt
+              {t('links.contactText')}
               <Link href="/kontakt" className="text-primary hover:underline mx-1">
-                über die Kontaktseite
+                {t('links.contactLink')}
               </Link>
-              eine Nachricht hinterlassen.
+              {t('links.contactEnd')}
             </p>
           </div>
         </div>
@@ -170,21 +171,21 @@ export default function ForgotPasswordPage() {
             status === 'not-found' ? 'text-warning' :
               'text-error'
             }`}>
-            {status === 'success' ? 'Erfolgreich!' :
-              status === 'not-found' ? 'E-Mail nicht gefunden' :
-                'Fehler'}
+            {status === 'success' ? t('modal.successTitle') :
+              status === 'not-found' ? t('modal.notFoundTitle') :
+                t('modal.errorTitle')}
           </h3>
           <p className="py-4">{message}</p>
           <div className="modal-action">
             <form method="dialog">
               <button type="button" onClick={closeModal} className="btn btn-primary">
-                OK
+                {t('modal.confirm')}
               </button>
             </form>
           </div>
         </div>
         <form method="dialog" className="modal-backdrop">
-          <button type="button" onClick={closeModal}>close</button>
+          <button type="button" onClick={closeModal}>{t('modal.close')}</button>
         </form>
       </dialog>
     </div>
