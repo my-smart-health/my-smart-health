@@ -4,7 +4,6 @@ import prisma from "@/lib/db";
 import Image from "next/image";
 import Link from "next/link";
 import ProfileMenu from "./ProfileMenu";
-import LogOut from "@/components/buttons/log-out/LogOut";
 import LocalePicker from "@/components/navigation/locale/LocalePicker";
 
 async function getUnreadNotifications() {
@@ -22,26 +21,7 @@ async function getUnreadNotifications() {
 
   return count;
 }
-async function isLogged(loginText: string) {
-  const session = await auth();
-  if (!session) {
-    return (
-      <div className="flex flex-col ml-auto items-center gap-2">
-        <LocalePicker />
-        <Link href="/login" className="hover:underline capitalize p-2 border-l-2 border-primary h-10 text-primary">
-          {loginText}
-        </Link>
-      </div>
-    );
-  } else {
-    return (
-      <div className="flex flex-col ml-auto items-center gap-2">
-        <LocalePicker />
-        <LogOut addClasses="ml-auto link link-error p-2 border-l-2 border-primary h-10" />
-      </div>
-    );
-  }
-}
+
 export default async function Navbar() {
   const t = await getTranslations('Navbar');
   const unreadCount = await getUnreadNotifications();
@@ -69,7 +49,10 @@ export default async function Navbar() {
             />
             <span className="ml-2 text-xl font-bold uppercase sr-only">{t('srOnly')}</span>
           </Link>
-          {await isLogged(t('login'))}
+          {/* {await isLogged(t('login'))} */}
+          <div className="flex flex-col ml-auto items-center gap-2">
+            <LocalePicker />
+          </div>
         </div>
       </nav>
       <ProfileMenu unreadNotifications={unreadCount} />

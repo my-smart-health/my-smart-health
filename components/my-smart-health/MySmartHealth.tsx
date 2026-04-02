@@ -18,6 +18,8 @@ import MSHLocations from '@/components/forms/msh-form/_components/MSHLocations';
 import { isYoutubeLink, isInstagramLink } from '@/utils/common';
 import YoutubeEmbed from '@/components/embed/youtube/YoutubeEmbed';
 import InstagramEmbed from '@/components/embed/instagram/InstagramEmbed';
+import LogOut from '../buttons/log-out/LogOut';
+import { Session } from 'next-auth';
 
 const getMySmartHealthInfo = async () => {
   return prisma.mySmartHealth.findFirst({
@@ -46,13 +48,29 @@ function getLocations() {
 
 export default async function MySmartHealth() {
   const t = await getTranslations('MySmartHealth');
+  const tLogin = await getTranslations('Navbar');
+
   const mySmartHealthInfo = (await getMySmartHealthInfo()) as MySmartHealthInfo | null;
   const locations = await getLocations();
   const session = await auth();
 
-  if (!mySmartHealthInfo) return null;
-
-  const { generalTitle, paragraph } = mySmartHealthInfo;
+  async function isLogged(loginText: string, session: Session | null) {
+    if (!session) {
+      return (
+        <div className="flex flex-col ml-auto items-end gap-2">
+          <Link href="/login" className="hover:underline capitalize p-2 h-10 text-primary">
+            {loginText}
+          </Link>
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex flex-col ml-auto items-end gap-2">
+          <LogOut addClasses="ml-auto link link-error p-2 h-10" />
+        </div>
+      );
+    }
+  }
 
   const platformIcons: Record<string, ReactNode> = {
     Email: <AtSign className="inline-block mr-1" size={30} />,
@@ -94,11 +112,15 @@ export default async function MySmartHealth() {
               className="z-10 btn w-full btn-primary bg-green-500 hover:bg-green-500/75" />
           }
 
-          {generalTitle && (
-            <h2 className="text-2xl font-bold my-2 text-primary">{generalTitle}</h2>
+          {await isLogged(tLogin('login'), session)}
+
+          <Divider />
+
+          {mySmartHealthInfo?.generalTitle && (
+            <h2 className="text-2xl font-bold my-2 text-primary">{mySmartHealthInfo.generalTitle}</h2>
           )}
 
-          {paragraph?.map((para, index) => (
+          {mySmartHealthInfo?.paragraph?.map((para, index) => (
             <div key={para.id ?? index} className="card p-4 rounded-xl gap-4">
               {para.title && (
                 <h3 className="badge badge-outline text-lg font-semibold text-primary h-full p-4">

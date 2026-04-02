@@ -109,7 +109,7 @@ export default function ProfileMenu({ unreadNotifications = 0 }: ProfileMenuProp
             </>
           )
           }
-          <li className="my-2"><LogOut /></li>
+          <li className="my-2 bg-red-500 rounded-xl"><LogOut /></li>
         </ul>
       </div>
     </div>
