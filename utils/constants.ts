@@ -23,18 +23,20 @@ export const PROFILE_TYPE_THE_LEADING_DOCTORS = 'THE_LEADING_DOCTORS';
 export const PROFILE_TYPE_MY_SMART_HEALTH_TERMINE_KURZFRISTIG =
   'MY_SMART_HEALTH_TERMINE_KURZFRISTIG';
 
+export const MY_SMART_HEALTH_IMAGE = '/pages/my-smart-health.png';
+
 export const CATEGORY_LINKS = {
   news: {
     link: '/news',
-    image: '/news.png',
+    image: '/icon2.png',
   },
   theLeadingDoctors: {
     link: '/the-leading-doctors',
-    image: '/the-leading-doctors.png',
+    image: '/pages/the-leading-doctors.png',
   },
   mySmartHealthTermineKurzfristig: {
     link: '/my-smart-health-termine-kurzfristig',
-    image: '/the-leading-hospitals.png',
+    image: '/pages/the-leading-hospitals.png',
   },
   smartHealth: {
     link: '/smart-health',

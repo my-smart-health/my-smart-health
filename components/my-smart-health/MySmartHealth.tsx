@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import { getTranslations } from 'next-intl/server';
 
 import { MySmartHealthInfo } from '@/utils/types';
-import { CACHE_STRATEGY } from '@/utils/constants';
+import { CACHE_STRATEGY, MY_SMART_HEALTH_IMAGE } from '@/utils/constants';
 import Divider from '@/components/divider/Divider';
 import GoToButton from '@/components/buttons/go-to/GoToButton';
 import { auth } from '@/auth';
@@ -73,7 +73,7 @@ export default async function MySmartHealth() {
         <input type="checkbox" className='w-full h-full' />
         <div className="collapse-title flex items-center gap-3 w-full h-full font-bold text-xl">
           <Image
-            src="/my-smart-health-section.png"
+            src={MY_SMART_HEALTH_IMAGE}
             alt="My Smart Health"
             width={150}
             height={60}
