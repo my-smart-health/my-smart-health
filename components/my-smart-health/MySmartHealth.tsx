@@ -114,8 +114,6 @@ export default async function MySmartHealth() {
 
           {await isLogged(tLogin('login'), session)}
 
-          <Divider />
-
           {mySmartHealthInfo?.generalTitle && (
             <h2 className="text-2xl font-bold my-2 text-primary">{mySmartHealthInfo.generalTitle}</h2>
           )}
