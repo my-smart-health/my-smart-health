@@ -256,6 +256,10 @@
       "networkError": "Network error. Please try again later."
     }
   },
+  "ShowMore": {
+    "showMore": "Show more",
+    "showLess": "Show less"
+  },
   "CookieConsent": {
     "title": "Cookies & Local Storage",
     "description": {

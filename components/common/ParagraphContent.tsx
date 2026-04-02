@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { getReadOnlyExtensions } from "@/utils/tiptap-extensions";
+import { useTranslations } from "next-intl";
 
 type ParagraphContentProps = {
   content: string;
@@ -15,6 +16,7 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
   const [isClamped, setIsClamped] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const clampLines = Math.max(1, Math.min(maxLines, 10));
+  const t = useTranslations('ShowMore');
 
   const editor = useEditor({
     immediatelyRender: false,
@@ -137,7 +139,7 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
           className="text-primary mt-2 cursor-pointer select-none italic hover:underline focus:outline-none"
           type="button"
         >
-          {expanded ? 'Weniger anzeigen' : 'Mehr erfahren'}
+          {expanded ? t('showLess') : t('showMore')}
         </button>
       )}
     </div>

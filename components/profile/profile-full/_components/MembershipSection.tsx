@@ -11,9 +11,9 @@ export default function MembershipSection({ membership }: MembershipSectionProps
 
   return (
     <>
-      <Link href={link} target="_self" className="mx-auto flex gap-2 rounded">
+      <Link href={link} target="_self" className="btn text-black bg-white hover:bg-primary/20 rounded-lg my-auto mx-auto h-14 min-w-44 max-w-44">
         <Image
-          src="/termine-icon.png"
+          src="/buttons/termine.png"
           alt="Termine Kurzfristig Icon"
           width={208}
           height={208}

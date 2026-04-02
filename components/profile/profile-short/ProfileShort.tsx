@@ -62,16 +62,16 @@ export default function ProfileShort({ id, name, bio, image, membership, ratingS
 
           <Link
             href={`/profile/${id}`}
-            className="btn btn-primary text-black bg-white hover:bg-primary/20 rounded-lg my-auto mx-auto h-14 min-w-44 max-w-44"
+            className="btn text-black bg-white hover:bg-primary/20 rounded-lg my-auto mx-auto h-14 min-w-44 max-w-44"
           >
             <Image
-              src="/android-chrome-192x192.png"
+              src="/buttons/zum-profil.png"
               alt={t('profileIconAlt')}
-              width={27}
-              height={27}
-              className="inline-block h-9 w-9"
+              width={250}
+              height={250}
+              className="inline-block object-fill w-auto h-auto max-w-44"
             />
-            <span> {t('toProfile')}</span>
+            {/* <span> {t('toProfile')}</span> */}
           </Link>
         </div>
       </div>

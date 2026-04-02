@@ -256,6 +256,10 @@
       "networkError": "Netzwerkfehler. Bitte versuchen Sie es später erneut."
     }
   },
+  "ShowMore": {
+    "showMore": "Mehr anzeigen",
+    "showLess": "Weniger anzeigen"
+  },
   "CookieConsent": {
     "title": "Cookies & Lokale Speicherung",
     "description": {
