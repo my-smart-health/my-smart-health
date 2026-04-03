@@ -9,6 +9,7 @@ import CookieConsentModal from "@/components/modals/cookie-consent/CookieConsent
 import Navbar from "@/components/navigation/navbar/Navbar";
 import AnalyticsConsent from "@/components/analytics/AnalyticsConsent";
 import Footer from "@/components/navigation/footer/Footer";
+import LocaleSync from "@/components/navigation/locale/LocaleSync";
 import SessionChecker from "@/components/session/SessionChecker";
 import SessionProvider from "@/components/session/SessionProvider";
 import { auth } from "@/auth";
@@ -73,6 +74,7 @@ export default async function RootLayout({
         className={`${ibmPlexSans.variable} antialiased flex flex-col justify-center items-center pt-2 min-h-[100dvh] w-auto lg:max-w-3xl mx-auto p-2 overscroll-x-none border bg-white text-black`}
       >
         <NextIntlClientProvider>
+          <LocaleSync />
           <SplashScreen />
           <UploadProgressProvider>
             <DeletionProgressProvider>

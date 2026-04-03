@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useLocale } from "next-intl";
 import { useTransition } from "react";
-import { AppLocale, LOCALE_OPTIONS, resolveLocale } from "@/i18n/locales";
+import { AppLocale, LOCALE_OPTIONS, LOCALE_STORAGE_KEY, resolveLocale } from "@/i18n/locales";
 
 export default function LocalePicker() {
   const locale = resolveLocale(useLocale());
@@ -14,6 +14,11 @@ export default function LocalePicker() {
 
   const setLocale = (nextLocale: AppLocale) => {
     if (nextLocale === locale) return;
+
+    try {
+      localStorage.setItem(LOCALE_STORAGE_KEY, nextLocale);
+    } catch {
+    }
 
     startTransition(async () => {
       await fetch("/api/locale", {

@@ -2,6 +2,7 @@ export const SUPPORTED_LOCALES = ['de', 'en'] as const;
 export type AppLocale = (typeof SUPPORTED_LOCALES)[number];
 
 export const DEFAULT_LOCALE: AppLocale = 'de';
+export const LOCALE_STORAGE_KEY = 'msh_locale';
 
 export const LOCALE_OPTIONS: Array<{
   locale: AppLocale;
