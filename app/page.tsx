@@ -215,14 +215,14 @@ export default async function Home() {
         </div>
       )}
       {cube && cube.onOff && cubeCarousel.length > 0 && (
-        <div className="w-full mt-3">
+        <div className={`w-full ${newsTopCarousel && newsTopCarousel.length > 4 ? 'mt-3' : ''}`}>
           <Suspense fallback={<NewsCarouselSkeleton />}>
             <NewsCarousel props={cubeCarousel} />
           </Suspense>
         </div>
       )}
 
-      <div className="flex flex-col mt-3 gap-3 w-full mx-auto max-w-[100%]">
+      <div className={`flex flex-col ${(newsTopCarousel && newsTopCarousel.length > 4 || cube && cube.onOff && cubeCarousel.length > 0) ? 'mt-3' : ''} gap-3 w-full mx-auto max-w-[100%]`}>
 
         {memberData && <MemberDashboard member={memberData} />}
         <MySmartHealth />

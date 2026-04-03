@@ -26,7 +26,7 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
 
   return (
     <Suspense fallback={<TopCarouselSkeleton times={7} />}>
-      <div draggable={false} className="min-h-36 max-h-fit max-w-full">
+      <div draggable={false} className={`min-h-36 max-h-fit max-w-full`}>
         <Swiper
           modules={[Pagination, Autoplay]}
           spaceBetween={4}
@@ -39,7 +39,7 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
           {props.map((news, index) => (
             <SwiperSlide
               key={news.id}
-              className="cursor-pointer pb-6">
+              className={`cursor-pointer ${props.length > 4 ? 'pb-6' : ''}`}>
               <Link href={`/news/${news.id}`} className="block" prefetch={false}>
                 <Image
                   preload={index === 0}
@@ -52,7 +52,7 @@ export default function TopCarousel({ props, disableOnInteraction = false }: Top
                   style={{ objectFit: 'contain', maxWidth: '182px', width: '100%', height: 'auto' }}
                   className="rounded-box border-6 border-primary aspect-square w-full h-auto"
                 />
-                <p className="text-center break-words line-clamp-1 text-[#2c2e35] mb-4 mt-2">{news.name}</p>
+                <p className="text-center break-words line-clamp-1 text-[#2c2e35] mb-3 mt-2">{news.name}</p>
               </Link>
             </SwiperSlide>
           ))}

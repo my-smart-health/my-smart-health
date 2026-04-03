@@ -665,7 +665,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
             router.push('/dashboard');
           }}
         >
-          Cancel
+          {t('buttons.cancel')}
         </button>
       </form >
 
