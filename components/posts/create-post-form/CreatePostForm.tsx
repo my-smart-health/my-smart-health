@@ -164,7 +164,7 @@ export default function CreatePostForm({ session }: CreatePostFormProps) {
       document.removeEventListener('click', onDocumentClick, true);
       cleanupUploads(false);
     };
-  }, [router]);
+  }, [router, t]);
 
   useEffect(() => {
     if (blobResult.length > 0) {

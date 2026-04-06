@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   try {
-    const { parentId, name } = await req.json();
+    const { parentId, name, nameEn } = await req.json();
     if (!parentId || !name)
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 });
 
@@ -19,13 +19,14 @@ export async function POST(req: Request) {
     if (!parent) {
       return NextResponse.json(
         { error: 'Parent category not found' },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     const sub = await prisma.category.create({
       data: {
         name,
+        nameTranslations: nameEn ? { en: nameEn } : undefined,
         parent: { connect: { id: parentId } },
         type: parent.type,
       },
@@ -36,7 +37,7 @@ export async function POST(req: Request) {
     if (process.env.NODE_ENV === 'development') console.error(err);
     return NextResponse.json(
       { error: 'Failed to create subcategory' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -20,6 +20,8 @@ export default function CategoryAccordion({
   type,
   isAdmin = false,
   pathToCategoryId = {},
+  locale = 'de',
+  categoryTranslations = {},
 }: {
   node: CategoryNodeSH;
   level?: number;
@@ -28,6 +30,8 @@ export default function CategoryAccordion({
   type: ProfileType;
   isAdmin?: boolean;
   pathToCategoryId?: Record<string, string>;
+  locale?: string;
+  categoryTranslations?: Record<string, { name: string; nameEn?: string }>;
 }) {
   const t = useTranslations('CategoryAccordion');
   const router = useRouter();
@@ -39,18 +43,19 @@ export default function CategoryAccordion({
   const [activeParentId, setActiveParentId] = useState<string>('');
   const [showRenameModal, setShowRenameModal] = useState(false);
   const [renameInitial, setRenameInitial] = useState('');
+  const [renameInitialEn, setRenameInitialEn] = useState('');
   const [renameCategoryId, setRenameCategoryId] = useState<string>('');
 
   const toggle = (cat: string) => {
     setOpen((prev) => ({ ...prev, [cat]: !prev[cat] }));
   };
 
-  const handleAddRootCategory = async (name: string) => {
+  const handleAddRootCategory = async (name: string, nameEn?: string) => {
     try {
       const response = await fetch('/api/category/create-root', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, type }),
+        body: JSON.stringify({ name, nameEn, type }),
       });
 
       if (response.ok) {
@@ -64,12 +69,12 @@ export default function CategoryAccordion({
     }
   };
 
-  const handleAddSubcategory = async (name: string) => {
+  const handleAddSubcategory = async (name: string, nameEn?: string) => {
     try {
       const response = await fetch('/api/category/create-subcategory', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ parentId: activeParentId, name }),
+        body: JSON.stringify({ parentId: activeParentId, name, nameEn }),
       });
 
       if (response.ok) {
@@ -102,12 +107,12 @@ export default function CategoryAccordion({
     }
   };
 
-  const handleRenameCategory = async (name: string) => {
+  const handleRenameCategory = async (name: string, nameEn?: string) => {
     try {
       const response = await fetch('/api/category/rename', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ categoryId: renameCategoryId, name }),
+        body: JSON.stringify({ categoryId: renameCategoryId, name, nameEn }),
       });
       if (response.ok) {
         router.refresh();
@@ -179,6 +184,8 @@ export default function CategoryAccordion({
         const currentPath = [...parentPath, catName];
         const currentPathLabel = currentPath.join(' > ');
         const currentCategoryId = pathToCategoryId[currentPathLabel];
+        const translations = currentCategoryId ? categoryTranslations[currentCategoryId] : undefined;
+        const displayName = locale !== 'de' && translations?.nameEn ? translations.nameEn : catName;
 
         // Different styles based on level
         const levelColors = [
@@ -202,7 +209,7 @@ export default function CategoryAccordion({
                 size={20}
               />
               <div className="flex-1">
-                <span>{catName}</span>
+                <span>{displayName}</span>
               </div>
             </button>
 
@@ -210,7 +217,7 @@ export default function CategoryAccordion({
               <div className={`mt-2 pl-4 border-l-4 ${level === 0 ? 'border-primary' : level === 1 ? 'border-accent' : level === 2 ? 'border-secondary' : 'border-info'}`}>
                 {child.users.length > 0 && (
                   <div className="space-y-2 mb-3 mt-2">
-                    {child.users
+                    {Array.from(new Map(child.users.map((u) => [u.id, u])).values())
                       .slice()
                       .sort((a, b) => collator.compare((a.name || '').trim(), (b.name || '').trim()))
                       .map((user) => {
@@ -281,6 +288,7 @@ export default function CategoryAccordion({
                           if (!currentCategoryId) return alert(t('missingCategoryId'));
                           setRenameCategoryId(currentCategoryId);
                           setRenameInitial(catName);
+                          setRenameInitialEn(translations?.nameEn ?? '');
                           setShowRenameModal(true);
                         }}
                       >
@@ -308,6 +316,8 @@ export default function CategoryAccordion({
                   type={type}
                   isAdmin={isAdmin}
                   pathToCategoryId={pathToCategoryId}
+                  locale={locale}
+                  categoryTranslations={categoryTranslations}
                 />
               </div>
             )}
@@ -352,6 +362,7 @@ export default function CategoryAccordion({
       <EditCategoryModal
         isOpen={showRenameModal}
         initialName={renameInitial}
+        initialNameEn={renameInitialEn}
         onClose={() => setShowRenameModal(false)}
         onSubmit={handleRenameCategory}
         title={t('modalRenameTitle')}

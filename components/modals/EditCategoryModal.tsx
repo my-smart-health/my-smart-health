@@ -6,25 +6,30 @@ import { useTranslations } from 'next-intl';
 interface EditCategoryModalProps {
   isOpen: boolean;
   initialName: string;
+  initialNameEn?: string;
   onClose: () => void;
-  onSubmit: (name: string) => void;
+  onSubmit: (name: string, nameEn?: string) => void;
   title?: string;
 }
 
-export default function EditCategoryModal({ isOpen, initialName, onClose, onSubmit, title }: EditCategoryModalProps) {
+export default function EditCategoryModal({ isOpen, initialName, initialNameEn, onClose, onSubmit, title }: EditCategoryModalProps) {
   const [name, setName] = useState(initialName ?? '');
+  const [nameEn, setNameEn] = useState(initialNameEn ?? '');
   const t = useTranslations('EditCategoryModal');
 
   useEffect(() => {
-    if (isOpen) setName(initialName ?? '');
-  }, [isOpen, initialName]);
+    if (isOpen) {
+      setName(initialName ?? '');
+      setNameEn(initialNameEn ?? '');
+    }
+  }, [isOpen, initialName, initialNameEn]);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (name.trim()) {
-      onSubmit(name.trim());
+      onSubmit(name.trim(), nameEn.trim() || undefined);
       onClose();
     }
   };
@@ -45,6 +50,19 @@ export default function EditCategoryModal({ isOpen, initialName, onClose, onSubm
               onChange={(e) => setName(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               autoFocus
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="categoryNameEn" className="block text-sm font-medium text-gray-700 mb-2">
+              {t('labelEn')}
+            </label>
+            <input
+              type="text"
+              id="categoryNameEn"
+              value={nameEn}
+              onChange={(e) => setNameEn(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder={t('placeholderEn')}
             />
           </div>
           <div className="flex justify-end space-x-3">

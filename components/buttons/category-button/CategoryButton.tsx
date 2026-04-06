@@ -16,7 +16,7 @@ export default function CategoryButton({ name, icon, goTo, active, imageAsTitle,
   return (
     <Link href={goTo} className={`flex flex-row ${imageAsTitle ? "" : "h-15"} w-full max-w-[100%] rounded-2xl border shadow-xl`}>
       {imageAsTitle ? (
-        <div className={`flex flex-col items-center  justify-center w-full ${active ? 'bg-secondary rounded-2xl' : ''}`}>
+        <div className={`flex flex-col items-center max-h-[102px] justify-center w-full ${active ? 'bg-secondary rounded-2xl' : ''}`}>
           <Image src={imageAsTitle} width={150} height={150} alt={`${name} icon`} style={{ objectFit: "contain", width: "auto", height: "auto" }} className={`w-auto h-auto mx-auto py-4 ${active ? 'bg-secondary rounded-2xl' : ''}`} />
           {imageAsTitleSecond && (
             <>

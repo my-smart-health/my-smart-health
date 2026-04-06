@@ -26,6 +26,7 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
     editorProps: {
       attributes: {
         class: `bio-content max-w-none focus:outline-none ${className}`,
+        translate: "yes",
       },
     },
   });
@@ -44,6 +45,7 @@ export default function ParagraphContent({ content, maxLines = 3, className = ""
       editorProps: {
         attributes: {
           class: `bio-content max-w-none focus:outline-none ${className}`,
+          translate: "yes",
         },
       },
     });

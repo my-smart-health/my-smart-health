@@ -6,12 +6,13 @@ import { useTranslations } from 'next-intl';
 interface AddCategoryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (name: string) => void;
+  onSubmit: (name: string, nameEn?: string) => void;
   title: string;
 }
 
 export default function AddCategoryModal({ isOpen, onClose, onSubmit, title }: AddCategoryModalProps) {
   const [name, setName] = useState('');
+  const [nameEn, setNameEn] = useState('');
   const t = useTranslations('AddCategoryModal');
 
   if (!isOpen) return null;
@@ -19,14 +20,16 @@ export default function AddCategoryModal({ isOpen, onClose, onSubmit, title }: A
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (name.trim()) {
-      onSubmit(name.trim());
+      onSubmit(name.trim(), nameEn.trim() || undefined);
       setName('');
+      setNameEn('');
       onClose();
     }
   };
 
   const handleClose = () => {
     setName('');
+    setNameEn('');
     onClose();
   };
 
@@ -47,6 +50,19 @@ export default function AddCategoryModal({ isOpen, onClose, onSubmit, title }: A
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder={t('placeholder')}
               autoFocus
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="categoryNameEn" className="block text-sm font-medium text-gray-700 mb-2">
+              {t('labelEn')}
+            </label>
+            <input
+              type="text"
+              id="categoryNameEn"
+              value={nameEn}
+              onChange={(e) => setNameEn(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder={t('placeholderEn')}
             />
           </div>
           <div className="flex justify-end space-x-3">

@@ -13,9 +13,9 @@ export default function StatusModal({
   message: string;
   type?: "success" | "error" | "warning";
 }) {
-  if (!isOpen) return null;
-
   const t = useTranslations('StatusModal');
+
+  if (!isOpen) return null;
   let bgClass = "bg-green-500 text-white";
   let title = t('success');
   if (type === "error") {

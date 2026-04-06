@@ -161,13 +161,14 @@ model Location {
 }
 
 model Category {
-  id            String         @id @default(uuid())
-  name          String
-  parent        Category?      @relation("CategoryChildren", fields: [parentId], references: [id])
-  parentId      String?
-  children      Category[]     @relation("CategoryChildren")
-  categoryUsers CategoryUser[]
-  type          CategoryType
+  id               String         @id @default(uuid())
+  name             String
+  nameTranslations Json?
+  parent           Category?      @relation("CategoryChildren", fields: [parentId], references: [id])
+  parentId         String?
+  children         Category[]     @relation("CategoryChildren")
+  categoryUsers    CategoryUser[]
+  type             CategoryType
 }
 
 model CategoryUser {

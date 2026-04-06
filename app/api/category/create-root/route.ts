@@ -9,17 +9,18 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { name, type } = await req.json();
+    const { name, nameEn, type } = await req.json();
     if (!name || !type) {
       return NextResponse.json(
         { error: 'Missing name or type' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     const category = await prisma.category.create({
       data: {
         name,
+        nameTranslations: nameEn ? { en: nameEn } : undefined,
         type,
       },
     });
@@ -29,7 +30,7 @@ export async function POST(req: Request) {
     if (process.env.NODE_ENV === 'development') console.error(err);
     return NextResponse.json(
       { error: 'Failed to create category' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

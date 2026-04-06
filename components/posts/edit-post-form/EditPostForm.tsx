@@ -187,7 +187,7 @@ export default function EditPostForm({ session, post }: EditPostFormProps) {
       document.removeEventListener('click', onDocumentClick, true);
       cleanupNewUploads(false);
     };
-  }, [router]);
+  }, [router, t]);
 
   const handleAddURL = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

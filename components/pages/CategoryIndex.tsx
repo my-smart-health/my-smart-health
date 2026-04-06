@@ -3,6 +3,7 @@ import CategoryAccordion from '@/components/buttons/category-accordion-button/Ca
 import { auth } from '@/auth';
 import { CategoryNodeSH, Membership, UserProfileSH, ProfileType } from '@/utils/types';
 import { CACHE_STRATEGY } from '@/utils/constants';
+import { getLocale } from 'next-intl/server';
 
 type Props = {
   profileType: ProfileType;
@@ -11,6 +12,7 @@ type Props = {
 type CategoryRecord = {
   id: string;
   name: string;
+  nameTranslations: Record<string, string> | null;
   parentId: string | null;
 };
 
@@ -19,6 +21,7 @@ type CategoryLookup = Map<string, CategoryRecord>;
 type LoadResult = {
   tree: CategoryNodeSH;
   pathToCategoryId: Record<string, string>;
+  categoryTranslations: Record<string, { name: string; nameEn?: string }>;
 };
 
 function buildCategoryTree(users: UserProfileSH[]): CategoryNodeSH {
@@ -76,16 +79,24 @@ async function loadCategoryTree(profileType: ProfileType, isAdmin: boolean): Pro
   const collator = new Intl.Collator('de', { sensitivity: 'base', ignorePunctuation: true });
   const categories = await prisma.category.findMany({
     where: { type: profileType },
-    select: { id: true, name: true, parentId: true },
+    select: { id: true, name: true, nameTranslations: true, parentId: true },
     cacheStrategy,
   });
 
   if (!categories.length) {
-    return { tree: buildCategoryTree([]), pathToCategoryId: {} };
+    return { tree: buildCategoryTree([]), pathToCategoryId: {}, categoryTranslations: {} };
   }
 
   const lookup: CategoryLookup = new Map(
-    categories.map((category: CategoryRecord) => [category.id, category]),
+    categories.map((category) => [
+      category.id,
+      {
+        id: category.id,
+        name: category.name,
+        nameTranslations: category.nameTranslations as Record<string, string> | null,
+        parentId: category.parentId,
+      },
+    ]),
   );
   const pathCache = new Map<string, string[]>();
 
@@ -109,11 +120,16 @@ async function loadCategoryTree(profileType: ProfileType, isAdmin: boolean): Pro
   });
 
   const users: UserProfileSH[] = [];
+  const seenPathUser = new Set<string>();
   for (const link of links) {
     const user = link.user;
     if (!user) continue;
     const path = resolveCategoryPath(link.categoryId, lookup, pathCache);
     if (!path.length) continue;
+
+    const assignmentKey = `${path.join(' > ')}::${user.id}`;
+    if (seenPathUser.has(assignmentKey)) continue;
+    seenPathUser.add(assignmentKey);
 
     users.push({
       id: user.id,
@@ -174,12 +190,22 @@ async function loadCategoryTree(profileType: ProfileType, isAdmin: boolean): Pro
 
   sortTree(tree);
 
-  return { tree, pathToCategoryId };
+  const categoryTranslations: Record<string, { name: string; nameEn?: string }> = {};
+  for (const category of categories) {
+    const translations = category.nameTranslations as Record<string, string> | null;
+    categoryTranslations[category.id] = {
+      name: category.name,
+      nameEn: translations?.en,
+    };
+  }
+
+  return { tree, pathToCategoryId, categoryTranslations };
 }
 
 export default async function CategoryIndex({ profileType }: Props) {
   const session = await auth();
   const isAdmin = session?.user?.role === 'ADMIN';
+  const locale = await getLocale();
   const categoryData = await loadCategoryTree(profileType, isAdmin);
 
   return (
@@ -189,6 +215,8 @@ export default async function CategoryIndex({ profileType }: Props) {
         type={profileType}
         isAdmin={isAdmin}
         pathToCategoryId={categoryData.pathToCategoryId}
+        locale={locale}
+        categoryTranslations={categoryData.categoryTranslations}
       />
     </div>
   );

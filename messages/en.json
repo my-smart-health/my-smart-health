@@ -1359,14 +1359,18 @@
     "noName": "No Name"
   },
   "AddCategoryModal": {
-    "label": "Category Name",
-    "placeholder": "Enter category name",
+    "label": "Category Name (DE)",
+    "placeholder": "Enter category name in German",
+    "labelEn": "Category Name (EN)",
+    "placeholderEn": "Enter category name in English",
     "cancel": "Cancel",
     "submit": "Add Category"
   },
   "EditCategoryModal": {
     "defaultTitle": "Rename Category",
-    "label": "Name",
+    "label": "Name (DE)",
+    "labelEn": "Name (EN)",
+    "placeholderEn": "Category name in English",
     "cancel": "Cancel",
     "save": "Save"
   },
