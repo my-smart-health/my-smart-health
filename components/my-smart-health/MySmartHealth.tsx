@@ -57,15 +57,13 @@ export default async function MySmartHealth() {
   async function isLogged(loginText: string, session: Session | null) {
     if (!session) {
       return (
-        <Link href="/login" className="btn btn-outline btn-wide border-primary hover:underline capitalize p-2 h-10 text-primary">
+        <Link href="/login" className="btn btn-outline w-full border-primary hover:underline hover:bg-primary/75 hover:text-white capitalize p-2 h-10 text-primary">
           {loginText}
         </Link>
       );
     } else {
       return (
-        <div className="btn btn-outline border-red-500 flex flex-col items-center m-2 gap-2">
-          <LogOut addClasses="link link-error p-2 h-10" />
-        </div>
+        <LogOut addClasses="link link-error w-full btn btn-outline hover:border-red-500/75 hover:bg-red-500/75 hover:text-white w-full p-2 mt-2 h-10" />
       );
     }
   }
