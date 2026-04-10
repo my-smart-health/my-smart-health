@@ -32,11 +32,11 @@ export const CATEGORY_LINKS = {
   },
   theLeadingDoctors: {
     link: '/the-leading-doctors',
-    image: '/pages/the-leading-doctors.png',
+    image: '/pages/Logo_the-leading-doctors.png',
   },
   mySmartHealthTermineKurzfristig: {
     link: '/my-smart-health-termine-kurzfristig',
-    image: '/pages/the-leading-hospitals.png',
+    image: '/pages/Logo_the-leading-hospitals.png',
   },
   smartHealth: {
     link: '/smart-health',
