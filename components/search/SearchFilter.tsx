@@ -30,8 +30,7 @@ export default function SearchFilter({ users, currentUserId }: SearchFilterProps
     return users.filter((user) => {
       const name = (user.name || "").toLowerCase();
       const email = (user.email || "").toLowerCase();
-      const isContactable = user.isContactable;
-      return (name.includes(normalized) || email.includes(normalized)) && isContactable;
+      return name.includes(normalized) || email.includes(normalized);
     });
   }, [users, query]);
 
